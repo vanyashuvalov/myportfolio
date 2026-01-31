@@ -16,6 +16,12 @@ export class SimpleDragHover {
     this.startPos = { x: 0, y: 0 };
     this.startWidgetPos = { x: 0, y: 0 };
     
+    // CRITICAL: Viewport padding to keep widgets away from screen edges
+    this.viewportPadding = 20; // pixels
+    
+    // SCALED FOR: Boundary offset to shift drag area (negative = left/up, positive = right/down)
+    this.boundaryOffset = { x: -30, y: -30 }; // shift left 30px, up 30px
+    
     // CRITICAL: Bind global handlers once to avoid memory leaks
     this.boundMouseMove = this.handleGlobalMouseMove.bind(this);
     this.boundMouseUp = this.handleGlobalMouseUp.bind(this);
@@ -23,12 +29,15 @@ export class SimpleDragHover {
 
   /**
    * Initialize drag and hover for a widget
-   * CRITICAL: Simple direct event attachment without complex systems
+   * CRITICAL: Simple direct event attachment with smooth transitions
    */
   initWidget(widget) {
     if (!widget || !widget.element) return;
     
     const element = widget.element;
+    
+    // UPDATED COMMENTS: Add smooth transition for hover effects
+    element.style.transition = 'transform 400ms cubic-bezier(0.4, 0, 0.2, 1)';
     
     // UPDATED COMMENTS: Direct mouse events for immediate response
     element.addEventListener('mouseenter', () => this.handleHoverStart(widget));
@@ -79,13 +88,16 @@ export class SimpleDragHover {
 
   /**
    * Handle mouse down - start potential drag
-   * UPDATED COMMENTS: Simple drag initiation without threshold bullshit
+   * UPDATED COMMENTS: Simple drag initiation with transition disabled during drag
    */
   handleMouseDown(event, widget) {
     if (event.button !== 0) return; // Only left mouse button
     if (!widget.config.isDraggable) return;
     
     event.preventDefault();
+    
+    // CRITICAL: Disable transitions during drag for immediate response
+    widget.element.style.transition = 'none';
     
     // CRITICAL: Store drag start state
     this.isDragging = true;
@@ -105,8 +117,8 @@ export class SimpleDragHover {
   }
 
   /**
-   * Handle global mouse move - update drag position
-   * CRITICAL: Direct position calculation with hover effects preserved
+   * Handle global mouse move - update drag position with boundary constraints
+   * CRITICAL: Direct position calculation with viewport boundary enforcement
    */
   handleGlobalMouseMove(event) {
     if (!this.isDragging || !this.dragWidget) return;
@@ -120,20 +132,35 @@ export class SimpleDragHover {
     const newX = this.startWidgetPos.x + deltaX;
     const newY = this.startWidgetPos.y + deltaY;
     
-    // CRITICAL: Update widget position immediately
-    widget.currentPosition = { x: newX, y: newY };
+    // CRITICAL: Get widget dimensions for boundary calculation
+    const rect = widget.element.getBoundingClientRect();
+    const widgetWidth = rect.width;
+    const widgetHeight = rect.height;
+    
+    // SCALED FOR: Viewport boundary constraints with padding and offset adjustment
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    const padding = this.viewportPadding;
+    const offsetX = this.boundaryOffset.x;
+    const offsetY = this.boundaryOffset.y;
+    
+    const constrainedX = Math.max(padding + offsetX, Math.min(viewportWidth - widgetWidth - padding + offsetX, newX));
+    const constrainedY = Math.max(padding + offsetY, Math.min(viewportHeight - widgetHeight - padding + offsetY, newY));
+    
+    // CRITICAL: Update widget position with constraints
+    widget.currentPosition = { x: constrainedX, y: constrainedY };
     
     // REUSED: Keep hover effects during drag - scale and rotation
     const hoverRotation = widget.rotation + 3;
     const hoverScale = widget.scale * 1.02;
     
     widget.element.style.transform = 
-      `translate3d(${newX}px, ${newY}px, 0) rotate(${hoverRotation}deg) scale(${hoverScale})`;
+      `translate3d(${constrainedX}px, ${constrainedY}px, 0) rotate(${hoverRotation}deg) scale(${hoverScale})`;
   }
 
   /**
    * Handle global mouse up - end drag
-   * SCALED FOR: Clean drag end with hover state preserved if mouse still over widget
+   * SCALED FOR: Clean drag end with hover state preserved and transitions restored
    */
   handleGlobalMouseUp(event) {
     if (!this.isDragging || !this.dragWidget) return;
@@ -143,6 +170,9 @@ export class SimpleDragHover {
     // CRITICAL: Remove global listeners
     document.removeEventListener('mousemove', this.boundMouseMove);
     document.removeEventListener('mouseup', this.boundMouseUp);
+    
+    // UPDATED COMMENTS: Restore smooth transitions after drag
+    widget.element.style.transition = 'transform 400ms cubic-bezier(0.4, 0, 0.2, 1)';
     
     // UPDATED COMMENTS: Reset drag state
     this.isDragging = false;
@@ -163,7 +193,7 @@ export class SimpleDragHover {
       widget.state.isHovered = true;
       widget.element.classList.add('widget--hovered');
       
-      // Keep hover transform
+      // Keep hover transform with smooth transition
       const pos = widget.currentPosition;
       const hoverRotation = widget.rotation + 3;
       const hoverScale = widget.scale * 1.02;
