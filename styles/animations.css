@@ -1,0 +1,239 @@
+/* ANCHOR: animations */
+/* REUSED: Universal animation library for all interactive elements */
+/* SCALED FOR: 60fps performance with hardware acceleration */
+
+/* ANCHOR: cat_animations */
+.cat-idle {
+  animation: cat-idle-pulse 2s ease-in-out infinite;
+}
+
+@keyframes cat-idle-pulse {
+  0%, 100% { 
+    transform: scale(1); 
+    opacity: 1;
+  }
+  50% { 
+    transform: scale(1.05); 
+    opacity: 0.9;
+  }
+}
+
+.cat-walking {
+  animation: cat-walk-cycle 0.8s steps(6) infinite;
+}
+
+@keyframes cat-walk-cycle {
+  0% { background-image: url('../assets/cat/sprites/cat-walk-right.svg'); }
+  16.66% { background-image: url('../assets/cat/sprites/cat-walk-right.svg'); }
+  33.33% { background-image: url('../assets/cat/sprites/cat-walk-right.svg'); }
+  50% { background-image: url('../assets/cat/sprites/cat-walk-right.svg'); }
+  66.66% { background-image: url('../assets/cat/sprites/cat-walk-right.svg'); }
+  83.33% { background-image: url('../assets/cat/sprites/cat-walk-right.svg'); }
+  100% { background-image: url('../assets/cat/sprites/cat-walk-right.svg'); }
+}
+
+.cat-eating {
+  animation: cat-eating-cycle 3s ease-in-out;
+}
+
+@keyframes cat-eating-cycle {
+  0%, 100% { 
+    background-image: url('../assets/cat/sprites/cat-idle.svg');
+    transform: scale(1);
+  }
+  25%, 75% { 
+    background-image: url('../assets/cat/sprites/cat-eating.svg');
+    transform: scale(1.1);
+  }
+  50% { 
+    background-image: url('../assets/cat/sprites/cat-eating.svg');
+    transform: scale(1.15);
+  }
+}
+
+.cat-happy {
+  animation: cat-happy-bounce 2s ease-in-out;
+}
+
+@keyframes cat-happy-bounce {
+  0%, 100% { 
+    background-image: url('../assets/cat/sprites/cat-idle.svg');
+    transform: scale(1) rotate(0deg); 
+  }
+  25% { 
+    background-image: url('../assets/cat/sprites/cat-happy.svg');
+    transform: scale(1.2) rotate(-10deg); 
+  }
+  50% { 
+    background-image: url('../assets/cat/sprites/cat-happy.svg');
+    transform: scale(1.3) rotate(0deg); 
+  }
+  75% { 
+    background-image: url('../assets/cat/sprites/cat-happy.svg');
+    transform: scale(1.2) rotate(10deg); 
+  }
+}
+
+/* ANCHOR: widget_interactions */
+/* UPDATED COMMENTS: Smooth interaction animations with hardware acceleration */
+.widget-enter {
+  animation: widget-enter 0.5s var(--transition-bounce);
+}
+
+@keyframes widget-enter {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) rotate(-180deg);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1) rotate(-10deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/* ANCHOR: widget_entrance_animations */
+/* UPDATED COMMENTS: Smooth widget entrance animations with real positioning */
+@keyframes widgetEnter {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* REUSED: Entrance animation state for widgets */
+.widget--entering {
+  animation: widgetEnter 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.widget-exit {
+  animation: widget-exit 0.3s ease-in forwards;
+}
+
+@keyframes widget-exit {
+  0% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.3) rotate(180deg);
+  }
+}
+
+/* ANCHOR: hover_effects */
+.hover-lift {
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: var(--widget-shadow-hovered);
+}
+
+.hover-rotate {
+  transition: transform var(--transition-normal);
+}
+
+.hover-rotate:hover {
+  transform: rotate(5deg) scale(1.05);
+}
+
+.hover-glow {
+  transition: box-shadow var(--transition-normal), filter var(--transition-normal);
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+  filter: brightness(1.1);
+}
+
+/* ANCHOR: loading_animations */
+.pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.bounce {
+  animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(-25%);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  50% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+/* ANCHOR: modal_animations */
+.modal-slide-up {
+  animation: modal-slide-up 0.3s ease-out;
+}
+
+@keyframes modal-slide-up {
+  0% {
+    opacity: 0;
+    transform: translateY(100px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-fade-in {
+  animation: modal-fade-in 0.2s ease-out;
+}
+
+@keyframes modal-fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* ANCHOR: performance_optimizations */
+/* UPDATED COMMENTS: Hardware acceleration for smooth 60fps animations */
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* REUSED: Reduced motion support for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

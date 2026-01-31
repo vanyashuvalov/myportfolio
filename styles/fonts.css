@@ -1,0 +1,45 @@
+/* ANCHOR: font_declarations */
+/* REUSED: Professional SF Pro Display font family system */
+/* SCALED FOR: Optimal loading performance with font-display swap */
+
+/* UPDATED COMMENTS: SF Pro Display Regular (400) */
+@font-face {
+  font-family: 'SF Pro Display';
+  src: url('../assets/font/SFPRODISPLAYREGULAR.OTF') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap; /* SCALED FOR: Performance optimization */
+}
+
+/* UPDATED COMMENTS: SF Pro Display Medium (500) */
+@font-face {
+  font-family: 'SF Pro Display';
+  src: url('../assets/font/SFPRODISPLAYMEDIUM.OTF') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* UPDATED COMMENTS: SF Pro Display Bold (700) - using as Semibold (600) */
+@font-face {
+  font-family: 'SF Pro Display';
+  src: url('../assets/font/SFPRODISPLAYBOLD.OTF') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* UPDATED COMMENTS: SF Pro Display Bold (700) */
+@font-face {
+  font-family: 'SF Pro Display';
+  src: url('../assets/font/SFPRODISPLAYBOLD.OTF') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ANCHOR: font_fallback_stack */
+/* REUSED: Professional font stack with system fallbacks */
+:root {
+  --font-family-sf-pro: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}

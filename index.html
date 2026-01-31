@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Ivan Shuvalov - Product Designer Portfolio">
+  <title>Ivan Shuvalov - Product Designer</title>
+  
+  <!-- ANCHOR: performance_optimization -->
+  <!-- UPDATED COMMENTS: Preload critical resources and OTF fonts for optimal performance -->
+  <link rel="preload" href="styles/reset.css" as="style">
+  <link rel="preload" href="js/main.js" as="script">
+  <link rel="preload" href="assets/images/bg-mountains.jpg" as="image">
+  <link rel="preload" href="assets/font/SFPRODISPLAYREGULAR.OTF" as="font" type="font/otf" crossorigin>
+  <link rel="preload" href="assets/font/SFPRODISPLAYBOLD.OTF" as="font" type="font/otf" crossorigin>
+  
+  <!-- REUSED: Modular CSS architecture with font loading -->
+  <link rel="stylesheet" href="styles/fonts.css">
+  <link rel="stylesheet" href="styles/reset.css">
+  <link rel="stylesheet" href="styles/variables.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/animations.css">
+  <link rel="stylesheet" href="styles/responsive.css">
+</head>
+<body>
+  <!-- ANCHOR: main_application -->
+  <main id="desktop-canvas" class="desktop-canvas" role="main">
+    <div id="loading-indicator" class="loading-indicator">
+      <div class="loading-spinner"></div>
+      <p>Loading portfolio...</p>
+    </div>
+  </main>
+  
+  <!-- ANCHOR: modal_system -->
+  <div id="modal-container" class="modal-container" role="dialog" aria-hidden="true">
+    <!-- Modal content dynamically inserted -->
+  </div>
+  
+  <!-- ANCHOR: accessibility -->
+  <a href="#desktop-canvas" class="skip-link">Skip to main content</a>
+  
+  <!-- ANCHOR: javascript_entry -->
+  <script type="module" src="js/main.js"></script>
+  
+  <!-- UPDATED COMMENTS: Fallback for legacy browsers -->
+  <script nomodule>
+    console.warn('ES6 modules not supported. Please update your browser.');
+  </script>
+</body>
+</html>

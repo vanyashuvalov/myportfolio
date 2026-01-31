@@ -1,0 +1,49 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <!-- ANCHOR: cat_walk_left_sprite -->
+  <!-- REUSED: Cat base with walking posture facing left (mirrored) -->
+  <g class="cat-body">
+    <!-- Main body (slightly elongated for walking) -->
+    <ellipse cx="32" cy="45" rx="20" ry="10" fill="#4A5568"/>
+    
+    <!-- Head (facing left) -->
+    <circle cx="29" cy="25" r="15" fill="#4A5568"/>
+    
+    <!-- Ears -->
+    <polygon points="17,15 22,8 27,15" fill="#4A5568"/>
+    <polygon points="31,15 36,8 41,15" fill="#4A5568"/>
+    
+    <!-- Inner ears -->
+    <polygon points="19,14 22,10 25,14" fill="#E2E8F0"/>
+    <polygon points="33,14 36,10 39,14" fill="#E2E8F0"/>
+    
+    <!-- Eyes (alert, looking forward) -->
+    <circle cx="24" cy="22" r="2" fill="#48BB78"/>
+    <circle cx="34" cy="22" r="2" fill="#48BB78"/>
+    
+    <!-- Eye shine -->
+    <circle cx="23.5" cy="21.5" r="0.5" fill="white"/>
+    <circle cx="33.5" cy="21.5" r="0.5" fill="white"/>
+    
+    <!-- Nose -->
+    <polygon points="29,26 27,28 31,28" fill="#F56565"/>
+    
+    <!-- Mouth -->
+    <path d="M29 28 Q26 30 24 29" stroke="#4A5568" stroke-width="1" fill="none"/>
+    <path d="M29 28 Q32 30 34 29" stroke="#4A5568" stroke-width="1" fill="none"/>
+    
+    <!-- Whiskers (forward-facing) -->
+    <line x1="15" y1="24" x2="22" y2="25" stroke="#4A5568" stroke-width="1"/>
+    <line x1="15" y1="27" x2="22" y2="27" stroke="#4A5568" stroke-width="1"/>
+    <line x1="36" y1="25" x2="43" y2="24" stroke="#4A5568" stroke-width="1"/>
+    <line x1="36" y1="27" x2="43" y2="27" stroke="#4A5568" stroke-width="1"/>
+    
+    <!-- Tail (swishing while walking) -->
+    <path d="M12 45 Q7 35 10 25" stroke="#4A5568" stroke-width="6" fill="none" stroke-linecap="round"/>
+    
+    <!-- UPDATED COMMENTS: Paws in walking position (alternating, mirrored) -->
+    <ellipse cx="18" cy="54" rx="3" ry="2" fill="#4A5568"/> <!-- Front left raised -->
+    <ellipse cx="26" cy="57" rx="3" ry="2" fill="#4A5568"/> <!-- Front right down -->
+    <ellipse cx="34" cy="57" rx="3" ry="2" fill="#4A5568"/> <!-- Back left down -->
+    <ellipse cx="42" cy="54" rx="3" ry="2" fill="#4A5568"/> <!-- Back right raised -->
+  </g>
+</svg>

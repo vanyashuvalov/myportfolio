@@ -1,0 +1,355 @@
+/* ANCHOR: component_styles */
+/* REUSED: Universal component styles with inheritance */
+/* SCALED FOR: Consistent widget appearance across all types */
+
+/* ANCHOR: widget_base */
+.widget {
+  position: absolute;
+  cursor: grab;
+  /* CRITICAL: Transform-based positioning and effects */
+  will-change: transform;
+  /* CRITICAL: Force overflow visible for shadows */
+  overflow: visible !important;
+  /* UPDATED COMMENTS: No CSS transitions - using JS animations for better control */
+}
+
+/* UPDATED COMMENTS: Widget states - no shadows on wrapper, handled by inner content */
+.widget:hover {
+  /* CRITICAL: No shadow on wrapper - applied to inner content for proper transform alignment */
+}
+
+.widget.widget--pressed {
+  /* UPDATED COMMENTS: No shadow on wrapper - applied to inner content */
+}
+
+.widget.widget--dragging {
+  cursor: grabbing;
+  z-index: var(--z-modal);
+  /* CRITICAL: Disable transitions during drag for immediate response */
+  transition: none !important;
+  /* UPDATED COMMENTS: No shadow on wrapper - applied to inner content */
+}
+
+/* UPDATED COMMENTS: Widget initialized - ready for JS animations */
+.widget.widget--initialized {
+  /* CRITICAL: JS animations handle all transforms - no CSS transitions needed */
+}
+
+/* ANCHOR: clock_widget */
+.clock-widget {
+  width: 140px;
+  height: 140px;
+}
+
+.clock-container {
+  width: 100%;
+  height: 100%;
+  background: var(--color-widget-clock);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow: var(--widget-shadow-default);
+  /* UPDATED COMMENTS: Smooth transitions for all clock interactions */
+  transition: box-shadow var(--transition-normal), transform var(--transition-normal);
+}
+
+.clock-face {
+  width: 124px;
+  height: 124px;
+}
+
+.clock-background {
+  fill: var(--color-widget-clock);
+  stroke: rgba(255, 255, 255, 0.1);
+  stroke-width: 1;
+}
+
+.clock-hands {
+  transform-origin: 62px 62px;
+}
+
+.hour-hand {
+  stroke: white;
+  stroke-width: 3;
+  stroke-linecap: round;
+  transform-origin: 62px 62px;
+  transition: transform 0.5s ease-in-out;
+}
+
+.minute-hand {
+  stroke: white;
+  stroke-width: 2;
+  stroke-linecap: round;
+  transform-origin: 62px 62px;
+  transition: transform 0.5s ease-in-out;
+}
+
+.second-hand {
+  stroke: #ef4444;
+  stroke-width: 1;
+  transform-origin: 62px 62px;
+  transition: transform 0.1s ease-out;
+}
+
+.center-dot {
+  fill: white;
+}
+
+.timezone-label {
+  position: absolute;
+  bottom: 20px;
+  font-size: var(--font-size-xs);
+  color: rgba(255, 255, 255, 0.5);
+  font-family: var(--font-family-primary);
+}
+
+/* ANCHOR: sticker_widget */
+.sticker-widget {
+  max-width: 340px; /* Updated max width as specified */
+  min-width: 280px;
+  /* UPDATED COMMENTS: Allow shadows to extend beyond widget bounds */
+  overflow: visible;
+}
+
+.sticker-container {
+  background: var(--color-widget-sticker);
+  border-radius: 14px; /* Updated to 14px border radius */
+  padding: 24px; /* Updated to exact 24px padding */
+  /* CRITICAL: Apply shadows to inner content so they rotate with transforms */
+  box-shadow: var(--widget-shadow-default);
+  transition: box-shadow var(--transition-normal);
+  /* SCALED FOR: Professional presentation with proper spacing */
+  line-height: 1;
+  /* CRITICAL: Force overflow visible for shadows */
+  overflow: visible !important;
+}
+
+/* ANCHOR: sticker_interaction_shadows */
+/* CRITICAL: Shadow states applied to inner content for transform compatibility */
+.widget--sticker:hover .sticker-container {
+  box-shadow: var(--widget-shadow-hovered);
+}
+
+.widget--sticker.widget--pressed .sticker-container {
+  box-shadow: var(--widget-shadow-pressed);
+}
+
+.widget--sticker.widget--dragging .sticker-container {
+  box-shadow: var(--widget-shadow-dragging);
+  transition: none !important;
+}
+
+/* UPDATED COMMENTS: Shadow styles now applied to inner content for proper transform alignment */
+
+/* UPDATED COMMENTS: Professional typography with exact color specification and 16px gap */
+.sticker-title {
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 24px;
+  font-weight: 600; /* Semibold */
+  letter-spacing: -0.02em; /* -2% letter spacing */
+  line-height: 1.2;
+  color: #101828; /* Exact color as specified */
+  margin-bottom: 16px; /* Updated to exact 16px gap */
+  /* REUSED: Professional heading styling */
+}
+
+.sticker-body {
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 16px;
+  font-weight: 400; /* Regular - explicitly set to 400 */
+  line-height: 1.3; /* 130% line height */
+  letter-spacing: 0; /* Normal letter spacing (0%) for body text */
+  color: #101828; /* Exact color as specified */
+}
+
+/* UPDATED COMMENTS: Paragraph spacing exactly 16px as specified */
+.sticker-body p {
+  margin: 0;
+}
+
+.sticker-body p + p {
+  margin-top: 16px; /* Exact 16px paragraph spacing */
+}
+
+/* ANCHOR: sticker_size_variants */
+/* SCALED FOR: Multiple size options for different content lengths */
+.sticker-container--small {
+  padding: var(--space-4);
+  max-width: 240px;
+}
+
+.sticker-container--small .sticker-title {
+  font-size: 18px;
+  margin-bottom: var(--space-3);
+}
+
+.sticker-container--small .sticker-body {
+  font-size: 14px;
+}
+
+.sticker-container--medium {
+  padding: var(--space-6);
+  max-width: 300px;
+}
+
+.sticker-container--large {
+  padding: var(--space-8);
+  max-width: 340px; /* Updated to match widget max-width */
+  min-width: 320px;
+}
+
+/* ANCHOR: sticker_theme_variants */
+/* REUSED: Theme system with updated yellow gradient */
+.sticker-container--yellow {
+  /* UPDATED COMMENTS: Correct gradient - DCD078 (dark) at top, FEF08A (light) at bottom */
+  background: linear-gradient(180deg, #DCD078 0%, #FEF08A 100%);
+}
+
+.sticker-container--blue {
+  background: linear-gradient(135deg, #BFDBFE 0%, #93C5FD 100%);
+}
+
+.sticker-container--green {
+  background: linear-gradient(135deg, #BBF7D0 0%, #86EFAC 100%);
+}
+
+.sticker-container--pink {
+  background: linear-gradient(135deg, #FBCFE8 0%, #F9A8D4 100%);
+}
+
+.sticker-container--purple {
+  background: linear-gradient(135deg, #DDD6FE 0%, #C4B5FD 100%);
+}
+
+/* ANCHOR: folder_widget */
+.folder-widget {
+  width: 140px;
+  height: 140px;
+}
+
+.folder-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.folder-back,
+.folder-upper {
+  position: absolute;
+  width: 100%;
+  height: auto;
+}
+
+.folder-back {
+  z-index: 1;
+  filter: drop-shadow(var(--widget-shadow-default));
+}
+
+.folder-upper {
+  z-index: 3;
+  top: 0;
+  height: 65px;
+}
+
+.folder-thumbnails {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  bottom: 35px;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 2px;
+  padding: 4px;
+}
+
+.folder-thumbnail {
+  border-radius: 2px;
+  background-size: cover;
+  background-position: center;
+  transition: transform var(--transition-fast);
+}
+
+.folder-thumbnail:hover {
+  transform: scale(1.1);
+  z-index: 4;
+}
+
+.folder-label {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+  text-align: center;
+  pointer-events: none;
+}
+
+.folder-title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary);
+  margin-bottom: 2px;
+}
+
+.folder-subtitle {
+  font-size: var(--font-size-xs);
+  color: var(--color-secondary);
+}
+
+/* ANCHOR: cat_widget */
+.cat-widget {
+  width: 64px;
+  height: 64px;
+}
+
+.cat-sprite {
+  width: 100%;
+  height: 100%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+  transition: transform var(--transition-normal);
+}
+
+.cat-sprite:hover {
+  transform: scale(1.1);
+}
+
+/* ANCHOR: feed_button */
+.feed-button {
+  width: 60px;
+  height: 60px;
+}
+
+.feed-button-container {
+  width: 100%;
+  height: 100%;
+  background: var(--color-accent);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--widget-shadow-default);
+  transition: all var(--transition-normal);
+}
+
+.feed-button-container:hover {
+  background: #2563EB;
+  transform: scale(1.1);
+}
+
+.feed-button-container:active {
+  transform: scale(0.95);
+}
+
+.feed-icon {
+  width: 24px;
+  height: 24px;
+  fill: white;
+}

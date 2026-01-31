@@ -1,0 +1,166 @@
+/* ANCHOR: base_styles */
+/* REUSED: Foundation styles for all components */
+/* SCALED FOR: Performance optimization with contain property */
+
+/* ANCHOR: base_styles */
+/* REUSED: Foundation styles for all components */
+/* SCALED FOR: Performance optimization with contain property */
+
+html {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--font-family-primary);
+  /* UPDATED COMMENTS: Multi-layer background system with gradient and dot texture */
+  background: 
+    /* Layer 2: Dot texture pattern (top layer) */
+    radial-gradient(circle at center, rgba(0, 0, 0, 0.07) 1.5px, transparent 1.5px),
+    /* Layer 1: Base gradient (bottom layer) */
+    linear-gradient(180deg, #8A547D 0%, #A76697 100%);
+  
+  /* REUSED: Background positioning and sizing for layered effect */
+  background-size: 
+    16px 16px,           /* Dot pattern grid size */
+    100% 100%;           /* Gradient covers full area */
+  
+  background-position: 
+    0 0,                 /* Dot pattern from top-left */
+    center center;       /* Gradient centered */
+  
+  background-repeat: 
+    repeat,              /* Dot pattern repeats */
+    no-repeat;           /* Gradient doesn't repeat */
+  
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  user-select: none;
+  color: var(--color-primary);
+  position: relative;
+}
+
+/* ANCHOR: mountain_overlay */
+/* UPDATED COMMENTS: Mountain silhouette with 30% opacity using pseudo-element */
+body::before {
+  content: '';
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('../assets/images/bg-mountains.jpg') bottom center / 100% auto no-repeat;
+  opacity: 0.3;
+  pointer-events: none;
+  z-index: 0;
+  /* SCALED FOR: Mountain layer with proper blend mode */
+  mix-blend-mode: darken;
+}
+
+/* ANCHOR: desktop_canvas */
+/* UPDATED COMMENTS: True fullscreen canvas with absolute positioning above mountain layer */
+.desktop-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  contain: layout style paint;
+  z-index: 2;
+}
+
+/* ANCHOR: loading_system */
+.loading-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+  z-index: var(--z-modal);
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top: 3px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto var(--space-4);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ANCHOR: modal_system */
+.modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-modal-backdrop);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition-normal), visibility var(--transition-normal);
+}
+
+.modal-container.modal-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-content {
+  background: var(--color-bg-primary);
+  border-radius: 12px;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  transform: scale(0.9);
+  transition: transform var(--transition-normal);
+  box-shadow: var(--shadow-xl);
+}
+
+.modal-container.modal-open .modal-content {
+  transform: scale(1);
+}
+
+/* ANCHOR: utility_classes */
+/* REUSED: Common utility classes for rapid development */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.no-scroll {
+  overflow: hidden;
+}
+
+.pointer-events-none {
+  pointer-events: none;
+}
+
+.pointer-events-auto {
+  pointer-events: auto;
+}

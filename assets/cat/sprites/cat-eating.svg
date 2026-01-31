@@ -1,0 +1,58 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <!-- ANCHOR: cat_eating_sprite -->
+  <!-- REUSED: Cat base with eating posture and food bowl -->
+  <g class="cat-body">
+    <!-- Main body (slightly lowered) -->
+    <ellipse cx="32" cy="47" rx="18" ry="12" fill="#4A5568"/>
+    
+    <!-- Head (lowered toward food) -->
+    <circle cx="32" cy="28" r="15" fill="#4A5568"/>
+    
+    <!-- Ears -->
+    <polygon points="20,18 25,11 30,18" fill="#4A5568"/>
+    <polygon points="34,18 39,11 44,18" fill="#4A5568"/>
+    
+    <!-- Inner ears -->
+    <polygon points="22,17 25,13 28,17" fill="#E2E8F0"/>
+    <polygon points="36,17 39,13 42,17" fill="#E2E8F0"/>
+    
+    <!-- Focused eyes (looking down at food) -->
+    <circle cx="27" cy="25" r="2" fill="#4A5568"/>
+    <circle cx="37" cy="25" r="2" fill="#4A5568"/>
+    
+    <!-- Eye shine -->
+    <circle cx="27.5" cy="24.5" r="0.5" fill="white"/>
+    <circle cx="37.5" cy="24.5" r="0.5" fill="white"/>
+    
+    <!-- Nose -->
+    <polygon points="32,29 30,31 34,31" fill="#F56565"/>
+    
+    <!-- Mouth (eating) -->
+    <ellipse cx="32" cy="33" rx="3" ry="2" fill="#4A5568"/>
+    
+    <!-- Whiskers -->
+    <line x1="18" y1="27" x2="25" y2="28" stroke="#4A5568" stroke-width="1"/>
+    <line x1="18" y1="30" x2="25" y2="30" stroke="#4A5568" stroke-width="1"/>
+    <line x1="39" y1="28" x2="46" y2="27" stroke="#4A5568" stroke-width="1"/>
+    <line x1="39" y1="30" x2="46" y2="30" stroke="#4A5568" stroke-width="1"/>
+    
+    <!-- Tail (relaxed) -->
+    <path d="M50 47 Q55 37 52 28" stroke="#4A5568" stroke-width="6" fill="none" stroke-linecap="round"/>
+    
+    <!-- Paws -->
+    <ellipse cx="24" cy="57" rx="3" ry="2" fill="#4A5568"/>
+    <ellipse cx="32" cy="58" rx="3" ry="2" fill="#4A5568"/>
+    <ellipse cx="40" cy="57" rx="3" ry="2" fill="#4A5568"/>
+    
+    <!-- UPDATED COMMENTS: Food bowl with kibble -->
+    <ellipse cx="32" cy="52" rx="8" ry="3" fill="#8B4513"/>
+    <ellipse cx="32" cy="50" rx="8" ry="3" fill="#A0522D"/>
+    
+    <!-- Food pieces -->
+    <circle cx="28" cy="50" r="1.5" fill="#D2691E"/>
+    <circle cx="32" cy="49" r="1.5" fill="#D2691E"/>
+    <circle cx="36" cy="50" r="1.5" fill="#D2691E"/>
+    <circle cx="30" cy="51" r="1" fill="#D2691E"/>
+    <circle cx="34" cy="51" r="1" fill="#D2691E"/>
+  </g>
+</svg>

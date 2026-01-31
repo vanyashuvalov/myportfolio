@@ -1,0 +1,48 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <!-- ANCHOR: cat_happy_sprite -->
+  <!-- REUSED: Cat base structure with happiness expressions -->
+  <g class="cat-body">
+    <!-- Main body -->
+    <ellipse cx="32" cy="45" rx="18" ry="12" fill="#4A5568"/>
+    
+    <!-- Head -->
+    <circle cx="32" cy="25" r="15" fill="#4A5568"/>
+    
+    <!-- Ears -->
+    <polygon points="20,15 25,8 30,15" fill="#4A5568"/>
+    <polygon points="34,15 39,8 44,15" fill="#4A5568"/>
+    
+    <!-- Inner ears -->
+    <polygon points="22,14 25,10 28,14" fill="#E2E8F0"/>
+    <polygon points="36,14 39,10 42,14" fill="#E2E8F0"/>
+    
+    <!-- Happy eyes (closed/squinting) -->
+    <path d="M25 22 Q27 20 29 22" stroke="#4A5568" stroke-width="2" fill="none"/>
+    <path d="M35 22 Q37 20 39 22" stroke="#4A5568" stroke-width="2" fill="none"/>
+    
+    <!-- Nose -->
+    <polygon points="32,26 30,28 34,28" fill="#F56565"/>
+    
+    <!-- Happy mouth -->
+    <path d="M28 30 Q32 33 36 30" stroke="#4A5568" stroke-width="2" fill="none"/>
+    
+    <!-- Whiskers (slightly raised) -->
+    <line x1="18" y1="23" x2="25" y2="24" stroke="#4A5568" stroke-width="1"/>
+    <line x1="18" y1="26" x2="25" y2="26" stroke="#4A5568" stroke-width="1"/>
+    <line x1="39" y1="24" x2="46" y2="23" stroke="#4A5568" stroke-width="1"/>
+    <line x1="39" y1="26" x2="46" y2="26" stroke="#4A5568" stroke-width="1"/>
+    
+    <!-- Tail (curved up happily) -->
+    <path d="M50 45 Q58 30 50 20" stroke="#4A5568" stroke-width="6" fill="none" stroke-linecap="round"/>
+    
+    <!-- Paws -->
+    <ellipse cx="24" cy="55" rx="3" ry="2" fill="#4A5568"/>
+    <ellipse cx="32" cy="56" rx="3" ry="2" fill="#4A5568"/>
+    <ellipse cx="40" cy="55" rx="3" ry="2" fill="#4A5568"/>
+    
+    <!-- UPDATED COMMENTS: Heart symbols for happiness (Unicode, not emoji) -->
+    <text x="15" y="18" font-size="8" fill="#F56565">♡</text>
+    <text x="48" y="20" font-size="6" fill="#F56565">♡</text>
+    <text x="45" y="35" font-size="7" fill="#F56565">♡</text>
+  </g>
+</svg>

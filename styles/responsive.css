@@ -1,0 +1,218 @@
+/* ANCHOR: responsive_design */
+/* REUSED: Mobile-first responsive design system */
+/* SCALED FOR: All device sizes with optimal performance */
+
+/* ANCHOR: mobile_first */
+/* Base styles for mobile devices (320px+) */
+.desktop-canvas {
+  padding: var(--space-4);
+}
+
+.widget {
+  /* Larger touch targets for mobile */
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.clock-widget {
+  width: 120px;
+  height: 120px;
+}
+
+.clock-container {
+  width: 100%;
+  height: 100%;
+}
+
+.clock-face {
+  width: 104px;
+  height: 104px;
+}
+
+.sticker-widget {
+  max-width: 280px;
+  min-width: 200px;
+}
+
+.sticker-container {
+  padding: var(--space-4);
+}
+
+.sticker-title {
+  font-size: var(--font-size-lg);
+}
+
+.folder-widget {
+  width: 120px;
+  height: 120px;
+}
+
+/* ANCHOR: tablet_styles */
+@media (min-width: 640px) {
+  .desktop-canvas {
+    padding: var(--space-6);
+  }
+  
+  .clock-widget {
+    width: 130px;
+    height: 130px;
+  }
+  
+  .clock-face {
+    width: 114px;
+    height: 114px;
+  }
+  
+  .sticker-widget {
+    max-width: 320px;
+    min-width: 220px;
+  }
+  
+  .sticker-container {
+    padding: var(--space-5);
+  }
+  
+  .sticker-title {
+    font-size: var(--font-size-xl);
+  }
+  
+  .folder-widget {
+    width: 130px;
+    height: 130px;
+  }
+}
+
+/* ANCHOR: desktop_styles */
+@media (min-width: 1024px) {
+  .desktop-canvas {
+    padding: var(--space-8);
+  }
+  
+  .clock-widget {
+    width: 140px;
+    height: 140px;
+  }
+  
+  .clock-face {
+    width: 124px;
+    height: 124px;
+  }
+  
+  .sticker-widget {
+    max-width: 340px;
+    min-width: 240px;
+  }
+  
+  .sticker-container {
+    padding: var(--space-6);
+  }
+  
+  .sticker-title {
+    font-size: var(--font-size-2xl);
+  }
+  
+  .folder-widget {
+    width: 140px;
+    height: 140px;
+  }
+  
+  /* UPDATED COMMENTS: Hover effects only on devices that support hover */
+  .widget:hover {
+    transform: rotate(3deg) scale(1.02);
+  }
+}
+
+/* ANCHOR: large_desktop */
+@media (min-width: 1280px) {
+  .desktop-canvas {
+    padding: var(--space-10);
+  }
+  
+  /* Larger widgets for high-resolution displays */
+  .clock-widget {
+    width: 160px;
+    height: 160px;
+  }
+  
+  .clock-face {
+    width: 144px;
+    height: 144px;
+  }
+  
+  .folder-widget {
+    width: 160px;
+    height: 160px;
+  }
+  
+  .sticker-widget {
+    max-width: 380px;
+  }
+}
+
+/* ANCHOR: touch_devices */
+@media (hover: none) and (pointer: coarse) {
+  /* UPDATED COMMENTS: Touch-optimized interactions */
+  .widget {
+    min-width: 48px;
+    min-height: 48px;
+  }
+  
+  .widget:hover {
+    transform: none;
+  }
+  
+  .widget:active {
+    transform: scale(0.95);
+  }
+  
+  /* Disable complex animations on touch devices for performance */
+  .cat-walking,
+  .cat-eating,
+  .cat-happy {
+    animation: none;
+  }
+  
+  .cat-sprite {
+    transition: transform 0.1s ease-out;
+  }
+}
+
+/* ANCHOR: high_contrast */
+@media (prefers-contrast: high) {
+  :root {
+    --widget-shadow-default: 0 4px 12px rgba(0, 0, 0, 0.4);
+    --widget-shadow-hovered: 0 8px 24px rgba(0, 0, 0, 0.5);
+    --widget-shadow-dragging: 0 12px 32px rgba(0, 0, 0, 0.6);
+  }
+  
+  .clock-background {
+    stroke: rgba(255, 255, 255, 0.3);
+    stroke-width: 2;
+  }
+  
+  .folder-title,
+  .sticker-title {
+    font-weight: var(--font-weight-bold);
+  }
+}
+
+/* ANCHOR: print_styles */
+@media print {
+  .desktop-canvas {
+    background: white;
+    color: black;
+  }
+  
+  .widget {
+    position: static;
+    display: inline-block;
+    margin: var(--space-4);
+    box-shadow: none;
+    transform: none;
+  }
+  
+  .loading-indicator,
+  .modal-container {
+    display: none;
+  }
+}
