@@ -114,7 +114,8 @@ export class WidgetBase {
     // CRITICAL: Initialize position tracking
     this.currentPosition = { x: initialX, y: initialY };
     
-    this.element.style.transform = `translate3d(${initialX}px, ${initialY}px, 0) rotate(${this.rotation}deg) scale(${this.scale})`;
+    // UPDATED COMMENTS: SimpleDragHover will handle all transforms
+    // Don't set initial transform here to avoid conflicts
     
     // Set other styles for performance
     Object.assign(this.element.style, {

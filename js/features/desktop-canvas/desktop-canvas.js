@@ -340,11 +340,15 @@ export class DesktopCanvas {
     // UPDATED COMMENTS: Wrapper handles positioning only
     wrapperElement.className = 'widget-wrapper';
     wrapperElement.style.position = 'absolute';
-    wrapperElement.style.transform = `translate3d(${finalPosition.x}px, ${finalPosition.y}px, 0)`;
+    // CRITICAL: Don't set transform here - SimpleDragHover will handle it
     wrapperElement.style.transformOrigin = 'center center';
     wrapperElement.style.willChange = 'transform';
     wrapperElement.style.opacity = '0';
     wrapperElement.style.transition = 'opacity 0.3s ease-out';
+    
+    // CRITICAL: Set initial position data for WidgetBase
+    wrapperElement.dataset.initialX = finalPosition.x;
+    wrapperElement.dataset.initialY = finalPosition.y;
     
     // UPDATED COMMENTS: Inner element handles visual effects
     innerElement.className = 'widget-inner';
@@ -360,6 +364,9 @@ export class DesktopCanvas {
       innerElement: innerElement,
       ...config
     });
+    
+    // CRITICAL: Update widget position after creation to ensure currentPosition is correct
+    widget.currentPosition = { x: finalPosition.x, y: finalPosition.y };
     
     // SCALED FOR: DOM insertion after complete setup
     this.container.appendChild(wrapperElement);

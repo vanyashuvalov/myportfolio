@@ -14,7 +14,8 @@
 }
 
 /* UPDATED COMMENTS: Widget states - no shadows on wrapper, handled by inner content */
-.widget:hover {
+.widget:hover,
+.widget.widget--hovered {
   /* CRITICAL: No shadow on wrapper - applied to inner content for proper transform alignment */
 }
 
@@ -128,7 +129,8 @@
 
 /* ANCHOR: sticker_interaction_shadows */
 /* CRITICAL: Shadow states applied to inner content for transform compatibility */
-.widget--sticker:hover .sticker-container {
+.widget--sticker:hover .sticker-container,
+.widget--sticker.widget--hovered .sticker-container {
   box-shadow: var(--widget-shadow-hovered);
 }
 

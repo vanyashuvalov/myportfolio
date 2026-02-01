@@ -117,8 +117,9 @@
   }
   
   /* UPDATED COMMENTS: Hover effects only on devices that support hover */
+  /* CRITICAL: Completely disable CSS hover transforms - JS handles everything */
   .widget:hover {
-    transform: rotate(3deg) scale(1.02);
+    /* No transforms - JavaScript SimpleDragHover system handles all transforms */
   }
 }
 
@@ -157,8 +158,9 @@
     min-height: 48px;
   }
   
+  /* CRITICAL: Completely disable CSS hover transforms on touch devices */
   .widget:hover {
-    transform: none;
+    /* No transforms - JavaScript handles everything */
   }
   
   .widget:active {
