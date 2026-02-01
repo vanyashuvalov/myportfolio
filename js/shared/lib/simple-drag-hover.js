@@ -36,7 +36,7 @@ export class SimpleDragHover {
 
   /**
    * Initialize drag and hover for a widget
-   * CRITICAL: Offset-based event attachment with boundary-constrained positioning
+   * CRITICAL: Hardware-accelerated drag with optimized transitions
    */
   initWidget(widget) {
     if (!widget || !widget.element) {
@@ -44,28 +44,27 @@ export class SimpleDragHover {
       return;
     }
     
-    console.log('INITIALIZING SimpleDragHover for widget:', widget.id, widget.type); // DEBUG
-    
     const element = widget.element;
     
     // CRITICAL: Initialize offset with widget's current position, constrained to bounds
-    const initialX = parseFloat(element.dataset.initialX) || 100; // Default to 100px if no position
-    const initialY = parseFloat(element.dataset.initialY) || 100; // Default to 100px if no position
+    const initialX = parseFloat(element.dataset.initialX) || 100;
+    const initialY = parseFloat(element.dataset.initialY) || 100;
     
     // UPDATED COMMENTS: Apply boundary constraints to initial position
     const constrainedPosition = this.constrainToScreenBounds(initialX, initialY, element);
     this.xOffset = constrainedPosition.x;
     this.yOffset = constrainedPosition.y;
     
-    console.log('📍 Initial offset (constrained):', this.xOffset, this.yOffset); // DEBUG
+    // CRITICAL: Hardware acceleration and optimized transitions
+    element.style.willChange = 'transform';
+    element.style.transformStyle = 'preserve-3d';
+    element.style.backfaceVisibility = 'hidden';
     
-    // UPDATED COMMENTS: Add smooth transition for hover effects only
-    element.style.transition = 'transform 400ms cubic-bezier(0.4, 0, 0.2, 1)';
+    // UPDATED COMMENTS: Smooth transition for hover only - disabled during drag
+    element.style.transition = 'transform 200ms cubic-bezier(0.4, 0, 0.2, 1)';
     
     // CRITICAL: Listen on container for reliable drag (Kirupa pattern)
     const container = element.parentElement || document.body;
-    
-    console.log('📍 Container for events:', container.tagName, container.id || container.className); // DEBUG
     
     // UPDATED COMMENTS: Direct mouse events for immediate response
     element.addEventListener('mouseenter', () => this.handleHoverStart(widget));
@@ -84,42 +83,38 @@ export class SimpleDragHover {
     // CRITICAL: Ensure widget is visible
     element.style.opacity = '1';
     element.style.display = 'block';
-    
-    console.log('SimpleDragHover initialized successfully!'); // DEBUG
   }
 
   /**
-   * Handle hover start - simple scale and rotation
-   * REUSED: Basic hover effects without position interference
+   * Handle hover start - universal hover effects
+   * REUSED: Standard hover behavior for all widgets including clock
    */
   handleHoverStart(widget) {
     if (this.active) return; // Skip hover during drag
     
     widget.state.isHovered = true;
+    widget.element.classList.add('widget--hovered');
     
-    // CRITICAL: Apply hover effects without changing position
+    // CRITICAL: All widgets get same hover treatment - rotation + scale
     const hoverRotation = widget.rotation + 3;
     const hoverScale = widget.scale * 1.02;
     
     // UPDATED COMMENTS: Use current offset position for hover
     this.setTranslate(this.xOffset, this.yOffset, widget.element, hoverRotation, hoverScale);
-    
-    widget.element.classList.add('widget--hovered');
   }
 
   /**
-   * Handle hover end - return to normal state
-   * SCALED FOR: Smooth transition back to base state
+   * Handle hover end - universal hover cleanup
+   * SCALED FOR: Standard hover reset for all widgets
    */
   handleHoverEnd(widget) {
     if (this.active && this.dragWidget === widget) return; // Keep hover during drag
     
     widget.state.isHovered = false;
-    
-    // CRITICAL: Return to base transform with current offset
-    this.setTranslate(this.xOffset, this.yOffset, widget.element, widget.rotation, widget.scale);
-    
     widget.element.classList.remove('widget--hovered');
+    
+    // CRITICAL: Return to base transform for all widgets
+    this.setTranslate(this.xOffset, this.yOffset, widget.element, widget.rotation, widget.scale);
   }
 
   /**
@@ -165,7 +160,7 @@ export class SimpleDragHover {
 
   /**
    * Handle mouse move - update position with offset tracking
-   * CRITICAL: Kirupa-style position calculation with screen boundaries and detailed debugging
+   * CRITICAL: Hardware-accelerated dragging with subpixel precision
    */
   handleMouseMove(event) {
     if (!this.active || !this.dragWidget) return;
@@ -178,12 +173,9 @@ export class SimpleDragHover {
     let newX = event.clientX - this.initialX;
     let newY = event.clientY - this.initialY;
     
-    console.log('🎯 DRAG MOVE DEBUG:', {
-      mousePosition: { x: event.clientX, y: event.clientY },
-      initialOffset: { x: this.initialX, y: this.initialY },
-      calculatedPosition: { x: newX, y: newY },
-      currentOffset: { x: this.xOffset, y: this.yOffset }
-    });
+    // UPDATED COMMENTS: Round to prevent subpixel blurriness
+    newX = Math.round(newX);
+    newY = Math.round(newY);
     
     // UPDATED COMMENTS: Apply screen boundaries constraint
     const constrainedPosition = this.constrainToScreenBounds(newX, newY, widget.element);
@@ -200,13 +192,11 @@ export class SimpleDragHover {
     
     // CRITICAL: Set transform using constrained position
     this.setTranslate(this.currentX, this.currentY, widget.element, hoverRotation, hoverScale);
-    
-    console.log('📍 FINAL POSITION:', { x: this.currentX, y: this.currentY });
   }
 
   /**
    * Handle mouse up - end drag with offset preservation
-   * SCALED FOR: Clean drag end with position preservation
+   * SCALED FOR: Clean drag end with optimized transitions
    */
   handleMouseUp(event) {
     if (!this.active || !this.dragWidget) return;
@@ -226,8 +216,8 @@ export class SimpleDragHover {
     this.active = false;
     widget.state.isDragging = false;
     
-    // UPDATED COMMENTS: Restore smooth transitions after drag
-    widget.element.style.transition = 'transform 400ms cubic-bezier(0.4, 0, 0.2, 1)';
+    // UPDATED COMMENTS: Restore optimized transitions after drag
+    widget.element.style.transition = 'transform 200ms cubic-bezier(0.4, 0, 0.2, 1)';
     
     // REUSED: Visual state cleanup
     widget.element.style.cursor = widget.config.isDraggable ? 'grab' : 'default';
@@ -239,15 +229,16 @@ export class SimpleDragHover {
     const isStillHovered = widget.element.contains(elementUnderMouse) || widget.element === elementUnderMouse;
     
     if (isStillHovered) {
-      // UPDATED COMMENTS: Maintain hover state with current position
+      // UPDATED COMMENTS: Maintain hover state with standard behavior
       widget.state.isHovered = true;
       widget.element.classList.add('widget--hovered');
       
+      // CRITICAL: All widgets get same hover treatment
       const hoverRotation = widget.rotation + 3;
       const hoverScale = widget.scale * 1.02;
       this.setTranslate(this.xOffset, this.yOffset, widget.element, hoverRotation, hoverScale);
     } else {
-      // CRITICAL: Return to normal state with current position
+      // CRITICAL: Return to normal state for all widgets
       widget.state.isHovered = false;
       widget.element.classList.remove('widget--hovered');
       this.setTranslate(this.xOffset, this.yOffset, widget.element, widget.rotation, widget.scale);
@@ -348,7 +339,7 @@ export class SimpleDragHover {
 
   /**
    * REUSABLE LOGIC: Set element transform with position and effects
-   * Kirupa-style transform setting with rotation and scale
+   * Hardware-accelerated transform with subpixel precision
    * 
    * @param {number} xPos - X position
    * @param {number} yPos - Y position  
@@ -357,7 +348,12 @@ export class SimpleDragHover {
    * @param {number} scale - Scale factor
    */
   setTranslate(xPos, yPos, element, rotation = 0, scale = 1) {
-    element.style.transform = `translate3d(${xPos}px, ${yPos}px, 0) rotate(${rotation}deg) scale(${scale})`;
+    // CRITICAL: Round positions to prevent subpixel blurriness
+    const roundedX = Math.round(xPos);
+    const roundedY = Math.round(yPos);
+    
+    // UPDATED COMMENTS: Hardware-accelerated transform with translateZ(0)
+    element.style.transform = `translate3d(${roundedX}px, ${roundedY}px, 0) rotate(${rotation}deg) scale(${scale})`;
   }
 
   /**

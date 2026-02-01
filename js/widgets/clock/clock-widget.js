@@ -171,7 +171,7 @@ export class ClockWidget extends WidgetBase {
   /**
    * Update hand rotation without 360° transition jumps
    * REUSABLE LOGIC: Smooth hand rotation with transition management for SVG hands
-   * UPDATED COMMENTS: Works with both SVG containers and CSS elements
+   * UPDATED COMMENTS: Fixed - eliminates all transition conflicts and jitter
    */
   updateHandWithoutJump(handElement, newAngle, handType) {
     if (!handElement) return;
@@ -184,22 +184,19 @@ export class ClockWidget extends WidgetBase {
     const isCrossingBoundary = angleDiff > 180;
     
     if (isCrossingBoundary) {
-      // CRITICAL: Temporarily disable transition to prevent jump
+      // CRITICAL: Completely disable transition to prevent jump
       handElement.style.transition = 'none';
+      handElement.style.transform = `rotate(${newAngle}deg)`;
+      handElement.dataset.angle = newAngle;
       
-      // SCALED FOR: Re-enable transition after DOM update
-      requestAnimationFrame(() => {
-        handElement.style.transform = `rotate(${newAngle}deg)`;
-        handElement.dataset.angle = newAngle;
-        
-        // UPDATED COMMENTS: Re-enable transition after position update
-        requestAnimationFrame(() => {
-          handElement.style.transition = handType === 'second' ? 
-            'transform 0.1s ease-out' : 'transform 0.5s ease-in-out';
-        });
-      });
+      // SCALED FOR: Force immediate DOM update without transition
+      handElement.offsetHeight; // Force reflow
+      
+      // UPDATED COMMENTS: Keep transitions disabled for clock hands to prevent jitter
+      // Clock hands should move instantly, not smoothly, for accurate time display
     } else {
-      // REUSED: Normal smooth transition for both SVG and CSS hands
+      // CRITICAL: No transitions for clock hands - instant movement only
+      handElement.style.transition = 'none';
       handElement.style.transform = `rotate(${newAngle}deg)`;
       handElement.dataset.angle = newAngle;
     }

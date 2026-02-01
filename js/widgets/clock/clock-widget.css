@@ -179,7 +179,7 @@
   left: 0;
 }
 
-/* CRITICAL: Hour hand container - starts from center with 3px offset */
+/* CRITICAL: Hour hand container - hardware accelerated, no transitions */
 .hour-hand {
   position: absolute;
   width: 3px;
@@ -187,7 +187,10 @@
   left: calc(50% - 1.5px);
   top: calc(50% - 24px); /* CRITICAL: Start 3px from center, extend 24px upward */
   transform-origin: 1.5px calc(24px); /* CRITICAL: Origin at clock center (3px below SVG start) */
-  transition: transform 0.5s ease-in-out;
+  /* UPDATED COMMENTS: No transitions - instant movement for accurate time display */
+  will-change: transform;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
 }
 
 .hour-hand img {
@@ -196,7 +199,7 @@
   display: block;
 }
 
-/* CRITICAL: Minute hand container - starts from center with 3px offset */
+/* CRITICAL: Minute hand container - hardware accelerated, no transitions */
 .minute-hand {
   position: absolute;
   width: 3px;
@@ -204,7 +207,10 @@
   left: calc(50% - 1.5px);
   top: calc(50% - 55px); /* CRITICAL: Start 3px from center, extend 55px upward */
   transform-origin: 1.5px calc(55px); /* CRITICAL: Origin at clock center (3px below SVG start) */
-  transition: transform 0.5s ease-in-out;
+  /* UPDATED COMMENTS: No transitions - instant movement for accurate time display */
+  will-change: transform;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
 }
 
 .minute-hand img {
@@ -213,7 +219,7 @@
   display: block;
 }
 
-/* CRITICAL: Second hand - CSS-based, also starts 3px from center */
+/* CRITICAL: Second hand - hardware accelerated, no transitions */
 .second-hand {
   position: absolute;
   width: 1px;
@@ -222,7 +228,10 @@
   left: calc(50% - 0.5px);
   top: calc(50% - 3px - 31px); /* CRITICAL: Start 3px from center, extend 31px upward */
   transform-origin: 0.5px calc(31px + 3px); /* CRITICAL: Origin at clock center (3px below hand start) */
-  transition: transform 0.1s ease-out;
+  /* UPDATED COMMENTS: No transitions - instant movement for smooth second ticking */
+  will-change: transform;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
 }
 
 /* ANCHOR: center_dot */
