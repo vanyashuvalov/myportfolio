@@ -39,7 +39,7 @@
   border: 1px solid #E2E8F0;
   /* CRITICAL: Apply shadows to document page like sticker container */
   box-shadow: var(--widget-shadow-default);
-  transition: box-shadow var(--transition-normal);
+  /* CRITICAL: Shadow transitions moved to shared styles/components.css */
   overflow: hidden;
 }
 
@@ -143,16 +143,4 @@
 }
 
 /* ANCHOR: resume_interaction_shadows */
-/* CRITICAL: Shadow states applied to document page like sticker container */
-.widget--resume:hover .document-page {
-  box-shadow: var(--widget-shadow-hovered);
-}
-
-.widget--resume.widget--pressed .document-page {
-  box-shadow: var(--widget-shadow-pressed);
-}
-
-.widget--resume.widget--dragging .document-page {
-  box-shadow: var(--widget-shadow-dragging);
-  transition: none !important;
-}
+/* CRITICAL: Shadow states moved to shared styles/components.css for reusability */

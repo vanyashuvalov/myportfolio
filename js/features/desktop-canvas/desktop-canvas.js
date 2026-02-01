@@ -240,8 +240,8 @@ export class DesktopCanvas {
    * UPDATED COMMENTS: Adding clock, resume and sticker widgets for professional portfolio
    */
   async createDefaultWidgets() {
-    console.log('🎯 Canvas initialized - adding portfolio widgets');
-    console.log('📋 Current widgets: Clock + Resume + Sticker');
+    console.log('Canvas initialized - adding portfolio widgets');
+    console.log('Current widgets: Clock + Resume + Sticker');
     
     // UPDATED COMMENTS: Calculate positions for three widgets
     const clockPosition = {

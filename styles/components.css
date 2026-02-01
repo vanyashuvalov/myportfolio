@@ -14,7 +14,101 @@
   transform-origin: top left;
   /* CRITICAL: Force overflow visible for shadows */
   overflow: visible !important;
-  /* UPDATED COMMENTS: No CSS transitions - using JS animations for better control */
+  /* UPDATED COMMENTS: CSS transitions for smooth animations */
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ANCHOR: universal_shadow_states */
+/* REUSED: Universal shadow states for all widgets - applied to inner containers */
+/* CRITICAL: Shadows applied to inner content for proper transform alignment */
+
+/* Universal shadow transitions for inner containers */
+.sticker-container,
+.document-page,
+.clock-face,
+.feed-button-container {
+  /* CRITICAL: CSS transitions for shadows only - JS handles transforms */
+  transition: box-shadow var(--transition-normal);
+}
+
+.folder-back {
+  /* CRITICAL: CSS transitions for shadows only - JS handles transforms */
+  transition: filter var(--transition-normal);
+}
+
+/* Sticker widget shadows */
+.widget--sticker:hover .sticker-container,
+.widget--sticker.widget--hovered .sticker-container {
+  box-shadow: var(--widget-shadow-hovered);
+}
+
+.widget--sticker.widget--pressed .sticker-container {
+  box-shadow: var(--widget-shadow-pressed);
+}
+
+.widget--sticker.widget--dragging .sticker-container {
+  box-shadow: var(--widget-shadow-dragging);
+  transition: none !important;
+}
+
+/* Resume widget shadows */
+.widget--resume:hover .document-page,
+.widget--resume.widget--hovered .document-page {
+  box-shadow: var(--widget-shadow-hovered);
+}
+
+.widget--resume.widget--pressed .document-page {
+  box-shadow: var(--widget-shadow-pressed);
+}
+
+.widget--resume.widget--dragging .document-page {
+  box-shadow: var(--widget-shadow-dragging);
+  transition: none !important;
+}
+
+/* Clock widget shadows */
+.widget--clock:hover .clock-face,
+.widget--clock.widget--hovered .clock-face {
+  box-shadow: var(--widget-shadow-hovered);
+}
+
+.widget--clock.widget--pressed .clock-face {
+  box-shadow: var(--widget-shadow-pressed);
+}
+
+.widget--clock.widget--dragging .clock-face {
+  box-shadow: var(--widget-shadow-dragging);
+  transition: none !important;
+}
+
+/* Feed button widget shadows */
+.widget--feed-button:hover .feed-button-container,
+.widget--feed-button.widget--hovered .feed-button-container {
+  box-shadow: var(--widget-shadow-hovered);
+}
+
+.widget--feed-button.widget--pressed .feed-button-container {
+  box-shadow: var(--widget-shadow-pressed);
+}
+
+.widget--feed-button.widget--dragging .feed-button-container {
+  box-shadow: var(--widget-shadow-dragging);
+  transition: none !important;
+}
+
+/* Folder widget shadows (uses filter instead of box-shadow) */
+.widget--folder:hover .folder-back,
+.widget--folder.widget--hovered .folder-back {
+  filter: drop-shadow(var(--widget-shadow-hovered));
+}
+
+.widget--folder.widget--pressed .folder-back {
+  filter: drop-shadow(var(--widget-shadow-pressed));
+}
+
+.widget--folder.widget--dragging .folder-back {
+  filter: drop-shadow(var(--widget-shadow-dragging));
+  transition: none !important;
 }
 
 /* CRITICAL: Universal font smoothing fix for all text elements */

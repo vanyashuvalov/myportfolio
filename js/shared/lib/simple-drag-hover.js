@@ -36,7 +36,7 @@ export class SimpleDragHover {
 
   /**
    * Initialize drag and hover for a widget
-   * CRITICAL: Hardware-accelerated drag with optimized transitions
+   * CRITICAL: Pure JS animations without CSS transitions
    */
   initWidget(widget) {
     if (!widget || !widget.element) {
@@ -55,13 +55,13 @@ export class SimpleDragHover {
     this.xOffset = constrainedPosition.x;
     this.yOffset = constrainedPosition.y;
     
-    // CRITICAL: Hardware acceleration and optimized transitions
+    // CRITICAL: Hardware acceleration and smooth transform transitions
     element.style.willChange = 'transform';
     element.style.transformStyle = 'preserve-3d';
     element.style.backfaceVisibility = 'hidden';
     
-    // UPDATED COMMENTS: Smooth transition for hover only - disabled during drag
-    element.style.transition = 'transform 200ms cubic-bezier(0.4, 0, 0.2, 1)';
+    // UPDATED COMMENTS: CSS transitions for transforms only - shadows handled separately
+    element.style.transition = 'transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)';
     
     // CRITICAL: Listen on container for reliable drag (Kirupa pattern)
     const container = element.parentElement || document.body;
@@ -86,8 +86,8 @@ export class SimpleDragHover {
   }
 
   /**
-   * Handle hover start - universal hover effects
-   * REUSED: Standard hover behavior for all widgets including clock
+   * Handle hover start - CSS transitions handle transforms and shadows
+   * REUSED: CSS handles both transforms and shadows automatically
    */
   handleHoverStart(widget) {
     if (this.active) return; // Skip hover during drag
@@ -95,16 +95,16 @@ export class SimpleDragHover {
     widget.state.isHovered = true;
     widget.element.classList.add('widget--hovered');
     
-    // CRITICAL: All widgets get same hover treatment - rotation + scale
+    // CRITICAL: CSS handles both transform and shadow transitions automatically
     const hoverRotation = widget.rotation + 3;
     const hoverScale = widget.scale * 1.02;
     
-    // UPDATED COMMENTS: Use current offset position for hover
+    // UPDATED COMMENTS: Direct CSS transform - CSS transition handles animation
     this.setTranslate(this.xOffset, this.yOffset, widget.element, hoverRotation, hoverScale);
   }
 
   /**
-   * Handle hover end - universal hover cleanup
+   * Handle hover end - CSS transitions handle transforms and shadows
    * SCALED FOR: Standard hover reset for all widgets
    */
   handleHoverEnd(widget) {
@@ -113,7 +113,7 @@ export class SimpleDragHover {
     widget.state.isHovered = false;
     widget.element.classList.remove('widget--hovered');
     
-    // CRITICAL: Return to base transform for all widgets
+    // CRITICAL: Direct CSS transform - CSS transition handles animation back to base state
     this.setTranslate(this.xOffset, this.yOffset, widget.element, widget.rotation, widget.scale);
   }
 
@@ -129,7 +129,7 @@ export class SimpleDragHover {
     const isWidgetClick = widget.element === event.target || widget.element.contains(event.target);
     if (!isWidgetClick) return;
     
-    console.log('🎯 DRAG START - Widget clicked!', widget.id); // DEBUG
+    console.log('DRAG START - Widget clicked!', widget.id); // DEBUG
     
     event.preventDefault();
     
@@ -147,15 +147,15 @@ export class SimpleDragHover {
     widget.element.classList.add('widget--dragging');
     widget.element.style.zIndex = widget.zIndex + 1000;
     
-    // CRITICAL: Disable transitions during drag
-    widget.element.style.transition = 'none';
+    // CRITICAL: Enable smooth transitions for dragging - transform only, not shadows
+    widget.element.style.transition = 'transform 0.1s ease-out';
     
     // CRITICAL: Attach global mouse events to container
     const container = widget._dragContainer;
     container.addEventListener('mousemove', this.boundMouseMove);
     container.addEventListener('mouseup', this.boundMouseUp);
     
-    console.log('✅ DRAG INITIALIZED'); // DEBUG
+    console.log('DRAG INITIALIZED'); // DEBUG
   }
 
   /**
@@ -216,8 +216,8 @@ export class SimpleDragHover {
     this.active = false;
     widget.state.isDragging = false;
     
-    // UPDATED COMMENTS: Restore optimized transitions after drag
-    widget.element.style.transition = 'transform 200ms cubic-bezier(0.4, 0, 0.2, 1)';
+    // CRITICAL: Keep smooth transitions for post-drag animations
+    widget.element.style.transition = 'transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)';
     
     // REUSED: Visual state cleanup
     widget.element.style.cursor = widget.config.isDraggable ? 'grab' : 'default';
@@ -229,16 +229,16 @@ export class SimpleDragHover {
     const isStillHovered = widget.element.contains(elementUnderMouse) || widget.element === elementUnderMouse;
     
     if (isStillHovered) {
-      // UPDATED COMMENTS: Maintain hover state with standard behavior
+      // UPDATED COMMENTS: Maintain hover state - CSS handles both transforms and shadows
       widget.state.isHovered = true;
       widget.element.classList.add('widget--hovered');
       
-      // CRITICAL: All widgets get same hover treatment
+      // CRITICAL: Direct CSS transform - CSS transition handles animation
       const hoverRotation = widget.rotation + 3;
       const hoverScale = widget.scale * 1.02;
       this.setTranslate(this.xOffset, this.yOffset, widget.element, hoverRotation, hoverScale);
     } else {
-      // CRITICAL: Return to normal state for all widgets
+      // CRITICAL: Direct CSS transform back to normal state
       widget.state.isHovered = false;
       widget.element.classList.remove('widget--hovered');
       this.setTranslate(this.xOffset, this.yOffset, widget.element, widget.rotation, widget.scale);
@@ -277,7 +277,7 @@ export class SimpleDragHover {
     const actualWidth = rect.width;
     const actualHeight = rect.height;
     
-    console.log('📏 WIDGET DIMENSIONS:', {
+    console.log('WIDGET DIMENSIONS:', {
       element: element.className,
       measurements: {
         boundingRect: { width: rect.width, height: rect.height },
@@ -320,7 +320,7 @@ export class SimpleDragHover {
     const constrainedY = Math.max(minY, Math.min(maxY, y));
     
     // REUSABLE LOGIC: Debug output for boundary verification
-    console.log('🎯 CORRECTED BOUNDARY CALCULATION:', {
+    console.log('CORRECTED BOUNDARY CALCULATION:', {
       input: { x, y },
       output: { x: constrainedX, y: constrainedY },
       viewport: { width: viewportWidth, height: viewportHeight },

@@ -24,7 +24,10 @@
 .folder-back {
   z-index: 1;
   filter: drop-shadow(var(--widget-shadow-default));
+  /* CRITICAL: Shadow transitions moved to shared styles/components.css */
 }
+
+/* CRITICAL: Shadow states moved to shared styles/components.css for reusability */
 
 .folder-upper {
   z-index: 3;
@@ -50,13 +53,10 @@
   border-radius: 2px;
   background-size: cover;
   background-position: center;
-  transition: transform var(--transition-fast);
+  /* CRITICAL: NO CSS hover - JS handles all interactions */
 }
 
-.folder-thumbnail:hover {
-  transform: scale(1.1);
-  z-index: 4;
-}
+/* CRITICAL: NO CSS hover - JS handles all interactions */
 
 .folder-label {
   position: absolute;

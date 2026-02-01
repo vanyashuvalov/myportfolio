@@ -15,9 +15,7 @@
   background-repeat: no-repeat;
   background-position: center;
   cursor: pointer;
-  transition: transform var(--transition-normal);
+  /* CRITICAL: NO CSS hover - JS handles all interactions */
 }
 
-.cat-sprite:hover {
-  transform: scale(1.1);
-}
+/* CRITICAL: NO CSS hover - JS handles all interactions */

@@ -31,7 +31,7 @@
   padding: 8px; /* CRITICAL: 8px padding as specified */
   /* CRITICAL: Apply shadows to clock face like other widgets */
   box-shadow: var(--widget-shadow-default);
-  transition: box-shadow var(--transition-normal);
+  /* CRITICAL: Shadow transitions moved to shared styles/components.css */
   /* CRITICAL: Optimize for transform performance */
   will-change: transform, box-shadow;
   transform-style: preserve-3d;
@@ -288,17 +288,4 @@
 }
 
 /* ANCHOR: clock_interaction_shadows */
-/* CRITICAL: Shadow states applied to clock face like other widgets */
-.widget--clock:hover .clock-face,
-.widget--clock.widget--hovered .clock-face {
-  box-shadow: var(--widget-shadow-hovered);
-}
-
-.widget--clock.widget--pressed .clock-face {
-  box-shadow: var(--widget-shadow-pressed);
-}
-
-.widget--clock.widget--dragging .clock-face {
-  box-shadow: var(--widget-shadow-dragging);
-  transition: none !important;
-}
+/* CRITICAL: Shadow states moved to shared styles/components.css for reusability */

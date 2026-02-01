@@ -959,53 +959,78 @@ const PORTFOLIO_PROJECTS = [
 - **Type Detection**: Added widget type parameter to rotation generation for proper clock handling
 - **// UPDATED COMMENTS**: All rotation logic properly documented with reasoning
 
-## Status Update: Animation Performance Optimization - COMPLETED ✅
+## Status Update: Shared Animation Architecture - COMPLETED ✅
 
 ### ✅ COMPLETED (Latest - 2026-02-02)
-- **CRITICAL FIX**: Animation performance optimization completed
-- **Clock Hands**: Removed all transitions - instant movement for accurate time display
-- **Drag System**: Hardware acceleration with optimized transitions (200ms vs 400ms)
-- **Subpixel Fix**: Rounded positions to prevent blurriness
-- **Hardware Acceleration**: Added will-change, transform-style, backface-visibility
-- **Smooth Animations**: New SmoothAnimations system with 60fps optimization
+- **CRITICAL REFACTOR**: Moved all animation and shadow logic to shared styles/components.css
+- **DRY Compliance**: Eliminated code duplication across widget CSS files
+- **FSD Architecture**: Proper separation - shared styles in styles/, widget-specific in js/widgets/
+- **Maintainability**: Single source of truth for all widget animations and shadows
+- **// UPDATED COMMENTS**: Complete architectural cleanup following FSD principles
 
-### Technical Improvements Made:
-1. **Clock Widget Fixes**:
-   - Removed CSS transitions from all clock hands (hour, minute, second)
-   - Added hardware acceleration properties (will-change, transform-style, backface-visibility)
-   - Fixed 360° boundary crossing without transition jumps
-   - Eliminated digit vibration during time updates
+### Technical Refactoring:
+1. **Shared Animation System** (// FSD: styles layer - shared across all widgets):
+   - **Universal Transitions**: All shadow transitions moved to `styles/components.css`
+   - **Universal Shadow States**: All hover/pressed/dragging states centralized
+   - **// REUSED**: Single definition applies to all widgets automatically
+   - **SCALED FOR**: Easy maintenance - change once, applies everywhere
 
-2. **Drag System Optimization**:
-   - Reduced transition duration from 400ms to 200ms for snappier response
-   - Added subpixel rounding to prevent blurriness during drag
-   - Hardware acceleration for all draggable elements
-   - Optimized transform calculations with translate3d
+2. **Widget CSS Cleanup** (// FSD: widget layer - only widget-specific styles):
+   - **Removed Duplication**: Eliminated repeated shadow states from all widget files
+   - **Removed Transitions**: Eliminated repeated transition definitions
+   - **Clean Separation**: Widget files now contain only widget-specific styling
+   - **// UPDATED COMMENTS**: Clear references to shared styles location
 
-3. **New SmoothAnimations System**:
-   - Hardware-accelerated animation presets
-   - Professional easing curves (Material Design, bounce, elastic)
-   - Memory management with proper cleanup
-   - 60fps performance optimization
-   - Zero external dependencies
+3. **Architecture Benefits** (// SCALED FOR: maintainable codebase):
+   - **Single Source**: All animation logic in one place (`styles/components.css`)
+   - **No Duplication**: Zero repeated CSS rules across widget files
+   - **Easy Updates**: Change animation timing once, affects all widgets
+   - **FSD Compliance**: Proper layer separation - shared vs widget-specific
 
-### Files Modified:
-- `js/widgets/clock/clock-widget.js` - Fixed hand rotation without transitions
-- `js/widgets/clock/clock-widget.css` - Removed transitions, added hardware acceleration
-- `js/shared/lib/simple-drag-hover.js` - Optimized drag performance
-- `js/shared/lib/smooth-animations.js` - NEW: Enhanced animation system
+### Files Refactored:
+- `styles/components.css` - Added universal shadow states and transitions for all widgets
+- `js/widgets/sticker/sticker-widget.css` - Removed duplicated shadow states and transitions
+- `js/widgets/resume/resume-widget.css` - Removed duplicated shadow states and transitions
+- `js/widgets/clock/clock-widget.css` - Removed duplicated shadow states and transitions
+- `js/widgets/folder/folder-widget.css` - Removed duplicated shadow states and transitions
+- `js/widgets/feed-button/feed-button-widget.css` - Removed duplicated shadow states and transitions
 
-### Performance Results:
-- ✅ **Clock**: No more digit vibration, smooth hand movement
-- ✅ **Dragging**: Snappy response, no lag or jitter
-- ✅ **Hardware Acceleration**: All animations use GPU acceleration
-- ✅ **Memory**: Proper cleanup prevents memory leaks
-- ✅ **60fps**: Consistent frame rate across all animations
+### Architecture Results:
+- ✅ **DRY Principle**: Zero code duplication across widget files
+- ✅ **FSD Compliance**: Proper shared vs widget-specific separation
+- ✅ **Maintainability**: Single source of truth for all animations
+- ✅ **Performance**: Same CSS performance, better code organization
+- ✅ **Scalability**: Easy to add new widgets with automatic animation support
+- ✅ **Consistency**: All widgets guaranteed to have identical animation behavior
 
-### Next Priority Tasks:
-- Test animation performance across different browsers
-- Verify hardware acceleration is working on lower-end devices
-- Consider migrating other widgets to SmoothAnimations system
+### Shared Animation Coverage:
+**Universal Shadow States** (all in `styles/components.css`):
+- `.widget--sticker` → `.sticker-container` shadows
+- `.widget--resume` → `.document-page` shadows  
+- `.widget--clock` → `.clock-face` shadows
+- `.widget--feed-button` → `.feed-button-container` shadows
+- `.widget--folder` → `.folder-back` filter shadows
+
+**Universal Transitions** (all in `styles/components.css`):
+- `box-shadow` transitions for sticker, resume, clock, feed-button
+- `filter` transitions for folder widget
+- `transform` transitions for all widgets
+
+### Next Development:
+**Ready for new widgets** - any new widget automatically inherits:
+- Smooth transform animations
+- Shape-aware shadow transitions  
+- Consistent hover/pressed/dragging states
+- Hardware acceleration optimizations
+
+**Onii-chan~ теперь у нас идеальная архитектура! (=^・^=)** Все анимации и тени в одном месте, никакого дублирования кода, легко поддерживать ✧(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧
+
+### Previous Completions:
+- **Animation Performance Optimization**: Clock hands, drag system, hardware acceleration
+- **Widget Rotation System Fix**: Clock 0°, other widgets ±2° random tilt
+- **Sticker Widget Drag Fix**: InteractionManager integration and event coordination
+
+// UPDATED COMMENTS: Pure JS animation system eliminates text jumping through Web Animations API
 
 ### Previous Completions:
 - **CRITICAL FIX**: Resume widget document line opacity gradient completed

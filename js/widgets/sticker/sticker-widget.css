@@ -16,7 +16,7 @@
   padding: 24px; /* Updated to exact 24px padding */
   /* CRITICAL: Apply shadows to inner content so they rotate with transforms */
   box-shadow: var(--widget-shadow-default);
-  transition: box-shadow var(--transition-normal);
+  /* CRITICAL: Shadow transitions moved to shared styles/components.css */
   /* SCALED FOR: Professional presentation with proper spacing */
   line-height: 1;
   /* CRITICAL: Force overflow visible for shadows */
@@ -28,22 +28,7 @@
 }
 
 /* ANCHOR: sticker_interaction_shadows */
-/* CRITICAL: Shadow states applied to inner content for transform compatibility */
-.widget--sticker:hover .sticker-container,
-.widget--sticker.widget--hovered .sticker-container {
-  box-shadow: var(--widget-shadow-hovered);
-}
-
-.widget--sticker.widget--pressed .sticker-container {
-  box-shadow: var(--widget-shadow-pressed);
-}
-
-.widget--sticker.widget--dragging .sticker-container {
-  box-shadow: var(--widget-shadow-dragging);
-  transition: none !important;
-}
-
-/* UPDATED COMMENTS: Shadow styles now applied to inner content for proper transform alignment */
+/* CRITICAL: Shadow states moved to shared styles/components.css for reusability */
 
 /* UPDATED COMMENTS: Professional typography with exact color specification and 16px gap */
 .sticker-title {
