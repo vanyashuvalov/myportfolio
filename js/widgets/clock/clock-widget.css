@@ -32,6 +32,10 @@
   /* CRITICAL: Apply shadows to clock face like other widgets */
   box-shadow: var(--widget-shadow-default);
   transition: box-shadow var(--transition-normal);
+  /* CRITICAL: Optimize for transform performance */
+  will-change: transform, box-shadow;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
 }
 
 /* ANCHOR: clock_background */
@@ -91,6 +95,10 @@
   height: 100%;
   top: 0;
   left: 0;
+  /* CRITICAL: Isolate text layer from parent transforms */
+  will-change: transform;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
 }
 
 .clock-number {
@@ -99,7 +107,7 @@
   height: 20px;
   font-family: var(--font-family-primary);
   font-style: normal;
-  font-weight: 400;
+  font-weight: 300; /* UPDATED: Thinner font weight */
   font-size: 10px;
   line-height: 12px;
   display: flex;
@@ -107,67 +115,75 @@
   justify-content: center;
   text-align: center;
   color: #FFFFFF;
+  /* CRITICAL: Fix font smoothing during transforms */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* CRITICAL: Hardware acceleration for stable text rendering */
+  will-change: transform;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
-/* CRITICAL: Exact positioning for each number as per Figma */
+/* CRITICAL: Integer pixel positioning to prevent subpixel jitter */
 .clock-number--12 {
-  left: calc(50% - 10px);
-  top: calc(50% - 10px - 43px);
+  left: 60px;  /* was calc(50% - 10px) = 60px */
+  top: 18px;   /* was 12px, moved down +6px more */
 }
 
 .clock-number--1 {
-  left: calc(50% - 10px + 22px);
-  top: calc(50% - 10px - 38px);
+  left: 82px;  /* was calc(50% - 10px + 22px) = 82px */
+  top: 23px;   /* was 17px, moved down +6px more */
 }
 
 .clock-number--2 {
-  left: calc(50% - 10px + 40px);
-  top: calc(50% - 10px - 22px);
+  left: 99px;  /* was 100px, moved left -1px */
+  top: 39px;   /* was 33px, moved down +6px more */
 }
 
 .clock-number--3 {
-  left: calc(50% - 10px + 44px);
-  top: calc(50% - 10px);
+  left: 104px; /* was calc(50% - 10px + 44px) = 104px */
+  top: 61px;   /* was 55px, moved down +6px more */
 }
 
 .clock-number--4 {
-  left: calc(50% - 10px + 40px);
-  top: calc(50% - 10px + 22px);
+  left: 99px;  /* was 100px, moved left -1px */
+  top: 83px;   /* was 77px, moved down +6px more */
 }
 
 .clock-number--5 {
-  left: calc(50% - 10px + 24px);
-  top: calc(50% - 10px + 39px);
+  left: 84px;  /* was calc(50% - 10px + 24px) = 84px */
+  top: 99px;   /* was 100px, moved up -1px */
 }
 
 .clock-number--6 {
-  left: calc(50% - 10px);
-  top: calc(50% - 10px + 43px);
+  left: 60px;  /* was calc(50% - 10px) = 60px */
+  top: 104px;  /* was 98px, moved down +6px more */
 }
 
 .clock-number--7 {
-  left: calc(50% - 10px - 22px);
-  top: calc(50% - 10px + 39px);
+  left: 38px;  /* was calc(50% - 10px - 22px) = 38px */
+  top: 99px;   /* was 100px, moved up -1px */
 }
 
 .clock-number--8 {
-  left: calc(50% - 10px - 40px);
-  top: calc(50% - 10px + 22px);
+  left: 21px;  /* was 20px, moved right +1px */
+  top: 83px;   /* was 77px, moved down +6px more */
 }
 
 .clock-number--9 {
-  left: calc(50% - 10px - 44px);
-  top: calc(50% - 10px);
+  left: 16px;  /* was calc(50% - 10px - 44px) = 16px */
+  top: 61px;   /* was 55px, moved down +6px more */
 }
 
 .clock-number--10 {
-  left: calc(50% - 10px - 40px);
-  top: calc(50% - 10px - 22px);
+  left: 21px;  /* was 20px, moved right +1px */
+  top: 39px;   /* was 33px, moved down +6px more */
 }
 
 .clock-number--11 {
-  left: calc(50% - 10px - 22px);
-  top: calc(50% - 10px - 38px);
+  left: 38px;  /* was calc(50% - 10px - 22px) = 38px */
+  top: 23px;   /* was 17px, moved down +6px more */
 }
 
 /* ANCHOR: clock_hands */
@@ -251,8 +267,8 @@
   position: absolute;
   width: 27px;
   height: 14px;
-  left: calc(50% - 13.5px);
-  top: calc(50% - 7px + 19px);
+  left: 55px;  /* was 47px, moved right +8px */
+  top: 81px;   /* was 75px, moved down +6px more */
   font-family: var(--font-family-primary);
   font-style: normal;
   font-weight: 400;
@@ -261,6 +277,14 @@
   text-align: center;
   color: #FFFFFF;
   opacity: 0.5; /* CRITICAL: 50% opacity as per Figma */
+  /* CRITICAL: Fix font smoothing during transforms */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* CRITICAL: Hardware acceleration for stable text rendering */
+  will-change: transform;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 /* ANCHOR: clock_interaction_shadows */

@@ -17,6 +17,31 @@
   /* UPDATED COMMENTS: No CSS transitions - using JS animations for better control */
 }
 
+/* CRITICAL: Universal font smoothing fix for all text elements */
+.widget *,
+.widget *::before,
+.widget *::after {
+  /* UPDATED COMMENTS: Fix font smoothing during transforms across all browsers */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* CRITICAL: Hardware acceleration for stable text rendering */
+  backface-visibility: hidden;
+}
+
+/* CRITICAL: Hardware acceleration for all transformable elements */
+.widget,
+.widget > *,
+.widget [class*="container"],
+.widget [class*="content"],
+.widget [class*="title"],
+.widget [class*="body"],
+.widget [class*="label"],
+.widget [class*="text"] {
+  /* UPDATED COMMENTS: GPU optimization for smooth transforms */
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
 /* UPDATED COMMENTS: Widget states - no shadows on wrapper, handled by inner content */
 .widget:hover,
 .widget.widget--hovered {
