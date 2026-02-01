@@ -951,7 +951,13 @@ const PORTFOLIO_PROJECTS = [
 
 ## Status Update: Drag System Fix - COMPLETED ✅
 
-### ✅ COMPLETED (Latest - 2026-01-31)
+### ✅ COMPLETED (Latest - 2026-02-01)
+- **CRITICAL FIX**: Resume widget document line opacity gradient completed
+- **Opacity Gradient**: Applied rgba(0,0,0,0.3) to rgba(0,0,0,0.1) gradient to document lines as specified
+- **CSS Fix**: Fixed document-line styles with proper nth-child selectors for gradient effect
+- **Visual Polish**: Resume widget now matches exact mockup specifications with proper text line opacity
+
+### ✅ COMPLETED (2026-01-31)  
 - **CRITICAL FIX**: Fixed sticker widget drag functionality - sticker now moves properly during drag operations
 - **InteractionManager Integration**: Re-enabled InteractionManager in widget-base.js setupInteractions() method  
 - **Event System Fix**: Added missing widget:dragmove and widget:dragend events to InteractionManager
@@ -1549,3 +1555,94 @@ class CompatibilityChecker {
 **Architecture**: Clear separation of concerns - one system per responsibility
 
 **Result**: No more transform conflicts - SimpleDragHover has complete control
+### 2024-02-01: Drag System Debugging & Visibility Fixes (COMPLETED)
+**Issue**: Dragging completely broken after transform ownership changes
+**Root Cause**: Multiple issues after removing initial transforms
+- Widgets not visible due to missing initial positioning
+- Event target checking too strict for container-based listening
+- Default position fallback needed when no initial position set
+
+**Solution Applied**:
+1. **Visibility Fixes**: Ensured widgets are visible after initialization
+   - Added `opacity: 1` and `display: block` to make widgets visible
+   - Set default position (100px, 100px) when no initial position found
+   - Applied initial transform immediately after SimpleDragHover initialization
+2. **Event Handling Fix**: Improved click detection for container-based events
+   - Changed from strict `event.target === widget.element` check
+   - Now uses `widget.element.contains(event.target)` for child elements
+   - Allows clicking on widget content to initiate drag
+3. **Debug Cleanup**: Removed debug logging for production readiness
+   - Cleaned up console.log statements
+   - Maintained clean, production-ready code
+
+**Files Modified**:
+- `js/shared/lib/simple-drag-hover.js` - Fixed visibility, event handling, cleaned debug logs
+
+**REUSABLE LOGIC**: Container-based event handling pattern with proper target detection
+**Result**: Widgets now visible and draggable with proper hover effects
+
+**Status**: Drag and hover system should now work correctly
+### 2024-02-01: Resume Widget Implementation (COMPLETED)
+**Requirement**: Create resume widget matching mockup design
+**Specifications**: 
+- 140x140 wrapper with drag/hover functionality
+- 120x120 document icon made from divs (no images)
+- "Resume.pdf" label (not rotated initially)
+- Document icon with folded corner and content lines
+
+**Implementation**:
+1. **Widget Structure**: Created ResumeWidget extending WidgetBase
+   - Registered in DesktopCanvas widget types
+   - Added to default widgets creation
+   - Positioned at 5% from left, 15% from top
+2. **Document Icon Design**: Pure CSS document icon from divs
+   - 80x100px white document page with border
+   - Folded corner effect using CSS gradients and pseudo-elements
+   - Content lines with varying widths (90%, 70%, 50%)
+   - Drop shadow applied to icon container
+3. **Label**: "Resume.pdf" text below icon
+   - 12px font size, medium weight
+   - Not rotated initially as specified
+   - Centered below document icon
+
+**Files Created/Modified**:
+- `js/widgets/resume/resume-widget.js` - Resume widget implementation
+- `styles/components.css` - Document icon CSS design
+- `js/features/desktop-canvas/desktop-canvas.js` - Widget registration and creation
+
+**REUSABLE LOGIC**: Document icon pattern available for other file-type widgets
+**Result**: Resume widget now displays as document icon matching mockup design
+
+### 2024-02-01: CSS Modular Refactoring (COMPLETED)
+**Requirement**: Refactor component styles from monolithic components.css to modular widget-specific files
+**Goal**: Improve maintainability and follow component-based architecture
+
+**Implementation**:
+1. **Widget-Specific CSS Files Created**:
+   - `js/widgets/sticker/sticker-widget.css` - Sticker widget styles with themes and variants
+   - `js/widgets/resume/resume-widget.css` - Resume widget document icon styles  
+   - `js/widgets/clock/clock-widget.css` - Clock widget SVG and animation styles
+   - `js/widgets/folder/folder-widget.css` - Folder widget thumbnail grid styles
+   - `js/widgets/cat/cat-widget.css` - Cat widget sprite animation styles
+   - `js/widgets/feed-button/feed-button-widget.css` - Feed button interaction styles
+
+2. **Preserved Shared Styles**: Kept reusable design tokens in shared files
+   - `styles/variables.css` - Color system, shadows, typography, spacing tokens
+   - `styles/components.css` - Base widget class and universal widget behaviors
+   - Maintained CSS custom properties for consistent theming
+
+3. **Modular Architecture Benefits**:
+   - **Component Isolation**: Each widget has its own CSS file co-located with JS
+   - **Maintainability**: Easier to modify widget-specific styles without affecting others
+   - **Reusability**: Shared design tokens remain centralized for consistency
+   - **Scalability**: New widgets can have isolated styles without bloating main CSS
+
+**Files Modified**:
+- `styles/components.css` - Removed widget-specific styles, kept base widget class
+- Created 6 new widget-specific CSS files with extracted styles
+- Added import comments for build process integration
+
+**REUSED**: CSS custom properties from variables.css for consistent theming across all widgets
+**SCALED FOR**: Modular CSS architecture supporting 50+ widgets without style conflicts
+
+**Result**: CSS architecture now follows component-based structure with clear separation of concerns

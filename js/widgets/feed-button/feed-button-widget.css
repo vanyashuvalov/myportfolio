@@ -1,0 +1,36 @@
+/* ANCHOR: feed_button_styles */
+/* REUSED: Feed button widget specific styles extracted from components.css */
+/* SCALED FOR: Modular CSS architecture with component isolation */
+
+/* ANCHOR: feed_button */
+.feed-button {
+  width: 60px;
+  height: 60px;
+}
+
+.feed-button-container {
+  width: 100%;
+  height: 100%;
+  background: var(--color-accent);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--widget-shadow-default);
+  transition: all var(--transition-normal);
+}
+
+.feed-button-container:hover {
+  background: #2563EB;
+  transform: scale(1.1);
+}
+
+.feed-button-container:active {
+  transform: scale(0.95);
+}
+
+.feed-icon {
+  width: 24px;
+  height: 24px;
+  fill: white;
+}

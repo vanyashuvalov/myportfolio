@@ -30,7 +30,7 @@ export class SimpleDragHover {
 
   /**
    * Initialize drag and hover for a widget
-   * CRITICAL: Offset-based event attachment with current position initialization
+   * CRITICAL: Offset-based event attachment with boundary-constrained positioning
    */
   initWidget(widget) {
     if (!widget || !widget.element) {
@@ -38,22 +38,28 @@ export class SimpleDragHover {
       return;
     }
     
+    console.log('🎯 INITIALIZING SimpleDragHover for widget:', widget.id, widget.type); // DEBUG
+    
     const element = widget.element;
     
-    // CRITICAL: Initialize offset with widget's current position
+    // CRITICAL: Initialize offset with widget's current position, constrained to bounds
     const initialX = parseFloat(element.dataset.initialX) || 100; // Default to 100px if no position
     const initialY = parseFloat(element.dataset.initialY) || 100; // Default to 100px if no position
-    this.xOffset = initialX;
-    this.yOffset = initialY;
     
-    console.log('🎯 SimpleDragHover initialized with offset:', this.xOffset, this.yOffset); // DEBUG
-    console.log('📍 Dataset values - initialX:', element.dataset.initialX, 'initialY:', element.dataset.initialY); // DEBUG
+    // UPDATED COMMENTS: Apply boundary constraints to initial position
+    const constrainedPosition = this.constrainToScreenBounds(initialX, initialY, element);
+    this.xOffset = constrainedPosition.x;
+    this.yOffset = constrainedPosition.y;
+    
+    console.log('📍 Initial offset (constrained):', this.xOffset, this.yOffset); // DEBUG
     
     // UPDATED COMMENTS: Add smooth transition for hover effects only
     element.style.transition = 'transform 400ms cubic-bezier(0.4, 0, 0.2, 1)';
     
     // CRITICAL: Listen on container for reliable drag (Kirupa pattern)
     const container = element.parentElement || document.body;
+    
+    console.log('📍 Container for events:', container.tagName, container.id || container.className); // DEBUG
     
     // UPDATED COMMENTS: Direct mouse events for immediate response
     element.addEventListener('mouseenter', () => this.handleHoverStart(widget));
@@ -68,6 +74,12 @@ export class SimpleDragHover {
     
     // CRITICAL: Apply initial transform with current offset
     this.setTranslate(this.xOffset, this.yOffset, element, widget.rotation, widget.scale);
+    
+    // CRITICAL: Ensure widget is visible
+    element.style.opacity = '1';
+    element.style.display = 'block';
+    
+    console.log('✅ SimpleDragHover initialized successfully!'); // DEBUG
   }
 
   /**
@@ -106,32 +118,23 @@ export class SimpleDragHover {
 
   /**
    * Handle mouse down - initialize drag with offset calculation
-   * UPDATED COMMENTS: Kirupa-style offset initialization with debugging
+   * UPDATED COMMENTS: Kirupa-style offset initialization
    */
   handleMouseDown(event, widget) {
-    console.log('🎯 Mouse down on:', event.target, 'Widget element:', widget.element); // DEBUG
-    
     if (event.button !== 0) return; // Only left mouse button
     if (!widget.config.isDraggable) return;
     
-    // CRITICAL: Check if click is on widget or its children
+    // CRITICAL: Check if click is on widget wrapper or its children (including inner content)
     const isWidgetClick = widget.element === event.target || widget.element.contains(event.target);
-    if (!isWidgetClick) {
-      console.log('❌ Click not on widget - ignoring'); // DEBUG
-      return;
-    }
+    if (!isWidgetClick) return;
     
-    console.log('✅ Starting drag for widget:', widget.id); // DEBUG
+    console.log('🎯 DRAG START - Widget clicked!', widget.id); // DEBUG
     
     event.preventDefault();
     
     // CRITICAL: Calculate initial position with offset (Kirupa pattern)
     this.initialX = event.clientX - this.xOffset;
     this.initialY = event.clientY - this.yOffset;
-    
-    console.log('📍 Drag start - clientX:', event.clientX, 'clientY:', event.clientY); // DEBUG
-    console.log('📍 Current offset - xOffset:', this.xOffset, 'yOffset:', this.yOffset); // DEBUG
-    console.log('📍 Calculated initial - initialX:', this.initialX, 'initialY:', this.initialY); // DEBUG
     
     // CRITICAL: Set drag state
     this.active = true;
@@ -151,28 +154,30 @@ export class SimpleDragHover {
     container.addEventListener('mousemove', this.boundMouseMove);
     container.addEventListener('mouseup', this.boundMouseUp);
     
-    console.log('✅ Drag initialized successfully'); // DEBUG
+    console.log('✅ DRAG INITIALIZED'); // DEBUG
   }
 
   /**
    * Handle mouse move - update position with offset tracking
-   * CRITICAL: Kirupa-style position calculation with debugging
+   * CRITICAL: Kirupa-style position calculation with screen boundaries
    */
   handleMouseMove(event) {
     if (!this.active || !this.dragWidget) return;
     
-    console.log('🎯 Mouse move - active:', this.active, 'dragWidget:', !!this.dragWidget); // DEBUG
+    console.log('🎯 MOUSE MOVE - Dragging active!'); // DEBUG
     
     event.preventDefault();
     
     const widget = this.dragWidget;
     
     // CRITICAL: Calculate current position using offset pattern
-    this.currentX = event.clientX - this.initialX;
-    this.currentY = event.clientY - this.initialY;
+    let newX = event.clientX - this.initialX;
+    let newY = event.clientY - this.initialY;
     
-    console.log('📍 Mouse move - clientX:', event.clientX, 'clientY:', event.clientY); // DEBUG
-    console.log('📍 Calculated position - currentX:', this.currentX, 'currentY:', this.currentY); // DEBUG
+    // UPDATED COMMENTS: Apply screen boundaries constraint
+    const constrainedPosition = this.constrainToScreenBounds(newX, newY, widget.element);
+    this.currentX = constrainedPosition.x;
+    this.currentY = constrainedPosition.y;
     
     // UPDATED COMMENTS: Update offset for next operation
     this.xOffset = this.currentX;
@@ -182,10 +187,10 @@ export class SimpleDragHover {
     const hoverRotation = widget.rotation + 3;
     const hoverScale = widget.scale * 1.02;
     
-    // CRITICAL: Set transform using offset position
+    // CRITICAL: Set transform using constrained position
     this.setTranslate(this.currentX, this.currentY, widget.element, hoverRotation, hoverScale);
     
-    console.log('✅ Transform applied:', `translate3d(${this.currentX}px, ${this.currentY}px, 0)`); // DEBUG
+    console.log('📍 Position (constrained):', this.currentX, this.currentY); // DEBUG
   }
 
   /**
@@ -239,6 +244,61 @@ export class SimpleDragHover {
     
     // CRITICAL: Clear drag widget reference
     this.dragWidget = null;
+  }
+
+  /**
+   * REUSABLE LOGIC: Constrain widget position to screen boundaries
+   * Prevents widgets from being dragged outside viewport edges
+   * 
+   * @param {number} x - Desired X position
+   * @param {number} y - Desired Y position
+   * @param {HTMLElement} element - Widget element to constrain
+   * @returns {Object} Constrained position {x, y}
+   */
+  constrainToScreenBounds(x, y, element) {
+    // CRITICAL: Get viewport dimensions
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    
+    // UPDATED COMMENTS: Get widget base dimensions without position influence
+    // Using offsetWidth/Height instead of getBoundingClientRect to avoid position offset
+    const elementWidth = element.offsetWidth;
+    const elementHeight = element.offsetHeight;
+    
+    // SCALED FOR: Account for current scale transform to get actual rendered size
+    const computedStyle = window.getComputedStyle(element);
+    const transform = computedStyle.transform;
+    
+    let scaleX = 1, scaleY = 1;
+    if (transform && transform !== 'none') {
+      const matrix = new DOMMatrix(transform);
+      scaleX = Math.abs(matrix.a);
+      scaleY = Math.abs(matrix.d);
+    }
+    
+    // CRITICAL: Calculate actual rendered dimensions with scale
+    const actualWidth = elementWidth * scaleX;
+    const actualHeight = elementHeight * scaleY;
+    
+    // UPDATED COMMENTS: Calculate boundaries (widget edges must stay within viewport)
+    const minX = 0;
+    const maxX = viewportWidth - actualWidth;
+    const minY = 0;
+    const maxY = viewportHeight - actualHeight;
+    
+    // CRITICAL: Constrain position to boundaries
+    const constrainedX = Math.max(minX, Math.min(maxX, x));
+    const constrainedY = Math.max(minY, Math.min(maxY, y));
+    
+    console.log('🔒 BOUNDARY CHECK:', {
+      desired: { x, y },
+      constrained: { x: constrainedX, y: constrainedY },
+      viewport: { width: viewportWidth, height: viewportHeight },
+      widget: { width: actualWidth, height: actualHeight },
+      bounds: { minX, maxX, minY, maxY }
+    }); // DEBUG
+    
+    return { x: constrainedX, y: constrainedY };
   }
 
   /**

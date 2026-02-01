@@ -1,0 +1,161 @@
+/* ANCHOR: resume_widget_styles */
+/* REUSED: Resume widget specific styles extracted from components.css */
+/* SCALED FOR: Modular CSS architecture with component isolation */
+
+/* ANCHOR: resume_widget */
+.resume-widget {
+  width: 140px;
+  height: 140px;
+}
+
+.resume-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* ANCHOR: document_icon */
+.document-icon {
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.document-page {
+  width: 120px;
+  height: 120px;
+  background: #FFFFFF;
+  border-radius: 14px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #E2E8F0;
+  /* CRITICAL: Apply shadows to document page like sticker container */
+  box-shadow: var(--widget-shadow-default);
+  transition: box-shadow var(--transition-normal);
+  overflow: hidden;
+}
+
+/* ANCHOR: document_header */
+.document-header {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 12px;
+  width: 120px;
+  height: 28px;
+  background: rgba(0, 0, 0, 0.07);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.11);
+  flex: none;
+}
+
+/* ANCHOR: pdf_icon */
+.pdf-icon {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+
+/* ANCHOR: pdf_text */
+.pdf-text {
+  width: 20px;
+  height: 14px;
+  font-family: var(--font-family-primary);
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 14px;
+  text-align: right;
+  color: #000000;
+  opacity: 0.6;
+  flex: none;
+}
+
+/* ANCHOR: document_content */
+.document-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px 12px;
+  flex: 1;
+}
+
+.document-line {
+  height: 2px;
+  border-radius: 1px;
+}
+
+/* CRITICAL: Gradient opacity from 30% (top) to 10% (bottom) as specified */
+.document-line:nth-child(1) {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.document-line:nth-child(2) {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.document-line:nth-child(3) {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.document-line:nth-child(4) {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.document-line:nth-child(5) {
+  background: rgba(0, 0, 0, 0.12);
+}
+
+.document-line:nth-child(6) {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.document-line--long {
+  width: 90%;
+}
+
+.document-line--medium {
+  width: 70%;
+}
+
+.document-line--short {
+  width: 50%;
+}
+
+/* ANCHOR: document_label */
+.document-label {
+  font-family: var(--font-family-primary);
+  font-size: 16px;
+  font-weight: 600; /* Semibold */
+  color: var(--color-primary);
+  text-align: center;
+  /* CRITICAL: 10px margin from document wrapper as specified */
+  margin-top: 10px;
+  /* CRITICAL: Label is not rotated initially as per requirements */
+  transform: none;
+  user-select: none;
+}
+
+/* ANCHOR: resume_interaction_shadows */
+/* CRITICAL: Shadow states applied to document page like sticker container */
+.widget--resume:hover .document-page {
+  box-shadow: var(--widget-shadow-hovered);
+}
+
+.widget--resume.widget--pressed .document-page {
+  box-shadow: var(--widget-shadow-pressed);
+}
+
+.widget--resume.widget--dragging .document-page {
+  box-shadow: var(--widget-shadow-dragging);
+  transition: none !important;
+}

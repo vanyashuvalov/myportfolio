@@ -7,6 +7,7 @@ import { StickerWidget } from '../../widgets/sticker/sticker-widget.js';
 import { FolderWidget } from '../../widgets/folder/folder-widget.js';
 import { CatWidget } from '../../widgets/cat/cat-widget.js';
 import { FeedButtonWidget } from '../../widgets/feed-button/feed-button-widget.js';
+import { ResumeWidget } from '../../widgets/resume/resume-widget.js';
 import { widgetInitializer } from '../../shared/lib/widget-initializer.js';
 
 /**
@@ -88,6 +89,7 @@ export class DesktopCanvas {
     this.widgetTypes.set('folder', FolderWidget);
     this.widgetTypes.set('cat', CatWidget);
     this.widgetTypes.set('feed-button', FeedButtonWidget);
+    this.widgetTypes.set('resume', ResumeWidget);
   }
 
   /**
@@ -235,23 +237,36 @@ export class DesktopCanvas {
 
   /**
    * Create default widgets for the desktop
-   * UPDATED COMMENTS: Adding sticker widget with Ivan's professional introduction
-   * TODO: Add remaining widgets incrementally: clock → folder → cat → feed-button
+   * UPDATED COMMENTS: Adding resume and sticker widgets for professional portfolio
    */
   async createDefaultWidgets() {
-    console.log('🎯 Canvas initialized - adding sticker widget for incremental development');
-    console.log('📋 Current widget: Sticker (Ivan\'s introduction)');
-    console.log('📋 Remaining widgets:');
-    console.log('  1. Clock widget (analog time display)');
-    console.log('  2. Folder widget (project showcase)');
-    console.log('  3. Cat widget (interactive pet)');
-    console.log('  4. Feed button widget (cat interaction)');
+    console.log('🎯 Canvas initialized - adding portfolio widgets');
+    console.log('📋 Current widgets: Resume + Sticker');
     
-    // UPDATED COMMENTS: Calculate precise position - 10% from left, 60% from bottom
-    // SCALED FOR: Responsive positioning across all screen sizes
+    // UPDATED COMMENTS: Calculate positions for both widgets
+    const resumePosition = {
+      x: window.innerWidth * 0.05,  // 5% from left edge
+      y: window.innerHeight * 0.15  // 15% from top
+    };
+    
     const stickerPosition = {
-      x: window.innerWidth * 0.1,  // 10% from left edge
-      y: window.innerHeight * 0.4  // 60% from bottom = 40% from top
+      x: window.innerWidth * 0.4,   // 40% from left edge
+      y: window.innerHeight * 0.3   // 30% from top
+    };
+    
+    // REUSED: Widget creation logic for resume
+    const resumeWidget = {
+      type: 'resume',
+      position: resumePosition,
+      config: {
+        personalInfo: {
+          name: 'Ivan Shuvalov',
+          title: 'Product Designer',
+          location: 'Remote',
+          email: 'ivan.shuvalov@example.com',
+          phone: '+1 (555) 123-4567'
+        }
+      }
     };
     
     // REUSED: Widget creation logic for sticker introduction
@@ -266,7 +281,8 @@ export class DesktopCanvas {
       }
     };
     
-    // Create sticker widget immediately
+    // Create both widgets
+    this.createWidget(resumeWidget.type, resumeWidget.position, resumeWidget.config);
     this.createWidget(stickerWidget.type, stickerWidget.position, stickerWidget.config);
     
     // Store remaining planned widgets for future incremental addition

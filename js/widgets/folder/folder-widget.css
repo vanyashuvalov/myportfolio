@@ -1,0 +1,81 @@
+/* ANCHOR: folder_widget_styles */
+/* REUSED: Folder widget specific styles extracted from components.css */
+/* SCALED FOR: Modular CSS architecture with component isolation */
+
+/* ANCHOR: folder_widget */
+.folder-widget {
+  width: 140px;
+  height: 140px;
+}
+
+.folder-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.folder-back,
+.folder-upper {
+  position: absolute;
+  width: 100%;
+  height: auto;
+}
+
+.folder-back {
+  z-index: 1;
+  filter: drop-shadow(var(--widget-shadow-default));
+}
+
+.folder-upper {
+  z-index: 3;
+  top: 0;
+  height: 65px;
+}
+
+.folder-thumbnails {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  bottom: 35px;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 2px;
+  padding: 4px;
+}
+
+.folder-thumbnail {
+  border-radius: 2px;
+  background-size: cover;
+  background-position: center;
+  transition: transform var(--transition-fast);
+}
+
+.folder-thumbnail:hover {
+  transform: scale(1.1);
+  z-index: 4;
+}
+
+.folder-label {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+  text-align: center;
+  pointer-events: none;
+}
+
+.folder-title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary);
+  margin-bottom: 2px;
+}
+
+.folder-subtitle {
+  font-size: var(--font-size-xs);
+  color: var(--color-secondary);
+}

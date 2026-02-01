@@ -1,0 +1,122 @@
+/* ANCHOR: sticker_widget_styles */
+/* REUSED: Sticker widget specific styles extracted from components.css */
+/* SCALED FOR: Modular CSS architecture with component isolation */
+
+/* ANCHOR: sticker_widget */
+.sticker-widget {
+  max-width: 340px; /* Updated max width as specified */
+  min-width: 280px;
+  /* UPDATED COMMENTS: Allow shadows to extend beyond widget bounds */
+  overflow: visible;
+}
+
+.sticker-container {
+  background: var(--color-widget-sticker);
+  border-radius: 14px; /* Updated to 14px border radius */
+  padding: 24px; /* Updated to exact 24px padding */
+  /* CRITICAL: Apply shadows to inner content so they rotate with transforms */
+  box-shadow: var(--widget-shadow-default);
+  transition: box-shadow var(--transition-normal);
+  /* SCALED FOR: Professional presentation with proper spacing */
+  line-height: 1;
+  /* CRITICAL: Force overflow visible for shadows */
+  overflow: visible !important;
+}
+
+/* ANCHOR: sticker_interaction_shadows */
+/* CRITICAL: Shadow states applied to inner content for transform compatibility */
+.widget--sticker:hover .sticker-container,
+.widget--sticker.widget--hovered .sticker-container {
+  box-shadow: var(--widget-shadow-hovered);
+}
+
+.widget--sticker.widget--pressed .sticker-container {
+  box-shadow: var(--widget-shadow-pressed);
+}
+
+.widget--sticker.widget--dragging .sticker-container {
+  box-shadow: var(--widget-shadow-dragging);
+  transition: none !important;
+}
+
+/* UPDATED COMMENTS: Shadow styles now applied to inner content for proper transform alignment */
+
+/* UPDATED COMMENTS: Professional typography with exact color specification and 16px gap */
+.sticker-title {
+  font-family: var(--font-family-primary);
+  font-size: 24px;
+  font-weight: 600; /* Semibold */
+  letter-spacing: -0.02em; /* -2% letter spacing */
+  line-height: 1.2;
+  color: #101828; /* Exact color as specified */
+  margin-bottom: 16px; /* Updated to exact 16px gap */
+  /* REUSED: Professional heading styling */
+}
+
+.sticker-body {
+  font-family: var(--font-family-primary);
+  font-size: 16px;
+  font-weight: 400; /* Regular - explicitly set to 400 */
+  line-height: 1.3; /* 130% line height */
+  letter-spacing: 0; /* Normal letter spacing (0%) for body text */
+  color: #101828; /* Exact color as specified */
+}
+
+/* UPDATED COMMENTS: Paragraph spacing exactly 16px as specified */
+.sticker-body p {
+  margin: 0;
+}
+
+.sticker-body p + p {
+  margin-top: 16px; /* Exact 16px paragraph spacing */
+}
+
+/* ANCHOR: sticker_size_variants */
+/* SCALED FOR: Multiple size options for different content lengths */
+.sticker-container--small {
+  padding: var(--space-4);
+  max-width: 240px;
+}
+
+.sticker-container--small .sticker-title {
+  font-size: 18px;
+  margin-bottom: var(--space-3);
+}
+
+.sticker-container--small .sticker-body {
+  font-size: 14px;
+}
+
+.sticker-container--medium {
+  padding: var(--space-6);
+  max-width: 300px;
+}
+
+.sticker-container--large {
+  padding: var(--space-8);
+  max-width: 340px; /* Updated to match widget max-width */
+  min-width: 320px;
+}
+
+/* ANCHOR: sticker_theme_variants */
+/* REUSED: Theme system with updated yellow gradient */
+.sticker-container--yellow {
+  /* UPDATED COMMENTS: Correct gradient - DCD078 (dark) at top, FEF08A (light) at bottom */
+  background: linear-gradient(180deg, #DCD078 0%, #FEF08A 100%);
+}
+
+.sticker-container--blue {
+  background: linear-gradient(135deg, #BFDBFE 0%, #93C5FD 100%);
+}
+
+.sticker-container--green {
+  background: linear-gradient(135deg, #BBF7D0 0%, #86EFAC 100%);
+}
+
+.sticker-container--pink {
+  background: linear-gradient(135deg, #FBCFE8 0%, #F9A8D4 100%);
+}
+
+.sticker-container--purple {
+  background: linear-gradient(135deg, #DDD6FE 0%, #C4B5FD 100%);
+}

@@ -1,0 +1,73 @@
+/* ANCHOR: clock_widget_styles */
+/* REUSED: Clock widget specific styles extracted from components.css */
+/* SCALED FOR: Modular CSS architecture with component isolation */
+
+/* ANCHOR: clock_widget */
+.clock-widget {
+  width: 140px;
+  height: 140px;
+}
+
+.clock-container {
+  width: 100%;
+  height: 100%;
+  background: var(--color-widget-clock);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow: var(--widget-shadow-default);
+  /* UPDATED COMMENTS: Smooth transitions for all clock interactions */
+  transition: box-shadow var(--transition-normal), transform var(--transition-normal);
+}
+
+.clock-face {
+  width: 124px;
+  height: 124px;
+}
+
+.clock-background {
+  fill: var(--color-widget-clock);
+  stroke: rgba(255, 255, 255, 0.1);
+  stroke-width: 1;
+}
+
+.clock-hands {
+  transform-origin: 62px 62px;
+}
+
+.hour-hand {
+  stroke: white;
+  stroke-width: 3;
+  stroke-linecap: round;
+  transform-origin: 62px 62px;
+  transition: transform 0.5s ease-in-out;
+}
+
+.minute-hand {
+  stroke: white;
+  stroke-width: 2;
+  stroke-linecap: round;
+  transform-origin: 62px 62px;
+  transition: transform 0.5s ease-in-out;
+}
+
+.second-hand {
+  stroke: #ef4444;
+  stroke-width: 1;
+  transform-origin: 62px 62px;
+  transition: transform 0.1s ease-out;
+}
+
+.center-dot {
+  fill: white;
+}
+
+.timezone-label {
+  position: absolute;
+  bottom: 20px;
+  font-size: var(--font-size-xs);
+  color: rgba(255, 255, 255, 0.5);
+  font-family: var(--font-family-primary);
+}
