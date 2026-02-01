@@ -237,21 +237,37 @@ export class DesktopCanvas {
 
   /**
    * Create default widgets for the desktop
-   * UPDATED COMMENTS: Adding resume and sticker widgets for professional portfolio
+   * UPDATED COMMENTS: Adding clock, resume and sticker widgets for professional portfolio
    */
   async createDefaultWidgets() {
     console.log('🎯 Canvas initialized - adding portfolio widgets');
-    console.log('📋 Current widgets: Resume + Sticker');
+    console.log('📋 Current widgets: Clock + Resume + Sticker');
     
-    // UPDATED COMMENTS: Calculate positions for both widgets
-    const resumePosition = {
+    // UPDATED COMMENTS: Calculate positions for three widgets
+    const clockPosition = {
       x: window.innerWidth * 0.05,  // 5% from left edge
+      y: window.innerHeight * 0.05  // 5% from top
+    };
+    
+    const resumePosition = {
+      x: window.innerWidth * 0.25,  // 25% from left edge
       y: window.innerHeight * 0.15  // 15% from top
     };
     
     const stickerPosition = {
       x: window.innerWidth * 0.4,   // 40% from left edge
       y: window.innerHeight * 0.3   // 30% from top
+    };
+    
+    // REUSED: Widget creation logic for clock
+    const clockWidget = {
+      type: 'clock',
+      position: clockPosition,
+      config: {
+        timezone: 'Europe/Moscow',
+        showSeconds: true,
+        rotation: 0 // CRITICAL: No random rotation for clock widget
+      }
     };
     
     // REUSED: Widget creation logic for resume
@@ -281,7 +297,8 @@ export class DesktopCanvas {
       }
     };
     
-    // Create both widgets
+    // Create all three widgets
+    this.createWidget(clockWidget.type, clockWidget.position, clockWidget.config);
     this.createWidget(resumeWidget.type, resumeWidget.position, resumeWidget.config);
     this.createWidget(stickerWidget.type, stickerWidget.position, stickerWidget.config);
     
@@ -357,7 +374,7 @@ export class DesktopCanvas {
     wrapperElement.className = 'widget-wrapper';
     wrapperElement.style.position = 'absolute';
     // CRITICAL: Don't set transform here - SimpleDragHover will handle it
-    wrapperElement.style.transformOrigin = 'center center';
+    wrapperElement.style.transformOrigin = 'top left'; // FIXED: Position from top-left corner
     wrapperElement.style.willChange = 'transform';
     wrapperElement.style.opacity = '0';
     wrapperElement.style.transition = 'opacity 0.3s ease-out';

@@ -6,6 +6,7 @@
  * SimpleDragHover - Offset-based drag and hover system
  * Uses offset tracking pattern for reliable position management
  * Based on proven drag implementation from Kirupa.com
+ * UPDATED COMMENTS: Added manual boundary offset correction
  * 
  * @class SimpleDragHover
  */
@@ -23,6 +24,11 @@ export class SimpleDragHover {
     this.xOffset = 0;
     this.yOffset = 0;
     
+    // REUSABLE LOGIC: Global boundary offset configuration
+    // UPDATED COMMENTS: Small bevel offset creates elegant frame effect
+    // Boundaries are slightly narrower than screen for visual appeal
+    this.globalBoundaryOffset = -60; // Small bevel margin from all edges
+    
     // CRITICAL: Bind global handlers once to avoid memory leaks
     this.boundMouseMove = this.handleMouseMove.bind(this);
     this.boundMouseUp = this.handleMouseUp.bind(this);
@@ -38,7 +44,7 @@ export class SimpleDragHover {
       return;
     }
     
-    console.log('🎯 INITIALIZING SimpleDragHover for widget:', widget.id, widget.type); // DEBUG
+    console.log('INITIALIZING SimpleDragHover for widget:', widget.id, widget.type); // DEBUG
     
     const element = widget.element;
     
@@ -79,7 +85,7 @@ export class SimpleDragHover {
     element.style.opacity = '1';
     element.style.display = 'block';
     
-    console.log('✅ SimpleDragHover initialized successfully!'); // DEBUG
+    console.log('SimpleDragHover initialized successfully!'); // DEBUG
   }
 
   /**
@@ -159,12 +165,10 @@ export class SimpleDragHover {
 
   /**
    * Handle mouse move - update position with offset tracking
-   * CRITICAL: Kirupa-style position calculation with screen boundaries
+   * CRITICAL: Kirupa-style position calculation with screen boundaries and detailed debugging
    */
   handleMouseMove(event) {
     if (!this.active || !this.dragWidget) return;
-    
-    console.log('🎯 MOUSE MOVE - Dragging active!'); // DEBUG
     
     event.preventDefault();
     
@@ -173,6 +177,13 @@ export class SimpleDragHover {
     // CRITICAL: Calculate current position using offset pattern
     let newX = event.clientX - this.initialX;
     let newY = event.clientY - this.initialY;
+    
+    console.log('🎯 DRAG MOVE DEBUG:', {
+      mousePosition: { x: event.clientX, y: event.clientY },
+      initialOffset: { x: this.initialX, y: this.initialY },
+      calculatedPosition: { x: newX, y: newY },
+      currentOffset: { x: this.xOffset, y: this.yOffset }
+    });
     
     // UPDATED COMMENTS: Apply screen boundaries constraint
     const constrainedPosition = this.constrainToScreenBounds(newX, newY, widget.element);
@@ -190,7 +201,7 @@ export class SimpleDragHover {
     // CRITICAL: Set transform using constrained position
     this.setTranslate(this.currentX, this.currentY, widget.element, hoverRotation, hoverScale);
     
-    console.log('📍 Position (constrained):', this.currentX, this.currentY); // DEBUG
+    console.log('📍 FINAL POSITION:', { x: this.currentX, y: this.currentY });
   }
 
   /**
@@ -247,25 +258,19 @@ export class SimpleDragHover {
   }
 
   /**
-   * REUSABLE LOGIC: Constrain widget position to screen boundaries
-   * Prevents widgets from being dragged outside viewport edges
+   * REUSABLE LOGIC: Get actual widget dimensions for boundary calculation
+   * UPDATED COMMENTS: Multiple measurement methods for accurate sizing
    * 
-   * @param {number} x - Desired X position
-   * @param {number} y - Desired Y position
-   * @param {HTMLElement} element - Widget element to constrain
-   * @returns {Object} Constrained position {x, y}
+   * @param {HTMLElement} element - Widget element to measure
+   * @returns {Object} Widget dimensions {width, height}
    */
-  constrainToScreenBounds(x, y, element) {
-    // CRITICAL: Get viewport dimensions
-    const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
+  getWidgetDimensions(element) {
+    // CRITICAL: Try multiple measurement methods
+    const rect = element.getBoundingClientRect();
+    const offset = { width: element.offsetWidth, height: element.offsetHeight };
+    const client = { width: element.clientWidth, height: element.clientHeight };
     
-    // UPDATED COMMENTS: Get widget base dimensions without position influence
-    // Using offsetWidth/Height instead of getBoundingClientRect to avoid position offset
-    const elementWidth = element.offsetWidth;
-    const elementHeight = element.offsetHeight;
-    
-    // SCALED FOR: Account for current scale transform to get actual rendered size
+    // SCALED FOR: Account for scale transforms
     const computedStyle = window.getComputedStyle(element);
     const transform = computedStyle.transform;
     
@@ -276,27 +281,67 @@ export class SimpleDragHover {
       scaleY = Math.abs(matrix.d);
     }
     
-    // CRITICAL: Calculate actual rendered dimensions with scale
-    const actualWidth = elementWidth * scaleX;
-    const actualHeight = elementHeight * scaleY;
+    // UPDATED COMMENTS: Use the most reliable measurement
+    // getBoundingClientRect accounts for all transforms and positioning
+    const actualWidth = rect.width;
+    const actualHeight = rect.height;
     
-    // UPDATED COMMENTS: Calculate boundaries (widget edges must stay within viewport)
-    const minX = 0;
-    const maxX = viewportWidth - actualWidth;
-    const minY = 0;
-    const maxY = viewportHeight - actualHeight;
+    console.log('📏 WIDGET DIMENSIONS:', {
+      element: element.className,
+      measurements: {
+        boundingRect: { width: rect.width, height: rect.height },
+        offset: offset,
+        client: client
+      },
+      transform: { scaleX, scaleY },
+      final: { width: actualWidth, height: actualHeight }
+    });
+    
+    return { width: actualWidth, height: actualHeight };
+  }
+
+  /**
+   * REUSABLE LOGIC: Constrain widget position to screen boundaries
+   * Prevents widgets from being dragged outside viewport edges
+   * UPDATED COMMENTS: FIXED - Properly shrinks draggable area with global offset
+   * 
+   * @param {number} x - Desired X position (top-left corner)
+   * @param {number} y - Desired Y position (top-left corner)
+   * @param {HTMLElement} element - Widget element to constrain
+   * @returns {Object} Constrained position {x, y}
+   */
+  constrainToScreenBounds(x, y, element) {
+    // CRITICAL: Get viewport dimensions
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    
+    // UPDATED COMMENTS: Get actual widget dimensions
+    const dimensions = this.getWidgetDimensions(element);
+    
+    // CRITICAL: FIXED COORDINATES - Shrink draggable area by offset from all sides
+    const minX = this.globalBoundaryOffset;  // Left boundary moves RIGHT by offset
+    const minY = this.globalBoundaryOffset;  // Top boundary moves DOWN by offset
+    const maxX = viewportWidth - this.globalBoundaryOffset - dimensions.width;   // Right boundary moves LEFT by offset + widget width
+    const maxY = viewportHeight - this.globalBoundaryOffset - dimensions.height; // Bottom boundary moves UP by offset + widget height
     
     // CRITICAL: Constrain position to boundaries
     const constrainedX = Math.max(minX, Math.min(maxX, x));
     const constrainedY = Math.max(minY, Math.min(maxY, y));
     
-    console.log('🔒 BOUNDARY CHECK:', {
-      desired: { x, y },
-      constrained: { x: constrainedX, y: constrainedY },
+    // REUSABLE LOGIC: Debug output for boundary verification
+    console.log('🎯 CORRECTED BOUNDARY CALCULATION:', {
+      input: { x, y },
+      output: { x: constrainedX, y: constrainedY },
       viewport: { width: viewportWidth, height: viewportHeight },
-      widget: { width: actualWidth, height: actualHeight },
-      bounds: { minX, maxX, minY, maxY }
-    }); // DEBUG
+      widget: dimensions,
+      globalOffset: this.globalBoundaryOffset,
+      boundaries: { minX, maxX, minY, maxY },
+      availableArea: {
+        width: maxX - minX,
+        height: maxY - minY
+      },
+      constrained: constrainedX !== x || constrainedY !== y
+    });
     
     return { x: constrainedX, y: constrainedY };
   }

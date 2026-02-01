@@ -10,6 +10,8 @@
   cursor: grab;
   /* CRITICAL: Transform-based positioning and effects */
   will-change: transform;
+  /* CRITICAL: Position from top-left corner for accurate boundaries */
+  transform-origin: top left;
   /* CRITICAL: Force overflow visible for shadows */
   overflow: visible !important;
   /* UPDATED COMMENTS: No CSS transitions - using JS animations for better control */

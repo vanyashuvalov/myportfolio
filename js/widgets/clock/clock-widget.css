@@ -1,73 +1,271 @@
 /* ANCHOR: clock_widget_styles */
-/* REUSED: Clock widget specific styles extracted from components.css */
-/* SCALED FOR: Modular CSS architecture with component isolation */
+/* REUSED: Clock widget specific styles extracted from Figma specifications */
+/* SCALED FOR: Professional analog clock with Moscow timezone */
 
 /* ANCHOR: clock_widget */
 .clock-widget {
-  width: 140px;
-  height: 140px;
+  width: 160px;
+  height: 160px;
 }
 
 .clock-container {
   width: 100%;
   height: 100%;
-  background: var(--color-widget-clock);
-  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  box-shadow: var(--widget-shadow-default);
-  /* UPDATED COMMENTS: Smooth transitions for all clock interactions */
-  transition: box-shadow var(--transition-normal), transform var(--transition-normal);
+  /* UPDATED COMMENTS: Shadow moved to .clock-face for consistency with other widgets */
 }
 
+/* ANCHOR: clock_face */
 .clock-face {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  background: #0B0B0B; /* CRITICAL: Dark background as specified */
+  border-radius: 14px; /* CRITICAL: 14px border radius as specified */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px; /* CRITICAL: 8px padding as specified */
+  /* CRITICAL: Apply shadows to clock face like other widgets */
+  box-shadow: var(--widget-shadow-default);
+  transition: box-shadow var(--transition-normal);
+}
+
+/* ANCHOR: clock_background */
+.clock-background {
+  position: absolute;
   width: 124px;
   height: 124px;
+  background: #FFFFFF;
+  opacity: 0.07; /* CRITICAL: White overlay with 7% opacity */
+  border-radius: 50%; /* UPDATED COMMENTS: Perfect circle without borders */
+  top: 8px;
+  left: 8px;
+  border: none; /* CRITICAL: No borders as specified */
 }
 
-.clock-background {
-  fill: var(--color-widget-clock);
-  stroke: rgba(255, 255, 255, 0.1);
-  stroke-width: 1;
+/* ANCHOR: hour_markers */
+.hour-markers {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
 }
 
+.hour-marker {
+  position: absolute;
+  width: 1px; /* CRITICAL: All markers have uniform 1px width */
+  height: 8px; /* CRITICAL: All markers have uniform 8px height */
+  background: #FFFFFF;
+  left: calc(50% - 0.5px);
+  top: 8px; /* UPDATED COMMENTS: 8px from edge matching padding */
+  transform-origin: 0.5px 62px; /* CRITICAL: Transform origin at clock center */
+}
+
+/* CRITICAL: Main hour markers (12, 3, 6, 9) - full white, same size as others */
+.hour-marker--main {
+  opacity: 0.7; /* UPDATED COMMENTS: Full opacity white for main hours only */
+  background: #FFFFFF;
+}
+
+/* CRITICAL: Regular hour markers (1,2,4,5,7,8,10,11) - same as minute markers */
+.hour-marker--regular {
+  opacity: 0.2; /* UPDATED COMMENTS: 20% opacity white, same as minute markers */
+  background: #FFFFFF;
+}
+
+/* CRITICAL: Minute markers - same styling as regular hour markers */
+.minute-marker {
+  opacity: 0.2; /* UPDATED COMMENTS: 20% opacity white, same as regular hours */
+  background: #FFFFFF;
+}
+
+/* ANCHOR: clock_numbers */
+.clock-numbers {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.clock-number {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  font-family: var(--font-family-primary);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #FFFFFF;
+}
+
+/* CRITICAL: Exact positioning for each number as per Figma */
+.clock-number--12 {
+  left: calc(50% - 10px);
+  top: calc(50% - 10px - 43px);
+}
+
+.clock-number--1 {
+  left: calc(50% - 10px + 22px);
+  top: calc(50% - 10px - 38px);
+}
+
+.clock-number--2 {
+  left: calc(50% - 10px + 40px);
+  top: calc(50% - 10px - 22px);
+}
+
+.clock-number--3 {
+  left: calc(50% - 10px + 44px);
+  top: calc(50% - 10px);
+}
+
+.clock-number--4 {
+  left: calc(50% - 10px + 40px);
+  top: calc(50% - 10px + 22px);
+}
+
+.clock-number--5 {
+  left: calc(50% - 10px + 24px);
+  top: calc(50% - 10px + 39px);
+}
+
+.clock-number--6 {
+  left: calc(50% - 10px);
+  top: calc(50% - 10px + 43px);
+}
+
+.clock-number--7 {
+  left: calc(50% - 10px - 22px);
+  top: calc(50% - 10px + 39px);
+}
+
+.clock-number--8 {
+  left: calc(50% - 10px - 40px);
+  top: calc(50% - 10px + 22px);
+}
+
+.clock-number--9 {
+  left: calc(50% - 10px - 44px);
+  top: calc(50% - 10px);
+}
+
+.clock-number--10 {
+  left: calc(50% - 10px - 40px);
+  top: calc(50% - 10px - 22px);
+}
+
+.clock-number--11 {
+  left: calc(50% - 10px - 22px);
+  top: calc(50% - 10px - 38px);
+}
+
+/* ANCHOR: clock_hands */
 .clock-hands {
-  transform-origin: 62px 62px;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
 }
 
+/* CRITICAL: Hour hand container - starts from center with 3px offset */
 .hour-hand {
-  stroke: white;
-  stroke-width: 3;
-  stroke-linecap: round;
-  transform-origin: 62px 62px;
+  position: absolute;
+  width: 3px;
+  height: 24px;
+  left: calc(50% - 1.5px);
+  top: calc(50% - 24px); /* CRITICAL: Start 3px from center, extend 24px upward */
+  transform-origin: 1.5px calc(24px); /* CRITICAL: Origin at clock center (3px below SVG start) */
   transition: transform 0.5s ease-in-out;
 }
 
+.hour-hand img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* CRITICAL: Minute hand container - starts from center with 3px offset */
 .minute-hand {
-  stroke: white;
-  stroke-width: 2;
-  stroke-linecap: round;
-  transform-origin: 62px 62px;
+  position: absolute;
+  width: 3px;
+  height: 55px;
+  left: calc(50% - 1.5px);
+  top: calc(50% - 55px); /* CRITICAL: Start 3px from center, extend 55px upward */
+  transform-origin: 1.5px calc(55px); /* CRITICAL: Origin at clock center (3px below SVG start) */
   transition: transform 0.5s ease-in-out;
 }
 
+.minute-hand img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* CRITICAL: Second hand - CSS-based, also starts 3px from center */
 .second-hand {
-  stroke: #ef4444;
-  stroke-width: 1;
-  transform-origin: 62px 62px;
+  position: absolute;
+  width: 1px;
+  height: 31px;
+  background: #FF8D28; /* UPDATED COMMENTS: Orange color as per Figma */
+  left: calc(50% - 0.5px);
+  top: calc(50% - 3px - 31px); /* CRITICAL: Start 3px from center, extend 31px upward */
+  transform-origin: 0.5px calc(31px + 3px); /* CRITICAL: Origin at clock center (3px below hand start) */
   transition: transform 0.1s ease-out;
 }
 
+/* ANCHOR: center_dot */
 .center-dot {
-  fill: white;
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  background: #FFFFFF;
+  border-radius: 50%;
+  left: calc(50% - 2.5px);
+  top: calc(50% - 2.5px);
+  z-index: 10; /* CRITICAL: Above all hands */
 }
 
+/* ANCHOR: timezone_label */
 .timezone-label {
   position: absolute;
-  bottom: 20px;
-  font-size: var(--font-size-xs);
-  color: rgba(255, 255, 255, 0.5);
+  width: 27px;
+  height: 14px;
+  left: calc(50% - 13.5px);
+  top: calc(50% - 7px + 19px);
   font-family: var(--font-family-primary);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 14px;
+  text-align: center;
+  color: #FFFFFF;
+  opacity: 0.5; /* CRITICAL: 50% opacity as per Figma */
+}
+
+/* ANCHOR: clock_interaction_shadows */
+/* CRITICAL: Shadow states applied to clock face like other widgets */
+.widget--clock:hover .clock-face,
+.widget--clock.widget--hovered .clock-face {
+  box-shadow: var(--widget-shadow-hovered);
+}
+
+.widget--clock.widget--pressed .clock-face {
+  box-shadow: var(--widget-shadow-pressed);
+}
+
+.widget--clock.widget--dragging .clock-face {
+  box-shadow: var(--widget-shadow-dragging);
+  transition: none !important;
 }

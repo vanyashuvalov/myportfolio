@@ -359,8 +359,15 @@ export class WidgetBase {
   /**
    * Generate random tilt for natural appearance
    * SCALED FOR: Subtle randomization for organic desktop feel
+   * UPDATED COMMENTS: Clock widgets get 0 rotation, others get ±2 degrees
    */
   generateRandomTilt() {
+    // CRITICAL: Clock widgets should have 0 rotation for readability
+    if (this.type === 'clock') {
+      return 0;
+    }
+    
+    // REUSED: All other widgets get random tilt within 2 degrees
     return (Math.random() - 0.5) * 4; // ±2 degrees
   }
 

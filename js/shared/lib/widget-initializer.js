@@ -48,7 +48,7 @@ export class WidgetInitializer {
   prepareInitializationData(options) {
     return {
       position: this.calculateInitialPosition(options.position),
-      rotation: this.generateRandomTilt(),
+      rotation: this.generateRandomTilt(options.type),
       scale: options.scale || 1,
       zIndex: options.zIndex || 1,
       id: this.generateWidgetId(),
@@ -137,8 +137,14 @@ export class WidgetInitializer {
   /**
    * Generate random tilt for natural desktop appearance
    * REUSED: Consistent random tilt generation across all widgets
+   * UPDATED COMMENTS: Clock widgets get 0 rotation, others get ±2 degrees
    */
-  generateRandomTilt() {
+  generateRandomTilt(widgetType) {
+    // CRITICAL: Clock widgets should have 0 rotation for readability
+    if (widgetType === 'clock') {
+      return 0;
+    }
+    
     const { minTilt, maxTilt } = this.defaultConfig;
     return Math.random() * (maxTilt - minTilt) + minTilt;
   }
