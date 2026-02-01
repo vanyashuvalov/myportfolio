@@ -84,52 +84,49 @@
 .document-content {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding: 16px 12px;
+  align-items: flex-start;
+  padding: 14px 12px 16px 12px; /* CRITICAL: 14px top padding from header, 12px sides, 16px bottom */
+  gap: 12px; /* CRITICAL: 14px gap between line groups as specified */
   flex: 1;
+  width: 86px; /* UPDATED COMMENTS: Fixed width matching Figma layout */
+}
+
+/* ANCHOR: text_line_groups */
+/* REUSED: Flexbox layout pattern for consistent line group spacing */
+.text-line-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 4px; /* CRITICAL: 6px gap between lines within group */
+  width: 86px;
+  height: 12px;
+  flex: none;
+  align-self: stretch;
+}
+
+/* CRITICAL: Group-specific opacity values matching Figma specification */
+.text-line-group--first {
+  opacity: 0.2;
+}
+
+.text-line-group--second {
+  opacity: 0.2;
+}
+
+.text-line-group--third {
+  opacity: 0.1;
 }
 
 .document-line {
-  height: 2px;
-  border-radius: 1px;
+  height: 2px; /* CRITICAL: 2px line thickness as specified */
+  background: #000000; /* UPDATED COMMENTS: Using background instead of border for cleaner lines */
+  border: none; /* UPDATED COMMENTS: Removed border, using background for line rendering */
+  border-radius: 1px; /* REUSED: Subtle border-radius for professional appearance */
+  flex: none;
 }
 
-/* CRITICAL: Gradient opacity from 30% (top) to 10% (bottom) as specified */
-.document-line:nth-child(1) {
-  background: rgba(0, 0, 0, 0.3);
-}
-
-.document-line:nth-child(2) {
-  background: rgba(0, 0, 0, 0.25);
-}
-
-.document-line:nth-child(3) {
-  background: rgba(0, 0, 0, 0.2);
-}
-
-.document-line:nth-child(4) {
-  background: rgba(0, 0, 0, 0.15);
-}
-
-.document-line:nth-child(5) {
-  background: rgba(0, 0, 0, 0.12);
-}
-
-.document-line:nth-child(6) {
-  background: rgba(0, 0, 0, 0.1);
-}
-
-.document-line--long {
-  width: 90%;
-}
-
-.document-line--medium {
-  width: 70%;
-}
-
-.document-line--short {
-  width: 50%;
-}
+/* SCALED FOR: Removed old line width classes - now using inline styles for precise Figma widths */
 
 /* ANCHOR: document_label */
 .document-label {

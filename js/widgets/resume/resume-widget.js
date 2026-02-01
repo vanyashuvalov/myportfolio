@@ -72,12 +72,21 @@ export class ResumeWidget extends WidgetBase {
               <div class="pdf-text">pdf</div>
             </div>
             <div class="document-content">
-              <div class="document-line document-line--long"></div>
-              <div class="document-line document-line--medium"></div>
-              <div class="document-line document-line--long"></div>
-              <div class="document-line document-line--short"></div>
-              <div class="document-line document-line--medium"></div>
-              <div class="document-line document-line--long"></div>
+              <div class="text-line-group text-line-group--first">
+                <div class="document-line" style="width: 57px;"></div>
+                <div class="document-line" style="width: 86px;"></div>
+                <div class="document-line" style="width: 43px;"></div>
+              </div>
+              <div class="text-line-group text-line-group--second">
+                <div class="document-line" style="width: 78px;"></div>
+                <div class="document-line" style="width: 64px;"></div>
+                <div class="document-line" style="width: 47px;"></div>
+              </div>
+              <div class="text-line-group text-line-group--third">
+                <div class="document-line" style="width: 57px;"></div>
+                <div class="document-line" style="width: 86px;"></div>
+                <div class="document-line" style="width: 43px;"></div>
+              </div>
             </div>
           </div>
         </div>
