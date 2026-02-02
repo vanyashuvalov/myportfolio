@@ -15,10 +15,11 @@ export class FolderWidget extends WidgetBase {
   constructor(element, options = {}) {
     super(element, { ...options, type: 'folder' });
     
-    // UPDATED COMMENTS: Folder configuration with project data
+    // UPDATED COMMENTS: Folder configuration with project data and theme support
     this.title = options.title || 'Projects';
     this.itemCount = options.itemCount || 17;
     this.projects = options.projects || this.getDefaultProjects();
+    this.theme = options.theme || 'default'; // REUSED: Theme system for SVG variants
     
     this.createFolderStructure();
   }
@@ -33,16 +34,20 @@ export class FolderWidget extends WidgetBase {
 
   /**
    * Create simple folder structure with project preview cards
-   * UPDATED COMMENTS: Added 3 project preview cards between shadow and front layer
-   * SCALED FOR: Project showcase with placeholder cards
+   * UPDATED COMMENTS: Added theme support for pink/default SVG variants
+   * SCALED FOR: Project showcase with theme-based visual styling
    */
   createFolderStructure() {
     const targetElement = this.innerElement || this.element;
+    
+    // REUSED: Theme-based SVG path selection
+    const svgPaths = this.getSvgPaths();
+    
     targetElement.innerHTML = `
-      <div class="folder-container">
+      <div class="folder-container folder-container--${this.theme}">
         <div class="folder-icon-area">
           <!-- Layer 1: Back folder SVG with shadow -->
-          <img class="folder-back" src="/assets/images/folder-bot.svg" alt="Folder back" />
+          <img class="folder-back" src="${svgPaths.back}" alt="Folder back" />
           
           <!-- Layer 1.5: SVG shadow overlay -->
           <img class="folder-back-shadow" src="/assets/images/folder-back-shadow.svg" alt="Folder shadow" />
@@ -55,7 +60,7 @@ export class FolderWidget extends WidgetBase {
           </div>
           
           <!-- Layer 3: Front folder SVG -->
-          <img class="folder-front" src="/assets/images/folder-top.svg" alt="Folder front" />
+          <img class="folder-front" src="${svgPaths.front}" alt="Folder front" />
         </div>
         
         <!-- Folder labels -->
@@ -65,6 +70,25 @@ export class FolderWidget extends WidgetBase {
         </div>
       </div>
     `;
+  }
+
+  /**
+   * Get SVG paths based on theme
+   * REUSED: Theme-based asset selection utility
+   */
+  getSvgPaths() {
+    if (this.theme === 'pink') {
+      return {
+        back: '/assets/images/folder-bot-pink.svg',
+        front: '/assets/images/folder-top-pink.svg'
+      };
+    }
+    
+    // Default theme
+    return {
+      back: '/assets/images/folder-bot.svg',
+      front: '/assets/images/folder-top.svg'
+    };
   }
 
 
@@ -81,11 +105,12 @@ export class FolderWidget extends WidgetBase {
 
   /**
    * Update folder projects and item count
-   * UPDATED COMMENTS: Dynamic content updates with re-rendering
+   * UPDATED COMMENTS: Dynamic content updates with theme support and re-rendering
    */
-  updateProjects(projects, itemCount) {
+  updateProjects(projects, itemCount, theme) {
     if (projects) this.projects = projects;
     if (itemCount !== undefined) this.itemCount = itemCount;
+    if (theme) this.theme = theme;
     
     this.createFolderStructure();
     
@@ -94,7 +119,8 @@ export class FolderWidget extends WidgetBase {
       this.eventBus.emit('folder:updated', {
         widget: this,
         projects: this.projects,
-        itemCount: this.itemCount
+        itemCount: this.itemCount,
+        theme: this.theme
       });
     }
   }
@@ -123,14 +149,15 @@ export class FolderWidget extends WidgetBase {
 
   /**
    * Get folder data for serialization
-   * SCALED FOR: Data persistence and export functionality
+   * SCALED FOR: Data persistence and export functionality with theme support
    */
   getData() {
     return {
       ...super.getInfo(),
       title: this.title,
       itemCount: this.itemCount,
-      projects: this.projects
+      projects: this.projects,
+      theme: this.theme
     };
   }
 }

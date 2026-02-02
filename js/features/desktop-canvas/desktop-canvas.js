@@ -238,13 +238,14 @@ export class DesktopCanvas {
 
   /**
    * Create default widgets for the desktop
-   * UPDATED COMMENTS: Adding clock, resume, sticker and folder widgets for professional portfolio
+   * UPDATED COMMENTS: Adding clock, resume, sticker and dual folder widgets for professional portfolio
+   * SCALED FOR: Theme-based folder variants with Projects (default) and Fun (pink)
    */
   async createDefaultWidgets() {
     console.log('Canvas initialized - adding portfolio widgets');
-    console.log('Current widgets: Clock + Resume + Sticker + Folder');
+    console.log('Current widgets: Clock + Resume + Sticker + Projects Folder + Fun Folder');
     
-    // UPDATED COMMENTS: Calculate positions for four widgets
+    // UPDATED COMMENTS: Calculate positions for five widgets with proper spacing
     const clockPosition = {
       x: window.innerWidth * 0.05,  // 5% from left edge
       y: window.innerHeight * 0.05  // 5% from top
@@ -260,9 +261,15 @@ export class DesktopCanvas {
       y: window.innerHeight * 0.3   // 30% from top
     };
     
-    const folderPosition = {
+    const projectsFolderPosition = {
       x: window.innerWidth * 0.6,   // 60% from left edge
       y: window.innerHeight * 0.15  // 15% from top
+    };
+    
+    // REUSED: Adjacent positioning for Fun folder next to Projects
+    const funFolderPosition = {
+      x: window.innerWidth * 0.75,  // 75% from left edge (15% right from Projects)
+      y: window.innerHeight * 0.15  // Same vertical level as Projects
     };
     
     // REUSED: Widget creation logic for clock
@@ -303,22 +310,36 @@ export class DesktopCanvas {
       }
     };
     
-    // REUSED: Widget creation logic for folder
-    const folderWidget = {
+    // REUSED: Widget creation logic for Projects folder (default theme)
+    const projectsFolderWidget = {
       type: 'folder',
-      position: folderPosition,
+      position: projectsFolderPosition,
       config: {
         title: 'Projects',
         itemCount: 17,
+        theme: 'default', // CRITICAL: Default theme uses regular SVGs
         projects: await this.getProjectData()
       }
     };
     
-    // Create all four widgets
+    // REUSED: Widget creation logic for Fun folder (pink theme)
+    const funFolderWidget = {
+      type: 'folder',
+      position: funFolderPosition,
+      config: {
+        title: 'Fun',
+        itemCount: 12, // UPDATED COMMENTS: 12 items as requested
+        theme: 'pink', // CRITICAL: Pink theme uses pink SVGs
+        projects: await this.getFunProjectData()
+      }
+    };
+    
+    // Create all five widgets
     this.createWidget(clockWidget.type, clockWidget.position, clockWidget.config);
     this.createWidget(resumeWidget.type, resumeWidget.position, resumeWidget.config);
     this.createWidget(stickerWidget.type, stickerWidget.position, stickerWidget.config);
-    this.createWidget(folderWidget.type, folderWidget.position, folderWidget.config);
+    this.createWidget(projectsFolderWidget.type, projectsFolderWidget.position, projectsFolderWidget.config);
+    this.createWidget(funFolderWidget.type, funFolderWidget.position, funFolderWidget.config);
     
     // Store remaining planned widgets for future incremental addition
     this.plannedWidgets = [
@@ -362,6 +383,35 @@ export class DesktopCanvas {
         title: 'Surgery Scheduling', 
         image: '/assets/images/projects/surgery-scheduling.jpg',
         rotation: 11.67
+      }
+    ];
+  }
+
+  /**
+   * Get fun project data for pink folder widget
+   * REUSED: Fun project data loading utility with creative/personal projects
+   * SCALED FOR: Different project categories with theme-appropriate content
+   */
+  async getFunProjectData() {
+    // UPDATED COMMENTS: Fun/creative projects for pink folder theme
+    return [
+      { 
+        id: 'pixel-art', 
+        title: 'Pixel Art Collection', 
+        image: '/assets/images/projects/pixel-art.jpg',
+        rotation: -2.5
+      },
+      { 
+        id: 'ui-experiments', 
+        title: 'UI Experiments', 
+        image: '/assets/images/projects/ui-experiments.jpg',
+        rotation: 4.2
+      },
+      { 
+        id: 'animation-studies', 
+        title: 'Animation Studies', 
+        image: '/assets/images/projects/animation-studies.jpg',
+        rotation: 8.8
       }
     ];
   }

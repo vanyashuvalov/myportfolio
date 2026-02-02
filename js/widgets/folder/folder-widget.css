@@ -1,6 +1,6 @@
 /* ANCHOR: folder_widget_styles */
-/* REUSED: Folder widget specific styles - simplified 2-layer structure */
-/* SCALED FOR: Clean folder design without complexity */
+/* REUSED: Folder widget specific styles with theme support */
+/* SCALED FOR: Clean folder design with pink theme variant */
 
 /* ANCHOR: folder_widget */
 .folder-widget {
@@ -19,6 +19,21 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+/* ANCHOR: theme_variants */
+/* REUSED: Theme-based styling for default and pink variants */
+.folder-container--default {
+  /* Default theme - no additional styles needed */
+}
+
+.folder-container--pink {
+  /* Pink theme - enhanced hover effects */
+}
+
+.folder-container--pink:hover .project-card {
+  /* UPDATED COMMENTS: Pink theme has more pronounced hover animation */
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 /* ANCHOR: folder_icon_area */
