@@ -1,0 +1,419 @@
+/* ANCHOR: telegram_widget_styles */
+/* REUSED: Widget-specific styling following Figma specifications */
+/* SCALED FOR: Professional telegram channel display with white background */
+
+/* Telegram Widget Container - Exact Figma specifications */
+.telegram-container {
+  /* CRITICAL: Exact Figma dimensions and layout */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px 16px;
+  gap: 16px;
+  position: relative;
+  width: 300px;
+  height: 161px;
+  
+  /* UPDATED COMMENTS: White background from Figma */
+  background: #FFFFFF;
+  
+  /* CRITICAL: Multi-layer shadow system from Figma */
+  box-shadow: 
+    0px 32px 13px rgba(0, 0, 0, 0.01), 
+    0px 18px 11px rgba(0, 0, 0, 0.05), 
+    0px 8px 8px rgba(0, 0, 0, 0.09), 
+    0px 2px 4px rgba(0, 0, 0, 0.1);
+  
+  border-radius: 14px;
+  
+  /* REUSED: Rotation handled by shared widget system */
+  /* transform: rotate(2deg); - Applied by widget rotation system */
+}
+
+/* Telegram Header - Channel info and external link */
+.telegram-header {
+  /* CRITICAL: Auto layout from Figma */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 12px;
+  width: 268px;
+  height: 41px;
+  
+  /* REUSED: Flexbox positioning within container */
+  flex: none;
+  order: 0;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+/* Channel Avatar - Rounded image */
+.telegram-avatar {
+  /* CRITICAL: Exact avatar dimensions */
+  width: 40px;
+  height: 40px;
+  border-radius: 123.75px; /* Very rounded for circular appearance */
+  
+  /* UPDATED COMMENTS: Avatar positioning and overflow with gray placeholder */
+  position: relative;
+  overflow: hidden;
+  background-color: #E5E7EB; /* UPDATED: Gray placeholder background */
+  
+  /* REUSED: Flexbox positioning within header */
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+/* Avatar Image */
+.telegram-avatar img {
+  /* CRITICAL: Fill avatar container */
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0px;
+  top: 0px;
+  
+  /* UPDATED COMMENTS: Proper image scaling */
+  object-fit: cover;
+}
+
+/* Channel Information Section */
+.telegram-channel-info {
+  /* CRITICAL: Auto layout from Figma */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 2px;
+  width: 180px;
+  height: 41px;
+  
+  /* REUSED: Flexbox positioning with grow */
+  flex: none;
+  order: 1;
+  flex-grow: 1;
+}
+
+/* Channel Name - Main title */
+.telegram-channel-name {
+  /* CRITICAL: Fill width for channel name */
+  width: 100%;
+  height: 21px;
+  
+  /* UPDATED COMMENTS: SF Pro font with exact specifications */
+  font-family: 'SF Pro Display', 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-style: normal;
+  font-weight: 600; /* Figma: 590 weight */
+  font-size: 18px;
+  line-height: 21px;
+  letter-spacing: -0.01em; /* -2% letter spacing */
+  
+  color: #0E1621;
+  
+  /* REUSED: Flexbox positioning */
+  flex: none;
+  order: 0;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+/* Channel Type - Subtitle */
+.telegram-channel-type {
+  /* CRITICAL: Fill width for channel type */
+  width: 100%;
+  height: 18px;
+  
+  /* UPDATED COMMENTS: Body text typography with increased letter spacing */
+  font-family: 'SF Pro Display', 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 130%; /* or 18px */
+  letter-spacing: 0.03em; /* UPDATED: Increased letter spacing for better readability */
+  
+  color: #0E1621;
+  opacity: 0.6; /* 60% opacity for subtitle */
+  
+  /* REUSED: Flexbox positioning */
+  flex: none;
+  order: 1;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+/* External Link Arrow */
+.telegram-external-link {
+  /* CRITICAL: Exact icon dimensions */
+  width: 24px;
+  height: 24px;
+  opacity: 0.6;
+  
+  /* UPDATED COMMENTS: Icon color and styling */
+  color: #0E1621;
+  cursor: pointer;
+  transition: all 0.2s ease-out;
+  
+  /* REUSED: Flexbox positioning within header */
+  flex: none;
+  order: 2;
+  flex-grow: 0;
+  
+  /* SCALED FOR: Icon alignment */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* External Link Hover State */
+.telegram-external-link--hovered {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* External Link SVG */
+.telegram-external-link svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Post Content Section */
+.telegram-post {
+  /* CRITICAL: Auto layout from Figma */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 4px;
+  width: 268px;
+  height: 64px;
+  
+  /* REUSED: Flexbox positioning within container */
+  flex: none;
+  order: 1;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+/* Post Text Content */
+.telegram-post-text {
+  /* CRITICAL: Fill width for post text */
+  width: 100%;
+  height: 42px;
+  
+  /* UPDATED COMMENTS: Post text typography */
+  font-family: 'SF Pro Display', 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 130%; /* or 21px */
+  letter-spacing: 0.03em;
+  
+  color: #0E1621;
+  
+  /* REUSED: Flexbox positioning */
+  flex: none;
+  order: 0;
+  align-self: stretch;
+  flex-grow: 0;
+  
+  /* CRITICAL: Text overflow handling */
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* Post Info Section - Views and Time */
+.telegram-post-info {
+  /* CRITICAL: Auto layout from Figma */
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0px;
+  gap: 16px;
+  width: 100%;
+  height: 18px;
+  
+  /* REUSED: Flexbox positioning */
+  flex: none;
+  order: 1;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+/* Views Section */
+.telegram-views {
+  /* CRITICAL: Auto layout from Figma */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 6px;
+  width: 40px;
+  height: 18px;
+  
+  /* REUSED: Flexbox positioning */
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+/* Views Icon */
+.telegram-views-icon {
+  /* CRITICAL: Exact icon dimensions */
+  width: 16px;
+  height: 16px;
+  opacity: 0.6;
+  
+  /* UPDATED COMMENTS: Icon styling */
+  color: #0E1621;
+  
+  /* REUSED: Flexbox positioning */
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  
+  /* SCALED FOR: Icon alignment */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Views Icon SVG */
+.telegram-views-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Views Count Text */
+.telegram-views-count {
+  /* CRITICAL: Views count styling */
+  width: 18px;
+  height: 18px;
+  
+  /* UPDATED COMMENTS: Small text typography */
+  font-family: 'SF Pro Display', 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 130%; /* or 18px */
+  letter-spacing: 0.02em;
+  
+  color: #0E1621;
+  
+  /* REUSED: Flexbox positioning */
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+/* Time Section */
+.telegram-time {
+  /* CRITICAL: Auto layout from Figma */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 6px;
+  width: 101px;
+  height: 18px;
+  
+  /* REUSED: Flexbox positioning */
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+/* Time Icon */
+.telegram-time-icon {
+  /* CRITICAL: Exact icon dimensions */
+  width: 16px;
+  height: 16px;
+  opacity: 0.6;
+  
+  /* UPDATED COMMENTS: Icon styling */
+  color: #0E1621;
+  
+  /* REUSED: Flexbox positioning */
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  
+  /* SCALED FOR: Icon alignment */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Time Icon SVG */
+.telegram-time-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Time Text */
+.telegram-time-text {
+  /* CRITICAL: Time text styling */
+  width: 79px;
+  height: 18px;
+  
+  /* UPDATED COMMENTS: Small text typography */
+  font-family: 'SF Pro Display', 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 130%; /* or 18px */
+  letter-spacing: 0.02em;
+  
+  color: #0E1621;
+  
+  /* REUSED: Flexbox positioning */
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+/* REUSED: Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  .telegram-container {
+    width: 280px;
+    height: 150px;
+    padding: 18px 14px;
+    gap: 14px;
+  }
+  
+  .telegram-header {
+    width: 252px;
+    gap: 10px;
+  }
+  
+  .telegram-avatar {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .telegram-channel-name {
+    font-size: 16px;
+    line-height: 19px;
+  }
+  
+  .telegram-channel-type {
+    font-size: 13px;
+  }
+  
+  .telegram-post {
+    width: 252px;
+    height: 58px;
+  }
+  
+  .telegram-post-text {
+    font-size: 15px;
+    height: 38px;
+  }
+}

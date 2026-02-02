@@ -34,7 +34,7 @@
 .sticker-title {
   font-family: var(--font-family-primary);
   font-size: 24px;
-  font-weight: 600; /* Semibold */
+  font-weight: 500; /* UPDATED: Reduced from 600 to 500 for thinner appearance */
   letter-spacing: -0.02em; /* -2% letter spacing */
   line-height: 1.2;
   color: #101828; /* Exact color as specified */

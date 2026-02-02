@@ -1,0 +1,231 @@
+/* ANCHOR: cat_sticker_styles */
+/* REUSED: Widget-specific styling following Figma specifications */
+/* SCALED FOR: Professional cat information display with blue gradient */
+
+/* Cat Sticker Container - Exact Figma specifications */
+.cat-sticker-container {
+  /* CRITICAL: Exact Figma dimensions and layout */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 24px;
+  gap: 16px;
+  position: relative;
+  width: 300px;
+  height: 191px;
+  
+  /* UPDATED COMMENTS: Blue gradient background from Figma */
+  background: linear-gradient(180deg, #9CCDD0 0%, #CDF4F6 58.64%);
+  
+  /* CRITICAL: Multi-layer shadow system from Figma */
+  box-shadow: 
+    0px 32px 13px rgba(0, 0, 0, 0.01), 
+    0px 18px 11px rgba(0, 0, 0, 0.05), 
+    0px 8px 8px rgba(0, 0, 0, 0.09), 
+    0px 2px 4px rgba(0, 0, 0, 0.1);
+  
+  border-radius: 14px;
+  
+  /* CRITICAL: Hide overflow to keep cat icon within bounds */
+  overflow: hidden;
+  
+  /* REUSED: Rotation handled by shared widget system */
+  /* transform: rotate(-1deg); - Applied by widget rotation system */
+}
+
+/* Cat Name Title - Fill width typography */
+.cat-sticker-title {
+  /* CRITICAL: Fill width instead of absolute dimensions */
+  width: 100%;
+  /* Remove fixed height to allow natural text flow */
+  
+  /* UPDATED COMMENTS: SF Pro font with lighter weight for better readability */
+  font-family: 'SF Pro Display', 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-style: normal;
+  font-weight: 500; /* UPDATED: Reduced from 590 to 500 for thinner appearance */
+  font-size: 24px;
+  line-height: 29px; /* identical to box height */
+  text-align: left; /* FIXED: Left align for natural text flow */
+  letter-spacing: -0.02em; /* -2% letter spacing */
+  
+  color: #101828;
+  
+  /* REUSED: Flexbox positioning within container */
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+/* Description Text - Fill width specifications */
+.cat-sticker-description {
+  /* CRITICAL: Fill width instead of absolute dimensions */
+  width: 100%;
+  /* Remove fixed height to allow natural text flow */
+  
+  /* UPDATED COMMENTS: Body text typography */
+  font-family: 'SF Pro Display', 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 130%; /* or 21px */
+  
+  color: #101828;
+  
+  /* REUSED: Flexbox positioning with stretch */
+  flex: none;
+  order: 1;
+  align-self: stretch; /* CRITICAL: Stretch to fill container width */
+  flex-grow: 0;
+}
+
+/* Feed Button Container - Figma Frame 28021 */
+.cat-sticker-feed-button {
+  /* CRITICAL: Auto layout from Figma */
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 12px;
+  gap: 8px;
+  
+  /* UPDATED COMMENTS: Exact button dimensions */
+  width: 97px;
+  height: 40px;
+  
+  /* REUSED: Semi-transparent background */
+  background: rgba(16, 24, 40, 0.1);
+  border-radius: 8px;
+  
+  /* SCALED FOR: Interactive button styling */
+  cursor: pointer;
+  transition: all 0.2s ease-out;
+  
+  /* CRITICAL: Flexbox positioning within sticker */
+  flex: none;
+  order: 2;
+  flex-grow: 0;
+}
+
+/* Feed Button Hover State */
+.cat-sticker-feed-button--hovered {
+  background: rgba(16, 24, 40, 0.15);
+  /* REMOVED: transform: scale(1.02); - No scaling on hover */
+}
+
+/* Feed Button Pressed State */
+.cat-sticker-feed-button--pressed {
+  background: rgba(16, 24, 40, 0.2);
+  transform: scale(0.98);
+}
+
+/* Heart Icon - Figma iconamoon:heart */
+.cat-sticker-heart-icon {
+  /* CRITICAL: Exact icon dimensions */
+  width: 24px;
+  height: 24px;
+  opacity: 0.6;
+  
+  /* UPDATED COMMENTS: Icon color and styling */
+  color: #101828;
+  
+  /* REUSED: Flexbox positioning within button */
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  
+  /* SCALED FOR: Icon alignment */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Heart Icon SVG */
+.cat-sticker-heart-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Feed Text - Natural text sizing */
+.cat-sticker-feed-text {
+  /* CRITICAL: Remove fixed dimensions for natural text flow */
+  /* width: auto; height: auto; - Let text size naturally */
+  
+  /* UPDATED COMMENTS: SF UI Display for button text */
+  font-family: 'SF UI Display', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 21px;
+  
+  color: #101828;
+  
+  /* REUSED: Flexbox positioning within button */
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+/* REUSED: Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  .cat-sticker-container {
+    width: 280px;
+    height: 180px;
+    padding: 20px;
+    gap: 14px;
+  }
+  
+  .cat-sticker-title {
+    font-size: 22px;
+    line-height: 26px;
+    /* Width remains 100% - no absolute sizing */
+  }
+  
+  .cat-sticker-description {
+    font-size: 15px;
+    /* Width remains 100% - no absolute sizing */
+  }
+  
+  .cat-sticker-feed-button {
+    width: 90px;
+    height: 36px;
+    padding: 8px 10px;
+  }
+  
+  .cat-sticker-feed-text {
+    font-size: 16px;
+    line-height: 19px;
+    /* Width and height remain auto - natural text sizing */
+  }
+}
+/* Cat Face Icon - Bottom right corner positioning */
+.cat-sticker-cat-icon {
+  /* CRITICAL: Absolute positioning in bottom right corner */
+  position: absolute;
+  right: 6px;
+  bottom: 6px;
+  
+  /* UPDATED COMMENTS: Original icon size - no fixed dimensions */
+  /* Let icon maintain its natural size */
+  
+  /* CRITICAL: 10% opacity for subtle appearance */
+  opacity: 0.1;
+  
+  /* SCALED FOR: Icon alignment and display */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  /* REUSED: Prevent pointer events to avoid interfering with widget interactions */
+  pointer-events: none;
+}
+
+/* Cat Face Icon Image */
+.cat-sticker-cat-icon img {
+  /* CRITICAL: Original size - no width/height constraints */
+  /* width: auto; height: auto; - Let image use natural dimensions */
+  
+  /* UPDATED COMMENTS: Maintain aspect ratio without size constraints */
+  object-fit: contain;
+}

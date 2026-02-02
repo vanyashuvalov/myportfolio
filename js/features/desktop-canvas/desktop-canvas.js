@@ -6,6 +6,8 @@ import { ClockWidget } from '../../widgets/clock/clock-widget.js';
 import { StickerWidget } from '../../widgets/sticker/sticker-widget.js';
 import { FolderWidget } from '../../widgets/folder/folder-widget.js';
 import { CatWidget } from '../../widgets/cat/cat-widget.js';
+import { CatStickerWidget } from '../../widgets/cat-sticker/cat-sticker-widget.js';
+import { TelegramWidget } from '../../widgets/telegram/telegram-widget.js';
 import { FeedButtonWidget } from '../../widgets/feed-button/feed-button-widget.js';
 import { ResumeWidget } from '../../widgets/resume/resume-widget.js';
 import { widgetInitializer } from '../../shared/lib/widget-initializer.js';
@@ -89,6 +91,8 @@ export class DesktopCanvas {
     this.widgetTypes.set('sticker', StickerWidget);
     this.widgetTypes.set('folder', FolderWidget);
     this.widgetTypes.set('cat', CatWidget);
+    this.widgetTypes.set('cat-sticker', CatStickerWidget);
+    this.widgetTypes.set('telegram', TelegramWidget);
     this.widgetTypes.set('feed-button', FeedButtonWidget);
     this.widgetTypes.set('resume', ResumeWidget);
   }
@@ -238,14 +242,14 @@ export class DesktopCanvas {
 
   /**
    * Create default widgets for the desktop
-   * UPDATED COMMENTS: Adding clock, resume, sticker and dual folder widgets for professional portfolio
+   * UPDATED COMMENTS: Adding clock, resume, sticker, cat-sticker, telegram and dual folder widgets for professional portfolio
    * SCALED FOR: Theme-based folder variants with Projects (default) and Fun (pink)
    */
   async createDefaultWidgets() {
     console.log('Canvas initialized - adding portfolio widgets');
-    console.log('Current widgets: Clock + Resume + Sticker + Projects Folder + Fun Folder');
+    console.log('Current widgets: Clock + Resume + Sticker + Cat Sticker + Telegram + Projects Folder + Fun Folder');
     
-    // UPDATED COMMENTS: Calculate positions for five widgets with proper spacing
+    // UPDATED COMMENTS: Calculate positions for seven widgets with proper spacing
     const clockPosition = {
       x: window.innerWidth * 0.05,  // 5% from left edge
       y: window.innerHeight * 0.05  // 5% from top
@@ -259,6 +263,18 @@ export class DesktopCanvas {
     const stickerPosition = {
       x: window.innerWidth * 0.4,   // 40% from left edge
       y: window.innerHeight * 0.3   // 30% from top
+    };
+    
+    // CRITICAL: Cat sticker positioned near bottom left for cat information
+    const catStickerPosition = {
+      x: window.innerWidth * 0.05,  // 5% from left edge (below clock)
+      y: window.innerHeight * 0.6   // 60% from top
+    };
+    
+    // CRITICAL: Telegram widget positioned in center-right area
+    const telegramPosition = {
+      x: window.innerWidth * 0.4,   // 40% from left edge
+      y: window.innerHeight * 0.6   // 60% from top
     };
     
     const projectsFolderPosition = {
@@ -310,6 +326,33 @@ export class DesktopCanvas {
       }
     };
     
+    // CRITICAL: Cat sticker widget with blue gradient theme
+    const catStickerWidget = {
+      type: 'cat-sticker',
+      position: catStickerPosition,
+      config: {
+        catName: 'Cat Here',
+        description: 'You can interact my boy as you want. But do not punch him',
+        showFeedButton: true,
+        targetCat: null // Will be set when cat widget is added
+      }
+    };
+    
+    // CRITICAL: Telegram widget with channel information
+    const telegramWidget = {
+      type: 'telegram',
+      position: telegramPosition,
+      config: {
+        channelName: 'ваня кнопочкин',
+        channelType: 'Telegram Channel',
+        channelAvatar: 'assets/images/telegram-avatar.jpg',
+        postText: 'москва газ соревнования по счету в уме',
+        viewCount: 43,
+        timestamp: '0:58 Jan 27',
+        channelUrl: 'https://t.me/example_channel'
+      }
+    };
+    
     // REUSED: Widget creation logic for Projects folder (default theme)
     const projectsFolderWidget = {
       type: 'folder',
@@ -334,10 +377,12 @@ export class DesktopCanvas {
       }
     };
     
-    // Create all five widgets
+    // Create all seven widgets
     this.createWidget(clockWidget.type, clockWidget.position, clockWidget.config);
     this.createWidget(resumeWidget.type, resumeWidget.position, resumeWidget.config);
     this.createWidget(stickerWidget.type, stickerWidget.position, stickerWidget.config);
+    this.createWidget(catStickerWidget.type, catStickerWidget.position, catStickerWidget.config);
+    this.createWidget(telegramWidget.type, telegramWidget.position, telegramWidget.config);
     this.createWidget(projectsFolderWidget.type, projectsFolderWidget.position, projectsFolderWidget.config);
     this.createWidget(funFolderWidget.type, funFolderWidget.position, funFolderWidget.config);
     
