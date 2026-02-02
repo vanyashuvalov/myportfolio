@@ -32,9 +32,9 @@ export class FolderWidget extends WidgetBase {
   }
 
   /**
-   * Create simple folder structure with 2 layers: back SVG and front SVG
-   * UPDATED COMMENTS: Using external SVG shadow file instead of CSS gradient
-   * SCALED FOR: Clean folder design with SVG-based shadows
+   * Create simple folder structure with project preview cards
+   * UPDATED COMMENTS: Added 3 project preview cards between shadow and front layer
+   * SCALED FOR: Project showcase with placeholder cards
    */
   createFolderStructure() {
     const targetElement = this.innerElement || this.element;
@@ -46,7 +46,14 @@ export class FolderWidget extends WidgetBase {
         <!-- Layer 1.5: SVG shadow overlay -->
         <img class="folder-back-shadow" src="/assets/images/folder-back-shadow.svg" alt="Folder shadow" />
         
-        <!-- Layer 2: Front folder SVG -->
+        <!-- Layer 2: Project preview cards -->
+        <div class="project-previews">
+          <div class="project-card project-card--1"></div>
+          <div class="project-card project-card--2"></div>
+          <div class="project-card project-card--3"></div>
+        </div>
+        
+        <!-- Layer 3: Front folder SVG -->
         <img class="folder-front" src="/assets/images/folder-top.svg" alt="Folder front" />
         
         <!-- Folder labels -->

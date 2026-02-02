@@ -36,11 +36,54 @@
   position: absolute;
   width: auto;
   height: auto;
-  left: 5px; /* UPDATED COMMENTS: 1px left from back layer (6px - 1px) */
-  top: 4px;  /* UPDATED COMMENTS: 1px up from back layer (5px - 1px) */
-  z-index: 2; /* UPDATED COMMENTS: Above back layer (1), below front layer (3) */
+  left: 5px; /* UPDATED COMMENTS: 1px left from back layer (5px - 1px) */
+  top: 4px;  /* UPDATED COMMENTS: 1px up from back layer (4px - 1px) */
+  z-index: 4; /* UPDATED COMMENTS: Above project cards (2), below front layer (5) */
   /* UPDATED COMMENTS: Original SVG size, no scaling */
   pointer-events: none; /* CRITICAL: Don't interfere with interactions */
+}
+
+/* ANCHOR: project_previews */
+.project-previews {
+  position: absolute;
+  width: 84px;
+  height: 84px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) translate(-8px, -12px); /* UPDATED COMMENTS: Additional offset: 10px left (6px + 4px), 14px up (8px + 6px) */
+  z-index: 2; /* UPDATED COMMENTS: Above back (1), below shadow (4) and front (5) */
+}
+
+/* ANCHOR: project_cards */
+.project-card {
+  position: absolute;
+  width: 84px;
+  height: 84px;
+  background: #FFFFFF; /* UPDATED COMMENTS: White placeholder color */
+  border-radius: 4px; /* UPDATED COMMENTS: 4px border radius for rounded corners */
+  border: 1px solid #E0E0E0; /* UPDATED COMMENTS: Light gray border for definition */
+  /* UPDATED COMMENTS: Each card rotated with 3° additional left turn from base angles */
+}
+
+.project-card--1 {
+  left: 0px;
+  top: 0px;
+  transform: rotate(-1deg); /* UPDATED COMMENTS: -4° + 3° left = -7° */
+  z-index: 2;
+}
+
+.project-card--2 {
+  left: 6px; /* UPDATED COMMENTS: 4px right from previous (2px + 2px increase) */
+  top: 6px;  /* UPDATED COMMENTS: 4px down from previous (2px + 2px increase) */
+  transform: rotate(4deg); /* UPDATED COMMENTS: -8° + 3° left = -11° */
+  z-index: 2;
+}
+
+.project-card--3 {
+  left: 12px; /* UPDATED COMMENTS: 4px right from previous (4px + 4px) */
+  top: 12px;  /* UPDATED COMMENTS: 4px down from previous (4px + 4px) */
+  transform: rotate(9deg); /* UPDATED COMMENTS: -12° + 3° left = -15° */
+  z-index: 2;
 }
 
 /* ANCHOR: folder_front_svg */
@@ -50,7 +93,7 @@
   height: auto;
   left: 12px;   /* UPDATED COMMENTS: Offset to position front layer correctly */
   top: 42px;   /* UPDATED COMMENTS: Vertical offset for layering effect */
-  z-index: 3;   /* UPDATED COMMENTS: Above shadow layer (2) */
+  z-index: 5;   /* UPDATED COMMENTS: Above shadow layer (4) and project cards (2) */
   /* UPDATED COMMENTS: No shadow on front layer */
 }
 
@@ -66,7 +109,7 @@
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  z-index: 4; /* UPDATED COMMENTS: Above all other layers */
+  z-index: 6; /* UPDATED COMMENTS: Above all other layers for proper text visibility */
 }
 
 .folder-title {
