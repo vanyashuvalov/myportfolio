@@ -37,8 +37,8 @@
   left: 5px; /* UPDATED COMMENTS: Offset to center back layer */
   top: 4px;   /* UPDATED COMMENTS: Vertical offset for proper alignment */
   z-index: 1;
-  /* CRITICAL: SVG shadow using filter drop-shadow */
-  filter: drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.15));
+  /* REUSED: Widget shadow for folder back layer depth */
+  filter: drop-shadow(0px 32px 13px rgba(0, 0, 0, 0.01)) drop-shadow(0px 18px 11px rgba(0, 0, 0, 0.05)) drop-shadow(0px 8px 8px rgba(0, 0, 0, 0.09)) drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.1));
   /* CRITICAL: Shadow transitions moved to shared styles/components.css */
 }
 
@@ -75,6 +75,8 @@
   border: 1px solid #E0E0E0; /* UPDATED COMMENTS: Light gray border for definition */
   /* UPDATED COMMENTS: Each card rotated with 3° additional left turn from base angles */
   transition: transform 0.3s ease; /* UPDATED COMMENTS: Smooth animation for hover spreading effect */
+  /* REUSED: Small shadow variant for project cards - 50% reduced from widget shadow */
+  box-shadow: var(--widget-shadow-small);
 }
 
 .project-card--1 {
@@ -152,13 +154,13 @@
 /* ANCHOR: project_cards_hover */
 /* UPDATED COMMENTS: Hover effect - cards spread out when hovering over folder container */
 .folder-container:hover .project-card--1 {
-  transform: rotate(-8deg) translate(-4px, -8px); /* UPDATED COMMENTS: Card 1: left -10px, up -8px */
+  transform: rotate(-6deg) translate(-4px, -20px); /* UPDATED COMMENTS: Card 1: left -10px, up -8px */
 }
 
 .folder-container:hover .project-card--2 {
-  transform: rotate(-3deg) translate(4px, -18px); /* UPDATED COMMENTS: Card 2: right +6px, up -8px */
+  transform: rotate(-1deg) translate(4px, -18px); /* UPDATED COMMENTS: Card 2: right +6px, up -8px */
 }
 
 .folder-container:hover .project-card--3 {
-  transform: rotate(3deg) translate(8px, -6px); /* UPDATED COMMENTS: Card 3: left -8px, up -6px */
+  transform: rotate(8deg) translate(4px, -6px); /* UPDATED COMMENTS: Card 3: left -8px, up -6px */
 }
