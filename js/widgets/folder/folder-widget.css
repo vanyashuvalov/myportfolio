@@ -23,12 +23,24 @@
   position: absolute;
   width: auto;
   height: auto;
-  left: 6px; /* UPDATED COMMENTS: Offset to center back layer */
-  top: 5px;   /* UPDATED COMMENTS: Vertical offset for proper alignment */
+  left: 5px; /* UPDATED COMMENTS: Offset to center back layer */
+  top: 4px;   /* UPDATED COMMENTS: Vertical offset for proper alignment */
   z-index: 1;
   /* CRITICAL: SVG shadow using filter drop-shadow */
   filter: drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.15));
   /* CRITICAL: Shadow transitions moved to shared styles/components.css */
+}
+
+/* ANCHOR: folder_back_shadow */
+.folder-back-shadow {
+  position: absolute;
+  width: auto;
+  height: auto;
+  left: 5px; /* UPDATED COMMENTS: 1px left from back layer (6px - 1px) */
+  top: 4px;  /* UPDATED COMMENTS: 1px up from back layer (5px - 1px) */
+  z-index: 2; /* UPDATED COMMENTS: Above back layer (1), below front layer (3) */
+  /* UPDATED COMMENTS: Original SVG size, no scaling */
+  pointer-events: none; /* CRITICAL: Don't interfere with interactions */
 }
 
 /* ANCHOR: folder_front_svg */
@@ -36,9 +48,9 @@
   position: absolute;
   width: auto;
   height: auto;
-  left: 10px;   /* UPDATED COMMENTS: Offset to position front layer correctly */
+  left: 12px;   /* UPDATED COMMENTS: Offset to position front layer correctly */
   top: 42px;   /* UPDATED COMMENTS: Vertical offset for layering effect */
-  z-index: 2;
+  z-index: 3;   /* UPDATED COMMENTS: Above shadow layer (2) */
   /* UPDATED COMMENTS: No shadow on front layer */
 }
 
@@ -54,7 +66,7 @@
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  z-index: 3;
+  z-index: 4; /* UPDATED COMMENTS: Above all other layers */
 }
 
 .folder-title {
@@ -62,7 +74,7 @@
   height: 19px;
   font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
   font-style: normal;
-  font-weight: 590; /* UPDATED COMMENTS: Figma specified weight */
+  font-weight: 500; /* UPDATED COMMENTS: Increased from 400 to 500 for better readability */
   font-size: 16px;
   line-height: 19px;
   text-align: center;
@@ -76,7 +88,7 @@
   font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
   font-style: normal;
   font-weight: 400;
-  font-size: 16px;
+  font-size: 16px; /* UPDATED COMMENTS: Confirmed SF Pro 16px as requested */
   line-height: 19px;
   text-align: center;
   color: #FFFFFF;

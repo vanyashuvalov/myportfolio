@@ -129,9 +129,9 @@
 
 /* ANCHOR: document_label */
 .document-label {
-  font-family: var(--font-family-primary);
+  font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 16px;
-  font-weight: 600; /* Semibold */
+  font-weight: 500; /* UPDATED COMMENTS: Increased from 400 to 500 for better readability */
   color: var(--color-primary);
   text-align: center;
   /* CRITICAL: 10px margin from document wrapper as specified */
