@@ -24,11 +24,11 @@
 /* ANCHOR: theme_variants */
 /* REUSED: Theme-based styling for default and pink variants */
 .folder-container--default {
-  /* Default theme - no additional styles needed */
+  /* UPDATED COMMENTS: Default theme uses standard folder behavior */
 }
 
 .folder-container--pink {
-  /* Pink theme - enhanced hover effects */
+  /* UPDATED COMMENTS: Pink theme with enhanced hover effects */
 }
 
 .folder-container--pink:hover .project-card {
@@ -52,9 +52,11 @@
   left: 5px; /* UPDATED COMMENTS: Offset to center back layer */
   top: 4px;   /* UPDATED COMMENTS: Vertical offset for proper alignment */
   z-index: 1;
-  /* REUSED: Widget shadow for folder back layer depth */
+  /* CRITICAL: Base shadow applied directly - ensures shadow always visible */
+  /* REUSED: Default widget shadow values for consistency */
   filter: drop-shadow(0px 32px 13px rgba(0, 0, 0, 0.01)) drop-shadow(0px 18px 11px rgba(0, 0, 0, 0.05)) drop-shadow(0px 8px 8px rgba(0, 0, 0, 0.09)) drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.1));
-  /* CRITICAL: Shadow transitions moved to shared styles/components.css */
+  /* CRITICAL: Transition for smooth shadow changes */
+  transition: filter var(--transition-normal);
 }
 
 /* ANCHOR: folder_back_shadow */

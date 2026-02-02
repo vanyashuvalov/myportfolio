@@ -39,75 +39,76 @@
 /* Sticker widget shadows */
 .widget--sticker:hover .sticker-container,
 .widget--sticker.widget--hovered .sticker-container {
-  box-shadow: var(--widget-shadow-hovered);
+  box-shadow: 0px 40px 16px rgba(0, 0, 0, 0.02), 0px 22px 14px rgba(0, 0, 0, 0.08), 0px 10px 10px rgba(0, 0, 0, 0.12), 0px 3px 6px rgba(0, 0, 0, 0.15);
 }
 
 .widget--sticker.widget--pressed .sticker-container {
-  box-shadow: var(--widget-shadow-pressed);
+  box-shadow: 0px 16px 6px rgba(0, 0, 0, 0.02), 0px 9px 5px rgba(0, 0, 0, 0.08), 0px 4px 4px rgba(0, 0, 0, 0.12), 0px 1px 2px rgba(0, 0, 0, 0.15);
 }
 
 .widget--sticker.widget--dragging .sticker-container {
-  box-shadow: var(--widget-shadow-dragging);
+  box-shadow: 0px 50px 20px rgba(0, 0, 0, 0.03), 0px 28px 18px rgba(0, 0, 0, 0.10), 0px 12px 12px rgba(0, 0, 0, 0.15), 0px 4px 8px rgba(0, 0, 0, 0.20);
   transition: none !important;
 }
 
 /* Resume widget shadows */
 .widget--resume:hover .document-page,
 .widget--resume.widget--hovered .document-page {
-  box-shadow: var(--widget-shadow-hovered);
+  box-shadow: 0px 40px 16px rgba(0, 0, 0, 0.02), 0px 22px 14px rgba(0, 0, 0, 0.08), 0px 10px 10px rgba(0, 0, 0, 0.12), 0px 3px 6px rgba(0, 0, 0, 0.15);
 }
 
 .widget--resume.widget--pressed .document-page {
-  box-shadow: var(--widget-shadow-pressed);
+  box-shadow: 0px 16px 6px rgba(0, 0, 0, 0.02), 0px 9px 5px rgba(0, 0, 0, 0.08), 0px 4px 4px rgba(0, 0, 0, 0.12), 0px 1px 2px rgba(0, 0, 0, 0.15);
 }
 
 .widget--resume.widget--dragging .document-page {
-  box-shadow: var(--widget-shadow-dragging);
+  box-shadow: 0px 50px 20px rgba(0, 0, 0, 0.03), 0px 28px 18px rgba(0, 0, 0, 0.10), 0px 12px 12px rgba(0, 0, 0, 0.15), 0px 4px 8px rgba(0, 0, 0, 0.20);
   transition: none !important;
 }
 
 /* Clock widget shadows */
 .widget--clock:hover .clock-face,
 .widget--clock.widget--hovered .clock-face {
-  box-shadow: var(--widget-shadow-hovered);
+  box-shadow: 0px 40px 16px rgba(0, 0, 0, 0.02), 0px 22px 14px rgba(0, 0, 0, 0.08), 0px 10px 10px rgba(0, 0, 0, 0.12), 0px 3px 6px rgba(0, 0, 0, 0.15);
 }
 
 .widget--clock.widget--pressed .clock-face {
-  box-shadow: var(--widget-shadow-pressed);
+  box-shadow: 0px 16px 6px rgba(0, 0, 0, 0.02), 0px 9px 5px rgba(0, 0, 0, 0.08), 0px 4px 4px rgba(0, 0, 0, 0.12), 0px 1px 2px rgba(0, 0, 0, 0.15);
 }
 
 .widget--clock.widget--dragging .clock-face {
-  box-shadow: var(--widget-shadow-dragging);
+  box-shadow: 0px 50px 20px rgba(0, 0, 0, 0.03), 0px 28px 18px rgba(0, 0, 0, 0.10), 0px 12px 12px rgba(0, 0, 0, 0.15), 0px 4px 8px rgba(0, 0, 0, 0.20);
   transition: none !important;
 }
 
 /* Feed button widget shadows */
 .widget--feed-button:hover .feed-button-container,
 .widget--feed-button.widget--hovered .feed-button-container {
-  box-shadow: var(--widget-shadow-hovered);
+  box-shadow: 0px 40px 16px rgba(0, 0, 0, 0.02), 0px 22px 14px rgba(0, 0, 0, 0.08), 0px 10px 10px rgba(0, 0, 0, 0.12), 0px 3px 6px rgba(0, 0, 0, 0.15);
 }
 
 .widget--feed-button.widget--pressed .feed-button-container {
-  box-shadow: var(--widget-shadow-pressed);
+  box-shadow: 0px 16px 6px rgba(0, 0, 0, 0.02), 0px 9px 5px rgba(0, 0, 0, 0.08), 0px 4px 4px rgba(0, 0, 0, 0.12), 0px 1px 2px rgba(0, 0, 0, 0.15);
 }
 
 .widget--feed-button.widget--dragging .feed-button-container {
-  box-shadow: var(--widget-shadow-dragging);
+  box-shadow: 0px 50px 20px rgba(0, 0, 0, 0.03), 0px 28px 18px rgba(0, 0, 0, 0.10), 0px 12px 12px rgba(0, 0, 0, 0.15), 0px 4px 8px rgba(0, 0, 0, 0.20);
   transition: none !important;
 }
 
 /* Folder widget shadows (uses filter instead of box-shadow) */
+/* CRITICAL: Hover and interaction states override base shadow from folder-widget.css */
 .widget--folder:hover .folder-back,
 .widget--folder.widget--hovered .folder-back {
-  filter: drop-shadow(var(--widget-shadow-hovered));
+  filter: drop-shadow(0px 40px 16px rgba(0, 0, 0, 0.02)) drop-shadow(0px 22px 14px rgba(0, 0, 0, 0.08)) drop-shadow(0px 10px 10px rgba(0, 0, 0, 0.12)) drop-shadow(0px 3px 6px rgba(0, 0, 0, 0.15)) !important;
 }
 
 .widget--folder.widget--pressed .folder-back {
-  filter: drop-shadow(var(--widget-shadow-pressed));
+  filter: drop-shadow(0px 16px 6px rgba(0, 0, 0, 0.02)) drop-shadow(0px 9px 5px rgba(0, 0, 0, 0.08)) drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.12)) drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.15)) !important;
 }
 
 .widget--folder.widget--dragging .folder-back {
-  filter: drop-shadow(var(--widget-shadow-dragging));
+  filter: drop-shadow(0px 50px 20px rgba(0, 0, 0, 0.03)) drop-shadow(0px 28px 18px rgba(0, 0, 0, 0.10)) drop-shadow(0px 12px 12px rgba(0, 0, 0, 0.15)) drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.20)) !important;
   transition: none !important;
 }
 
