@@ -5,6 +5,7 @@
 import { ShadowSystem } from '../../shared/lib/shadow-system.js';
 import { AnimationSystem } from '../../shared/lib/animation-system.js';
 import { SimpleDragHover } from '../../shared/lib/simple-drag-hover.js';
+import { getWidgetRotation } from '../../shared/lib/widget-rotation.js';
 
 /**
  * WidgetBase - Abstract base class for all desktop widgets
@@ -25,7 +26,7 @@ export class WidgetBase {
     
     // CRITICAL: Track position in variables for accurate drag operations
     this.currentPosition = { x: 0, y: 0 };
-    this.rotation = options.rotation || this.generateRandomTilt();
+    this.rotation = options.rotation || this.getWidgetRotation();
     this.scale = options.scale || 1;
     this.zIndex = options.zIndex || 1;
     
@@ -357,18 +358,13 @@ export class WidgetBase {
   }
 
   /**
-   * Generate random tilt for natural appearance
-   * SCALED FOR: Subtle randomization for organic desktop feel
-   * UPDATED COMMENTS: Clock widgets get 0 rotation, others get ±2 degrees
+   * Get individual rotation for each widget type
+   * UPDATED COMMENTS: Uses shared rotation system for consistency
+   * REUSED: Centralized rotation logic from shared module
    */
-  generateRandomTilt() {
-    // CRITICAL: Clock widgets should have 0 rotation for readability
-    if (this.type === 'clock') {
-      return 0;
-    }
-    
-    // REUSED: All other widgets get random tilt within 2 degrees
-    return (Math.random() - 0.5) * 4; // ±2 degrees
+  getWidgetRotation() {
+    // CRITICAL: Use shared rotation system for consistency
+    return getWidgetRotation(this.type);
   }
 
   /**

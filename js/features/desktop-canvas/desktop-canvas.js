@@ -9,6 +9,7 @@ import { CatWidget } from '../../widgets/cat/cat-widget.js';
 import { FeedButtonWidget } from '../../widgets/feed-button/feed-button-widget.js';
 import { ResumeWidget } from '../../widgets/resume/resume-widget.js';
 import { widgetInitializer } from '../../shared/lib/widget-initializer.js';
+import { getWidgetRotation } from '../../shared/lib/widget-rotation.js';
 
 /**
  * DesktopCanvas - Main container and manager for all desktop widgets
@@ -266,7 +267,7 @@ export class DesktopCanvas {
       config: {
         timezone: 'Europe/Moscow',
         showSeconds: true,
-        rotation: 0 // CRITICAL: No random rotation for clock widget
+        rotation: 0 // CRITICAL: Clock widget needs 0 rotation for readability
       }
     };
     
@@ -391,6 +392,7 @@ export class DesktopCanvas {
     const widget = new WidgetClass(wrapperElement, {
       type,
       position: finalPosition,
+      rotation: getWidgetRotation(type), // CRITICAL: Pass individual rotation from shared module
       eventBus: this.eventBus,
       assetManager: this.assetManager,
       canvasBounds: this.bounds,

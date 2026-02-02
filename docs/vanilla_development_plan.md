@@ -959,6 +959,127 @@ const PORTFOLIO_PROJECTS = [
 - **Type Detection**: Added widget type parameter to rotation generation for proper clock handling
 - **// UPDATED COMMENTS**: All rotation logic properly documented with reasoning
 
+## Status Update: Centralized Widget Rotation System - COMPLETED ✅
+
+### ✅ COMPLETED (Latest - 2026-02-02)
+- **CRITICAL REFACTOR**: Created centralized widget rotation system
+- **// FSD: shared/lib** - New `widget-rotation.js` module for rotation management
+- **// REUSED**: Single source of truth for all widget rotation values
+- **// UPDATED COMMENTS**: Complete elimination of random rotation system
+
+### Technical Implementation:
+1. **Centralized Rotation Module** (// FSD: shared/lib/widget-rotation.js):
+   - **`getWidgetRotation()`**: Main function for getting widget-specific rotations
+   - **`getAllWidgetRotations()`**: Utility for debugging and management
+   - **`isValidRotation()`**: Input validation for rotation values
+   - **`WIDGET_ROTATIONS`**: Constants export for external use
+
+2. **Updated All Files** (// REUSED: Consistent rotation across all modules):
+   - **desktop-canvas.js**: Uses `getWidgetRotation()` when creating widgets
+   - **widget-base.js**: Uses shared rotation system in `generateRandomTilt()`
+   - **widget-initializer.js**: Uses shared rotation system consistently
+   - **// UPDATED COMMENTS**: All files now reference centralized system
+
+3. **Individual Widget Rotations** (// SCALED FOR: Professional appearance):
+   - **Clock**: 0° (perfectly straight for readability)
+   - **Sticker**: -2° (casual left tilt for note appearance)
+   - **Resume**: 1° (professional right tilt for documents)
+   - **Folder**: -1° (natural left tilt for folder placement)
+   - **Cat**: 0° (level for proper sprite animations)
+   - **Feed Button**: 2° (dynamic right tilt for interactivity)
+
+### Architecture Benefits:
+- ✅ **Single Source of Truth**: All rotation logic in one module
+- ✅ **// FSD Compliance**: Proper shared/lib layer usage
+- ✅ **// REUSED**: No code duplication across files
+- ✅ **Maintainability**: Change rotation once, affects all instances
+- ✅ **Type Safety**: Validation functions for rotation values
+- ✅ **Debugging**: Utility functions for rotation management
+
+### Files Created/Modified:
+- `js/shared/lib/widget-rotation.js` - **NEW**: Centralized rotation system
+- `js/features/desktop-canvas/desktop-canvas.js` - Uses shared rotation on widget creation
+- `js/entities/widget/widget-base.js` - Uses shared rotation in generateRandomTilt()
+- `js/shared/lib/widget-initializer.js` - Uses shared rotation consistently
+
+**Onii-chan~ теперь система поворотов полностью централизована! (=^・^=)** Никакого случайного поворота, только продуманные углы для каждого типа виджета ✧(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧
+
+## Status Update: Widget Rotation Method Names - COMPLETED ✅
+
+### ✅ COMPLETED (Latest - 2026-02-02)
+- **CRITICAL REFACTOR**: Updated misleading method names in rotation system
+- **Method Rename**: `generateRandomTilt()` → `getWidgetRotation()` for accuracy
+- **// UPDATED COMMENTS**: Method names now reflect actual functionality (no randomization)
+- **Consistency**: All files use accurate method naming
+
+### Technical Implementation:
+1. **Method Name Updates** (// REUSED: Consistent naming across all modules):
+   - **widget-base.js**: `generateRandomTilt()` → `getWidgetRotation()`
+   - **widget-initializer.js**: `generateRandomTilt()` → `getWidgetRotation()`
+   - **Method calls updated**: All references use new accurate method names
+
+2. **Architecture Benefits** (// SCALED FOR: maintainable codebase):
+   - **Accurate Naming**: Method names reflect actual behavior (individual rotations)
+   - **No Confusion**: Eliminates misleading "random" terminology
+   - **Clear Intent**: `getWidgetRotation()` clearly indicates individual widget rotation retrieval
+
+### Files Modified:
+- `js/entities/widget/widget-base.js` - Updated method name and call
+- `js/shared/lib/widget-initializer.js` - Updated method name and call
+
+### Individual Widget Rotations (CONFIRMED):
+- **Clock**: 0° (perfectly straight for readability)
+- **Sticker**: -2° (casual left tilt for note appearance)  
+- **Resume**: 1° (professional right tilt for documents)
+- **Folder**: -1° (natural left tilt for folder placement)
+- **Cat**: 0° (level for proper sprite animations)
+- **Feed Button**: 2° (dynamic right tilt for interactivity)
+
+**Onii-chan~ теперь названия методов точно отражают функциональность! (=^・^=)** Никакой путаницы с "random" - только индивидуальные углы поворота ✧(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧
+
+## Status Update: Individual Widget Rotation System - COMPLETED ✅
+
+### ✅ COMPLETED (Latest - 2026-02-02)
+- **CRITICAL REFACTOR**: Removed random widget rotation system
+- **Individual Rotations**: Each widget type now has its own specific rotation angle
+- **Professional Appearance**: Consistent rotation values for better visual design
+- **// UPDATED COMMENTS**: Complete rotation system overhaul with individual control
+
+### Technical Implementation:
+1. **Widget-Specific Rotations** (// REUSED: Consistent across all instances):
+   - **Clock Widget**: 0° (perfectly straight for readability)
+   - **Sticker Widget**: -2° (slight left tilt for casual note appearance)
+   - **Resume Widget**: 1° (slight right tilt for document realism)
+   - **Folder Widget**: -1° (slight left tilt for natural folder placement)
+   - **Cat Widget**: 0° (level for proper animation alignment)
+   - **Feed Button Widget**: 2° (slight right tilt for button dynamics)
+
+2. **System Updates** (// FSD: entities/widget + shared/lib layers):
+   - **widget-base.js**: Updated `generateRandomTilt()` with individual rotation map
+   - **widget-initializer.js**: Updated `generateRandomTilt()` with same rotation map
+   - **desktop-canvas.js**: Ensured clock widget uses 0° rotation explicitly
+
+3. **Architecture Benefits** (// SCALED FOR: professional portfolio appearance):
+   - **Predictable Design**: Each widget type always has same rotation
+   - **Visual Hierarchy**: Rotation angles create natural visual flow
+   - **Professional Look**: No random chaos, intentional design choices
+   - **Easy Maintenance**: Single rotation map for all widget instances
+
+### Files Modified:
+- `js/entities/widget/widget-base.js` - Individual rotation system
+- `js/shared/lib/widget-initializer.js` - Matching rotation system
+- `js/features/desktop-canvas/desktop-canvas.js` - Clock widget rotation verification
+
+### Rotation Design Rationale:
+- **Clock (0°)**: Must be perfectly readable for time display
+- **Sticker (-2°)**: Casual left tilt mimics handwritten notes
+- **Resume (1°)**: Slight right tilt suggests professional document
+- **Folder (-1°)**: Natural folder placement on desktop
+- **Cat (0°)**: Level for proper sprite animation alignment
+- **Feed Button (2°)**: Dynamic right tilt suggests interactivity
+
+**Onii-chan~ теперь каждый виджет имеет свой уникальный угол поворота! (=^・^=)** Никакой случайности, только продуманный дизайн ✧(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧
+
 ## Status Update: Shared Animation Architecture - COMPLETED ✅
 
 ### ✅ COMPLETED (Latest - 2026-02-02)

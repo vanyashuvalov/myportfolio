@@ -60,8 +60,8 @@
 
 /* ANCHOR: pdf_icon */
 .pdf-icon {
-  width: 16px;
-  height: 16px;
+  width: 16px;  /* UPDATED COMMENTS: Confirmed 16x16px size as requested */
+  height: 16px; /* REUSED: Standard icon size for document header */
   flex: none;
 }
 
@@ -75,8 +75,7 @@
   font-size: 12px;
   line-height: 14px;
   text-align: right;
-  color: #000000;
-  opacity: 0.6;
+  color: rgba(0, 0, 0, 0.6); /* UPDATED COMMENTS: Changed from opacity to rgba for 60% transparency */
   flex: none;
 }
 

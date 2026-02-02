@@ -2,6 +2,8 @@
 /* REUSED: Universal widget initialization system */
 /* SCALED FOR: Smooth widget creation without visual jumps */
 
+import { getWidgetRotation } from './widget-rotation.js';
+
 /**
  * WidgetInitializer - Handles proper widget initialization and positioning
  * Prevents visual jumps by setting position before DOM insertion
@@ -11,7 +13,7 @@
 export class WidgetInitializer {
   constructor(options = {}) {
     this.defaultConfig = {
-      // UPDATED COMMENTS: Random tilt range for natural desktop appearance
+      // UPDATED COMMENTS: Individual rotation angles for professional appearance
       minTilt: -2,
       maxTilt: 2,
       // SCALED FOR: Smooth entrance animations
@@ -48,7 +50,7 @@ export class WidgetInitializer {
   prepareInitializationData(options) {
     return {
       position: this.calculateInitialPosition(options.position),
-      rotation: this.generateRandomTilt(options.type),
+      rotation: this.getWidgetRotation(options.type),
       scale: options.scale || 1,
       zIndex: options.zIndex || 1,
       id: this.generateWidgetId(),
@@ -135,18 +137,13 @@ export class WidgetInitializer {
   }
 
   /**
-   * Generate random tilt for natural desktop appearance
-   * REUSED: Consistent random tilt generation across all widgets
-   * UPDATED COMMENTS: Clock widgets get 0 rotation, others get ±2 degrees
+   * Get individual rotation for each widget type
+   * REUSED: Uses shared rotation system for consistency
+   * UPDATED COMMENTS: Centralized rotation logic from shared module
    */
-  generateRandomTilt(widgetType) {
-    // CRITICAL: Clock widgets should have 0 rotation for readability
-    if (widgetType === 'clock') {
-      return 0;
-    }
-    
-    const { minTilt, maxTilt } = this.defaultConfig;
-    return Math.random() * (maxTilt - minTilt) + minTilt;
+  getWidgetRotation(widgetType) {
+    // CRITICAL: Use shared rotation system for consistency
+    return getWidgetRotation(widgetType);
   }
 
   /**
