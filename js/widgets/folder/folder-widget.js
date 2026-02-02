@@ -40,21 +40,23 @@ export class FolderWidget extends WidgetBase {
     const targetElement = this.innerElement || this.element;
     targetElement.innerHTML = `
       <div class="folder-container">
-        <!-- Layer 1: Back folder SVG with shadow -->
-        <img class="folder-back" src="/assets/images/folder-bot.svg" alt="Folder back" />
-        
-        <!-- Layer 1.5: SVG shadow overlay -->
-        <img class="folder-back-shadow" src="/assets/images/folder-back-shadow.svg" alt="Folder shadow" />
-        
-        <!-- Layer 2: Project preview cards -->
-        <div class="project-previews">
-          <div class="project-card project-card--1"></div>
-          <div class="project-card project-card--2"></div>
-          <div class="project-card project-card--3"></div>
+        <div class="folder-icon-area">
+          <!-- Layer 1: Back folder SVG with shadow -->
+          <img class="folder-back" src="/assets/images/folder-bot.svg" alt="Folder back" />
+          
+          <!-- Layer 1.5: SVG shadow overlay -->
+          <img class="folder-back-shadow" src="/assets/images/folder-back-shadow.svg" alt="Folder shadow" />
+          
+          <!-- Layer 2: Project preview cards -->
+          <div class="project-previews">
+            <div class="project-card project-card--1"></div>
+            <div class="project-card project-card--2"></div>
+            <div class="project-card project-card--3"></div>
+          </div>
+          
+          <!-- Layer 3: Front folder SVG -->
+          <img class="folder-front" src="/assets/images/folder-top.svg" alt="Folder front" />
         </div>
-        
-        <!-- Layer 3: Front folder SVG -->
-        <img class="folder-front" src="/assets/images/folder-top.svg" alt="Folder front" />
         
         <!-- Folder labels -->
         <div class="folder-labels">

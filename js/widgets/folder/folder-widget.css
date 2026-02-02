@@ -5,7 +5,7 @@
 /* ANCHOR: folder_widget */
 .folder-widget {
   width: 140px;
-  height: 140px;
+  height: 194px; /* UPDATED COMMENTS: Increased height to accommodate labels */
   /* UPDATED COMMENTS: Fixed wrapper size with overflow visible */
   overflow: visible;
 }
@@ -13,9 +13,20 @@
 .folder-container {
   position: relative;
   width: 140px;
-  height: 140px;
+  height: 194px; /* UPDATED COMMENTS: Increased height to accommodate labels (140px + 54px) */
   /* UPDATED COMMENTS: Fixed container size, content can overflow */
   overflow: visible;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ANCHOR: folder_icon_area */
+.folder-icon-area {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  /* UPDATED COMMENTS: Icon area contains all SVG layers and project cards */
 }
 
 /* ANCHOR: folder_back_svg */
@@ -63,6 +74,7 @@
   border-radius: 4px; /* UPDATED COMMENTS: 4px border radius for rounded corners */
   border: 1px solid #E0E0E0; /* UPDATED COMMENTS: Light gray border for definition */
   /* UPDATED COMMENTS: Each card rotated with 3° additional left turn from base angles */
+  transition: transform 0.3s ease; /* UPDATED COMMENTS: Smooth animation for hover spreading effect */
 }
 
 .project-card--1 {
@@ -99,16 +111,13 @@
 
 /* ANCHOR: folder_labels */
 .folder-labels {
-  position: absolute;
-  bottom: -54px; /* UPDATED COMMENTS: Position below 140px container */
-  left: 50%;
-  transform: translateX(-50%);
-  width: 140px;
-  height: 46px; /* UPDATED COMMENTS: Space for both title and subtitle */
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8px;
+  width: 140px;
+  height: 46px; /* UPDATED COMMENTS: Space for both title and subtitle */
+  margin-top: 8px; /* UPDATED COMMENTS: 8px gap from folder icon, similar to resume widget */
   z-index: 6; /* UPDATED COMMENTS: Above all other layers for proper text visibility */
 }
 
@@ -139,3 +148,17 @@
 }
 
 /* CRITICAL: Shadow states moved to shared styles/components.css for reusability */
+
+/* ANCHOR: project_cards_hover */
+/* UPDATED COMMENTS: Hover effect - cards spread out when hovering over folder container */
+.folder-container:hover .project-card--1 {
+  transform: rotate(-8deg) translate(-4px, -8px); /* UPDATED COMMENTS: Card 1: left -10px, up -8px */
+}
+
+.folder-container:hover .project-card--2 {
+  transform: rotate(-3deg) translate(4px, -18px); /* UPDATED COMMENTS: Card 2: right +6px, up -8px */
+}
+
+.folder-container:hover .project-card--3 {
+  transform: rotate(3deg) translate(8px, -6px); /* UPDATED COMMENTS: Card 3: left -8px, up -6px */
+}
