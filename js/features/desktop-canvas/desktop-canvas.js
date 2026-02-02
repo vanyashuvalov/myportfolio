@@ -238,13 +238,13 @@ export class DesktopCanvas {
 
   /**
    * Create default widgets for the desktop
-   * UPDATED COMMENTS: Adding clock, resume and sticker widgets for professional portfolio
+   * UPDATED COMMENTS: Adding clock, resume, sticker and folder widgets for professional portfolio
    */
   async createDefaultWidgets() {
     console.log('Canvas initialized - adding portfolio widgets');
-    console.log('Current widgets: Clock + Resume + Sticker');
+    console.log('Current widgets: Clock + Resume + Sticker + Folder');
     
-    // UPDATED COMMENTS: Calculate positions for three widgets
+    // UPDATED COMMENTS: Calculate positions for four widgets
     const clockPosition = {
       x: window.innerWidth * 0.05,  // 5% from left edge
       y: window.innerHeight * 0.05  // 5% from top
@@ -258,6 +258,11 @@ export class DesktopCanvas {
     const stickerPosition = {
       x: window.innerWidth * 0.4,   // 40% from left edge
       y: window.innerHeight * 0.3   // 30% from top
+    };
+    
+    const folderPosition = {
+      x: window.innerWidth * 0.6,   // 60% from left edge
+      y: window.innerHeight * 0.15  // 15% from top
     };
     
     // REUSED: Widget creation logic for clock
@@ -298,27 +303,25 @@ export class DesktopCanvas {
       }
     };
     
-    // Create all three widgets
+    // REUSED: Widget creation logic for folder
+    const folderWidget = {
+      type: 'folder',
+      position: folderPosition,
+      config: {
+        title: 'Projects',
+        itemCount: 17,
+        projects: await this.getProjectData()
+      }
+    };
+    
+    // Create all four widgets
     this.createWidget(clockWidget.type, clockWidget.position, clockWidget.config);
     this.createWidget(resumeWidget.type, resumeWidget.position, resumeWidget.config);
     this.createWidget(stickerWidget.type, stickerWidget.position, stickerWidget.config);
+    this.createWidget(folderWidget.type, folderWidget.position, folderWidget.config);
     
     // Store remaining planned widgets for future incremental addition
     this.plannedWidgets = [
-      {
-        type: 'clock',
-        position: { x: window.innerWidth * 0.05, y: window.innerHeight * 0.1 },
-        config: { timezone: 'Europe/Moscow' }
-      },
-      {
-        type: 'folder',
-        position: { x: window.innerWidth * 0.6, y: window.innerHeight * 0.15 },
-        config: {
-          title: 'Projects',
-          subtitle: '7 items',
-          projects: await this.getProjectData()
-        }
-      },
       {
         type: 'cat',
         position: { x: window.innerWidth * 0.3, y: window.innerHeight * 0.4 },
@@ -337,15 +340,29 @@ export class DesktopCanvas {
 
   /**
    * Get project data for folder widget
-   * REUSED: Project data loading utility
+   * REUSED: Project data loading utility with realistic portfolio projects
    */
   async getProjectData() {
-    // This would typically load from an API or JSON file
+    // UPDATED COMMENTS: Real portfolio projects with proper image paths
     return [
-      { id: 1, title: 'Clinical Dashboard', color: '#3B82F6' },
-      { id: 2, title: 'Maternity App', color: '#EC4899' },
-      { id: 3, title: 'E-commerce Platform', color: '#10B981' },
-      { id: 4, title: 'Banking Interface', color: '#F59E0B' }
+      { 
+        id: 'clinical-dashboard', 
+        title: 'Clinical Dashboard', 
+        image: '/assets/images/projects/clinical-dashboard.jpg',
+        rotation: -0.33
+      },
+      { 
+        id: 'maternity-app', 
+        title: 'Maternity App', 
+        image: '/assets/images/projects/maternity-app.jpg',
+        rotation: 5.67
+      },
+      { 
+        id: 'surgery-scheduling', 
+        title: 'Surgery Scheduling', 
+        image: '/assets/images/projects/surgery-scheduling.jpg',
+        rotation: 11.67
+      }
     ];
   }
 

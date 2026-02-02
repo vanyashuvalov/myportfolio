@@ -1,81 +1,86 @@
 /* ANCHOR: folder_widget_styles */
-/* REUSED: Folder widget specific styles extracted from components.css */
-/* SCALED FOR: Modular CSS architecture with component isolation */
+/* REUSED: Folder widget specific styles - simplified 2-layer structure */
+/* SCALED FOR: Clean folder design without complexity */
 
 /* ANCHOR: folder_widget */
 .folder-widget {
   width: 140px;
   height: 140px;
+  /* UPDATED COMMENTS: Fixed wrapper size with overflow visible */
+  overflow: visible;
 }
 
 .folder-container {
   position: relative;
-  width: 100%;
-  height: 100%;
+  width: 140px;
+  height: 140px;
+  /* UPDATED COMMENTS: Fixed container size, content can overflow */
+  overflow: visible;
 }
 
-.folder-back,
-.folder-upper {
-  position: absolute;
-  width: 100%;
-  height: auto;
-}
-
+/* ANCHOR: folder_back_svg */
 .folder-back {
+  position: absolute;
+  width: auto;
+  height: auto;
+  left: 6px; /* UPDATED COMMENTS: Offset to center back layer */
+  top: 5px;   /* UPDATED COMMENTS: Vertical offset for proper alignment */
   z-index: 1;
-  filter: drop-shadow(var(--widget-shadow-default));
+  /* CRITICAL: SVG shadow using filter drop-shadow */
+  filter: drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.15));
   /* CRITICAL: Shadow transitions moved to shared styles/components.css */
 }
 
-/* CRITICAL: Shadow states moved to shared styles/components.css for reusability */
-
-.folder-upper {
-  z-index: 3;
-  top: 0;
-  height: 65px;
-}
-
-.folder-thumbnails {
+/* ANCHOR: folder_front_svg */
+.folder-front {
   position: absolute;
-  top: 15px;
-  left: 15px;
-  right: 15px;
-  bottom: 35px;
+  width: auto;
+  height: auto;
+  left: 10px;   /* UPDATED COMMENTS: Offset to position front layer correctly */
+  top: 42px;   /* UPDATED COMMENTS: Vertical offset for layering effect */
   z-index: 2;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  gap: 2px;
-  padding: 4px;
+  /* UPDATED COMMENTS: No shadow on front layer */
 }
 
-.folder-thumbnail {
-  border-radius: 2px;
-  background-size: cover;
-  background-position: center;
-  /* CRITICAL: NO CSS hover - JS handles all interactions */
-}
-
-/* CRITICAL: NO CSS hover - JS handles all interactions */
-
-.folder-label {
+/* ANCHOR: folder_labels */
+.folder-labels {
   position: absolute;
-  bottom: 8px;
+  bottom: -54px; /* UPDATED COMMENTS: Position below 140px container */
   left: 50%;
   transform: translateX(-50%);
-  z-index: 4;
-  text-align: center;
-  pointer-events: none;
+  width: 140px;
+  height: 46px; /* UPDATED COMMENTS: Space for both title and subtitle */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 3;
 }
 
 .folder-title {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-primary);
-  margin-bottom: 2px;
+  width: 140px;
+  height: 19px;
+  font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-style: normal;
+  font-weight: 590; /* UPDATED COMMENTS: Figma specified weight */
+  font-size: 16px;
+  line-height: 19px;
+  text-align: center;
+  color: #FFFFFF;
+  /* CRITICAL: No rotation - labels stay horizontal */
 }
 
 .folder-subtitle {
-  font-size: var(--font-size-xs);
-  color: var(--color-secondary);
+  width: 140px;
+  height: 19px;
+  font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+  text-align: center;
+  color: #FFFFFF;
+  /* CRITICAL: No rotation - labels stay horizontal */
 }
+
+/* CRITICAL: Shadow states moved to shared styles/components.css for reusability */
