@@ -242,56 +242,20 @@ export class DesktopCanvas {
 
   /**
    * Create default widgets for the desktop
-   * UPDATED COMMENTS: Adding clock, resume, sticker, cat-sticker, telegram and dual folder widgets for professional portfolio
-   * SCALED FOR: Theme-based folder variants with Projects (default) and Fun (pink)
+   * UPDATED COMMENTS: CSS viewport-based positioning with responsive classes
+   * SCALED FOR: Precise widget placement with viewport units
    */
   async createDefaultWidgets() {
-    console.log('Canvas initialized - adding portfolio widgets');
+    console.log('Canvas initialized - adding portfolio widgets with CSS viewport positioning');
     console.log('Current widgets: Clock + Resume + Sticker + Cat Sticker + Telegram + Projects Folder + Fun Folder');
     
-    // UPDATED COMMENTS: Calculate positions for seven widgets with proper spacing
-    const clockPosition = {
-      x: window.innerWidth * 0.05,  // 5% from left edge
-      y: window.innerHeight * 0.05  // 5% from top
-    };
-    
-    const resumePosition = {
-      x: window.innerWidth * 0.25,  // 25% from left edge
-      y: window.innerHeight * 0.15  // 15% from top
-    };
-    
-    const stickerPosition = {
-      x: window.innerWidth * 0.4,   // 40% from left edge
-      y: window.innerHeight * 0.3   // 30% from top
-    };
-    
-    // CRITICAL: Cat sticker positioned near bottom left for cat information
-    const catStickerPosition = {
-      x: window.innerWidth * 0.05,  // 5% from left edge (below clock)
-      y: window.innerHeight * 0.6   // 60% from top
-    };
-    
-    // CRITICAL: Telegram widget positioned in center-right area
-    const telegramPosition = {
-      x: window.innerWidth * 0.4,   // 40% from left edge
-      y: window.innerHeight * 0.6   // 60% from top
-    };
-    
-    const projectsFolderPosition = {
-      x: window.innerWidth * 0.6,   // 60% from left edge
-      y: window.innerHeight * 0.15  // 15% from top
-    };
-    
-    // REUSED: Adjacent positioning for Fun folder next to Projects
-    const funFolderPosition = {
-      x: window.innerWidth * 0.75,  // 75% from left edge (15% right from Projects)
-      y: window.innerHeight * 0.15  // Same vertical level as Projects
-    };
+    // UPDATED COMMENTS: CSS-based positioning using viewport units
+    // Widget positions are now handled by CSS classes for better responsiveness
     
     // REUSED: Widget creation logic for clock
     const clockWidget = {
       type: 'clock',
-      position: clockPosition,
+      cssPositionClass: 'widget-position--clock',
       config: {
         timezone: 'Europe/Moscow',
         showSeconds: true,
@@ -302,7 +266,7 @@ export class DesktopCanvas {
     // REUSED: Widget creation logic for resume
     const resumeWidget = {
       type: 'resume',
-      position: resumePosition,
+      cssPositionClass: 'widget-position--resume',
       config: {
         personalInfo: {
           name: 'Ivan Shuvalov',
@@ -317,7 +281,7 @@ export class DesktopCanvas {
     // REUSED: Widget creation logic for sticker introduction
     const stickerWidget = {
       type: 'sticker',
-      position: stickerPosition,
+      cssPositionClass: 'widget-position--sticker',
       config: {
         title: 'Hi! My name is Ivan, I am Product Designer',
         content: 'Leading design and prototyping of data dashboard for clinical workers scheduling surgery blocks, resolving critical block time issues\n\nDesigning product flows for clinical workers in maternity health, translating complex healthcare workflows into intuitive experiences for 2,600+ care sites',
@@ -329,7 +293,7 @@ export class DesktopCanvas {
     // CRITICAL: Cat sticker widget with blue gradient theme
     const catStickerWidget = {
       type: 'cat-sticker',
-      position: catStickerPosition,
+      cssPositionClass: 'widget-position--cat-sticker',
       config: {
         catName: 'Cat Here',
         description: 'You can interact my boy as you want. But do not punch him',
@@ -341,7 +305,7 @@ export class DesktopCanvas {
     // CRITICAL: Telegram widget with channel information
     const telegramWidget = {
       type: 'telegram',
-      position: telegramPosition,
+      cssPositionClass: 'widget-position--telegram',
       config: {
         channelName: 'ваня кнопочкин',
         channelType: 'Telegram Channel',
@@ -356,7 +320,7 @@ export class DesktopCanvas {
     // REUSED: Widget creation logic for Projects folder (default theme)
     const projectsFolderWidget = {
       type: 'folder',
-      position: projectsFolderPosition,
+      cssPositionClass: 'widget-position--projects-folder',
       config: {
         title: 'Projects',
         itemCount: 17,
@@ -368,7 +332,7 @@ export class DesktopCanvas {
     // REUSED: Widget creation logic for Fun folder (pink theme)
     const funFolderWidget = {
       type: 'folder',
-      position: funFolderPosition,
+      cssPositionClass: 'widget-position--fun-folder',
       config: {
         title: 'Fun',
         itemCount: 12, // UPDATED COMMENTS: 12 items as requested
@@ -377,25 +341,25 @@ export class DesktopCanvas {
       }
     };
     
-    // Create all seven widgets
-    this.createWidget(clockWidget.type, clockWidget.position, clockWidget.config);
-    this.createWidget(resumeWidget.type, resumeWidget.position, resumeWidget.config);
-    this.createWidget(stickerWidget.type, stickerWidget.position, stickerWidget.config);
-    this.createWidget(catStickerWidget.type, catStickerWidget.position, catStickerWidget.config);
-    this.createWidget(telegramWidget.type, telegramWidget.position, telegramWidget.config);
-    this.createWidget(projectsFolderWidget.type, projectsFolderWidget.position, projectsFolderWidget.config);
-    this.createWidget(funFolderWidget.type, funFolderWidget.position, funFolderWidget.config);
+    // Create all seven widgets with CSS positioning
+    this.createWidget(clockWidget.type, null, clockWidget.config, clockWidget.cssPositionClass);
+    this.createWidget(resumeWidget.type, null, resumeWidget.config, resumeWidget.cssPositionClass);
+    this.createWidget(stickerWidget.type, null, stickerWidget.config, stickerWidget.cssPositionClass);
+    this.createWidget(catStickerWidget.type, null, catStickerWidget.config, catStickerWidget.cssPositionClass);
+    this.createWidget(telegramWidget.type, null, telegramWidget.config, telegramWidget.cssPositionClass);
+    this.createWidget(projectsFolderWidget.type, null, projectsFolderWidget.config, projectsFolderWidget.cssPositionClass);
+    this.createWidget(funFolderWidget.type, null, funFolderWidget.config, funFolderWidget.cssPositionClass);
     
     // Store remaining planned widgets for future incremental addition
     this.plannedWidgets = [
       {
         type: 'cat',
-        position: { x: window.innerWidth * 0.3, y: window.innerHeight * 0.4 },
+        cssPositionClass: 'widget-position--cat',
         config: { name: 'Pixel' }
       },
       {
         type: 'feed-button',
-        position: { x: window.innerWidth * 0.25, y: window.innerHeight * 0.6 },
+        cssPositionClass: 'widget-position--feed-button',
         config: { targetCat: 'cat' }
       }
     ];
@@ -463,10 +427,10 @@ export class DesktopCanvas {
 
   /**
    * Create widget on canvas with proper initialization
-   * UPDATED COMMENTS: Create wrapper + inner structure for clean interactions
+   * UPDATED COMMENTS: CSS-based positioning with optional fallback to JS positioning
    * SCALED FOR: Separation of positioning and visual effects
    */
-  createWidget(type, position = null, config = {}) {
+  createWidget(type, position = null, config = {}, cssPositionClass = null) {
     if (this.widgets.size >= this.config.maxWidgets) {
       console.warn(`Maximum widget limit (${this.config.maxWidgets}) reached`);
       return null;
@@ -481,20 +445,34 @@ export class DesktopCanvas {
     // CRITICAL: Create wrapper element for positioning
     const wrapperElement = document.createElement('div');
     const innerElement = document.createElement('div');
-    const finalPosition = position || this.findAvailablePosition();
     
-    // UPDATED COMMENTS: Wrapper handles positioning only
-    wrapperElement.className = 'widget-wrapper';
-    wrapperElement.style.position = 'absolute';
-    // CRITICAL: Don't set transform here - SimpleDragHover will handle it
-    wrapperElement.style.transformOrigin = 'top left'; // FIXED: Position from top-left corner
-    wrapperElement.style.willChange = 'transform';
-    wrapperElement.style.opacity = '0';
-    wrapperElement.style.transition = 'opacity 0.3s ease-out';
-    
-    // CRITICAL: Set initial position data for WidgetBase
-    wrapperElement.dataset.initialX = finalPosition.x;
-    wrapperElement.dataset.initialY = finalPosition.y;
+    // UPDATED COMMENTS: CSS-based positioning takes priority over JS positioning
+    if (cssPositionClass) {
+      // CRITICAL: Use CSS viewport positioning for responsive design
+      wrapperElement.className = `widget-wrapper ${cssPositionClass}`;
+      wrapperElement.style.position = 'absolute';
+      // CRITICAL: Don't set transform here - SimpleDragHover will handle it
+      wrapperElement.style.transformOrigin = 'top left';
+      wrapperElement.style.willChange = 'transform';
+      wrapperElement.style.opacity = '0';
+      wrapperElement.style.transition = 'opacity 0.3s ease-out';
+      
+      // UPDATED COMMENTS: No initial position data needed - CSS handles positioning
+    } else {
+      // FALLBACK: JavaScript positioning for backwards compatibility
+      const finalPosition = position || this.findAvailablePosition();
+      
+      wrapperElement.className = 'widget-wrapper';
+      wrapperElement.style.position = 'absolute';
+      wrapperElement.style.transformOrigin = 'top left';
+      wrapperElement.style.willChange = 'transform';
+      wrapperElement.style.opacity = '0';
+      wrapperElement.style.transition = 'opacity 0.3s ease-out';
+      
+      // CRITICAL: Set initial position data for WidgetBase
+      wrapperElement.dataset.initialX = finalPosition.x;
+      wrapperElement.dataset.initialY = finalPosition.y;
+    }
     
     // UPDATED COMMENTS: Inner element handles visual effects
     innerElement.className = 'widget-inner';
@@ -503,17 +481,20 @@ export class DesktopCanvas {
     // REUSED: Widget creation with wrapper structure
     const widget = new WidgetClass(wrapperElement, {
       type,
-      position: finalPosition,
+      position: cssPositionClass ? null : (position || this.findAvailablePosition()),
       rotation: getWidgetRotation(type), // CRITICAL: Pass individual rotation from shared module
       eventBus: this.eventBus,
       assetManager: this.assetManager,
       canvasBounds: this.bounds,
       innerElement: innerElement,
+      cssPositioning: !!cssPositionClass, // CRITICAL: Flag for CSS-based positioning
       ...config
     });
     
-    // CRITICAL: Update widget position after creation to ensure currentPosition is correct
-    widget.currentPosition = { x: finalPosition.x, y: finalPosition.y };
+    // CRITICAL: Update widget position after creation (only for JS positioning)
+    if (!cssPositionClass && position) {
+      widget.currentPosition = { x: position.x, y: position.y };
+    }
     
     // SCALED FOR: DOM insertion after complete setup
     this.container.appendChild(wrapperElement);

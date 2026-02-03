@@ -7,6 +7,7 @@ import { DesktopCanvas } from './features/desktop-canvas/desktop-canvas.js';
 import { PerformanceMonitor } from './shared/utils/performance-monitor.js';
 import { AssetManager } from './shared/utils/asset-manager.js';
 import { EventBus } from './shared/utils/event-bus.js';
+import { NavigationHeader } from './shared/ui/navigation/navigation-header.js';
 
 /**
  * Application class - Main application controller
@@ -17,6 +18,7 @@ import { EventBus } from './shared/utils/event-bus.js';
 class Application {
   constructor() {
     this.canvas = null;
+    this.navigation = null;
     this.performanceMonitor = null;
     this.assetManager = null;
     this.eventBus = null;
@@ -51,6 +53,31 @@ class Application {
         eventBus: this.eventBus,
         assetManager: this.assetManager
       });
+
+      // ANCHOR: navigation_initialization
+      // REUSED: Navigation header component with shared EventBus
+      const navigationContainer = document.getElementById('navigation-container');
+      if (!navigationContainer) {
+        throw new Error('Navigation container element not found');
+      }
+
+      this.navigation = new NavigationHeader(navigationContainer, {
+        eventBus: this.eventBus,
+        userName: 'Shuvalov Ivan',
+        userPhoto: 'assets/images/avatar.jpg',
+        statusText: 'Open for work',
+        currentPage: 'Home',
+        currentLanguage: 'EN',
+        socialLinks: {
+          telegram: 'https://t.me/shuvalov_ivan',
+          linkedin: 'https://linkedin.com/in/shuvalov-ivan',
+          email: 'mailto:ivan.shuvalov@example.com',
+          github: 'https://github.com/shuvalov-ivan'
+        },
+        cvUrl: 'assets/documents/Ivan_Shuvalov_CV.pdf'
+      });
+
+      await this.navigation.init();
 
       // Setup global event listeners
       this.setupGlobalEvents();
@@ -89,11 +116,15 @@ class Application {
 
   /**
    * Handle window resize events
-   * SCALED FOR: Responsive canvas updates
+   * SCALED FOR: Responsive canvas and navigation updates
    */
   handleResize() {
     if (this.canvas) {
       this.canvas.handleResize();
+    }
+    // REUSED: Navigation responsive handling through EventBus
+    if (this.navigation) {
+      this.eventBus.emit('app:resize');
     }
   }
 

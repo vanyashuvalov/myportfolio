@@ -94,7 +94,7 @@ export class WidgetBase {
   /**
    * Setup base element properties and classes
    * REUSED: Common element setup for all widget types
-   * UPDATED COMMENTS: Simple positioning setup
+   * UPDATED COMMENTS: Simple positioning setup with rotation application
    */
   setupElement() {
     if (!this.element) {
@@ -115,8 +115,8 @@ export class WidgetBase {
     // CRITICAL: Initialize position tracking
     this.currentPosition = { x: initialX, y: initialY };
     
-    // UPDATED COMMENTS: SimpleDragHover will handle all transforms
-    // Don't set initial transform here to avoid conflicts
+    // UPDATED COMMENTS: Apply initial transform with rotation
+    this.element.style.transform = `translate3d(${initialX}px, ${initialY}px, 0) rotate(${this.rotation}deg) scale(${this.scale})`;
     
     // Set other styles for performance
     Object.assign(this.element.style, {

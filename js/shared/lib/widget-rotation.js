@@ -14,12 +14,12 @@
 export const WIDGET_ROTATIONS = {
   'clock': 0,        // Clock needs to be perfectly straight for readability
   'sticker': -1,     // Slight left tilt for casual note appearance
-  'resume': 1,       // Slight right tilt for document realism
+  'resume': -2,      // Left tilt for document realism
   'folder': -1,      // Slight left tilt for natural folder placement
   'cat': 0,          // Cat should be level for proper animation
   'feed-button': 2,  // Slight right tilt for button dynamics
   'cat-sticker': -1, // Cat sticker with left tilt matching Figma spec
-  'telegram': 2      // Telegram widget with right tilt for dynamic appearance
+  'telegram': 1      // Telegram widget with slight right tilt
 };
 
 /**

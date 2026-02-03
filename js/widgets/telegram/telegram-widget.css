@@ -148,15 +148,16 @@
 
 /* External Link Arrow */
 .telegram-external-link {
-  /* CRITICAL: Exact icon dimensions */
-  width: 24px;
-  height: 24px;
+  /* CRITICAL: Increased dimensions for hover circle */
+  width: 42px;
+  height: 42px;
   opacity: 0.6;
   
-  /* UPDATED COMMENTS: Icon color and styling */
+  /* UPDATED COMMENTS: Icon color and styling with circle background */
   color: #0E1621;
   cursor: pointer;
   transition: all 0.2s ease-out;
+  border-radius: 50%; /* UPDATED: Circular shape for background */
   
   /* REUSED: Flexbox positioning within header */
   flex: none;
@@ -172,13 +173,14 @@
 /* External Link Hover State */
 .telegram-external-link--hovered {
   opacity: 1;
-  transform: scale(1.1);
+  background-color: rgba(0, 0, 0, 0.1); /* UPDATED: Black circle with 10% opacity */
+  /* REMOVED: transform: scale(1.1); - No scaling on hover */
 }
 
 /* External Link SVG */
 .telegram-external-link svg {
-  width: 100%;
-  height: 100%;
+  width: 24px; /* UPDATED: Fixed icon size */
+  height: 24px; /* UPDATED: Fixed icon size */
 }
 
 /* Post Content Section */
@@ -416,4 +418,57 @@
     font-size: 15px;
     height: 38px;
   }
+}
+/* Cat Icons Gradient - Further adjusted positioning */
+.telegram-cat-gradient {
+  /* CRITICAL: Further adjusted positioning - right 4px more, up 4px more */
+  position: absolute;
+  width: 89px;
+  height: 88px;
+  right: 10.86px; /* UPDATED: 6.86px + 4px = 10.86px (moved further right) */
+  top: -2.42px; /* UPDATED: 1.58px - 4px = -2.42px (moved further up) */
+  opacity: 0.1;
+  transform: rotate(1deg);
+  
+  /* REUSED: Figma auto layout properties */
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  z-index: 0;
+  
+  /* UPDATED COMMENTS: Prevent interaction with cat icons */
+  pointer-events: none;
+  
+  /* SCALED FOR: Allow precise absolute positioning of child icons */
+  overflow: visible;
+}
+
+/* Individual Cat Icon - Absolute positioning within container */
+.telegram-cat-icon {
+  /* CRITICAL: Absolute positioning for precise Figma placement */
+  position: absolute;
+  
+  /* UPDATED COMMENTS: Icon styling and display */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  /* SCALED FOR: Prevent interaction with decorative icons */
+  pointer-events: none;
+  
+  /* REUSED: 1 degree rotation for all icons */
+  transform: rotate(1deg);
+}
+
+/* Cat Icon Image */
+.telegram-cat-icon img {
+  /* CRITICAL: Fill icon container */
+  width: 100%;
+  height: 100%;
+  
+  /* UPDATED COMMENTS: Maintain aspect ratio */
+  object-fit: contain;
+  
+  /* REUSED: Prevent image selection */
+  user-select: none;
 }

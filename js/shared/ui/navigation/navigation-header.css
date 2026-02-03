@@ -1,0 +1,343 @@
+/* ANCHOR: imports */
+/* CRITICAL: Import universal button styles - must be at top */
+@import url('../button/button.css');
+
+/* ANCHOR: navigation_header */
+/* REUSED: Navigation header component with modular architecture */
+/* SCALED FOR: Responsive design and performance optimization */
+/* UPDATED COMMENTS: Clean navigation without shadows, backdrop blur effects */
+
+/* ANCHOR: navigation_wrapper */
+/* UPDATED COMMENTS: Full width navigation container with padding */
+.navigation-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 20px;
+  z-index: var(--z-fixed);
+  display: flex;
+  justify-content: center;
+}
+
+/* ANCHOR: main_container */
+.navigation-header {
+  /* REUSED: Flexbox layout from Figma auto-layout */
+  /* UPDATED COMMENTS: Full width navigation with proper space-between distribution */
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+  height: 40px;
+  width: 100%;
+  
+  /* SCALED FOR: Hardware acceleration for smooth performance */
+  will-change: transform;
+  contain: layout style;
+}
+
+/* ANCHOR: nav_section */
+.nav-section {
+  /* REUSED: Auto layout from Figma */
+  /* UPDATED COMMENTS: Flexible width with proper gap spacing */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0;
+  gap: 18px;
+  height: 40px;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+/* ANCHOR: breadcrumb_separators */
+/* UPDATED COMMENTS: Dynamic breadcrumb separator elements without fixed order */
+.breadcrumb-separator {
+  width: 14px;
+  height: 29px;
+  
+  font-family: 'Geist Mono', var(--font-family-mono);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 29px;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  opacity: 0.3;
+  
+  flex: none;
+  flex-grow: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* UPDATED COMMENTS: Removed fixed order for dynamic positioning */
+}
+
+/* ANCHOR: user_photo */
+.user-photo {
+  width: 40px;
+  height: 40px;
+  background: #FFFFFF;
+  border-radius: 123.75px;
+  flex: none;
+  flex-grow: 0;
+  overflow: hidden;
+  
+  /* UPDATED COMMENTS: Smooth image rendering, removed fixed order */
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+.user-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* ANCHOR: user_name_section */
+.user-name-section {
+  /* UPDATED COMMENTS: User name and status grouped together with 10px gap */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0;
+  gap: 10px;
+  height: 29px;
+  flex: none;
+  flex-grow: 0;
+  /* UPDATED COMMENTS: Removed fixed order for dynamic positioning */
+}
+
+.user-name {
+  height: 29px;
+  white-space: nowrap;
+  
+  /* REUSED: Geist Mono font from Figma specs */
+  font-family: 'Geist Mono', var(--font-family-mono);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 29px;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+/* ANCHOR: status_badge */
+.status-badge {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 4px 12px;
+  gap: 8px;
+  height: 26px;
+  white-space: nowrap;
+  
+  /* UPDATED COMMENTS: Green status background with transparency */
+  background: rgba(15, 108, 49, 0.3);
+  border: 1px solid rgba(15, 108, 49, 0.4);
+  border-radius: 99px;
+  
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+.status-indicator {
+  width: 6px;
+  height: 6px;
+  background: #53F38E;
+  border-radius: 50%;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+.status-text {
+  height: 18px;
+  white-space: nowrap;
+  
+  font-family: 'Geist Mono', var(--font-family-mono);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: #53F38E;
+  
+  flex: none;
+  flex-grow: 0;
+}
+
+/* ANCHOR: page_section */
+.page-section {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0;
+  gap: 10px;
+  height: 29px;
+  flex: none;
+  flex-grow: 0;
+  /* UPDATED COMMENTS: Removed fixed order for dynamic positioning */
+}
+
+.page-title {
+  height: 29px;
+  white-space: nowrap;
+  
+  font-family: 'Geist Mono', var(--font-family-mono);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 29px;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  
+  flex: none;
+  flex-grow: 0;
+  cursor: pointer;
+}
+
+.page-title:hover {
+  opacity: 0.7;
+}
+
+.dropdown-arrow {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+  cursor: pointer;
+  
+  /* UPDATED COMMENTS: SVG arrow styling - ensure visibility */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dropdown-arrow svg {
+  width: 100%;
+  height: 100%;
+  stroke: #FFFFFF;
+  stroke-width: 1.67px;
+  fill: none;
+  /* UPDATED COMMENTS: Ensure SVG is visible */
+  opacity: 1;
+}
+
+/* ANCHOR: language_section */
+.language-section {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0;
+  gap: 10px;
+  height: 29px;
+  flex: none;
+  flex-grow: 0;
+  /* UPDATED COMMENTS: Removed fixed order for dynamic positioning */
+}
+
+.flag-container {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.language-text {
+  height: 29px;
+  white-space: nowrap;
+  
+  font-family: 'Geist Mono', var(--font-family-mono);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 29px;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  
+  flex: none;
+  flex-grow: 0;
+  cursor: pointer;
+}
+
+.language-text:hover {
+  opacity: 0.7;
+}
+
+/* ANCHOR: action_buttons */
+.action-buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0;
+  gap: 12px;
+  height: 40px;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+/* ANCHOR: responsive_design */
+/* SCALED FOR: Mobile and tablet breakpoints */
+@media (max-width: 1024px) {
+  .navigation-wrapper {
+    padding: 20px;
+  }
+  
+  .navigation-header {
+    /* UPDATED COMMENTS: Responsive gap adjustment */
+    gap: 20px;
+  }
+  
+  .nav-section {
+    gap: 12px;
+  }
+  
+  .action-buttons {
+    gap: 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .navigation-wrapper {
+    padding: 16px;
+  }
+  
+  .navigation-header {
+    flex-direction: column;
+    height: auto;
+    gap: 16px;
+    background: rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 16px;
+  }
+  
+  .nav-section,
+  .action-buttons {
+    width: 100%;
+    justify-content: center;
+  }
+}

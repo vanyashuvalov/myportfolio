@@ -30,7 +30,7 @@ export class TelegramWidget extends WidgetBase {
 
   /**
    * Create telegram widget content with exact Figma specifications
-   * UPDATED COMMENTS: 300x161px white widget with header, post content and info
+   * UPDATED COMMENTS: 300x161px white widget with header, post content, info and cat icons gradient
    */
   createTelegramContent() {
     const targetElement = this.innerElement || this.element;
@@ -107,8 +107,49 @@ export class TelegramWidget extends WidgetBase {
             </div>
           </div>
         </div>
+        
+        <!-- CRITICAL: Cat icons gradient in bottom right corner -->
+        <div class="telegram-cat-gradient">
+          ${this.createCatIconsGradient()}
+        </div>
       </div>
     `;
+  }
+
+  /**
+   * Create cat icons gradient with right-based Figma positioning
+   * UPDATED COMMENTS: 9 cat icons with exact right-based coordinates from Figma specs
+   * SCALED FOR: Right-based positioning within 89x88px container
+   */
+  createCatIconsGradient() {
+    // CRITICAL: Right-based Figma positioning for each cat icon
+    const catIcons = [
+      // UPDATED COMMENTS: Cat icons with exact right-based Figma positioning
+      { right: 67.58, top: 63.71, size: 18, opacity: 0.5 },
+      { right: 7.87, top: 80.75, size: 18, opacity: 1.0 },
+      { right: 33.2, top: 42.3, size: 18, opacity: 1.0 },
+      { right: 63.01, top: 34.86, size: 14, opacity: 0.6 },
+      { right: 18.68, top: 16.62, size: 14, opacity: 1.0 },
+      { right: 80.54, top: 9.58, size: 12, opacity: 0.22 },
+      { right: 50.56, top: 11.1, size: 12, opacity: 0.5 },
+      { right: 4.21, top: 48.92, size: 12, opacity: 1.0 },
+      { right: 39.71, top: 75.27, size: 14, opacity: 0.7 }
+    ];
+    
+    return catIcons.map((icon, index) => `
+      <div class="telegram-cat-icon" 
+           style="
+             position: absolute;
+             right: ${icon.right}px; 
+             top: ${icon.top}px; 
+             width: ${icon.size}px; 
+             height: ${icon.size}px; 
+             opacity: ${icon.opacity};
+             transform: rotate(1deg);
+           ">
+        <img src="assets/images/streamline_cat-1-solid.svg" alt="Cat icon ${index + 1}" />
+      </div>
+    `).join('');
   }
 
   /**

@@ -1,0 +1,271 @@
+/* ANCHOR: universal_button_styles */
+/* REUSED: Universal button system with two variants */
+/* SCALED FOR: Consistent button styling across all components */
+/* UPDATED COMMENTS: Icon-only and icon+text button variants */
+
+/* ANCHOR: base_button */
+.nav-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+  
+  /* UPDATED COMMENTS: Clean background with backdrop blur - NO SHADOWS */
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(2px);
+  border-radius: 8px;
+  
+  /* SCALED FOR: Hardware acceleration */
+  will-change: opacity, background;
+}
+
+.nav-button:hover {
+  opacity: 0.9;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.nav-button:active {
+  opacity: 0.7;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+/* ANCHOR: icon_button_variant */
+/* UPDATED COMMENTS: Square icon-only buttons for social media */
+.nav-button--icon {
+  width: 40px;
+  height: 40px;
+  padding: 10px;
+  gap: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* UPDATED COMMENTS: Center icon content perfectly */
+}
+
+.nav-button--icon svg {
+  fill: #FFFFFF;
+  stroke: #FFFFFF;
+  /* UPDATED COMMENTS: Use original SVG sizes from iconamoon library */
+}
+
+/* ANCHOR: text_button_variant */
+/* UPDATED COMMENTS: Rectangular icon+text buttons for actions */
+.nav-button--text {
+  gap: 10px;
+  padding: 10px;
+  height: 40px;
+  min-width: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* UPDATED COMMENTS: Center all content in text buttons */
+}
+
+.nav-button--text .nav-button__icon {
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* UPDATED COMMENTS: Fixed 24x24px size to match social icons */
+}
+
+.nav-button--text .nav-button__icon svg {
+  width: 100%;
+  height: 100%;
+  stroke: #FFFFFF;
+  fill: none;
+  /* UPDATED COMMENTS: Preserve original SVG proportions */
+}
+
+.nav-button--text .nav-button__icon iconify-icon {
+  color: #FFFFFF;
+  /* UPDATED COMMENTS: White color for iconamoon icons */
+}
+
+.nav-button--text .nav-button__text {
+  font-family: 'Geist Mono', var(--font-family-mono);
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 23px;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+  display: flex;
+  align-items: center;
+  /* UPDATED COMMENTS: Center text vertically */
+}
+
+/* ANCHOR: dropdown_button_variant */
+/* UPDATED COMMENTS: Dropdown buttons with text and arrow icon on right */
+.nav-button--dropdown {
+  gap: 0;
+  padding: 0;
+  height: 29px;
+  min-width: fit-content;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.nav-button--dropdown .nav-button__text {
+  font-family: 'Geist Mono', var(--font-family-mono);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 29px;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  margin-right: 10px;
+  /* UPDATED COMMENTS: Margin instead of gap for better hover area */
+}
+
+.nav-button--dropdown .nav-button__icon {
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* UPDATED COMMENTS: Center arrow icon vertically */
+}
+
+.nav-button--dropdown .nav-button__icon svg {
+  width: 20px;
+  height: 20px;
+  stroke: #FFFFFF;
+  fill: none;
+}
+
+.nav-button--dropdown:hover .nav-button__text {
+  opacity: 0.7;
+}
+
+/* ANCHOR: dropdown_flag_variant */
+/* UPDATED COMMENTS: Dropdown button with flag icon */
+.nav-button--dropdown--flag {
+  gap: 0;
+}
+
+.nav-button--dropdown .nav-button__flag {
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  /* UPDATED COMMENTS: Center flag icon vertically and horizontally */
+}
+
+.nav-button--dropdown--flag .nav-button__text {
+  order: 1;
+  margin-right: 10px;
+  /* UPDATED COMMENTS: Margin for spacing between text and arrow */
+}
+
+.nav-button--dropdown--flag .nav-button__icon {
+  order: 2;
+}
+
+/* ANCHOR: button_sizes */
+/* SCALED FOR: Multiple button sizes */
+.nav-button--small {
+  padding: 6px;
+  height: 32px;
+}
+
+.nav-button--small.nav-button--icon {
+  width: 32px;
+  height: 32px;
+}
+
+.nav-button--small svg {
+  /* UPDATED COMMENTS: Use original SVG sizes, no forced dimensions */
+}
+
+.nav-button--small .nav-button__text {
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.nav-button--large {
+  padding: 14px;
+  height: 48px;
+}
+
+.nav-button--large.nav-button--icon {
+  width: 48px;
+  height: 48px;
+}
+
+.nav-button--large svg {
+  /* UPDATED COMMENTS: Use original SVG sizes, no forced dimensions */
+}
+
+.nav-button--large .nav-button__text {
+  font-size: 20px;
+  line-height: 26px;
+}
+
+/* ANCHOR: specific_button_widths */
+/* UPDATED COMMENTS: Specific widths for navigation buttons */
+.nav-button--cv {
+  width: 117px;
+}
+
+.nav-button--share {
+  width: 107px;
+}
+
+/* ANCHOR: accessibility */
+/* REUSED: Accessibility improvements */
+.nav-button:focus {
+  outline: 2px solid #FFFFFF;
+  outline-offset: 2px;
+}
+
+.nav-button:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ANCHOR: disabled_state */
+.nav-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ANCHOR: responsive_design */
+/* SCALED FOR: Mobile-friendly button sizes */
+@media (max-width: 768px) {
+  .nav-button--text .nav-button__text {
+    font-size: 16px;
+    line-height: 20px;
+  }
+  
+  .nav-button--cv,
+  .nav-button--share {
+    min-width: 100px;
+    width: auto;
+  }
+}

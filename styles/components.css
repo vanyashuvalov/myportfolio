@@ -18,6 +18,52 @@
   transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* ANCHOR: viewport_positioning */
+/* CRITICAL: Viewport-based absolute positioning for responsive widgets */
+/* UPDATED COMMENTS: CSS viewport units for truly responsive positioning */
+
+/* стикер: сверху 10% справа 5% */
+.widget-position--sticker {
+  top: 10vh;
+  right: 5vw;
+}
+
+/* папка проекты: сверху 35% справа 20% */
+.widget-position--projects-folder {
+  top: 35vh;
+  right: 20vw;
+}
+
+/* папка фан: от центра левее на 10% и выше на 5% */
+.widget-position--fun-folder {
+  left: calc(50vw - 10vw);
+  top: calc(50vh - 5vh);
+}
+
+/* резюме: от центра ниже на 5%, от права 40% */
+.widget-position--resume {
+  right: 40vw;
+  top: calc(50vh + 5vh);
+}
+
+/* часы: справа 15% сверху 25% */
+.widget-position--clock {
+  top: 25vh;
+  right: 15vw;
+}
+
+/* телеграм: справа 18%, от центра выше 5% */
+.widget-position--telegram {
+  right: 18vw;
+  top: calc(50vh - 5vh);
+}
+
+/* стикер кота: справа 14% снизу 17% */
+.widget-position--cat-sticker {
+  right: 14vw;
+  bottom: 17vh;
+}
+
 /* ANCHOR: universal_shadow_states */
 /* REUSED: Universal shadow states for all widgets - applied to inner containers */
 /* CRITICAL: Shadows applied to inner content for proper transform alignment */
