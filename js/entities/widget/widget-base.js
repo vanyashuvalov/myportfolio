@@ -94,7 +94,7 @@ export class WidgetBase {
   /**
    * Setup base element properties and classes
    * REUSED: Common element setup for all widget types
-   * UPDATED COMMENTS: Simple positioning setup with rotation application
+   * UPDATED COMMENTS: Support both CSS and JS positioning modes without conflicts
    */
   setupElement() {
     if (!this.element) {
@@ -108,15 +108,26 @@ export class WidgetBase {
     this.element.style.position = 'absolute';
     this.element.style.willChange = 'transform';
     
-    // Set initial transform directly
-    const initialX = parseFloat(this.element.dataset.initialX) || 0;
-    const initialY = parseFloat(this.element.dataset.initialY) || 0;
+    // CRITICAL: Check if widget uses CSS positioning
+    const usesCssPositioning = this.config && this.config.cssPositioning;
     
-    // CRITICAL: Initialize position tracking
-    this.currentPosition = { x: initialX, y: initialY };
-    
-    // UPDATED COMMENTS: Apply initial transform with rotation
-    this.element.style.transform = `translate3d(${initialX}px, ${initialY}px, 0) rotate(${this.rotation}deg) scale(${this.scale})`;
+    if (!usesCssPositioning) {
+      // UPDATED COMMENTS: Only apply JS positioning if not using CSS positioning
+      const initialX = parseFloat(this.element.dataset.initialX) || 0;
+      const initialY = parseFloat(this.element.dataset.initialY) || 0;
+      
+      // CRITICAL: Initialize position tracking
+      this.currentPosition = { x: initialX, y: initialY };
+      
+      // UPDATED COMMENTS: Apply initial transform with rotation (JS positioning only)
+      this.element.style.transform = `translate3d(${initialX}px, ${initialY}px, 0) rotate(${this.rotation}deg) scale(${this.scale})`;
+    } else {
+      // CRITICAL: For CSS positioning, don't override with JS transforms
+      // Let CSS handle initial positioning, only apply rotation and scale
+      this.element.style.transform = `rotate(${this.rotation}deg) scale(${this.scale})`;
+      console.log('CSS POSITIONING: Applied only rotation/scale for', this.type);
+      this.currentPosition = { x: 0, y: 0 }; // Will be updated by drag system
+    }
     
     // Set other styles for performance
     Object.assign(this.element.style, {

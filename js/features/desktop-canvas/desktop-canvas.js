@@ -457,7 +457,8 @@ export class DesktopCanvas {
       wrapperElement.style.opacity = '0';
       wrapperElement.style.transition = 'opacity 0.3s ease-out';
       
-      // UPDATED COMMENTS: No initial position data needed - CSS handles positioning
+      // CRITICAL: Don't set dataset.initialX/Y for CSS positioning - let CSS handle it
+      // SimpleDragHover will use current computed position as starting point
     } else {
       // FALLBACK: JavaScript positioning for backwards compatibility
       const finalPosition = position || this.findAvailablePosition();
@@ -469,7 +470,7 @@ export class DesktopCanvas {
       wrapperElement.style.opacity = '0';
       wrapperElement.style.transition = 'opacity 0.3s ease-out';
       
-      // CRITICAL: Set initial position data for WidgetBase
+      // CRITICAL: Set initial position data for WidgetBase (only for JS positioning)
       wrapperElement.dataset.initialX = finalPosition.x;
       wrapperElement.dataset.initialY = finalPosition.y;
     }

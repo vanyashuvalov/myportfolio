@@ -36,7 +36,7 @@ export class SimpleDragHover {
 
   /**
    * Initialize drag and hover for a widget
-   * CRITICAL: Pure JS animations without CSS transitions
+   * CRITICAL: Support both CSS and JS positioning modes with proper debugging
    */
   initWidget(widget) {
     if (!widget || !widget.element) {
@@ -46,14 +46,39 @@ export class SimpleDragHover {
     
     const element = widget.element;
     
-    // CRITICAL: Initialize offset with widget's current position, constrained to bounds
-    const initialX = parseFloat(element.dataset.initialX) || 100;
-    const initialY = parseFloat(element.dataset.initialY) || 100;
+    // CRITICAL: Check if widget uses CSS positioning
+    const usesCssPositioning = widget.config && widget.config.cssPositioning;
     
-    // UPDATED COMMENTS: Apply boundary constraints to initial position
-    const constrainedPosition = this.constrainToScreenBounds(initialX, initialY, element);
-    this.xOffset = constrainedPosition.x;
-    this.yOffset = constrainedPosition.y;
+    if (usesCssPositioning) {
+      // UPDATED COMMENTS: For CSS positioning, DON'T apply any transforms initially
+      // Let CSS positioning work first, then we can drag from there
+      this.xOffset = 0;
+      this.yOffset = 0;
+      
+      console.log('CSS POSITIONING MODE - NO INITIAL TRANSFORM:', {
+        widget: widget.type,
+        cssClasses: element.className,
+        computedStyle: {
+          position: getComputedStyle(element).position,
+          top: getComputedStyle(element).top,
+          right: getComputedStyle(element).right,
+          bottom: getComputedStyle(element).bottom,
+          left: getComputedStyle(element).left
+        }
+      });
+    } else {
+      // UPDATED COMMENTS: For JS positioning, use dataset values
+      const initialX = parseFloat(element.dataset.initialX) || 100;
+      const initialY = parseFloat(element.dataset.initialY) || 100;
+      
+      this.xOffset = initialX;
+      this.yOffset = initialY;
+      
+      console.log('JS POSITIONING MODE:', {
+        widget: widget.type,
+        initialPosition: { x: initialX, y: initialY }
+      });
+    }
     
     // CRITICAL: Hardware acceleration and smooth transform transitions
     element.style.willChange = 'transform';
@@ -77,8 +102,13 @@ export class SimpleDragHover {
     widget._simpleDragHover = this;
     widget._dragContainer = container;
     
-    // CRITICAL: Apply initial transform with current offset
-    this.setTranslate(this.xOffset, this.yOffset, element, widget.rotation, widget.scale);
+    // CRITICAL: Apply initial transform ONLY for JS positioning
+    if (!usesCssPositioning) {
+      this.setTranslate(this.xOffset, this.yOffset, element, widget.rotation, widget.scale);
+    } else {
+      // CRITICAL: For CSS positioning, don't apply any transform initially
+      console.log('SKIPPING INITIAL TRANSFORM FOR CSS WIDGET:', widget.type);
+    }
     
     // CRITICAL: Ensure widget is visible
     element.style.opacity = '1';
@@ -95,12 +125,20 @@ export class SimpleDragHover {
     widget.state.isHovered = true;
     widget.element.classList.add('widget--hovered');
     
-    // CRITICAL: CSS handles both transform and shadow transitions automatically
-    const hoverRotation = widget.rotation + 3;
-    const hoverScale = widget.scale * 1.02;
+    // CRITICAL: Check if widget uses CSS positioning
+    const usesCssPositioning = widget.config && widget.config.cssPositioning;
     
-    // UPDATED COMMENTS: Direct CSS transform - CSS transition handles animation
-    this.setTranslate(this.xOffset, this.yOffset, widget.element, hoverRotation, hoverScale);
+    if (!usesCssPositioning) {
+      // UPDATED COMMENTS: Only apply transforms for JS positioned widgets
+      const hoverRotation = widget.rotation + 3;
+      const hoverScale = widget.scale * 1.02;
+      this.setTranslate(this.xOffset, this.yOffset, widget.element, hoverRotation, hoverScale);
+    } else {
+      // CRITICAL: For CSS positioned widgets, only apply rotation and scale effects
+      const hoverRotation = widget.rotation + 3;
+      const hoverScale = widget.scale * 1.02;
+      widget.element.style.transform = `rotate(${hoverRotation}deg) scale(${hoverScale})`;
+    }
   }
 
   /**
@@ -113,13 +151,21 @@ export class SimpleDragHover {
     widget.state.isHovered = false;
     widget.element.classList.remove('widget--hovered');
     
-    // CRITICAL: Direct CSS transform - CSS transition handles animation back to base state
-    this.setTranslate(this.xOffset, this.yOffset, widget.element, widget.rotation, widget.scale);
+    // CRITICAL: Check if widget uses CSS positioning
+    const usesCssPositioning = widget.config && widget.config.cssPositioning;
+    
+    if (!usesCssPositioning) {
+      // UPDATED COMMENTS: Only apply transforms for JS positioned widgets
+      this.setTranslate(this.xOffset, this.yOffset, widget.element, widget.rotation, widget.scale);
+    } else {
+      // CRITICAL: For CSS positioned widgets, reset to base rotation and scale only
+      widget.element.style.transform = `rotate(${widget.rotation}deg) scale(${widget.scale})`;
+    }
   }
 
   /**
    * Handle mouse down - initialize drag with offset calculation
-   * UPDATED COMMENTS: Kirupa-style offset initialization
+   * UPDATED COMMENTS: Kirupa-style offset initialization with CSS positioning support
    */
   handleMouseDown(event, widget) {
     if (event.button !== 0) return; // Only left mouse button
@@ -132,6 +178,15 @@ export class SimpleDragHover {
     console.log('DRAG START - Widget clicked!', widget.id); // DEBUG
     
     event.preventDefault();
+    
+    // CRITICAL: For CSS positioned widgets, get current computed position
+    const usesCssPositioning = widget.config && widget.config.cssPositioning;
+    if (usesCssPositioning) {
+      const rect = widget.element.getBoundingClientRect();
+      this.xOffset = rect.left;
+      this.yOffset = rect.top;
+      console.log('CSS DRAG START:', { x: rect.left, y: rect.top });
+    }
     
     // CRITICAL: Calculate initial position with offset (Kirupa pattern)
     this.initialX = event.clientX - this.xOffset;
@@ -160,7 +215,7 @@ export class SimpleDragHover {
 
   /**
    * Handle mouse move - update position with offset tracking
-   * CRITICAL: Hardware-accelerated dragging with subpixel precision
+   * CRITICAL: Hardware-accelerated dragging with no boundaries
    */
   handleMouseMove(event) {
     if (!this.active || !this.dragWidget) return;
@@ -177,26 +232,23 @@ export class SimpleDragHover {
     newX = Math.round(newX);
     newY = Math.round(newY);
     
-    // UPDATED COMMENTS: Apply screen boundaries constraint
-    const constrainedPosition = this.constrainToScreenBounds(newX, newY, widget.element);
-    this.currentX = constrainedPosition.x;
-    this.currentY = constrainedPosition.y;
-    
-    // UPDATED COMMENTS: Update offset for next operation
-    this.xOffset = this.currentX;
-    this.yOffset = this.currentY;
+    // CRITICAL: No boundary constraints - free movement
+    this.currentX = newX;
+    this.currentY = newY;
+    this.xOffset = newX;
+    this.yOffset = newY;
     
     // REUSED: Keep hover effects during drag
     const hoverRotation = widget.rotation + 3;
     const hoverScale = widget.scale * 1.02;
     
-    // CRITICAL: Set transform using constrained position
+    // CRITICAL: Set transform using unconstrained position
     this.setTranslate(this.currentX, this.currentY, widget.element, hoverRotation, hoverScale);
   }
 
   /**
    * Handle mouse up - end drag with offset preservation
-   * SCALED FOR: Clean drag end with optimized transitions
+   * SCALED FOR: Clean drag end with optimized transitions for both positioning modes
    */
   handleMouseUp(event) {
     if (!this.active || !this.dragWidget) return;
@@ -228,17 +280,20 @@ export class SimpleDragHover {
     const elementUnderMouse = document.elementFromPoint(event.clientX, event.clientY);
     const isStillHovered = widget.element.contains(elementUnderMouse) || widget.element === elementUnderMouse;
     
+    // UPDATED COMMENTS: Handle hover state for both positioning modes
+    const usesCssPositioning = widget.config && widget.config.cssPositioning;
+    
     if (isStillHovered) {
       // UPDATED COMMENTS: Maintain hover state - CSS handles both transforms and shadows
       widget.state.isHovered = true;
       widget.element.classList.add('widget--hovered');
       
-      // CRITICAL: Direct CSS transform - CSS transition handles animation
+      // CRITICAL: Apply hover effects with current position
       const hoverRotation = widget.rotation + 3;
       const hoverScale = widget.scale * 1.02;
       this.setTranslate(this.xOffset, this.yOffset, widget.element, hoverRotation, hoverScale);
     } else {
-      // CRITICAL: Direct CSS transform back to normal state
+      // CRITICAL: Reset to normal state with current position
       widget.state.isHovered = false;
       widget.element.classList.remove('widget--hovered');
       this.setTranslate(this.xOffset, this.yOffset, widget.element, widget.rotation, widget.scale);
@@ -246,6 +301,12 @@ export class SimpleDragHover {
     
     // CRITICAL: Clear drag widget reference
     this.dragWidget = null;
+    
+    console.log('DRAG END:', {
+      widget: widget.type,
+      finalPosition: { x: this.xOffset, y: this.yOffset },
+      cssPositioning: usesCssPositioning
+    });
   }
 
   /**

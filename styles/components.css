@@ -20,45 +20,45 @@
 
 /* ANCHOR: viewport_positioning */
 /* CRITICAL: Viewport-based absolute positioning for responsive widgets */
-/* UPDATED COMMENTS: CSS viewport units for truly responsive positioning */
+/* UPDATED COMMENTS: Fixed CSS viewport units with proper positioning logic */
 
-/* стикер: сверху 10% справа 5% */
+/* стикер: сверху 10% справа 5% (max-width: 340px) */
 .widget-position--sticker {
   top: 10vh;
   right: 5vw;
 }
 
-/* папка проекты: сверху 35% справа 20% */
+/* папка проекты: сверху 35% справа 20% (width: 140px) */
 .widget-position--projects-folder {
   top: 35vh;
   right: 20vw;
 }
 
-/* папка фан: от центра левее на 10% и выше на 5% */
+/* папка фан: от центра левее на 10% и выше на 5% (width: 140px, height: 194px) */
 .widget-position--fun-folder {
-  left: calc(50vw - 10vw);
-  top: calc(50vh - 5vh);
+  left: calc(50vw - 10vw - 70px);
+  top: calc(50vh - 5vh - 97px);
 }
 
-/* резюме: от центра ниже на 5%, от права 40% */
+/* резюме: от центра ниже на 5%, от права 40% (assuming ~280px width) */
 .widget-position--resume {
   right: 40vw;
   top: calc(50vh + 5vh);
 }
 
-/* часы: справа 15% сверху 25% */
+/* часы: справа 15% сверху 25% (width: 160px) */
 .widget-position--clock {
   top: 25vh;
   right: 15vw;
 }
 
-/* телеграм: справа 18%, от центра выше 5% */
+/* телеграм: справа 18%, от центра выше 5% (assuming ~300px width) */
 .widget-position--telegram {
   right: 18vw;
   top: calc(50vh - 5vh);
 }
 
-/* стикер кота: справа 14% снизу 17% */
+/* стикер кота: справа 14% снизу 17% (assuming ~300px width, ~380px height) */
 .widget-position--cat-sticker {
   right: 14vw;
   bottom: 17vh;
