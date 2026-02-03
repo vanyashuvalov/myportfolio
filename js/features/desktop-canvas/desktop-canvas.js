@@ -53,6 +53,9 @@ export class DesktopCanvas {
    */
   async initialize() {
     try {
+      // CRITICAL: Wait for DOM and CSS to be fully loaded
+      await this.waitForDOMReady();
+      
       this.registerWidgetTypes();
       this.setupCanvas();
       this.setupEventListeners();
@@ -60,6 +63,16 @@ export class DesktopCanvas {
       
       // Calculate initial bounds
       this.updateBounds();
+      
+      // CRITICAL: Wait a frame to ensure workspace is rendered
+      await new Promise(resolve => requestAnimationFrame(resolve));
+      
+      // DEBUG: Log workspace state after setup
+      console.log('Workspace state after setup:', {
+        workspaceExists: !!this.workspaceContainer,
+        workspaceRect: this.workspaceContainer?.getBoundingClientRect(),
+        workspaceStyle: this.workspaceContainer ? window.getComputedStyle(this.workspaceContainer) : null
+      });
       
       // Create default widgets
       await this.createDefaultWidgets();
@@ -83,6 +96,20 @@ export class DesktopCanvas {
   }
 
   /**
+   * Wait for DOM to be ready
+   * REUSED: DOM readiness utility for proper initialization timing
+   */
+  async waitForDOMReady() {
+    return new Promise((resolve) => {
+      if (document.readyState === 'complete') {
+        resolve();
+      } else {
+        window.addEventListener('load', resolve, { once: true });
+      }
+    });
+  }
+
+  /**
    * Register available widget types
    * REUSED: Widget type registry for dynamic widget creation
    */
@@ -99,8 +126,8 @@ export class DesktopCanvas {
 
   /**
    * Setup canvas container properties
-   * SCALED FOR: Optimal rendering performance with containment
-   * UPDATED COMMENTS: Remove inline styles to allow CSS fullscreen control
+   * SCALED FOR: Centralized workspace with internal coordinate system
+   * UPDATED COMMENTS: Create workspace wrapper for controlled widget positioning
    */
   setupCanvas() {
     if (!this.container) {
@@ -114,11 +141,66 @@ export class DesktopCanvas {
     // Add canvas class (CSS handles all styling)
     this.container.classList.add('desktop-canvas');
     
+    // CRITICAL: Create centralized workspace container
+    this.workspaceContainer = document.createElement('div');
+    this.workspaceContainer.className = 'workspace-container';
+    this.workspaceContainer.dataset.workspaceId = this.generateId();
+    
+    // CRITICAL: Create centralized workspace container
+    this.workspaceContainer = document.createElement('div');
+    this.workspaceContainer.className = 'workspace-container';
+    this.workspaceContainer.dataset.workspaceId = this.generateId();
+    
+    // CRITICAL: Create centralized workspace container
+    this.workspaceContainer = document.createElement('div');
+    this.workspaceContainer.className = 'workspace-container';
+    this.workspaceContainer.dataset.workspaceId = this.generateId();
+    
+    // UPDATED COMMENTS: Clean workspace without visual debugging elements
+    this.workspaceContainer.style.width = 'calc(100vw - 20px)';
+    this.workspaceContainer.style.height = 'calc(100vh - 20px)';
+    this.workspaceContainer.style.minWidth = '320px';
+    this.workspaceContainer.style.minHeight = '240px';
+    this.workspaceContainer.style.maxWidth = 'none';
+    this.workspaceContainer.style.maxHeight = 'none';
+    this.workspaceContainer.style.border = 'none';
+    this.workspaceContainer.style.background = 'transparent';
+    this.workspaceContainer.style.backdropFilter = 'none';
+    this.workspaceContainer.style.position = 'relative';
+    this.workspaceContainer.style.boxSizing = 'border-box';
+    this.workspaceContainer.style.borderRadius = '0';
+    this.workspaceContainer.style.padding = '0';
+    this.workspaceContainer.style.margin = '0';
+    // CRITICAL: Don't set top/left/transform - let flexbox handle centering
+    this.workspaceContainer.style.flexShrink = '0';
+    
+    // UPDATED COMMENTS: Workspace container becomes the widget parent
+    this.container.appendChild(this.workspaceContainer);
+    
     // Set data attributes for identification
     this.container.dataset.canvasId = this.generateId();
     
-    // Force immediate layout recalculation for fullscreen
-    this.container.offsetHeight; // Trigger reflow
+    // DEBUG: Log workspace dimensions after DOM insertion
+    setTimeout(() => {
+      const rect = this.workspaceContainer.getBoundingClientRect();
+      const computedStyle = window.getComputedStyle(this.workspaceContainer);
+      console.log('Workspace container dimensions after insertion:', {
+        element: this.workspaceContainer,
+        rect: rect,
+        computedWidth: computedStyle.width,
+        computedHeight: computedStyle.height,
+        clientWidth: this.workspaceContainer.clientWidth,
+        clientHeight: this.workspaceContainer.clientHeight,
+        offsetWidth: this.workspaceContainer.offsetWidth,
+        offsetHeight: this.workspaceContainer.offsetHeight,
+        scrollWidth: this.workspaceContainer.scrollWidth,
+        scrollHeight: this.workspaceContainer.scrollHeight,
+        parentRect: this.container.getBoundingClientRect()
+      });
+    }, 100);
+    
+    // Force immediate layout recalculation for workspace
+    this.workspaceContainer.offsetHeight; // Trigger reflow
   }
 
   /**
@@ -190,10 +272,13 @@ export class DesktopCanvas {
 
   /**
    * Update canvas boundaries
-   * UPDATED COMMENTS: Accurate bounds calculation with padding
+   * UPDATED COMMENTS: Workspace-relative bounds calculation for internal positioning
    */
   updateBounds() {
-    const rect = this.container.getBoundingClientRect();
+    // CRITICAL: Use workspace container for bounds instead of main canvas
+    const rect = this.workspaceContainer ? 
+      this.workspaceContainer.getBoundingClientRect() : 
+      this.container.getBoundingClientRect();
     
     this.bounds = {
       left: this.config.padding,
@@ -242,28 +327,55 @@ export class DesktopCanvas {
 
   /**
    * Create default widgets for the desktop
-   * UPDATED COMMENTS: CSS viewport-based positioning with responsive classes
-   * SCALED FOR: Precise widget placement with viewport units
+   * UPDATED COMMENTS: Full-screen workspace layout with maximum space utilization
+   * SCALED FOR: Full viewport widget placement with minimal margins
    */
   async createDefaultWidgets() {
-    console.log('Canvas initialized - adding portfolio widgets with CSS viewport positioning');
-    console.log('Current widgets: Clock + Resume + Sticker + Cat Sticker + Telegram + Projects Folder + Fun Folder');
+    console.log('Canvas initialized - adding portfolio widgets with full-screen workspace');
+    console.log('Workspace: calc(100% - 20px) for maximum space utilization');
+    console.log('Layout: Sticker (left-top), Folders+Resume (left-center area), Clock (right-top), Telegram+Cat (right-side)');
     
-    // UPDATED COMMENTS: CSS-based positioning using viewport units
-    // Widget positions are now handled by CSS classes for better responsiveness
+    // UPDATED COMMENTS: Full-screen workspace layout with minimal margins
+    // Workspace now uses calc(100vw - 20px) × calc(100vh - 20px) for maximum space
+    // Widget positions remain percentage-based for responsive scaling
     
-    // REUSED: Widget creation logic for clock
-    const clockWidget = {
-      type: 'clock',
-      cssPositionClass: 'widget-position--clock',
+    // REUSED: Widget creation logic for sticker (левый верхний угол)
+    const stickerWidget = {
+      type: 'sticker',
+      cssPositionClass: 'widget-position--sticker',
       config: {
-        timezone: 'Europe/Moscow',
-        showSeconds: true,
-        rotation: 0 // CRITICAL: Clock widget needs 0 rotation for readability
+        title: 'Hi! My name is Ivan, I am Product Designer',
+        content: 'Leading design and prototyping of data dashboard for clinical workers scheduling surgery blocks, resolving critical block time issues\n\nDesigning product flows for clinical workers in maternity health, translating complex healthcare workflows into intuitive experiences for 2,600+ care sites',
+        size: 'large',
+        theme: 'yellow'
       }
     };
     
-    // REUSED: Widget creation logic for resume
+    // REUSED: Widget creation logic for Projects folder (центр-лево)
+    const projectsFolderWidget = {
+      type: 'folder',
+      cssPositionClass: 'widget-position--projects-folder',
+      config: {
+        title: 'Projects',
+        itemCount: 17,
+        theme: 'default', // CRITICAL: Default theme uses regular SVGs
+        projects: await this.getProjectData()
+      }
+    };
+    
+    // REUSED: Widget creation logic for Fun folder (центр-право)
+    const funFolderWidget = {
+      type: 'folder',
+      cssPositionClass: 'widget-position--fun-folder',
+      config: {
+        title: 'Fun',
+        itemCount: 12, // UPDATED COMMENTS: 12 items as requested
+        theme: 'pink', // CRITICAL: Pink theme uses pink SVGs
+        projects: await this.getFunProjectData()
+      }
+    };
+    
+    // REUSED: Widget creation logic for resume (центр-низ)
     const resumeWidget = {
       type: 'resume',
       cssPositionClass: 'widget-position--resume',
@@ -278,31 +390,18 @@ export class DesktopCanvas {
       }
     };
     
-    // REUSED: Widget creation logic for sticker introduction
-    const stickerWidget = {
-      type: 'sticker',
-      cssPositionClass: 'widget-position--sticker',
+    // REUSED: Widget creation logic for clock (правый верхний угол)
+    const clockWidget = {
+      type: 'clock',
+      cssPositionClass: 'widget-position--clock',
       config: {
-        title: 'Hi! My name is Ivan, I am Product Designer',
-        content: 'Leading design and prototyping of data dashboard for clinical workers scheduling surgery blocks, resolving critical block time issues\n\nDesigning product flows for clinical workers in maternity health, translating complex healthcare workflows into intuitive experiences for 2,600+ care sites',
-        size: 'large',
-        theme: 'yellow'
+        timezone: 'Europe/Moscow',
+        showSeconds: true,
+        rotation: 0 // CRITICAL: Clock widget needs 0 rotation for readability
       }
     };
     
-    // CRITICAL: Cat sticker widget with blue gradient theme
-    const catStickerWidget = {
-      type: 'cat-sticker',
-      cssPositionClass: 'widget-position--cat-sticker',
-      config: {
-        catName: 'Cat Here',
-        description: 'You can interact my boy as you want. But do not punch him',
-        showFeedButton: true,
-        targetCat: null // Will be set when cat widget is added
-      }
-    };
-    
-    // CRITICAL: Telegram widget with channel information
+    // CRITICAL: Telegram widget with channel information (правая сторона, центр)
     const telegramWidget = {
       type: 'telegram',
       cssPositionClass: 'widget-position--telegram',
@@ -317,38 +416,26 @@ export class DesktopCanvas {
       }
     };
     
-    // REUSED: Widget creation logic for Projects folder (default theme)
-    const projectsFolderWidget = {
-      type: 'folder',
-      cssPositionClass: 'widget-position--projects-folder',
+    // CRITICAL: Cat sticker widget with blue gradient theme (правая сторона, низ)
+    const catStickerWidget = {
+      type: 'cat-sticker',
+      cssPositionClass: 'widget-position--cat-sticker',
       config: {
-        title: 'Projects',
-        itemCount: 17,
-        theme: 'default', // CRITICAL: Default theme uses regular SVGs
-        projects: await this.getProjectData()
+        catName: 'Cat Here',
+        description: 'You can interact my boy as you want. But do not punch him',
+        showFeedButton: true,
+        targetCat: null // Will be set when cat widget is added
       }
     };
     
-    // REUSED: Widget creation logic for Fun folder (pink theme)
-    const funFolderWidget = {
-      type: 'folder',
-      cssPositionClass: 'widget-position--fun-folder',
-      config: {
-        title: 'Fun',
-        itemCount: 12, // UPDATED COMMENTS: 12 items as requested
-        theme: 'pink', // CRITICAL: Pink theme uses pink SVGs
-        projects: await this.getFunProjectData()
-      }
-    };
-    
-    // Create all seven widgets with CSS positioning
-    this.createWidget(clockWidget.type, null, clockWidget.config, clockWidget.cssPositionClass);
-    this.createWidget(resumeWidget.type, null, resumeWidget.config, resumeWidget.cssPositionClass);
+    // Create all seven widgets with organized workspace positioning
     this.createWidget(stickerWidget.type, null, stickerWidget.config, stickerWidget.cssPositionClass);
-    this.createWidget(catStickerWidget.type, null, catStickerWidget.config, catStickerWidget.cssPositionClass);
-    this.createWidget(telegramWidget.type, null, telegramWidget.config, telegramWidget.cssPositionClass);
     this.createWidget(projectsFolderWidget.type, null, projectsFolderWidget.config, projectsFolderWidget.cssPositionClass);
     this.createWidget(funFolderWidget.type, null, funFolderWidget.config, funFolderWidget.cssPositionClass);
+    this.createWidget(resumeWidget.type, null, resumeWidget.config, resumeWidget.cssPositionClass);
+    this.createWidget(clockWidget.type, null, clockWidget.config, clockWidget.cssPositionClass);
+    this.createWidget(telegramWidget.type, null, telegramWidget.config, telegramWidget.cssPositionClass);
+    this.createWidget(catStickerWidget.type, null, catStickerWidget.config, catStickerWidget.cssPositionClass);
     
     // Store remaining planned widgets for future incremental addition
     this.plannedWidgets = [
@@ -364,7 +451,7 @@ export class DesktopCanvas {
       }
     ];
     
-    // SCALED FOR: Clean incremental widget development
+    // SCALED FOR: Clean incremental widget development within organized workspace
     return Promise.resolve();
   }
 
@@ -497,8 +584,9 @@ export class DesktopCanvas {
       widget.currentPosition = { x: position.x, y: position.y };
     }
     
-    // SCALED FOR: DOM insertion after complete setup
-    this.container.appendChild(wrapperElement);
+    // SCALED FOR: DOM insertion into workspace container
+    const targetContainer = this.workspaceContainer || this.container;
+    targetContainer.appendChild(wrapperElement);
     
     // Show widget smoothly
     requestAnimationFrame(() => {
@@ -729,7 +817,7 @@ export class DesktopCanvas {
 
   /**
    * Destroy canvas and clean up resources
-   * SCALED FOR: Complete cleanup and memory management
+   * SCALED FOR: Complete cleanup including workspace container
    */
   destroy() {
     // Destroy all widgets
@@ -748,7 +836,10 @@ export class DesktopCanvas {
       this.resizeObserver.disconnect();
     }
     
-    // Clear container
+    // Clear workspace and container
+    if (this.workspaceContainer) {
+      this.workspaceContainer.innerHTML = '';
+    }
     if (this.container) {
       this.container.innerHTML = '';
     }

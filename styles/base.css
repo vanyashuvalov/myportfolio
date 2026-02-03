@@ -64,16 +64,52 @@ body::before {
 }
 
 /* ANCHOR: desktop_canvas */
-/* UPDATED COMMENTS: True fullscreen canvas with absolute positioning above mountain layer */
+/* UPDATED COMMENTS: Fullscreen canvas container with perfect flexbox centering */
 .desktop-canvas {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  contain: layout style paint;
   z-index: 2;
+  /* CRITICAL: Perfect flexbox centering */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* UPDATED COMMENTS: Ensure flexbox works properly */
+  flex-direction: column;
+  /* SCALED FOR: Proper containment without interfering with flexbox */
+  contain: layout style;
+}
+
+/* ANCHOR: workspace_container */
+/* REUSED: Centralized workspace wrapper for all widgets */
+/* SCALED FOR: Invisible workspace container without visual elements */
+.workspace-container {
+  /* CRITICAL: Flex item properties for proper centering */
+  flex-shrink: 0;
+  position: relative;
+  /* UPDATED COMMENTS: Full-screen workspace with 10px margins on all sides */
+  width: calc(100vw - 20px);
+  height: calc(100vh - 20px);
+  /* CRITICAL: Remove restrictive max/min dimensions for full utilization */
+  max-width: none;
+  max-height: none;
+  min-width: 320px;
+  min-height: 240px;
+  /* UPDATED COMMENTS: Invisible workspace - no visual elements */
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  backdrop-filter: none;
+  /* CRITICAL: Internal coordinate system for widgets */
+  overflow: visible;
+  /* CRITICAL: Force dimensions and remove any padding/margin */
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  /* UPDATED COMMENTS: Ensure proper flex behavior */
 }
 
 /* ANCHOR: loading_system */
