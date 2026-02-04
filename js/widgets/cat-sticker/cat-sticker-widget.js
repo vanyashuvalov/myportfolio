@@ -56,23 +56,25 @@ export class CatStickerWidget extends WidgetBase {
 
   /**
    * Create Chat Me button using shared WidgetButton component
-   * REUSED: Shared WidgetButton with Telegram icon and link
+   * REUSED: Shared WidgetButton with heart icon and Telegram link
+   * UPDATED COMMENTS: Changed from Telegram icon to heart icon for better UX
    */
   createChatButton() {
     const buttonContainer = this.element.querySelector('.cat-sticker-button-container');
     if (!buttonContainer) return;
     
-    // CRITICAL: Load Telegram icon from assets
-    const telegramIcon = `
+    // CRITICAL: Load heart icon from assets instead of Telegram icon
+    // UPDATED COMMENTS: Heart icon represents love/care for the cat
+    const heartIcon = `
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.13-.31-1.09-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06-.01.24-.02.38z" fill="currentColor"/>
+        <path d="M19.0712 13.1437L13.4142 18.8017C13.0391 19.1767 12.5305 19.3873 12.0002 19.3873C11.4699 19.3873 10.9613 19.1767 10.5862 18.8017L4.9292 13.1447C4.46157 12.6812 4.09011 12.1298 3.83613 11.5223C3.58216 10.9148 3.45067 10.2632 3.44923 9.6047C3.44779 8.94625 3.57642 8.294 3.82773 7.68539C4.07904 7.07679 4.44809 6.52381 4.91369 6.05822C5.37928 5.59262 5.93226 5.22357 6.54086 4.97226C7.14947 4.72095 7.80172 4.59232 8.46017 4.59376C9.11862 4.5952 9.7703 4.72669 10.3778 4.98066C10.9853 5.23464 11.5367 5.6061 12.0002 6.07373C12.9418 5.15561 14.2072 4.6454 15.5222 4.65364C16.8373 4.66188 18.0962 5.1879 19.0262 6.11776C19.9562 7.04761 20.4824 8.30643 20.4908 9.62151C20.4992 10.9366 19.9892 12.202 19.0712 13.1437Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     `;
     
-    // UPDATED COMMENTS: Create WidgetButton with Chat Me text and Telegram functionality
+    // UPDATED COMMENTS: Create WidgetButton with Chat Me text and heart icon
     this.chatButton = new WidgetButton({
       text: 'Chat Me',
-      icon: telegramIcon,
+      icon: heartIcon,
       onClick: () => this.handleChatClick(),
       className: 'cat-sticker-chat-button',
       variant: 'default'

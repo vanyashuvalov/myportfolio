@@ -68,39 +68,29 @@ export class TelegramWidget extends WidgetBase {
           
           <!-- CRITICAL: Post info with views and timestamp -->
           <div class="telegram-post-info">
-            <!-- REUSED: Views section with eye icon -->
+            <!-- REUSED: Views section with eye icon from iconamoon -->
             <div class="telegram-views">
               <div class="telegram-views-icon">
+                <!-- UPDATED COMMENTS: 16x16px eye icon from assets/icons/iconamoon_eye.svg -->
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M1 12S5 4 12 4s11 8 11 8-4 8-11 8S1 12 1 12z" 
-                        stroke="currentColor" 
-                        stroke-width="1.33" 
-                        stroke-linecap="round" 
-                        stroke-linejoin="round"/>
-                  <circle cx="12" cy="12" r="3" 
-                          stroke="currentColor" 
-                          stroke-width="1.33" 
-                          stroke-linecap="round" 
-                          stroke-linejoin="round"/>
+                  <g opacity="0.6">
+                    <path d="M14.999 12C14.999 12.7956 14.683 13.5587 14.1203 14.1213C13.5577 14.6839 12.7947 15 11.999 15C11.2034 15 10.4403 14.6839 9.8777 14.1213C9.31509 13.5587 8.99902 12.7956 8.99902 12C8.99902 11.2044 9.31509 10.4413 9.8777 9.87868C10.4403 9.31607 11.2034 9 11.999 9C12.7947 9 13.5577 9.31607 14.1203 9.87868C14.683 10.4413 14.999 11.2044 14.999 12Z" stroke="#0E1621" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M1.99805 12C3.59805 7.903 7.33405 5 11.998 5C16.662 5 20.398 7.903 21.998 12C20.398 16.097 16.662 19 11.998 19C7.33405 19 3.59805 16.097 1.99805 12Z" stroke="#0E1621" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </g>
                 </svg>
               </div>
               <span class="telegram-views-count">${this.viewCount}</span>
             </div>
             
-            <!-- REUSED: Timestamp section with clock icon -->
+            <!-- REUSED: Timestamp section with clock icon from iconamoon -->
             <div class="telegram-time">
               <div class="telegram-time-icon">
+                <!-- UPDATED COMMENTS: 16x16px clock icon from assets/icons/iconamoon_clock.svg -->
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="12" cy="12" r="10" 
-                          stroke="currentColor" 
-                          stroke-width="1.33" 
-                          stroke-linecap="round" 
-                          stroke-linejoin="round"/>
-                  <polyline points="12,6 12,12 16,14" 
-                            stroke="currentColor" 
-                            stroke-width="1.33" 
-                            stroke-linecap="round" 
-                            stroke-linejoin="round"/>
+                  <g opacity="0.6">
+                    <path d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" stroke="#0E1621" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M10.999 8V13H15.999" stroke="#0E1621" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </g>
                 </svg>
               </div>
               <span class="telegram-time-text">${this.escapeHtml(this.timestamp)}</span>

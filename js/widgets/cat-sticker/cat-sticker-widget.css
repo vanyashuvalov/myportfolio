@@ -119,6 +119,14 @@
   transform: scale(0.98) !important;
 }
 
+/* Heart Icon Styling - Ensure proper color and stroke */
+.cat-sticker-chat-button svg {
+  color: #101828 !important;
+  stroke: #101828 !important;
+  fill: none !important;
+  /* UPDATED COMMENTS: Heart icon uses stroke, not fill */
+}
+
 /* REUSED: Responsive adjustments for smaller screens */
 @media (max-width: 768px) {
   .cat-sticker-container {
