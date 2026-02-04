@@ -80,91 +80,43 @@
   flex-grow: 0;
 }
 
-/* Feed Button Container - Figma Frame 28021 */
-.cat-sticker-feed-button {
-  /* CRITICAL: Auto layout from Figma */
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 10px 12px;
-  gap: 8px;
-  
-  /* UPDATED COMMENTS: Exact button dimensions */
-  width: 97px;
-  height: 40px;
-  
-  /* REUSED: Semi-transparent background */
-  background: rgba(16, 24, 40, 0.1);
-  border-radius: 8px;
-  
-  /* SCALED FOR: Interactive button styling */
-  cursor: pointer;
-  transition: all 0.2s ease-out;
-  
+/* Cat Sticker Button Container - Shared WidgetButton wrapper */
+.cat-sticker-button-container {
   /* CRITICAL: Flexbox positioning within sticker */
   flex: none;
   order: 2;
   flex-grow: 0;
-}
-
-/* Feed Button Hover State */
-.cat-sticker-feed-button--hovered {
-  background: rgba(16, 24, 40, 0.15);
-  /* REMOVED: transform: scale(1.02); - No scaling on hover */
-}
-
-/* Feed Button Pressed State */
-.cat-sticker-feed-button--pressed {
-  background: rgba(16, 24, 40, 0.2);
-  transform: scale(0.98);
-}
-
-/* Heart Icon - Figma iconamoon:heart */
-.cat-sticker-heart-icon {
-  /* CRITICAL: Exact icon dimensions */
-  width: 24px;
-  height: 24px;
-  opacity: 0.6;
   
-  /* UPDATED COMMENTS: Icon color and styling */
-  color: #101828;
-  
-  /* REUSED: Flexbox positioning within button */
-  flex: none;
-  order: 0;
-  flex-grow: 0;
-  
-  /* SCALED FOR: Icon alignment */
+  /* REUSED: Container for shared WidgetButton component */
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
-/* Heart Icon SVG */
-.cat-sticker-heart-icon svg {
-  width: 100%;
-  height: 100%;
+/* Chat Me Button Styling - Override shared button styles */
+.cat-sticker-chat-button {
+  /* CRITICAL: Semi-transparent background matching original design */
+  background: rgba(16, 24, 40, 0.1) !important;
+  border-radius: 8px !important;
+  
+  /* UPDATED COMMENTS: Exact button dimensions for hug content */
+  padding: 10px 12px !important;
+  gap: 8px !important;
+  
+  /* SCALED FOR: Interactive button styling */
+  transition: all 0.2s ease-out !important;
 }
 
-/* Feed Text - Natural text sizing */
-.cat-sticker-feed-text {
-  /* CRITICAL: Remove fixed dimensions for natural text flow */
-  /* width: auto; height: auto; - Let text size naturally */
-  
-  /* UPDATED COMMENTS: SF UI Display for button text */
-  font-family: 'SF UI Display', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 18px;
-  line-height: 21px;
-  
-  color: #101828;
-  
-  /* REUSED: Flexbox positioning within button */
-  flex: none;
-  order: 1;
-  flex-grow: 0;
+/* Chat Me Button Hover State */
+.cat-sticker-chat-button:hover,
+.cat-sticker-chat-button.widget-button--hovered {
+  background: rgba(16, 24, 40, 0.15) !important;
+}
+
+/* Chat Me Button Pressed State */
+.cat-sticker-chat-button.widget-button--pressed {
+  background: rgba(16, 24, 40, 0.2) !important;
+  transform: scale(0.98) !important;
 }
 
 /* REUSED: Responsive adjustments for smaller screens */

@@ -25,12 +25,17 @@
   will-change: transform, box-shadow;
   transform-style: preserve-3d;
   backface-visibility: hidden;
+  /* UPDATED COMMENTS: Flex container for proper button positioning */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
 }
 
 /* ANCHOR: sticker_interaction_shadows */
 /* CRITICAL: Shadow states moved to shared styles/components.css for reusability */
 
-/* UPDATED COMMENTS: Professional typography with exact color specification and 16px gap */
+/* UPDATED COMMENTS: Professional typography with exact color specification */
 .sticker-title {
   font-family: var(--font-family-primary);
   font-size: 24px;
@@ -38,7 +43,7 @@
   letter-spacing: -0.02em; /* -2% letter spacing */
   line-height: 1.2;
   color: #101828; /* Exact color as specified */
-  margin-bottom: 16px; /* Updated to exact 16px gap */
+  margin: 0; /* UPDATED: Remove margin, using flex gap instead */
   /* REUSED: Professional heading styling */
   /* CRITICAL: Fix font smoothing during transforms */
   -webkit-font-smoothing: antialiased;
@@ -124,4 +129,12 @@
 
 .sticker-container--purple {
   background: linear-gradient(135deg, #DDD6FE 0%, #C4B5FD 100%);
+}
+
+/* ANCHOR: sticker_button_container */
+/* REUSED: Simple container for shared button component */
+.sticker-button-container {
+  /* UPDATED COMMENTS: Container for WidgetButton component */
+  display: flex;
+  align-items: flex-start;
 }

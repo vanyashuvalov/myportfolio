@@ -347,7 +347,10 @@ export class DesktopCanvas {
         title: 'Hi! My name is Ivan, I am Product Designer',
         content: 'Leading design and prototyping of data dashboard for clinical workers scheduling surgery blocks, resolving critical block time issues\n\nDesigning product flows for clinical workers in maternity health, translating complex healthcare workflows into intuitive experiences for 2,600+ care sites',
         size: 'large',
-        theme: 'yellow'
+        theme: 'yellow',
+        showButton: true,
+        buttonText: 'Chat Me',
+        buttonUrl: 'https://t.me/vanyashuvalov'
       }
     };
     
@@ -412,7 +415,7 @@ export class DesktopCanvas {
         postText: 'москва газ соревнования по счету в уме',
         viewCount: 43,
         timestamp: '0:58 Jan 27',
-        channelUrl: 'https://t.me/example_channel'
+        channelUrl: 'https://t.me/vanyashuvalov'
       }
     };
     

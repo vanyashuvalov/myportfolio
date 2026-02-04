@@ -3,6 +3,8 @@
 /* REUSED: WidgetBase class with cat-specific functionality */
 
 import { WidgetBase } from '../../entities/widget/widget-base.js';
+import { WidgetButton } from '../../shared/ui/widget-button/widget-button.js';
+import { SOCIAL_LINKS, getIconPath } from '../../shared/config/social-links.js';
 
 /**
  * CatStickerWidget - Information sticker about the interactive cat
@@ -22,7 +24,6 @@ export class CatStickerWidget extends WidgetBase {
     this.targetCat = options.targetCat || null; // Reference to cat widget for feeding
     
     this.createCatStickerContent();
-    this.setupFeedButton();
   }
 
   /**
@@ -39,22 +40,8 @@ export class CatStickerWidget extends WidgetBase {
         <!-- REUSED: Description text with proper line height -->
         <div class="cat-sticker-description">${this.escapeHtml(this.description)}</div>
         
-        <!-- CRITICAL: Feed button with heart icon and exact styling -->
-        <div class="cat-sticker-feed-button" data-action="feed">
-          <!-- REUSED: Heart icon with proper opacity -->
-          <div class="cat-sticker-heart-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M20.84 4.61C20.3292 4.099 19.7228 3.69364 19.0554 3.41708C18.3879 3.14052 17.6725 2.99817 16.95 2.99817C16.2275 2.99817 15.5121 3.14052 14.8446 3.41708C14.1772 3.69364 13.5708 4.099 13.06 4.61L12 5.67L10.94 4.61C9.9083 3.5783 8.50903 2.9987 7.05 2.9987C5.59096 2.9987 4.19169 3.5783 3.16 4.61C2.1283 5.6417 1.5487 7.04097 1.5487 8.5C1.5487 9.95903 2.1283 11.3583 3.16 12.39L12 21.23L20.84 12.39C21.351 11.8792 21.7563 11.2728 22.0329 10.6053C22.3095 9.93789 22.4518 9.22248 22.4518 8.5C22.4518 7.77752 22.3095 7.06211 22.0329 6.39467C21.7563 5.72723 21.351 5.1208 20.84 4.61V4.61Z" 
-                    stroke="currentColor" 
-                    stroke-width="2" 
-                    stroke-linecap="round" 
-                    stroke-linejoin="round"/>
-            </svg>
-          </div>
-          
-          <!-- CRITICAL: Feed text with SF UI Display font -->
-          <span class="cat-sticker-feed-text">Feed</span>
-        </div>
+        <!-- CRITICAL: Chat Me button container for shared WidgetButton -->
+        <div class="cat-sticker-button-container"></div>
         
         <!-- CRITICAL: Cat face icon in bottom right corner -->
         <div class="cat-sticker-cat-icon">
@@ -62,58 +49,59 @@ export class CatStickerWidget extends WidgetBase {
         </div>
       </div>
     `;
+    
+    // REUSED: Create shared WidgetButton component
+    this.createChatButton();
   }
 
   /**
-   * Setup feed button interaction
-   * SCALED FOR: Cat feeding system integration with event bus
+   * Create Chat Me button using shared WidgetButton component
+   * REUSED: Shared WidgetButton with Telegram icon and link
    */
-  setupFeedButton() {
-    const feedButton = this.element.querySelector('.cat-sticker-feed-button');
-    if (!feedButton) return;
+  createChatButton() {
+    const buttonContainer = this.element.querySelector('.cat-sticker-button-container');
+    if (!buttonContainer) return;
     
-    // UPDATED COMMENTS: Click handler for cat feeding
-    feedButton.addEventListener('click', (event) => {
-      event.stopPropagation(); // Prevent widget drag
-      this.handleFeedClick();
+    // CRITICAL: Load Telegram icon from assets
+    const telegramIcon = `
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.13-.31-1.09-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06-.01.24-.02.38z" fill="currentColor"/>
+      </svg>
+    `;
+    
+    // UPDATED COMMENTS: Create WidgetButton with Chat Me text and Telegram functionality
+    this.chatButton = new WidgetButton({
+      text: 'Chat Me',
+      icon: telegramIcon,
+      onClick: () => this.handleChatClick(),
+      className: 'cat-sticker-chat-button',
+      variant: 'default'
     });
     
-    // REUSED: Hover effects for button interactivity
-    feedButton.addEventListener('mouseenter', () => {
-      feedButton.classList.add('cat-sticker-feed-button--hovered');
-    });
-    
-    feedButton.addEventListener('mouseleave', () => {
-      feedButton.classList.remove('cat-sticker-feed-button--hovered');
-    });
+    // SCALED FOR: Append button to container
+    const buttonElement = this.chatButton.createElement();
+    buttonContainer.appendChild(buttonElement);
   }
 
   /**
-   * Handle feed button click
-   * REUSED: Event bus pattern for cat feeding communication
+   * Handle Chat Me button click
+   * REUSED: Social links configuration for Telegram navigation
    */
-  handleFeedClick() {
-    // CRITICAL: Emit cat feeding event through event bus
-    if (this.eventBus) {
-      this.eventBus.emit('cat:feed-requested', {
-        source: 'cat-sticker',
-        widget: this,
-        targetCat: this.targetCat,
-        foodType: 'kibble'
-      });
-    }
+  handleChatClick() {
+    // CRITICAL: Open Telegram link from centralized config
+    const telegramLink = SOCIAL_LINKS.telegram.url;
+    window.open(telegramLink, '_blank', 'noopener,noreferrer');
     
     // UPDATED COMMENTS: Visual feedback for button press
-    const feedButton = this.element.querySelector('.cat-sticker-feed-button');
-    if (feedButton) {
-      feedButton.classList.add('cat-sticker-feed-button--pressed');
+    if (this.chatButton && this.chatButton.element) {
+      this.chatButton.element.classList.add('widget-button--pressed');
       
       setTimeout(() => {
-        feedButton.classList.remove('cat-sticker-feed-button--pressed');
+        this.chatButton.element.classList.remove('widget-button--pressed');
       }, 150);
     }
     
-    console.log('Cat sticker: Feed button clicked!');
+    console.log('Cat sticker: Chat Me button clicked - opening Telegram');
   }
 
   /**
@@ -126,7 +114,6 @@ export class CatStickerWidget extends WidgetBase {
     
     // REUSED: Content re-rendering pattern
     this.createCatStickerContent();
-    this.setupFeedButton();
     
     // Emit update event
     if (this.eventBus) {

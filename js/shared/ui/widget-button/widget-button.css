@@ -1,0 +1,127 @@
+/* ANCHOR: widget_button_styles */
+/* REUSED: Universal button component for widgets */
+/* SCALED FOR: Consistent button design across all widgets */
+
+/* ANCHOR: widget_button */
+.widget-button {
+  /* CRITICAL: Hug content layout */
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 12px;
+  gap: 8px;
+  
+  /* UPDATED COMMENTS: Hug content - size to content only */
+  width: auto;
+  height: 40px;
+  
+  /* REUSED: Semi-transparent background */
+  background: rgba(16, 24, 40, 0.1);
+  border: none;
+  border-radius: 8px;
+  
+  /* SCALED FOR: Interactive button styling */
+  cursor: pointer;
+  transition: all 0.2s ease-out;
+  
+  /* CRITICAL: Prevent flex stretching */
+  flex: none;
+  flex-shrink: 0;
+  
+  /* UPDATED COMMENTS: Typography for button text */
+  font-family: 'SF UI Display', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 21px;
+  color: #101828;
+  text-decoration: none;
+}
+
+/* ANCHOR: widget_button_states */
+/* Button Hover State */
+.widget-button:hover,
+.widget-button--hovered {
+  background: rgba(16, 24, 40, 0.15);
+}
+
+/* Button Pressed State */
+.widget-button:active,
+.widget-button--pressed {
+  background: rgba(16, 24, 40, 0.2);
+  transform: scale(0.98);
+}
+
+/* Button Focus State */
+.widget-button:focus {
+  outline: 2px solid rgba(16, 24, 40, 0.3);
+  outline-offset: 2px;
+}
+
+/* ANCHOR: widget_button_icon */
+.widget-button-icon {
+  /* CRITICAL: Icon dimensions */
+  width: 24px;
+  height: 24px;
+  opacity: 0.6;
+  color: currentColor;
+  
+  /* REUSED: Flexbox positioning within button */
+  flex: none;
+  flex-shrink: 0;
+  
+  /* SCALED FOR: Icon alignment */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.widget-button-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* ANCHOR: widget_button_text */
+.widget-button-text {
+  /* UPDATED COMMENTS: Text inherits button typography */
+  flex: none;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+/* ANCHOR: widget_button_variants */
+/* Icon-only button */
+.widget-button--icon-only {
+  padding: 8px;
+  width: 40px;
+}
+
+.widget-button--icon-only .widget-button-text {
+  display: none;
+}
+
+/* Text-only button */
+.widget-button--text-only .widget-button-icon {
+  display: none;
+}
+
+/* ANCHOR: widget_button_themes */
+/* Theme variants for different contexts */
+.widget-button--primary {
+  background: rgba(59, 130, 246, 0.1);
+  color: #1E40AF;
+}
+
+.widget-button--primary:hover {
+  background: rgba(59, 130, 246, 0.15);
+}
+
+.widget-button--success {
+  background: rgba(16, 185, 129, 0.1);
+  color: #047857;
+}
+
+.widget-button--success:hover {
+  background: rgba(16, 185, 129, 0.15);
+}

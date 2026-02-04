@@ -1,12 +1,13 @@
 /* ANCHOR: navigation_header_component */
 /* REUSED: Modular component architecture with EventBus integration */
 /* SCALED FOR: Performance optimization and accessibility */
-/* UPDATED COMMENTS: Refactored navigation header with modular components */
+/* UPDATED COMMENTS: Refactored navigation header with centralized social links */
 
 import { EventBus } from '../../utils/event-bus.js';
 import { UserInfo } from './components/user-info.js';
 import { Breadcrumb } from './components/breadcrumb.js';
 import { ActionButtons } from './components/action-buttons.js';
+import { SOCIAL_LINKS } from '../../config/social-links.js';
 
 /**
  * NavigationHeader class - Main navigation component
@@ -24,13 +25,14 @@ export class NavigationHeader {
       statusText: 'Open for work',
       currentPage: 'Home',
       currentLanguage: 'EN',
+      // UPDATED COMMENTS: Use centralized social links configuration
       socialLinks: {
-        telegram: 'https://t.me/yourusername',
-        linkedin: 'https://linkedin.com/in/yourusername',
-        email: 'mailto:your.email@example.com',
-        github: 'https://github.com/yourusername'
+        telegram: SOCIAL_LINKS.telegram.url,
+        linkedin: SOCIAL_LINKS.linkedin.url,
+        email: SOCIAL_LINKS.email.url,
+        github: SOCIAL_LINKS.github.url
       },
-      cvUrl: 'assets/documents/cv.pdf',
+      cvUrl: SOCIAL_LINKS.resume.url,
       ...options
     };
     

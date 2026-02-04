@@ -33,6 +33,7 @@
 
 /* ANCHOR: icon_button_variant */
 /* UPDATED COMMENTS: Square icon-only buttons for social media */
+/* CRITICAL: Social icons (telegram, linkedin) use fill, action icons use stroke */
 .nav-button--icon {
   width: 40px;
   height: 40px;
@@ -46,8 +47,8 @@
 
 .nav-button--icon svg {
   fill: #FFFFFF;
-  stroke: #FFFFFF;
-  /* UPDATED COMMENTS: Use original SVG sizes from iconamoon library */
+  stroke: none;
+  /* UPDATED COMMENTS: Remove stroke to prevent outline on social icons */
 }
 
 /* ANCHOR: text_button_variant */
@@ -80,7 +81,7 @@
   height: 100%;
   stroke: #FFFFFF;
   fill: none;
-  /* UPDATED COMMENTS: Preserve original SVG proportions */
+  /* UPDATED COMMENTS: Keep stroke for action icons like download/copy */
 }
 
 .nav-button--text .nav-button__icon iconify-icon {
