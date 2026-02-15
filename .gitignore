@@ -1,0 +1,44 @@
+# Logs
+*.log
+backend/*.log
+backend/telegram_html_parser.log
+backend/unified_scraper.log
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+backend/__pycache__/
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env.local
+.env.*.local
+
+# Telegram session files
+*.session
+*.session-journal
+
+# Node modules (if any)
+node_modules/
+
+# Build outputs
+dist/
+build/
