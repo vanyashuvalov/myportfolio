@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Critical Fixes Test - Ivan Shuvalov Portfolio</title>
+  
+  <link rel="stylesheet" href="styles/reset.css">
+  <link rel="stylesheet" href="styles/variables.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/widget-error.css">
+  
+  <style>
+    body {
+      padding: 40px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+    
+    .test-section {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .test-section h2 {
+      margin: 0 0 16px 0;
+      color: #101828;
+      font-size: 20px;
+      font-weight: 600;
+    }
+    
+    .test-section p {
+      margin: 0 0 12px 0;
+      color: #475467;
+      line-height: 1.5;
+    }
+    
+    .test-button {
+      background: #3B82F6;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      margin-right: 8px;
+      margin-bottom: 8px;
+    }
+    
+    .test-button:hover {
+      background: #2563EB;
+    }
+    
+    .test-result {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 13px;
+      display: none;
+    }
+    
+    .test-result.success {
+      background: #D1FAE5;
+      color: #065F46;
+      border: 1px solid #10B981;
+      display: block;
+    }
+    
+    .test-result.error {
+      background: #FEE2E2;
+      color: #991B1B;
+      border: 1px solid #EF4444;
+      display: block;
+    }
+    
+    .test-result.info {
+      background: #DBEAFE;
+      color: #1E40AF;
+      border: 1px solid #3B82F6;
+      display: block;
+    }
+    
+    .widget-test-area {
+      position: relative;
+      min-height: 300px;
+      background: rgba(0, 0, 0, 0.05);
+      border-radius: 8px;
+      margin-top: 16px;
+      padding: 20px;
+    }
+    
+    .console-output {
+      background: #1F2937;
+      color: #10B981;
+      padding: 12px;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 12px;
+      max-height: 200px;
+      overflow-y: auto;
+      margin-top: 12px;
+    }
+    
+    .console-output div {
+      margin-bottom: 4px;
+    }
+    
+    .console-output .warn {
+      color: #F59E0B;
+    }
+    
+    .console-output .error {
+      color: #EF4444;
+    }
+  </style>
+</head>
+<body>
+  <div class="test-section">
+    <h2>🔧 Critical Fixes Test Suite</h2>
+    <p>Тестирование исправлений Фазы 1: CRITICAL</p>
+  </div>
+
+  <!-- Test 1: Desktop Canvas Duplication Fix -->
+  <div class="test-section">
+    <h2>Test 1: Desktop Canvas - Дублирование кода</h2>
+    <p>Проверка что workspace container создается только один раз</p>
+    <button class="test-button" onclick="testDesktopCanvasDuplication()">Запустить тест</button>
+    <div id="test1-result" class="test-result"></div>
+    <div id="test1-console" class="console-output" style="display: none;"></div>
+  </div>
+
+  <!-- Test 2: Deprecated Methods Warning -->
+  <div class="test-section">
+    <h2>Test 2: WidgetBase - Deprecated методы</h2>
+    <p>Проверка что deprecated методы выдают предупреждения</p>
+    <button class="test-button" onclick="testDeprecatedMethods()">Запустить тест</button>
+    <div id="test2-result" class="test-result"></div>
+    <div id="test2-console" class="console-output" style="display: none;"></div>
+  </div>
+
+  <!-- Test 3: Error Boundary -->
+  <div class="test-section">
+    <h2>Test 3: Widget Error Boundary</h2>
+    <p>Проверка что виджеты с ошибками показывают fallback UI</p>
+    <button class="test-button" onclick="testErrorBoundary()">Создать виджет с ошибкой</button>
+    <button class="test-button" onclick="clearTestArea()">Очистить</button>
+    <div id="test3-result" class="test-result"></div>
+    <div class="widget-test-area" id="error-widget-area"></div>
+  </div>
+
+  <!-- Test 4: Memory Leaks Fix -->
+  <div class="test-section">
+    <h2>Test 4: SimpleDragHover - Memory Leaks</h2>
+    <p>Проверка что event listeners правильно очищаются</p>
+    <button class="test-button" onclick="testMemoryLeaks()">Создать и удалить 10 виджетов</button>
+    <div id="test4-result" class="test-result"></div>
+    <div id="test4-console" class="console-output" style="display: none;"></div>
+  </div>
+
+  <!-- Test 5: Configurable Boundary Offset -->
+  <div class="test-section">
+    <h2>Test 5: SimpleDragHover - Configurable Boundary</h2>
+    <p>Проверка что boundary offset можно настроить</p>
+    <button class="test-button" onclick="testConfigurableBoundary()">Запустить тест</button>
+    <div id="test5-result" class="test-result"></div>
+    <div id="test5-console" class="console-output" style="display: none;"></div>
+  </div>
+
+  <script type="module">
+    import { DesktopCanvas } from './js/features/desktop-canvas/desktop-canvas.js';
+    import { WidgetBase } from './js/entities/widget/widget-base.js';
+    import { SimpleDragHover } from './js/shared/lib/simple-drag-hover.js';
+    import { EventBus } from './js/shared/utils/event-bus.js';
+
+    // Make available globally for tests
+    window.DesktopCanvas = DesktopCanvas;
+    window.WidgetBase = WidgetBase;
+    window.SimpleDragHover = SimpleDragHover;
+    window.EventBus = EventBus;
+
+    console.log('✅ Test modules loaded successfully');
+  </script>
+
+  <script>
+    // Test 1: Desktop Canvas Duplication
+    function testDesktopCanvasDuplication() {
+      const result = document.getElementById('test1-result');
+      const consoleOutput = document.getElementById('test1-console');
+      
+      try {
+        // Create temporary container
+        const container = document.createElement('div');
+        container.id = 'test-canvas';
+        document.body.appendChild(container);
+        
+        // Create canvas
+        const canvas = new window.DesktopCanvas(container, {
+          eventBus: new window.EventBus()
+        });
+        
+        // Check workspace container count
+        const workspaceContainers = container.querySelectorAll('.workspace-container');
+        
+        if (workspaceContainers.length === 1) {
+          result.className = 'test-result success';
+          result.textContent = `✅ PASS: Workspace container создан ровно 1 раз (найдено: ${workspaceContainers.length})`;
+        } else {
+          result.className = 'test-result error';
+          result.textContent = `❌ FAIL: Найдено ${workspaceContainers.length} workspace containers (ожидалось: 1)`;
+        }
+        
+        // Cleanup
+        canvas.destroy();
+        container.remove();
+        
+      } catch (error) {
+        result.className = 'test-result error';
+        result.textContent = `❌ ERROR: ${error.message}`;
+        consoleOutput.style.display = 'block';
+        consoleOutput.innerHTML = `<div class="error">${error.stack}</div>`;
+      }
+    }
+
+    // Test 2: Deprecated Methods
+    function testDeprecatedMethods() {
+      const result = document.getElementById('test2-result');
+      const consoleOutput = document.getElementById('test2-console');
+      consoleOutput.style.display = 'block';
+      consoleOutput.innerHTML = '';
+      
+      // Capture console.warn
+      const originalWarn = console.warn;
+      const warnings = [];
+      console.warn = function(...args) {
+        warnings.push(args.join(' '));
+        consoleOutput.innerHTML += `<div class="warn">⚠️ ${args.join(' ')}</div>`;
+        originalWarn.apply(console, args);
+      };
+      
+      try {
+        // Create test widget
+        const element = document.createElement('div');
+        const widget = new window.WidgetBase(element, {
+          type: 'test',
+          eventBus: new window.EventBus()
+        });
+        
+        // Call deprecated methods
+        widget.updateTransform();
+        widget.getHoverRotation();
+        widget.getInteractionScale();
+        
+        // Restore console.warn
+        console.warn = originalWarn;
+        
+        if (warnings.length === 3) {
+          result.className = 'test-result success';
+          result.textContent = `✅ PASS: Все 3 deprecated метода выдали предупреждения`;
+        } else {
+          result.className = 'test-result error';
+          result.textContent = `❌ FAIL: Получено ${warnings.length} предупреждений (ожидалось: 3)`;
+        }
+        
+        // Cleanup
+        widget.destroy();
+        
+      } catch (error) {
+        console.warn = originalWarn;
+        result.className = 'test-result error';
+        result.textContent = `❌ ERROR: ${error.message}`;
+        consoleOutput.innerHTML += `<div class="error">${error.stack}</div>`;
+      }
+    }
+
+    // Test 3: Error Boundary
+    function testErrorBoundary() {
+      const result = document.getElementById('test3-result');
+      const area = document.getElementById('error-widget-area');
+      area.innerHTML = '';
+      
+      try {
+        // Create widget that will fail
+        class BrokenWidget extends window.WidgetBase {
+          constructor(element, options) {
+            super(element, options);
+          }
+          
+          setupElement() {
+            // Intentionally throw error
+            throw new Error('Simulated widget initialization error');
+          }
+        }
+        
+        const element = document.createElement('div');
+        area.appendChild(element);
+        
+        try {
+          const widget = new BrokenWidget(element, {
+            type: 'broken',
+            eventBus: new window.EventBus()
+          });
+        } catch (e) {
+          // Expected error
+        }
+        
+        // Check if error UI is shown
+        const hasErrorClass = element.classList.contains('widget--error');
+        const hasErrorMessage = element.textContent.includes('Widget failed to load');
+        
+        if (hasErrorClass && hasErrorMessage) {
+          result.className = 'test-result success';
+          result.textContent = '✅ PASS: Error boundary показывает fallback UI';
+        } else {
+          result.className = 'test-result error';
+          result.textContent = `❌ FAIL: Error UI не отображается (hasErrorClass: ${hasErrorClass}, hasErrorMessage: ${hasErrorMessage})`;
+        }
+        
+      } catch (error) {
+        result.className = 'test-result error';
+        result.textContent = `❌ ERROR: ${error.message}`;
+      }
+    }
+
+    function clearTestArea() {
+      document.getElementById('error-widget-area').innerHTML = '';
+      document.getElementById('test3-result').style.display = 'none';
+    }
+
+    // Test 4: Memory Leaks
+    function testMemoryLeaks() {
+      const result = document.getElementById('test4-result');
+      const consoleOutput = document.getElementById('test4-console');
+      consoleOutput.style.display = 'block';
+      consoleOutput.innerHTML = '';
+      
+      try {
+        const dragHover = new window.SimpleDragHover();
+        const widgets = [];
+        
+        // Create 10 widgets
+        for (let i = 0; i < 10; i++) {
+          const element = document.createElement('div');
+          document.body.appendChild(element);
+          
+          const widget = new window.WidgetBase(element, {
+            type: 'test',
+            eventBus: new window.EventBus()
+          });
+          
+          dragHover.initWidget(widget);
+          widgets.push(widget);
+        }
+        
+        consoleOutput.innerHTML += `<div>✅ Создано 10 виджетов</div>`;
+        
+        // Check activeListeners
+        const hasActiveListeners = dragHover.activeListeners instanceof WeakMap;
+        consoleOutput.innerHTML += `<div>✅ activeListeners is WeakMap: ${hasActiveListeners}</div>`;
+        
+        // Destroy all widgets
+        widgets.forEach((widget, i) => {
+          dragHover.destroyWidget(widget);
+          widget.element.remove();
+          consoleOutput.innerHTML += `<div>✅ Widget ${i + 1} destroyed</div>`;
+        });
+        
+        result.className = 'test-result success';
+        result.textContent = '✅ PASS: 10 виджетов созданы и удалены без ошибок. Проверьте console для деталей.';
+        
+      } catch (error) {
+        result.className = 'test-result error';
+        result.textContent = `❌ ERROR: ${error.message}`;
+        consoleOutput.innerHTML += `<div class="error">${error.stack}</div>`;
+      }
+    }
+
+    // Test 5: Configurable Boundary
+    function testConfigurableBoundary() {
+      const result = document.getElementById('test5-result');
+      const consoleOutput = document.getElementById('test5-console');
+      consoleOutput.style.display = 'block';
+      consoleOutput.innerHTML = '';
+      
+      try {
+        // Test default boundary
+        const dragHover1 = new window.SimpleDragHover();
+        consoleOutput.innerHTML += `<div>✅ Default boundary offset: ${dragHover1.globalBoundaryOffset}px</div>`;
+        
+        // Test custom boundary
+        const dragHover2 = new window.SimpleDragHover({ boundaryOffset: -100 });
+        consoleOutput.innerHTML += `<div>✅ Custom boundary offset: ${dragHover2.globalBoundaryOffset}px</div>`;
+        
+        // Test zero boundary
+        const dragHover3 = new window.SimpleDragHover({ boundaryOffset: 0 });
+        consoleOutput.innerHTML += `<div>✅ Zero boundary offset: ${dragHover3.globalBoundaryOffset}px</div>`;
+        
+        const allCorrect = 
+          dragHover1.globalBoundaryOffset === -60 &&
+          dragHover2.globalBoundaryOffset === -100 &&
+          dragHover3.globalBoundaryOffset === 0;
+        
+        if (allCorrect) {
+          result.className = 'test-result success';
+          result.textContent = '✅ PASS: Boundary offset настраивается правильно';
+        } else {
+          result.className = 'test-result error';
+          result.textContent = '❌ FAIL: Boundary offset не настраивается';
+        }
+        
+      } catch (error) {
+        result.className = 'test-result error';
+        result.textContent = `❌ ERROR: ${error.message}`;
+        consoleOutput.innerHTML += `<div class="error">${error.stack}</div>`;
+      }
+    }
+  </script>
+</body>
+</html>

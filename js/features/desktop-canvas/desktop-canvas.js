@@ -146,16 +146,6 @@ export class DesktopCanvas {
     this.workspaceContainer.className = 'workspace-container';
     this.workspaceContainer.dataset.workspaceId = this.generateId();
     
-    // CRITICAL: Create centralized workspace container
-    this.workspaceContainer = document.createElement('div');
-    this.workspaceContainer.className = 'workspace-container';
-    this.workspaceContainer.dataset.workspaceId = this.generateId();
-    
-    // CRITICAL: Create centralized workspace container
-    this.workspaceContainer = document.createElement('div');
-    this.workspaceContainer.className = 'workspace-container';
-    this.workspaceContainer.dataset.workspaceId = this.generateId();
-    
     // UPDATED COMMENTS: Clean workspace without visual debugging elements
     this.workspaceContainer.style.width = 'calc(100vw - 20px)';
     this.workspaceContainer.style.height = 'calc(100vh - 20px)';

@@ -20,48 +20,49 @@
 
 /* ANCHOR: viewport_positioning */
 /* CRITICAL: Widget positioning with global offset adjustment */
-/* UPDATED COMMENTS: Все виджеты смещены выше на 5% и левее на 10% */
+/* UPDATED COMMENTS: All positioning values extracted to CSS variables for maintainability */
+/* REUSED: CSS variables from styles/variables.css for consistent positioning */
 
-/* стикер: левый верхний угол (смещен: -5% top, -10% left) */
+/* стикер: левый верхний угол */
 .widget-position--sticker {
-  top: -1%; /* было 5% */
-  left: -3%; /* было 2%, минимум 0% */
+  top: var(--widget-offset-sticker-top);
+  left: var(--widget-offset-sticker-left);
 }
 
-/* папка проекты: левый центр (смещен: -10% top, +15% right) */
+/* папка проекты: левый центр */
 .widget-position--projects-folder {
-  top: 8%; /* было 30%, -10% = 20% */
-  left: 26%; /* было 15%, +15% = 30% */
+  top: var(--widget-offset-projects-folder-top);
+  left: var(--widget-offset-projects-folder-left);
 }
 
-/* папка фан: центр (смещен: -5% top, +10% right) */
+/* папка фан: центр */
 .widget-position--fun-folder {
-  top: 30%; /* было 50%, -5% = 45% */
-  left: 36%; /* было 35%, +10% = 45% */
+  top: var(--widget-offset-fun-folder-top);
+  left: var(--widget-offset-fun-folder-left);
 }
 
-/* резюме: центр-низ (смещен: -10% top, +15% right) */
+/* резюме: центр-низ */
 .widget-position--resume {
-  top: 50%; /* было 65%, -10% = 55% */
-  left: 22%; /* было 15%, +15% = 30% */
+  top: var(--widget-offset-resume-top);
+  left: var(--widget-offset-resume-left);
 }
 
-/* часы: правый верхний угол (смещен: +5% left) */
+/* часы: правый верхний угол */
 .widget-position--clock {
-  top: -2%; /* без изменений */
-  right: 10%; /* было 15%, -5% = 10% (правее означает уменьшение right) */
+  top: var(--widget-offset-clock-top);
+  right: var(--widget-offset-clock-right);
 }
 
-/* телеграм: правая сторона (смещен: -5% top, -10% right) */
+/* телеграм: правая сторона */
 .widget-position--telegram {
-  right: 13%; /* было 3%, +10% = 13% */
-  top: 20%; /* было 25% */
+  right: var(--widget-offset-telegram-right);
+  top: var(--widget-offset-telegram-top);
 }
 
-/* стикер кота: правая сторона (смещен: -5% top, -10% right) */
+/* стикер кота: правая сторона */
 .widget-position--cat-sticker {
-  right: 10%; /* было 2%, +10% = 12% */
-  bottom: 18%;
+  right: var(--widget-offset-cat-sticker-right);
+  bottom: var(--widget-offset-cat-sticker-bottom);
 }
 
 /* ANCHOR: universal_shadow_states */

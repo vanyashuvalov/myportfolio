@@ -3,20 +3,43 @@
 /* SCALED FOR: Dynamic shadow calculation with performance optimization */
 
 /**
+ * @typedef {Object} ShadowOptions
+ * @property {number} [offsetX=0] - Horizontal offset in pixels
+ * @property {number} [offsetY=4] - Vertical offset in pixels
+ * @property {number} [blurRadius=12] - Blur radius in pixels
+ * @property {number} [spreadRadius=0] - Spread radius in pixels
+ * @property {string} [color='rgba(0, 0, 0, 0.15)'] - Shadow color
+ * @property {boolean} [inset=false] - Inset shadow
+ */
+
+/**
+ * @typedef {Object} WidgetShadows
+ * @property {string} default - Default shadow
+ * @property {string} hovered - Hovered shadow
+ * @property {string} pressed - Pressed shadow
+ * @property {string} dragging - Dragging shadow
+ */
+
+/**
  * ShadowSystem - Centralized shadow management for widgets
  * Provides consistent shadow styles based on interaction states
+ * // UPDATED COMMENTS: Added comprehensive JSDoc types for type safety
  * 
  * @class ShadowSystem
  */
 export class ShadowSystem {
   constructor() {
+    /** @type {Object.<string, string|WidgetShadows>} */
     this.shadowPresets = this.initializeShadowPresets();
+    /** @type {Map<string, string>} */
     this.customShadows = new Map();
   }
 
   /**
    * Initialize default shadow presets
    * UPDATED COMMENTS: Professional shadow system with depth progression
+   * 
+   * @returns {Object.<string, string|WidgetShadows>} Shadow presets object
    */
   initializeShadowPresets() {
     return {

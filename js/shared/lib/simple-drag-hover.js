@@ -11,7 +11,7 @@
  * @class SimpleDragHover
  */
 export class SimpleDragHover {
-  constructor() {
+  constructor(options = {}) {
     // UPDATED COMMENTS: Offset-based drag state tracking
     this.active = false;
     this.dragWidget = null;
@@ -24,19 +24,22 @@ export class SimpleDragHover {
     this.xOffset = 0;
     this.yOffset = 0;
     
-    // REUSABLE LOGIC: Global boundary offset configuration
+    // REUSABLE LOGIC: Configurable boundary offset
     // UPDATED COMMENTS: Small bevel offset creates elegant frame effect
     // Boundaries are slightly narrower than screen for visual appeal
-    this.globalBoundaryOffset = -60; // Small bevel margin from all edges
+    this.globalBoundaryOffset = options.boundaryOffset ?? -60; // Small bevel margin from all edges
     
     // CRITICAL: Bind global handlers once to avoid memory leaks
     this.boundMouseMove = this.handleMouseMove.bind(this);
     this.boundMouseUp = this.handleMouseUp.bind(this);
+    
+    // CRITICAL: Track active listeners for proper cleanup
+    this.activeListeners = new WeakMap();
   }
 
   /**
    * Initialize drag and hover for a widget
-   * CRITICAL: Support both CSS and JS positioning modes with proper debugging
+   * CRITICAL: Support both CSS and JS positioning modes with proper debugging and cleanup tracking
    */
   initWidget(widget) {
     if (!widget || !widget.element) {
@@ -91,12 +94,28 @@ export class SimpleDragHover {
     // CRITICAL: Listen on container for reliable drag (Kirupa pattern)
     const container = element.parentElement || document.body;
     
+    // CRITICAL: Create bound handlers for this specific widget
+    const hoverStartHandler = () => this.handleHoverStart(widget);
+    const hoverEndHandler = () => this.handleHoverEnd(widget);
+    const mouseDownHandler = (e) => this.handleMouseDown(e, widget);
+    
     // UPDATED COMMENTS: Direct mouse events for immediate response
-    element.addEventListener('mouseenter', () => this.handleHoverStart(widget));
-    element.addEventListener('mouseleave', () => this.handleHoverEnd(widget));
+    element.addEventListener('mouseenter', hoverStartHandler);
+    element.addEventListener('mouseleave', hoverEndHandler);
     
     // CRITICAL: Container-based drag events for reliable tracking
-    container.addEventListener('mousedown', (e) => this.handleMouseDown(e, widget));
+    container.addEventListener('mousedown', mouseDownHandler);
+    
+    // CRITICAL: Store listener references for cleanup
+    this.activeListeners.set(widget, {
+      element,
+      container,
+      handlers: {
+        hoverStart: hoverStartHandler,
+        hoverEnd: hoverEndHandler,
+        mouseDown: mouseDownHandler
+      }
+    });
     
     // Store references for cleanup
     widget._simpleDragHover = this;
@@ -419,14 +438,32 @@ export class SimpleDragHover {
 
   /**
    * Destroy drag hover system for widget
-   * UPDATED COMMENTS: Proper cleanup and memory management
+   * UPDATED COMMENTS: Comprehensive cleanup with listener tracking to prevent memory leaks
    */
   destroyWidget(widget) {
     if (this.dragWidget === widget) {
       this.handleMouseUp();
     }
     
-    // Clean up container listeners
+    // CRITICAL: Clean up tracked listeners
+    const listenerData = this.activeListeners.get(widget);
+    if (listenerData) {
+      const { element, container, handlers } = listenerData;
+      
+      // Remove element listeners
+      element.removeEventListener('mouseenter', handlers.hoverStart);
+      element.removeEventListener('mouseleave', handlers.hoverEnd);
+      
+      // Remove container listeners
+      container.removeEventListener('mousedown', handlers.mouseDown);
+      container.removeEventListener('mousemove', this.boundMouseMove);
+      container.removeEventListener('mouseup', this.boundMouseUp);
+      
+      // Remove from tracking
+      this.activeListeners.delete(widget);
+    }
+    
+    // Clean up legacy references
     if (widget._dragContainer) {
       widget._dragContainer.removeEventListener('mousemove', this.boundMouseMove);
       widget._dragContainer.removeEventListener('mouseup', this.boundMouseUp);
