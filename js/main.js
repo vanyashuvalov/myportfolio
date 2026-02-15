@@ -9,6 +9,7 @@ import { AssetManager } from './shared/utils/asset-manager.js';
 import { EventBus } from './shared/utils/event-bus.js';
 import { NavigationHeader } from './shared/ui/navigation/navigation-header.js';
 import { ContactInput } from './shared/ui/contact-input/contact-input.js';
+import { ContactModal } from './shared/ui/modal/contact-modal.js';
 
 /**
  * Application class - Main application controller
@@ -21,6 +22,7 @@ class Application {
     this.canvas = null;
     this.navigation = null;
     this.contactInput = null;
+    this.contactModal = null;
     this.performanceMonitor = null;
     this.assetManager = null;
     this.eventBus = null;
@@ -119,6 +121,33 @@ class Application {
           console.error('❌ Failed to initialize contact input:', error);
           console.error('Error stack:', error.stack);
         }
+      }
+
+      // ANCHOR: contact_modal_initialization
+      // REUSED: Contact modal component with shared EventBus
+      const modalContainer = document.getElementById('modal-container');
+      if (modalContainer) {
+        console.log('📬 Initializing contact modal...');
+        this.contactModal = new ContactModal(modalContainer, {
+          eventBus: this.eventBus
+        });
+        console.log('✅ Contact modal initialized');
+        
+        // CRITICAL: Listen for send events from contact input
+        this.eventBus.on('contact-input:send', ({ message }) => {
+          console.log('📬 Opening contact modal with message:', message);
+          this.contactModal.show(message);
+        });
+        
+        // REUSED: Listen for successful message send
+        this.eventBus.on('message:sent', ({ message, contact }) => {
+          console.log('✅ Message sent successfully');
+          if (this.contactInput) {
+            this.contactInput.clearInput();
+          }
+        });
+      } else {
+        console.warn('⚠️  Modal container not found');
       }
 
       // Setup global event listeners
