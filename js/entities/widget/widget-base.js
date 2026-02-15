@@ -8,12 +8,76 @@ import { SimpleDragHover } from '../../shared/lib/simple-drag-hover.js';
 import { getWidgetRotation } from '../../shared/lib/widget-rotation.js';
 
 /**
+ * @typedef {Object} Position
+ * @property {number} x - X coordinate in pixels
+ * @property {number} y - Y coordinate in pixels
+ */
+
+/**
+ * @typedef {Object} WidgetState
+ * @property {boolean} isHovered - Widget is currently hovered
+ * @property {boolean} isPressed - Widget is currently pressed
+ * @property {boolean} isDragging - Widget is currently being dragged
+ * @property {boolean} isFocused - Widget has keyboard focus
+ * @property {boolean} wasRecentlyDragged - Widget was recently dragged
+ */
+
+/**
+ * @typedef {Object} WidgetConfig
+ * @property {boolean} isDraggable - Widget can be dragged
+ * @property {boolean} isClickable - Widget can be clicked
+ * @property {boolean} hasHoverEffects - Widget has hover effects
+ * @property {boolean} hasShadows - Widget has shadow effects
+ * @property {boolean} [cssPositioning] - Widget uses CSS positioning
+ */
+
+/**
+ * @typedef {Object} WidgetOptions
+ * @property {string} [type='widget'] - Widget type identifier
+ * @property {string} [id] - Unique widget ID (auto-generated if not provided)
+ * @property {HTMLElement} [innerElement] - Inner element for content
+ * @property {Position} [position] - Initial position {x, y}
+ * @property {number} [rotation] - Rotation angle in degrees
+ * @property {number} [scale=1] - Scale factor
+ * @property {number} [zIndex=1] - Z-index for stacking
+ * @property {boolean} [draggable=true] - Enable dragging
+ * @property {boolean} [clickable=true] - Enable clicking
+ * @property {boolean} [hoverEffects=true] - Enable hover effects
+ * @property {boolean} [shadows=true] - Enable shadows
+ * @property {ShadowSystem} [shadowSystem] - Shadow system instance
+ * @property {AnimationSystem} [animationSystem] - Animation system instance
+ * @property {Object} [eventBus] - Event bus for communication
+ * @property {WidgetConfig} [config] - Additional configuration
+ */
+
+/**
+ * @typedef {Object} WidgetInfo
+ * @property {string} id - Widget unique identifier
+ * @property {string} type - Widget type
+ * @property {Position} position - Current position
+ * @property {number} rotation - Current rotation in degrees
+ * @property {number} scale - Current scale factor
+ * @property {number} zIndex - Current z-index
+ * @property {WidgetState} state - Current interaction state
+ * @property {WidgetConfig} config - Current configuration
+ */
+
+/**
  * WidgetBase - Abstract base class for all desktop widgets
  * Uses simple direct positioning for reliable movement
+ * // UPDATED COMMENTS: Added comprehensive JSDoc types for type safety
  * 
  * @class WidgetBase
  */
 export class WidgetBase {
+  /**
+   * Create a widget instance
+   * // CRITICAL: Abstract class - cannot be instantiated directly
+   * 
+   * @param {HTMLElement} element - DOM element for the widget wrapper
+   * @param {WidgetOptions} options - Configuration options
+   * @throws {Error} If instantiated directly (must be subclassed)
+   */
   constructor(element, options = {}) {
     if (new.target === WidgetBase) {
       throw new Error('WidgetBase is abstract and cannot be instantiated directly');
@@ -64,7 +128,7 @@ export class WidgetBase {
 
   /**
    * Initialize widget with base functionality
-   * UPDATED COMMENTS: Simple initialization with new drag system
+   * UPDATED COMMENTS: Simple initialization with new drag system and error boundary
    */
   initialize() {
     try {
@@ -87,7 +151,50 @@ export class WidgetBase {
       }
     } catch (error) {
       console.error(`Failed to initialize widget ${this.id}:`, error);
+      this.handleInitializationError(error);
       throw error;
+    }
+  }
+
+  /**
+   * Handle widget initialization errors with fallback UI
+   * SCALED FOR: Graceful error handling and user feedback
+   * @param {Error} error - The error that occurred during initialization
+   */
+  handleInitializationError(error) {
+    // CRITICAL: Show error state instead of broken widget
+    if (this.element) {
+      this.element.classList.add('widget--error');
+      this.element.innerHTML = `
+        <div class="widget-error-state">
+          <div class="widget-error-icon">⚠️</div>
+          <div class="widget-error-message">Widget failed to load</div>
+          <div class="widget-error-details">${this.type}</div>
+        </div>
+      `;
+      
+      // REUSED: Error styling
+      Object.assign(this.element.style, {
+        background: 'rgba(239, 68, 68, 0.1)',
+        border: '2px dashed rgba(239, 68, 68, 0.3)',
+        padding: '20px',
+        borderRadius: '8px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minWidth: '200px',
+        minHeight: '100px'
+      });
+    }
+    
+    // Emit error event for global error tracking
+    if (this.eventBus) {
+      this.eventBus.emit('widget:error', {
+        widget: this,
+        type: this.type,
+        id: this.id,
+        error: error.message
+      });
     }
   }
 
@@ -342,29 +449,31 @@ export class WidgetBase {
   }
 
   /**
+   * @deprecated Use HoverSystem and DragSystem instead
    * Update widget transform for visual effects only
-   * CRITICAL: Deprecated - now handled by HoverSystem and DragSystem
+   * CRITICAL: This method is deprecated and will be removed in future versions
    */
   updateTransform() {
-    // CRITICAL: This method is deprecated
-    // Visual effects now handled by HoverSystem and DragSystem
+    console.warn('WidgetBase.updateTransform() is deprecated. Visual effects now handled by HoverSystem and DragSystem.');
   }
 
   /**
+   * @deprecated Use HoverSystem instead
    * Get hover rotation offset
-   * CRITICAL: Deprecated - now handled by HoverSystem
+   * CRITICAL: This method is deprecated and will be removed in future versions
    */
   getHoverRotation() {
-    // CRITICAL: This method is deprecated
+    console.warn('WidgetBase.getHoverRotation() is deprecated. Use HoverSystem instead.');
     return 0;
   }
 
   /**
+   * @deprecated Use HoverSystem instead
    * Get interaction scale multiplier
-   * CRITICAL: Deprecated - now handled by HoverSystem
+   * CRITICAL: This method is deprecated and will be removed in future versions
    */
   getInteractionScale() {
-    // CRITICAL: This method is deprecated
+    console.warn('WidgetBase.getInteractionScale() is deprecated. Use HoverSystem instead.');
     return 1;
   }
 

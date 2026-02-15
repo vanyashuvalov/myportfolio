@@ -3,23 +3,69 @@
 /* SCALED FOR: 60fps performance with hardware acceleration */
 
 /**
+ * @typedef {Object} AnimationKeyframe
+ * @property {number} [opacity] - Opacity value (0-1)
+ * @property {string} [transform] - CSS transform value
+ */
+
+/**
+ * @typedef {Object} AnimationOptions
+ * @property {number} [duration=300] - Animation duration in milliseconds
+ * @property {string} [easing='smooth'] - Easing function name or cubic-bezier
+ * @property {number} [delay=0] - Delay before animation starts
+ * @property {number|string} [iterations=1] - Number of iterations or 'Infinity'
+ * @property {string} [fill='forwards'] - Fill mode (forwards, backwards, both, none)
+ */
+
+/**
+ * @typedef {Object} AnimationPreset
+ * @property {AnimationKeyframe[]} keyframes - Array of keyframe objects
+ * @property {AnimationOptions} options - Animation options
+ */
+
+/**
+ * @typedef {Object} TimingFunctions
+ * @property {string} linear - Linear timing
+ * @property {string} ease - Ease timing
+ * @property {string} easeIn - Ease-in timing
+ * @property {string} easeOut - Ease-out timing
+ * @property {string} easeInOut - Ease-in-out timing
+ * @property {string} smooth - Smooth cubic-bezier
+ * @property {string} bounce - Bounce cubic-bezier
+ * @property {string} elastic - Elastic cubic-bezier
+ * @property {string} sharp - Sharp cubic-bezier
+ * @property {string} hover - Hover cubic-bezier
+ * @property {string} press - Press cubic-bezier
+ * @property {string} release - Release cubic-bezier
+ * @property {string} drag - Drag cubic-bezier
+ */
+
+/**
  * AnimationSystem - Centralized animation management
  * Provides consistent animations, transitions, and timing functions
+ * // UPDATED COMMENTS: Added comprehensive JSDoc types for type safety
  * 
  * @class AnimationSystem
  */
 export class AnimationSystem {
   constructor() {
+    /** @type {Map<string, Object>} */
     this.activeAnimations = new Map();
+    /** @type {Array} */
     this.animationQueue = [];
+    /** @type {boolean} */
     this.isProcessingQueue = false;
+    /** @type {TimingFunctions} */
     this.timingFunctions = this.initializeTimingFunctions();
+    /** @type {Object.<string, AnimationPreset>} */
     this.presets = this.initializeAnimationPresets();
   }
 
   /**
    * Initialize timing functions for consistent easing
    * UPDATED COMMENTS: Professional easing curves for smooth animations
+   * 
+   * @returns {TimingFunctions} Object containing all timing functions
    */
   initializeTimingFunctions() {
     return {

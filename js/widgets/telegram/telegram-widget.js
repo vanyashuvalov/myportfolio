@@ -193,6 +193,7 @@ export class TelegramWidget extends WidgetBase {
   /**
    * Create telegram widget content with exact Figma specifications
    * UPDATED COMMENTS: 300x161px white widget with header, post content, info and cat icons gradient
+   * SCALED FOR: Avatar loading with error handling and placeholder
    */
   createTelegramContent() {
     const targetElement = this.innerElement || this.element;
@@ -213,9 +214,11 @@ export class TelegramWidget extends WidgetBase {
       <div class="telegram-container">
         <!-- CRITICAL: Header section with avatar, channel info and external link -->
         <div class="telegram-header">
-          <!-- REUSED: Channel avatar with rounded styling -->
+          <!-- REUSED: Channel avatar with rounded styling and error handling -->
           <div class="telegram-avatar">
-            <img src="${this.getAvatarUrl()}" alt="${this.escapeHtml(this.channelData.title)} avatar" />
+            <img src="${this.getAvatarUrl()}" 
+                 alt="${this.escapeHtml(this.channelData.title)} avatar"
+                 onerror="this.src='/assets/images/telegram-avatar.jpg'; this.onerror=null;" />
           </div>
           
           <!-- CRITICAL: Channel information section -->
@@ -282,11 +285,16 @@ export class TelegramWidget extends WidgetBase {
   }
 
   /**
-   * Get avatar URL - always use local file
-   * UPDATED COMMENTS: Simplified - always use static avatar file
+   * Get avatar URL - use API data with fallback
+   * UPDATED COMMENTS: Now uses API avatar_url with local fallback
+   * SCALED FOR: Dynamic avatar loading with error handling
    */
   getAvatarUrl() {
-    // CRITICAL: Always use local avatar file, ignore API avatar_url
+    // CRITICAL: Use API avatar with fallback to local file
+    if (this.channelData.avatar_url) {
+      return this.channelData.avatar_url;
+    }
+    // REUSED: Fallback to local avatar file
     return '/assets/images/telegram-avatar.jpg';
   }
 

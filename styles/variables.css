@@ -97,6 +97,34 @@
   --breakpoint-lg: 1024px;
   --breakpoint-xl: 1280px;
   --breakpoint-2xl: 1536px;
+  
+  /* ANCHOR: widget_positioning */
+  /* UPDATED COMMENTS: Widget positioning offsets for viewport placement */
+  /* SCALED FOR: Consistent widget layout across all screen sizes */
+  --widget-offset-sticker-top: -1%;
+  --widget-offset-sticker-left: -3%;
+  --widget-offset-projects-folder-top: 8%;
+  --widget-offset-projects-folder-left: 26%;
+  --widget-offset-fun-folder-top: 30%;
+  --widget-offset-fun-folder-left: 36%;
+  --widget-offset-resume-top: 50%;
+  --widget-offset-resume-left: 22%;
+  --widget-offset-clock-top: -2%;
+  --widget-offset-clock-right: 10%;
+  --widget-offset-telegram-top: 20%;
+  --widget-offset-telegram-right: 13%;
+  --widget-offset-cat-sticker-right: 10%;
+  --widget-offset-cat-sticker-bottom: 18%;
+  
+  /* ANCHOR: drag_boundaries */
+  /* UPDATED COMMENTS: Drag & drop boundary configuration */
+  /* REUSED: Universal boundary offset for all draggable widgets */
+  --drag-boundary-offset: -60px;
+  
+  /* ANCHOR: widget_dimensions */
+  /* UPDATED COMMENTS: Minimum widget dimensions for consistent sizing */
+  --widget-min-width: 200px;
+  --widget-min-height: 100px;
 }
 
 /* ANCHOR: dark_theme */
