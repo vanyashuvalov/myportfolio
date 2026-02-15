@@ -28,9 +28,12 @@ class Application {
   /**
    * Initialize application with all core systems
    * UPDATED COMMENTS: Async initialization with error handling
+   * CRITICAL: Use window load event to hide loader after all resources loaded
    */
   async init() {
     try {
+      console.log('🚀 Starting application initialization...');
+      
       // Initialize core utilities
       this.eventBus = new EventBus();
       this.performanceMonitor = new PerformanceMonitor();
@@ -38,10 +41,12 @@ class Application {
 
       // Wait for DOM to be ready
       if (document.readyState === 'loading') {
+        console.log('⏳ Waiting for DOM...');
         await new Promise(resolve => {
           document.addEventListener('DOMContentLoaded', resolve);
         });
       }
+      console.log('✅ DOM ready');
 
       // Initialize desktop canvas
       const canvasElement = document.getElementById('desktop-canvas');
@@ -49,6 +54,7 @@ class Application {
         throw new Error('Desktop canvas element not found');
       }
 
+      console.log('🎨 Initializing desktop canvas...');
       this.canvas = new DesktopCanvas(canvasElement, {
         eventBus: this.eventBus,
         assetManager: this.assetManager
@@ -61,6 +67,7 @@ class Application {
         throw new Error('Navigation container element not found');
       }
 
+      console.log('🧭 Initializing navigation...');
       this.navigation = new NavigationHeader(navigationContainer, {
         eventBus: this.eventBus,
         userName: 'Shuvalov Ivan',
@@ -78,19 +85,30 @@ class Application {
       });
 
       await this.navigation.init();
+      console.log('✅ Navigation initialized');
 
       // Setup global event listeners
       this.setupGlobalEvents();
 
-      // Hide loading indicator
-      this.hideLoadingIndicator();
+      // CRITICAL: Wait for window.load event (all resources including images loaded)
+      // REUSED: Standard pattern for hiding page loaders
+      if (document.readyState === 'complete') {
+        console.log('✅ All resources already loaded');
+        this.hideLoadingIndicator();
+      } else {
+        console.log('⏳ Waiting for all resources to load...');
+        window.addEventListener('load', () => {
+          console.log('✅ All resources loaded');
+          this.hideLoadingIndicator();
+        });
+      }
 
       this.isInitialized = true;
       this.eventBus.emit('app:initialized');
 
-      console.log('Application initialized successfully');
+      console.log('✨ Application initialized successfully');
     } catch (error) {
-      console.error('Failed to initialize application:', error);
+      console.error('❌ Failed to initialize application:', error);
       this.showErrorMessage(error.message);
     }
   }
@@ -165,17 +183,22 @@ class Application {
 
   /**
    * Hide loading indicator with smooth animation
-   * UPDATED COMMENTS: Smooth transition to main interface
+   * UPDATED COMMENTS: Smooth transition to main interface with body class toggle
+   * CRITICAL: Shows mountains and all content after loading is complete
    */
   hideLoadingIndicator() {
     const indicator = document.getElementById('loading-indicator');
     if (indicator) {
-      indicator.style.opacity = '0';
-      indicator.style.transition = 'opacity 0.3s ease-out';
+      // CRITICAL: Add 'loaded' class to body to trigger CSS transitions
+      document.body.classList.add('loaded');
       
+      // REUSED: Hide loading indicator with fade-out animation
+      indicator.classList.add('hidden');
+      
+      // SCALED FOR: Remove loading indicator from DOM after animation completes
       setTimeout(() => {
-        indicator.style.display = 'none';
-      }, 300);
+        indicator.remove();
+      }, 500); // Match CSS transition duration
     }
   }
 

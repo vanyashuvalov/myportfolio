@@ -1,0 +1,25 @@
+2026-02-14 23:31:22,517 - INFO - HTTP session initialized
+2026-02-14 23:31:22,517 - INFO - Scraping channel via HTML: vanya_knopochkin
+2026-02-14 23:31:22,517 - INFO - Fetching HTML for vanya_knopochkin from https://t.me/s/vanya_knopochkin
+2026-02-14 23:31:23,246 - INFO - Successfully fetched HTML for vanya_knopochkin
+2026-02-14 23:31:23,266 - INFO - Parsed channel info for vanya_knopochkin: ваня кнопочкин
+2026-02-14 23:31:23,283 - INFO - Parsed 10 posts from vanya_knopochkin
+2026-02-14 23:31:23,284 - INFO - HTTP session closed
+2026-02-15 01:46:11,520 - INFO - HTTP session initialized
+2026-02-15 01:46:11,521 - INFO - Scraping channel via HTML: vanya_knopochkin
+2026-02-15 01:46:11,521 - INFO - Fetching HTML for vanya_knopochkin from https://t.me/s/vanya_knopochkin
+2026-02-15 01:46:12,063 - INFO - Successfully fetched HTML for vanya_knopochkin
+2026-02-15 01:46:12,081 - INFO - Parsed channel info for vanya_knopochkin: ваня кнопочкин
+2026-02-15 01:46:12,098 - INFO - Parsed 10 posts from vanya_knopochkin
+2026-02-15 01:46:12,099 - INFO - Sorted posts by date - latest: 2026-01-26T21:41:24+00:00
+2026-02-15 01:46:12,100 - INFO - HTTP session closed
+2026-02-15 01:46:53,438 - INFO - HTTP session initialized
+2026-02-15 01:46:53,438 - INFO - Scraping channel via HTML: vanya_knopochkin
+2026-02-15 01:46:53,438 - INFO - Fetching HTML for vanya_knopochkin from https://t.me/s/vanya_knopochkin
+2026-02-15 01:46:53,972 - INFO - Successfully fetched HTML for vanya_knopochkin
+2026-02-15 01:46:53,990 - INFO - Parsed channel info for vanya_knopochkin: ваня кнопочкин
+2026-02-15 01:46:54,006 - INFO - Found 12 total posts on page
+2026-02-15 01:46:54,009 - INFO - Parsed 12 posts from vanya_knopochkin
+2026-02-15 01:46:54,009 - INFO - Sorted posts by date - latest: 2026-02-11T13:28:31+00:00
+2026-02-15 01:46:54,009 - INFO - Returning top 12 posts out of 12 total
+2026-02-15 01:46:54,010 - INFO - HTTP session closed

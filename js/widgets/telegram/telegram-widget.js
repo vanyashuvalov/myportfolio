@@ -3,10 +3,14 @@
 /* REUSED: WidgetBase class with telegram-specific functionality */
 
 import { WidgetBase } from '../../entities/widget/widget-base.js';
+import { telegramApi } from '../../shared/api/telegram-api.js';
+import { formatViewCount, formatTimestamp } from '../../shared/config/telegram-channels.js';
 
 /**
  * TelegramWidget - Latest post from telegram channel display
  * Features: Channel avatar, name, post content, views, timestamp, external link
+ * UPDATED COMMENTS: Now supports real-time data from MTProto API backend
+ * SCALED FOR: Multiple channels, automatic updates, error handling
  * 
  * @class TelegramWidget
  * @extends WidgetBase
@@ -15,38 +19,210 @@ export class TelegramWidget extends WidgetBase {
   constructor(element, options = {}) {
     super(element, { ...options, type: 'telegram' });
     
-    // UPDATED COMMENTS: Telegram widget configuration with Figma specifications
-    this.channelName = options.channelName || 'ваня кнопочкин';
-    this.channelType = options.channelType || 'Telegram Channel';
-    this.channelAvatar = options.channelAvatar || 'assets/images/telegram-avatar.jpg';
-    this.postText = options.postText || 'москва газ соревнования по счету в уме';
-    this.viewCount = options.viewCount || 43;
-    this.timestamp = options.timestamp || '0:58 Jan 27';
-    this.channelUrl = options.channelUrl || '#';
+    // UPDATED COMMENTS: Channel configuration with API integration
+    this.channelUsername = options.channelUsername || 'vanyashuvalov';
+    this.updateInterval = options.updateInterval || 300000; // 5 minutes
+    this.autoUpdate = options.autoUpdate !== false;
     
-    this.createTelegramContent();
-    this.setupExternalLink();
+    // REUSED: Default fallback data
+    this.channelData = {
+      title: 'Loading...',
+      username: this.channelUsername,
+      avatar_url: null,
+      description: '',
+      verified: false
+    };
+    
+    this.latestPost = {
+      text: 'Loading channel data...',
+      views: 0,
+      formatted_date: 'Loading...',
+      formatted_views: '0',
+      link: '#'
+    };
+    
+    // SCALED FOR: Loading and error states
+    this.isLoading = true;
+    this.hasError = false;
+    this.lastUpdate = null;
+    this.updateTimer = null;
+    
+    this.initializeWidget();
   }
 
+  /**
+   * Initialize widget with data loading
+   * UPDATED COMMENTS: Async initialization with error handling
+   */
+  async initializeWidget() {
+    this.createTelegramContent();
+    this.setupExternalLink();
+    
+    // SCALED FOR: Initial data loading
+    await this.loadChannelData();
+    
+    // REUSED: Auto-update setup
+    if (this.autoUpdate) {
+      this.startAutoUpdate();
+    }
+  }
+
+  /**
+   * Load channel data from API
+   * UPDATED COMMENTS: Fetches real channel data with fallback handling
+   */
+  async loadChannelData() {
+    try {
+      this.setLoadingState(true);
+      
+      // REUSED: API call with error handling
+      const response = await telegramApi.getLatestPost(this.channelUsername);
+      
+      if (response) {
+        this.channelData = response.channel;
+        this.latestPost = response.latest_post;
+        this.lastUpdate = new Date();
+        this.hasError = false;
+        
+        // UPDATED COMMENTS: Update UI with fresh data
+        this.updateContent();
+        
+        console.log(`Telegram widget: Loaded data for ${this.channelUsername}`, response);
+      }
+      
+    } catch (error) {
+      console.error('Failed to load channel data:', error);
+      this.hasError = true;
+      this.setErrorState();
+    } finally {
+      this.setLoadingState(false);
+    }
+  }
+
+  /**
+   * Start automatic updates
+   * SCALED FOR: Background data refresh without user interruption
+   */
+  startAutoUpdate() {
+    if (this.updateTimer) {
+      clearInterval(this.updateTimer);
+    }
+    
+    this.updateTimer = setInterval(() => {
+      this.loadChannelData();
+    }, this.updateInterval);
+  }
+
+  /**
+   * Stop automatic updates
+   * REUSED: Cleanup utility for widget lifecycle
+   */
+  stopAutoUpdate() {
+    if (this.updateTimer) {
+      clearInterval(this.updateTimer);
+      this.updateTimer = null;
+    }
+  }
+
+  /**
+   * Set loading state
+   * UPDATED COMMENTS: Visual loading indicators with content recreation
+   */
+  setLoadingState(isLoading) {
+    this.isLoading = isLoading;
+    
+    if (isLoading) {
+      this.element.classList.add('telegram-loading');
+      // CRITICAL: Show loading state immediately
+      this.createTelegramContent();
+    } else {
+      this.element.classList.remove('telegram-loading');
+      // CRITICAL: Recreate content with data after loading completes
+      this.createTelegramContent();
+      this.setupExternalLink();
+    }
+  }
+
+  /**
+   * Set error state with fallback content
+   * SCALED FOR: Graceful error handling with user feedback
+   */
+  setErrorState() {
+    this.element.classList.add('telegram-error');
+    
+    // REUSED: Fallback to mock data on error
+    this.channelData = {
+      title: 'ваня кнопочкин',
+      username: this.channelUsername,
+      avatar_url: null,
+      description: 'Product Designer',
+      verified: false
+    };
+    
+    this.latestPost = {
+      text: 'Unable to load latest post',
+      views: 0,
+      formatted_date: 'Error',
+      formatted_views: '0',
+      link: `https://t.me/${this.channelUsername}`
+    };
+    
+    this.updateContent();
+  }
+
+  /**
+   * Update widget content with current data
+   * REUSED: Content rendering separated from data loading
+   * UPDATED COMMENTS: No longer recreates content, just updates text
+   */
+  updateContent() {
+    // CRITICAL: Don't recreate - content already created in setLoadingState
+    // Just update text values if needed for auto-refresh
+    const channelNameEl = this.element.querySelector('.telegram-channel-name');
+    const postTextEl = this.element.querySelector('.telegram-post-text');
+    const viewsCountEl = this.element.querySelector('.telegram-views-count');
+    const timeTextEl = this.element.querySelector('.telegram-time-text');
+    
+    if (channelNameEl) channelNameEl.textContent = this.channelData.title;
+    if (postTextEl) postTextEl.textContent = this.latestPost.text;
+    if (viewsCountEl) viewsCountEl.textContent = this.latestPost.formatted_views;
+    if (timeTextEl) timeTextEl.textContent = this.latestPost.formatted_date;
+    
+    // REUSED: Update external link
+    this.channelUrl = this.latestPost.link;
+  }
   /**
    * Create telegram widget content with exact Figma specifications
    * UPDATED COMMENTS: 300x161px white widget with header, post content, info and cat icons gradient
    */
   createTelegramContent() {
     const targetElement = this.innerElement || this.element;
+    
+    // CRITICAL: Show only loader during initial loading, no mock data
+    if (this.isLoading) {
+      targetElement.innerHTML = `
+        <div class="telegram-container telegram-container--loading">
+          <div class="telegram-loading-overlay">
+            <div class="telegram-loading-spinner"></div>
+          </div>
+        </div>
+      `;
+      return;
+    }
+    
     targetElement.innerHTML = `
       <div class="telegram-container">
         <!-- CRITICAL: Header section with avatar, channel info and external link -->
         <div class="telegram-header">
           <!-- REUSED: Channel avatar with rounded styling -->
           <div class="telegram-avatar">
-            <img src="${this.channelAvatar}" alt="${this.escapeHtml(this.channelName)} avatar" />
+            <img src="${this.getAvatarUrl()}" alt="${this.escapeHtml(this.channelData.title)} avatar" />
           </div>
           
           <!-- CRITICAL: Channel information section -->
           <div class="telegram-channel-info">
-            <div class="telegram-channel-name">${this.escapeHtml(this.channelName)}</div>
-            <div class="telegram-channel-type">${this.escapeHtml(this.channelType)}</div>
+            <div class="telegram-channel-name">${this.escapeHtml(this.channelData.title)}</div>
+            <div class="telegram-channel-type">${this.getChannelType()}</div>
           </div>
           
           <!-- REUSED: External link arrow icon -->
@@ -64,7 +240,7 @@ export class TelegramWidget extends WidgetBase {
         <!-- CRITICAL: Post content section -->
         <div class="telegram-post">
           <!-- UPDATED COMMENTS: Post text with proper line height -->
-          <div class="telegram-post-text">${this.escapeHtml(this.postText)}</div>
+          <div class="telegram-post-text">${this.escapeHtml(this.latestPost.text)}</div>
           
           <!-- CRITICAL: Post info with views and timestamp -->
           <div class="telegram-post-info">
@@ -79,7 +255,7 @@ export class TelegramWidget extends WidgetBase {
                   </g>
                 </svg>
               </div>
-              <span class="telegram-views-count">${this.viewCount}</span>
+              <span class="telegram-views-count">${this.latestPost.formatted_views}</span>
             </div>
             
             <!-- REUSED: Timestamp section with clock icon from iconamoon -->
@@ -93,7 +269,7 @@ export class TelegramWidget extends WidgetBase {
                   </g>
                 </svg>
               </div>
-              <span class="telegram-time-text">${this.escapeHtml(this.timestamp)}</span>
+              <span class="telegram-time-text">${this.escapeHtml(this.latestPost.formatted_date)}</span>
             </div>
           </div>
         </div>
@@ -104,6 +280,26 @@ export class TelegramWidget extends WidgetBase {
         </div>
       </div>
     `;
+  }
+
+  /**
+   * Get avatar URL - always use local file
+   * UPDATED COMMENTS: Simplified - always use static avatar file
+   */
+  getAvatarUrl() {
+    // CRITICAL: Always use local avatar file, ignore API avatar_url
+    return '/assets/images/telegram-avatar.jpg';
+  }
+
+  /**
+   * Get channel type with verification status
+   * UPDATED COMMENTS: Dynamic channel type based on verification
+   */
+  getChannelType() {
+    if (this.channelData.verified) {
+      return 'Verified Channel';
+    }
+    return 'Telegram Channel';
   }
 
   /**
@@ -180,7 +376,7 @@ export class TelegramWidget extends WidgetBase {
     if (this.eventBus) {
       this.eventBus.emit('telegram:channel-opened', {
         widget: this,
-        channelName: this.channelName,
+        channelName: this.channelData.title,
         channelUrl: this.channelUrl
       });
     }
@@ -189,27 +385,40 @@ export class TelegramWidget extends WidgetBase {
   }
 
   /**
+   * Refresh channel data manually
+   * REUSED: Manual refresh functionality for user interaction
+   */
+  async refresh() {
+    await this.loadChannelData();
+  }
+
+  /**
+   * Widget cleanup on destroy
+   * SCALED FOR: Proper resource cleanup
+   */
+  destroy() {
+    this.stopAutoUpdate();
+    super.destroy && super.destroy();
+  }
+
+  /**
    * Update telegram post content
    * UPDATED COMMENTS: Dynamic content updates for new posts
    */
   updatePost(postData) {
-    if (postData.text) this.postText = postData.text;
-    if (postData.viewCount !== undefined) this.viewCount = postData.viewCount;
-    if (postData.timestamp) this.timestamp = postData.timestamp;
+    if (postData.text) this.latestPost.text = postData.text;
+    if (postData.views !== undefined) this.latestPost.views = postData.views;
+    if (postData.formatted_date) this.latestPost.formatted_date = postData.formatted_date;
+    if (postData.formatted_views) this.latestPost.formatted_views = postData.formatted_views;
     
     // REUSED: Content re-rendering pattern
-    this.createTelegramContent();
-    this.setupExternalLink();
+    this.updateContent();
     
     // Emit update event
     if (this.eventBus) {
       this.eventBus.emit('telegram:post-updated', {
         widget: this,
-        postData: {
-          text: this.postText,
-          viewCount: this.viewCount,
-          timestamp: this.timestamp
-        }
+        postData: this.latestPost
       });
     }
   }
@@ -219,25 +428,20 @@ export class TelegramWidget extends WidgetBase {
    * SCALED FOR: Dynamic channel switching
    */
   updateChannel(channelData) {
-    if (channelData.name) this.channelName = channelData.name;
-    if (channelData.type) this.channelType = channelData.type;
-    if (channelData.avatar) this.channelAvatar = channelData.avatar;
-    if (channelData.url) this.channelUrl = channelData.url;
+    if (channelData.title) this.channelData.title = channelData.title;
+    if (channelData.username) this.channelData.username = channelData.username;
+    if (channelData.avatar_url) this.channelData.avatar_url = channelData.avatar_url;
+    if (channelData.description) this.channelData.description = channelData.description;
+    if (channelData.verified !== undefined) this.channelData.verified = channelData.verified;
     
     // REUSED: Content re-rendering pattern
-    this.createTelegramContent();
-    this.setupExternalLink();
+    this.updateContent();
     
     // Emit channel update event
     if (this.eventBus) {
       this.eventBus.emit('telegram:channel-updated', {
         widget: this,
-        channelData: {
-          name: this.channelName,
-          type: this.channelType,
-          avatar: this.channelAvatar,
-          url: this.channelUrl
-        }
+        channelData: this.channelData
       });
     }
   }
@@ -277,13 +481,13 @@ export class TelegramWidget extends WidgetBase {
   getData() {
     return {
       ...super.getInfo(),
-      channelName: this.channelName,
-      channelType: this.channelType,
-      channelAvatar: this.channelAvatar,
-      postText: this.postText,
-      viewCount: this.viewCount,
-      timestamp: this.timestamp,
-      channelUrl: this.channelUrl
+      channelUsername: this.channelUsername,
+      channelData: this.channelData,
+      latestPost: this.latestPost,
+      updateInterval: this.updateInterval,
+      autoUpdate: this.autoUpdate,
+      lastUpdate: this.lastUpdate,
+      hasError: this.hasError
     };
   }
 }
