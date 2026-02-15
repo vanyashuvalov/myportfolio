@@ -7,9 +7,9 @@
   <title>Ivan Shuvalov - Product Designer</title>
   
   <!-- ANCHOR: performance_optimization -->
-  <!-- UPDATED COMMENTS: Preload critical resources and OTF fonts for optimal performance -->
+  <!-- UPDATED COMMENTS: Preload critical resources with proper crossorigin for modules -->
   <link rel="preload" href="styles/reset.css" as="style">
-  <link rel="preload" href="js/main.js" as="script">
+  <link rel="preload" href="js/main.js" as="script" crossorigin="anonymous">
   <link rel="preload" href="assets/images/bg-mountains.jpg" as="image">
   <link rel="preload" href="assets/font/SFPRODISPLAYREGULAR.OTF" as="font" type="font/otf" crossorigin>
   <link rel="preload" href="assets/font/SFPRODISPLAYBOLD.OTF" as="font" type="font/otf" crossorigin>
@@ -42,19 +42,35 @@
   <!-- REUSED: Navigation header component styles -->
   <link rel="stylesheet" href="js/shared/ui/navigation/navigation-header.css">
   <link rel="stylesheet" href="js/shared/ui/button/button.css">
+  
+  <!-- ANCHOR: contact_input_styles -->
+  <!-- REUSED: Contact input component styles -->
+  <link rel="stylesheet" href="js/shared/ui/contact-input/contact-input.css">
+  
+  <!-- ANCHOR: error_styles -->
+  <!-- CRITICAL: Widget error state styles -->
+  <link rel="stylesheet" href="styles/widget-error.css">
 </head>
 <body>
+  <!-- ANCHOR: loading_screen -->
+  <!-- CRITICAL: Loading indicator OUTSIDE desktop-canvas so it's always visible -->
+  <div id="loading-indicator" class="loading-indicator">
+    <div class="loading-spinner"></div>
+    <p>Loading portfolio...</p>
+  </div>
+  
   <!-- ANCHOR: main_application -->
   <main id="desktop-canvas" class="desktop-canvas" role="main">
-    <div id="loading-indicator" class="loading-indicator">
-      <div class="loading-spinner"></div>
-      <p>Loading portfolio...</p>
-    </div>
+    <!-- Desktop canvas content will be added here by JavaScript -->
   </main>
   
   <!-- ANCHOR: navigation_header -->
   <!-- REUSED: Navigation component container -->
   <div id="navigation-container"></div>
+  
+  <!-- ANCHOR: contact_input -->
+  <!-- REUSED: Contact input component container -->
+  <div id="contact-input-container"></div>
   
   <!-- ANCHOR: modal_system -->
   <div id="modal-container" class="modal-container" role="dialog" aria-hidden="true">
@@ -73,4 +89,3 @@
   </script>
 </body>
 </html>
-  <link rel="stylesheet" href="styles/widget-error.css">

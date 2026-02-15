@@ -45,6 +45,7 @@ export class TelegramWidget extends WidgetBase {
     this.hasError = false;
     this.lastUpdate = null;
     this.updateTimer = null;
+    this.isInitialLoad = true; // CRITICAL: Track first load vs auto-updates
     
     this.initializeWidget();
   }
@@ -69,10 +70,17 @@ export class TelegramWidget extends WidgetBase {
   /**
    * Load channel data from API
    * UPDATED COMMENTS: Fetches real channel data with fallback handling
+   * CRITICAL: Only shows loader on initial load, silent updates afterwards
    */
   async loadChannelData() {
     try {
-      this.setLoadingState(true);
+      // CRITICAL: Store initial load flag before any async operations
+      const wasInitialLoad = this.isInitialLoad;
+      
+      // CRITICAL: Only show loading state on initial load, not on auto-updates
+      if (wasInitialLoad) {
+        this.setLoadingState(true);
+      }
       
       // REUSED: API call with error handling
       const response = await telegramApi.getLatestPost(this.channelUsername);
@@ -83,8 +91,17 @@ export class TelegramWidget extends WidgetBase {
         this.lastUpdate = new Date();
         this.hasError = false;
         
-        // UPDATED COMMENTS: Update UI with fresh data
-        this.updateContent();
+        // UPDATED COMMENTS: Update UI with fresh data (no recreation on auto-update)
+        if (wasInitialLoad) {
+          // CRITICAL: First load - create full content
+          this.isInitialLoad = false;
+          this.setLoadingState(false);
+          this.createTelegramContent();
+          this.setupExternalLink();
+        } else {
+          // CRITICAL: Auto-update - only update text content, no recreation
+          this.updateContent();
+        }
         
         console.log(`Telegram widget: Loaded data for ${this.channelUsername}`, response);
       }
@@ -93,8 +110,7 @@ export class TelegramWidget extends WidgetBase {
       console.error('Failed to load channel data:', error);
       this.hasError = true;
       this.setErrorState();
-    } finally {
-      this.setLoadingState(false);
+      this.isInitialLoad = false;
     }
   }
 
@@ -125,20 +141,19 @@ export class TelegramWidget extends WidgetBase {
 
   /**
    * Set loading state
-   * UPDATED COMMENTS: Visual loading indicators with content recreation
+   * UPDATED COMMENTS: Visual loading indicators WITHOUT content recreation
+   * CRITICAL: Only used for initial load, not for auto-updates
    */
   setLoadingState(isLoading) {
     this.isLoading = isLoading;
     
     if (isLoading) {
       this.element.classList.add('telegram-loading');
-      // CRITICAL: Show loading state immediately
+      // CRITICAL: Show loading spinner only on initial load
       this.createTelegramContent();
     } else {
       this.element.classList.remove('telegram-loading');
-      // CRITICAL: Recreate content with data after loading completes
-      this.createTelegramContent();
-      this.setupExternalLink();
+      // CRITICAL: Content is created in loadChannelData(), not here
     }
   }
 

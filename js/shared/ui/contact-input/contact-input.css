@@ -1,0 +1,205 @@
+/* ANCHOR: contact_input_component */
+/* REUSED: Contact input field with Figma specs */
+/* SCALED FOR: Fixed bottom positioning, always visible */
+/* UPDATED COMMENTS: Message input field for direct contact */
+
+/* ANCHOR: contact_input_container */
+/* CRITICAL: Fixed positioning at bottom center of viewport */
+.contact-input-wrapper {
+  /* UPDATED COMMENTS: Fixed position, always visible above widgets */
+  position: fixed;
+  left: 50%;
+  bottom: 40px;
+  transform: translateX(-50%) translateY(100px);
+  z-index: var(--z-fixed);
+  
+  /* SCALED FOR: Hidden by default, shown via JS class */
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* UPDATED COMMENTS: Visible state with slide up animation and 2s delay */
+.contact-input-wrapper--visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+  transition: opacity 0.6s ease-out 2s, transform 0.6s ease-out 2s, visibility 0.6s ease-out 2s;
+}
+
+/* ANCHOR: contact_input_field */
+/* REUSED: Exact Figma auto-layout specs */
+.contact-input {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 11px 26px;
+  gap: 10px;
+  
+  width: 467px;
+  height: 64px;
+  
+  /* UPDATED COMMENTS: Semi-transparent background with blur - EXACT FIGMA SPECS */
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(2px);
+  border-radius: 999px;
+  
+  /* REUSED: Hardware acceleration */
+  will-change: opacity, background;
+  cursor: text;
+}
+
+.contact-input:hover {
+  opacity: 0.9;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.contact-input:active {
+  opacity: 0.7;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+/* ANCHOR: comment_icon */
+/* UPDATED COMMENTS: Comment icon on the left - becomes white when has value */
+.contact-input__icon {
+  width: 24px;
+  height: 24px;
+  opacity: 0.5;
+  
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  /* REUSED: Smooth opacity change */
+  transition: opacity 0.2s ease;
+}
+
+.contact-input__icon svg {
+  width: 100%;
+  height: 100%;
+  stroke: #FFFFFF;
+  stroke-width: 2px;
+  fill: none;
+}
+
+/* UPDATED COMMENTS: Icon becomes fully white when input has value */
+.contact-input--has-value .contact-input__icon {
+  opacity: 1;
+}
+
+/* ANCHOR: text_input */
+/* REUSED: Geist Mono font from design system */
+.contact-input__field {
+  width: 347px;
+  height: 26px;
+  
+  font-family: 'Geist Mono', var(--font-family-mono);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 130%;
+  color: #FFFFFF;
+  opacity: 0.8;
+  
+  /* CRITICAL: Remove default input styles */
+  background: transparent;
+  border: none;
+  outline: none;
+  
+  flex: none;
+  order: 1;
+  flex-grow: 1;
+}
+
+.contact-input__field::placeholder {
+  color: #FFFFFF;
+  opacity: 0.8;
+}
+
+.contact-input__field:focus {
+  opacity: 1;
+}
+
+/* ANCHOR: send_icon */
+/* UPDATED COMMENTS: Send icon appears when text entered */
+.contact-input__send {
+  width: 24px;
+  height: 24px;
+  opacity: 0;
+  
+  flex: none;
+  order: 2;
+  flex-grow: 0;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  
+  /* SCALED FOR: Smooth appearance */
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.contact-input__send svg {
+  width: 100%;
+  height: 100%;
+  stroke: #FFFFFF;
+  stroke-width: 2px;
+  fill: none;
+}
+
+/* UPDATED COMMENTS: Show send icon when input has value */
+.contact-input--has-value .contact-input__send {
+  opacity: 1;
+}
+
+.contact-input__send:hover {
+  opacity: 1 !important;
+  transform: scale(1.1);
+}
+
+.contact-input__send:active {
+  transform: scale(0.95);
+}
+
+/* ANCHOR: responsive_design */
+/* SCALED FOR: Mobile and tablet breakpoints */
+@media (max-width: 768px) {
+  .contact-input-wrapper {
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    transform: none;
+  }
+  
+  .contact-input {
+    width: 100%;
+    padding: 10px 20px;
+  }
+  
+  .contact-input__field {
+    width: auto;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-input {
+    padding: 8px 16px;
+    height: 56px;
+  }
+  
+  .contact-input__icon,
+  .contact-input__send {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .contact-input__field {
+    font-size: 14px;
+  }
+}

@@ -111,7 +111,7 @@
   font-weight: 600; /* Figma: 590 weight */
   font-size: 18px;
   line-height: 21px;
-  letter-spacing: -0.01em; /* -2% letter spacing */
+  letter-spacing: var(--letter-spacing-tight); /* -2% letter spacing - unified standard */
   
   color: #0E1621;
   
@@ -134,7 +134,7 @@
   font-weight: 400;
   font-size: 14px;
   line-height: 130%; /* or 18px */
-  letter-spacing: 0.03em; /* UPDATED: Increased letter spacing for better readability */
+  letter-spacing: var(--letter-spacing-normal); /* 3% letter spacing - unified standard */
   
   color: #0E1621;
   opacity: 0.6; /* 60% opacity for subtitle */
@@ -213,7 +213,7 @@
   font-weight: 300;
   font-size: 16px;
   line-height: 130%; /* or 21px */
-  letter-spacing: 0.03em;
+  letter-spacing: var(--letter-spacing-normal); /* 3% letter spacing - unified standard */
   
   color: #0E1621;
   
@@ -307,7 +307,7 @@
   font-weight: 400;
   font-size: 14px;
   line-height: 130%; /* or 18px */
-  letter-spacing: 0.02em;
+  letter-spacing: var(--letter-spacing-small); /* 2% letter spacing - unified standard */
   
   color: #0E1621;
   
@@ -378,7 +378,7 @@
   font-weight: 400;
   font-size: 14px;
   line-height: 130%; /* or 18px */
-  letter-spacing: 0.02em;
+  letter-spacing: var(--letter-spacing-small); /* 2% letter spacing - unified standard */
   
   color: #0E1621;
   
