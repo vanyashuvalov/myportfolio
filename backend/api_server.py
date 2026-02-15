@@ -1,28 +1,35 @@
 #!/usr/bin/env python3
 """
 ## ANCHOR POINTS
-- ENTRY: FastAPI server for Telegram channel data
+- ENTRY: FastAPI server for Telegram channel data and contact messages
 - MAIN: REST API endpoints for frontend consumption
-- EXPORTS: JSON API with channel info and posts
-- DEPS: fastapi, uvicorn, json, pathlib
+- EXPORTS: JSON API with channel info, posts, and contact submission
+- DEPS: fastapi, uvicorn, json, pathlib, httpx, python-dotenv
 - TODOs: Authentication, rate limiting, caching
 
 Telegram Data API Server
 UPDATED COMMENTS: FastAPI server serving scraped Telegram channel data
-Provides REST endpoints for frontend widget consumption
-SCALED FOR: Multiple channels, caching, error handling
+Provides REST endpoints for frontend widget consumption and contact messages
+SCALED FOR: Multiple channels, caching, error handling, Telegram bot integration
 """
 
 import json
 import logging
+import os
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, List, Optional
 
+import httpx
+from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel
+
+# CRITICAL: Load environment variables from backend/.env
+load_dotenv(Path(__file__).parent / '.env')
 
 # REUSED: Configuration management
 class APIConfig:
@@ -36,6 +43,16 @@ class APIConfig:
         # SCALED FOR: Cache configuration
         self.cache_ttl = 3600  # 1 hour cache
         self.max_posts_per_channel = 10
+        
+        # CRITICAL: Telegram bot configuration
+        self.telegram_bot_token = os.getenv('TELEGRAM_BOT_TOKEN')
+        self.telegram_chat_id = os.getenv('TELEGRAM_CHAT_ID')
+
+# ANCHOR: request_models
+class ContactMessage(BaseModel):
+    """Contact message request model"""
+    message: str
+    contact: Optional[str] = None
 
 # FSD: shared/api/telegram → API server implementation
 app = FastAPI(
@@ -49,7 +66,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Configure for production
     allow_credentials=True,
-    allow_methods=["GET"],
+    allow_methods=["*"],  # CRITICAL: Allow all methods including POST
     allow_headers=["*"],
 )
 
@@ -361,6 +378,95 @@ def get_mock_latest_post(username: str) -> Dict:
         "last_updated": datetime.now().isoformat(),
         "mock_data": True
     }
+
+# ANCHOR: contact_message_endpoint
+@app.post("/api/contact/send")
+async def send_contact_message(message: ContactMessage):
+    """
+    Send contact message to Telegram bot
+    UPDATED COMMENTS: Receives message from frontend and forwards to Telegram
+    SCALED FOR: Rate limiting and validation
+    
+    Args:
+        message: ContactMessage with text and optional contact info
+    """
+    # UPDATED COMMENTS: Validate message
+    if not message.message or len(message.message.strip()) < 10:
+        raise HTTPException(
+            status_code=400,
+            detail="Message must be at least 10 characters long"
+        )
+    
+    if len(message.message) > 2000:
+        raise HTTPException(
+            status_code=400,
+            detail="Message must be less than 2000 characters"
+        )
+    
+    # CRITICAL: Check if Telegram bot is configured
+    if not config.telegram_bot_token or not config.telegram_chat_id:
+        # UPDATED COMMENTS: Development mode - just log the message
+        logging.info("=" * 60)
+        logging.info("📬 New Contact Message (Development Mode)")
+        logging.info("=" * 60)
+        logging.info(f"Message: {message.message}")
+        logging.info(f"Contact: {message.contact or 'Anonymous'}")
+        logging.info(f"Received: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        logging.info("=" * 60)
+        
+        return {
+            "success": True,
+            "message": "Message logged (Telegram bot not configured)",
+            "dev_mode": True
+        }
+    
+    # CRITICAL: Format message for Telegram
+    telegram_text = f"📬 New Contact Message\n\n"
+    telegram_text += f"Message:\n{message.message}\n\n"
+    
+    if message.contact:
+        telegram_text += f"Contact: {message.contact}\n"
+    else:
+        telegram_text += "Contact: Anonymous\n"
+    
+    telegram_text += f"\nReceived: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+    
+    # SCALED FOR: Send to Telegram with error handling
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.post(
+                f"https://api.telegram.org/bot{config.telegram_bot_token}/sendMessage",
+                json={
+                    "chat_id": config.telegram_chat_id,
+                    "text": telegram_text,
+                    "parse_mode": "HTML"
+                },
+                timeout=10.0
+            )
+            
+            if response.status_code != 200:
+                logging.error(f"Telegram API error: {response.text}")
+                raise HTTPException(
+                    status_code=503,
+                    detail="Failed to send message to Telegram"
+                )
+            
+            return {
+                "success": True,
+                "message": "Message sent successfully"
+            }
+    
+    except httpx.TimeoutException:
+        raise HTTPException(
+            status_code=504,
+            detail="Telegram API timeout"
+        )
+    except Exception as e:
+        logging.error(f"Error sending to Telegram: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail="Internal server error"
+        )
 
 # UPDATED COMMENTS: Static file serving for avatars
 app.mount("/static", StaticFiles(directory=str(config.static_dir)), name="static")

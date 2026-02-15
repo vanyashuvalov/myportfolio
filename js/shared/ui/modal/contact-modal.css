@@ -1,0 +1,211 @@
+/* ANCHOR: contact_modal_styles */
+/* REUSED: Modal dialog styling with Figma specs */
+/* SCALED FOR: Responsive design and animations */
+/* UPDATED COMMENTS: Contact modal with smooth transitions */
+
+/* ANCHOR: modal_container */
+.modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: var(--z-modal);
+  
+  /* UPDATED COMMENTS: Hidden by default */
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-container--visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* ANCHOR: modal_overlay */
+.modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  
+  /* UPDATED COMMENTS: Dark semi-transparent background */
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* ANCHOR: modal_content */
+.modal-content {
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(10px);
+  border-radius: 24px;
+  padding: 40px;
+  
+  max-width: 500px;
+  width: 100%;
+  
+  /* SCALED FOR: Smooth appearance animation */
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+}
+
+.modal-container--visible .modal-content {
+  transform: scale(1);
+}
+
+/* ANCHOR: modal_title */
+.modal-title {
+  font-family: 'Geist Mono', var(--font-family-mono);
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 130%;
+  color: #FFFFFF;
+  margin: 0 0 24px 0;
+  text-align: center;
+}
+
+/* ANCHOR: message_preview */
+.modal-message-preview {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 24px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.modal-message-preview p {
+  font-family: 'Geist Mono', var(--font-family-mono);
+  font-size: 16px;
+  line-height: 150%;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* ANCHOR: modal_field */
+.modal-field {
+  margin-bottom: 24px;
+}
+
+.modal-input {
+  width: 100%;
+  padding: 16px 20px;
+  
+  font-family: 'Geist Mono', var(--font-family-mono);
+  font-size: 16px;
+  line-height: 130%;
+  color: #FFFFFF;
+  
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  outline: none;
+  
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.modal-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.modal-input:focus {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* ANCHOR: modal_actions */
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+/* ANCHOR: modal_buttons */
+.modal-button {
+  padding: 12px 24px;
+  
+  font-family: 'Geist Mono', var(--font-family-mono);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 130%;
+  text-transform: uppercase;
+  
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  
+  transition: opacity 0.2s ease, background 0.2s ease;
+}
+
+.modal-button:hover {
+  opacity: 0.9;
+}
+
+.modal-button:active {
+  opacity: 0.7;
+}
+
+.modal-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.modal-button--secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+}
+
+.modal-button--primary {
+  background: rgba(255, 255, 255, 0.9);
+  color: #000000;
+}
+
+.modal-button--primary:hover {
+  background: #FFFFFF;
+}
+
+/* ANCHOR: modal_error */
+.modal-error {
+  background: rgba(255, 0, 0, 0.2);
+  border: 1px solid rgba(255, 0, 0, 0.4);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  
+  font-family: 'Geist Mono', var(--font-family-mono);
+  font-size: 14px;
+  color: #FF6B6B;
+  text-align: center;
+}
+
+/* ANCHOR: responsive_design */
+@media (max-width: 768px) {
+  .modal-content {
+    padding: 24px;
+    max-width: 100%;
+  }
+  
+  .modal-title {
+    font-size: 18px;
+  }
+  
+  .modal-actions {
+    flex-direction: column;
+  }
+  
+  .modal-button {
+    width: 100%;
+  }
+}
