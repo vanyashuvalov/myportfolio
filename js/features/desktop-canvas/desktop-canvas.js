@@ -405,17 +405,14 @@ export class DesktopCanvas {
     };
     
     // CRITICAL: Telegram widget with channel information (правая сторона, центр)
+    // UPDATED COMMENTS: Now uses real API data from vanya_knopochkin channel
     const telegramWidget = {
       type: 'telegram',
       cssPositionClass: 'widget-position--telegram',
       config: {
-        channelName: 'ваня кнопочкин',
-        channelType: 'Telegram Channel',
-        channelAvatar: 'assets/images/telegram-avatar.jpg',
-        postText: 'москва газ соревнования по счету в уме',
-        viewCount: 43,
-        timestamp: '0:58 Jan 27',
-        channelUrl: 'https://t.me/vanyashuvalov'
+        channelUsername: 'vanya_knopochkin', // UPDATED: Changed to working channel
+        autoUpdate: true, // SCALED FOR: Auto-refresh every 5 minutes
+        updateInterval: 300000 // 5 minutes in milliseconds
       }
     };
     

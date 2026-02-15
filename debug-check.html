@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Check</title>
+</head>
+<body>
+    <h1>Debug Console Check</h1>
+    <div id="status">Checking...</div>
+    <pre id="errors"></pre>
+    
+    <script type="module">
+        const statusEl = document.getElementById('status');
+        const errorsEl = document.getElementById('errors');
+        const errors = [];
+        
+        // Capture console errors
+        window.addEventListener('error', (e) => {
+            errors.push(`ERROR: ${e.message} at ${e.filename}:${e.lineno}`);
+            errorsEl.textContent = errors.join('\n');
+        });
+        
+        window.addEventListener('unhandledrejection', (e) => {
+            errors.push(`PROMISE REJECTION: ${e.reason}`);
+            errorsEl.textContent = errors.join('\n');
+        });
+        
+        // Try to load main.js
+        try {
+            const module = await import('./js/main.js');
+            statusEl.textContent = 'Main.js loaded successfully!';
+            statusEl.style.color = 'green';
+        } catch (error) {
+            statusEl.textContent = 'Failed to load main.js';
+            statusEl.style.color = 'red';
+            errors.push(`IMPORT ERROR: ${error.message}\n${error.stack}`);
+            errorsEl.textContent = errors.join('\n\n');
+        }
+    </script>
+</body>
+</html>

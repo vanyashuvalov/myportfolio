@@ -9,6 +9,7 @@
 
 /* ANCHOR: navigation_wrapper */
 /* UPDATED COMMENTS: Full width navigation container with padding */
+/* CRITICAL: Hidden during loading, shown after content is ready */
 .navigation-wrapper {
   position: absolute;
   top: 0;
@@ -18,6 +19,16 @@
   z-index: var(--z-fixed);
   display: flex;
   justify-content: center;
+  /* REUSED: Hidden during loading state */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease-in, visibility 0.5s ease-in;
+}
+
+/* SCALED FOR: Show navigation after loading is complete */
+body.loaded .navigation-wrapper {
+  opacity: 1;
+  visibility: visible;
 }
 
 /* ANCHOR: main_container */

@@ -217,6 +217,27 @@
   }
 }
 
+/* ANCHOR: page_load_animations */
+/* UPDATED COMMENTS: Smooth fade-in animation for widgets and UI after loading */
+/* REUSED: Universal fade-in with 200ms duration for seamless appearance */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* CRITICAL: NO animation on body - it conflicts with loading indicator */
+/* Body stays visible, only content inside fades in after loading */
+
+/* REUSED: Fade-in for widgets and UI elements after body.loaded class added */
+body.loaded .widget,
+body.loaded .navigation-header {
+  animation: fadeIn 0.3s ease-in;
+}
+
 /* ANCHOR: performance_optimizations */
 /* UPDATED COMMENTS: Hardware acceleration for smooth 60fps animations */
 .gpu-accelerated {
