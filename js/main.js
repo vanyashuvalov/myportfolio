@@ -8,6 +8,7 @@ import { PerformanceMonitor } from './shared/utils/performance-monitor.js';
 import { AssetManager } from './shared/utils/asset-manager.js';
 import { EventBus } from './shared/utils/event-bus.js';
 import { NavigationHeader } from './shared/ui/navigation/navigation-header.js';
+import { ContactInput } from './shared/ui/contact-input/contact-input.js';
 
 /**
  * Application class - Main application controller
@@ -19,6 +20,7 @@ class Application {
   constructor() {
     this.canvas = null;
     this.navigation = null;
+    this.contactInput = null;
     this.performanceMonitor = null;
     this.assetManager = null;
     this.eventBus = null;
@@ -86,6 +88,38 @@ class Application {
 
       await this.navigation.init();
       console.log('✅ Navigation initialized');
+
+      // ANCHOR: contact_input_initialization
+      // REUSED: Contact input component with shared EventBus
+      console.log('💬 Looking for contact input container...');
+      const contactInputContainer = document.getElementById('contact-input-container');
+      console.log('💬 Contact input container found:', !!contactInputContainer, contactInputContainer);
+      
+      if (!contactInputContainer) {
+        console.error('❌ Contact input container not found - skipping initialization');
+        console.log('Available containers:', {
+          navigation: !!document.getElementById('navigation-container'),
+          contactInput: !!document.getElementById('contact-input-container'),
+          modal: !!document.getElementById('modal-container')
+        });
+      } else {
+        console.log('💬 Initializing contact input...');
+        try {
+          this.contactInput = new ContactInput(contactInputContainer, {
+            eventBus: this.eventBus,
+            placeholder: 'Message me right here...',
+            minLength: 10,
+            maxLength: 500
+          });
+
+          await this.contactInput.init();
+          console.log('✅ Contact input initialized successfully');
+          console.log('💬 Contact input HTML:', contactInputContainer.innerHTML.substring(0, 200));
+        } catch (error) {
+          console.error('❌ Failed to initialize contact input:', error);
+          console.error('Error stack:', error.stack);
+        }
+      }
 
       // Setup global event listeners
       this.setupGlobalEvents();

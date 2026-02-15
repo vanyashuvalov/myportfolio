@@ -48,7 +48,7 @@
   font-size: 24px;
   line-height: 29px; /* identical to box height */
   text-align: left; /* FIXED: Left align for natural text flow */
-  letter-spacing: -0.02em; /* -2% letter spacing */
+  letter-spacing: var(--letter-spacing-tight); /* -2% letter spacing - unified standard */
   
   color: #101828;
   
@@ -70,6 +70,7 @@
   font-weight: 400;
   font-size: 16px;
   line-height: 130%; /* or 21px */
+  letter-spacing: var(--letter-spacing-normal); /* 3% letter spacing - unified standard */
   
   color: #101828;
   

@@ -31,9 +31,13 @@ class CORSHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         
         # SCALED FOR: Caching control
         if self.path.endswith('.js'):
-            self.send_header('Cache-Control', 'no-cache')
+            self.send_header('Cache-Control', 'no-cache, no-store, must-revalidate')
         elif self.path.endswith('.css'):
-            self.send_header('Cache-Control', 'no-cache')
+            self.send_header('Cache-Control', 'no-cache, no-store, must-revalidate')
+        elif self.path.endswith('.html') or self.path == '/':
+            self.send_header('Cache-Control', 'no-cache, no-store, must-revalidate')
+            self.send_header('Pragma', 'no-cache')
+            self.send_header('Expires', '0')
         
         super().end_headers()
     

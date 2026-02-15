@@ -63,6 +63,13 @@
   --line-height-normal: 1.5;
   --line-height-relaxed: 1.75;
   
+  /* ANCHOR: letter_spacing */
+  /* UPDATED COMMENTS: Unified letter-spacing standards for consistent typography */
+  /* REUSED: Universal letter-spacing tokens for all text elements */
+  --letter-spacing-tight: -0.02em;   /* -2% for headings - tighter, more compact */
+  --letter-spacing-normal: 0.03em;   /* 3% for body text - better readability */
+  --letter-spacing-small: 0.02em;    /* 2% for small text (14px and below) */
+  
   /* ANCHOR: spacing */
   --space-1: 0.25rem;   /* 4px */
   --space-2: 0.5rem;    /* 8px */
