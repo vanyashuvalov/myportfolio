@@ -4,7 +4,6 @@
 
 import { WidgetBase } from '../../entities/widget/widget-base.js';
 import { telegramApi } from '../../shared/api/telegram-api.js';
-import { formatViewCount, formatTimestamp } from '../../shared/config/telegram-channels.js';
 
 /**
  * TelegramWidget - Latest post from telegram channel display
@@ -460,7 +459,7 @@ export class TelegramWidget extends WidgetBase {
    * Widget-specific click handler
    * UPDATED COMMENTS: Click functionality for opening channel
    */
-  onClick(data) {
+  onClick() {
     // Open channel on widget click
     this.handleExternalLinkClick();
   }
@@ -469,7 +468,7 @@ export class TelegramWidget extends WidgetBase {
    * Widget-specific long press handler
    * REUSED: Context menu pattern for telegram options
    */
-  onLongPress(data) {
+  onLongPress() {
     // Could show telegram options menu
     console.log('Telegram widget long press - could show options');
   }
