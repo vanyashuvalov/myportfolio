@@ -109,7 +109,7 @@ class Application {
             eventBus: this.eventBus,
             placeholder: 'Message me right here...',
             minLength: 10,
-            maxLength: 500
+            maxLength: 2000
           });
 
           await this.contactInput.init();

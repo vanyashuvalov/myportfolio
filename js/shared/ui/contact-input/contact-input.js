@@ -19,13 +19,14 @@ export class ContactInput {
     this.options = {
       placeholder: 'Message me right here...',
       minLength: 10,
-      maxLength: 500,
+      maxLength: 2000,
       ...options
     };
     
     this.inputElement = null;
     this.sendButton = null;
     this.isInitialized = false;
+    this.isExpanded = false; // Track if width is expanded
   }
 
   /**
@@ -77,13 +78,13 @@ export class ContactInput {
           </div>
           
           <!-- ANCHOR: text_input -->
-          <input 
-            type="text" 
+          <textarea 
             class="contact-input__field" 
             placeholder="${this.options.placeholder}"
             maxlength="${this.options.maxLength}"
             aria-label="Message input field"
-          />
+            rows="1"
+          ></textarea>
           
           <!-- ANCHOR: send_icon -->
           <div class="contact-input__send" role="button" tabindex="0" aria-label="Send message">
@@ -133,7 +134,7 @@ export class ContactInput {
 
   /**
    * Handle input changes
-   * UPDATED COMMENTS: Show/hide send button based on input
+   * UPDATED COMMENTS: Show/hide send button and auto-resize textarea
    */
   handleInput(event) {
     const value = event.target.value.trim();
@@ -145,7 +146,85 @@ export class ContactInput {
       this.wrapper.classList.remove('contact-input--has-value');
     }
     
+    // CRITICAL: Auto-resize textarea up to 10 lines
+    this.autoResizeTextarea();
+    
     this.eventBus.emit('contact-input:change', { value });
+  }
+
+  /**
+   * Auto-resize textarea based on content
+   * SCALED FOR: Jump to 95vw when text overflows, then expand height up to 10 lines
+   */
+  autoResizeTextarea() {
+    // CRITICAL: Calculate max width
+    const maxWrapperWidth = window.innerWidth * 0.95;
+    const minWrapperWidth = 467;
+    
+    // Create hidden span to measure text width
+    if (!this.measureSpan) {
+      this.measureSpan = document.createElement('span');
+      this.measureSpan.style.cssText = `
+        position: absolute;
+        visibility: hidden;
+        white-space: nowrap;
+        font-family: 'Geist Mono', var(--font-family-mono);
+        font-size: 20px;
+        font-weight: 400;
+        line-height: 130%;
+      `;
+      document.body.appendChild(this.measureSpan);
+    }
+    
+    // Measure text width
+    this.measureSpan.textContent = this.inputElement.value || this.inputElement.placeholder;
+    const textWidth = this.measureSpan.offsetWidth;
+    
+    // Calculate needed wrapper width (text + icons + padding + gaps)
+    const neededWidth = textWidth + 120;
+    
+    // CRITICAL: Check if text overflows initial width
+    if (neededWidth > minWrapperWidth && !this.isExpanded) {
+      // PHASE 1: Expand width with smooth transition, lock height temporarily
+      this.isExpanded = true;
+      
+      // Lock height at current value to prevent jump
+      const currentHeight = this.inputElement.offsetHeight;
+      this.inputElement.style.height = currentHeight + 'px';
+      
+      // Expand width (transition is in CSS)
+      this.wrapper.style.width = maxWrapperWidth + 'px';
+      
+      // After width transition completes, allow height to adjust
+      setTimeout(() => {
+        this.inputElement.style.height = 'auto';
+        const newHeight = Math.min(this.inputElement.scrollHeight, 260);
+        this.inputElement.style.height = newHeight + 'px';
+        
+        const wrapperHeight = newHeight + 40;
+        this.wrapper.style.minHeight = Math.max(64, wrapperHeight) + 'px';
+      }, 200); // Match CSS transition duration
+    } else if (this.isExpanded) {
+      // PHASE 2: Width already expanded, just adjust height smoothly
+      this.inputElement.style.height = 'auto';
+      const newHeight = Math.min(this.inputElement.scrollHeight, 260);
+      this.inputElement.style.height = newHeight + 'px';
+      
+      const wrapperHeight = newHeight + 40;
+      this.wrapper.style.minHeight = Math.max(64, wrapperHeight) + 'px';
+    } else {
+      // Text fits in initial width, keep single line
+      this.inputElement.style.height = '26px';
+      this.wrapper.style.minHeight = '64px';
+    }
+    
+    // Reset expanded state if text is deleted
+    if (neededWidth <= minWrapperWidth && this.isExpanded) {
+      this.isExpanded = false;
+      this.wrapper.style.width = minWrapperWidth + 'px';
+      this.inputElement.style.height = '26px';
+      this.wrapper.style.minHeight = '64px';
+    }
   }
 
   /**
@@ -249,6 +328,12 @@ export class ContactInput {
     if (this.container) {
       this.container.innerHTML = '';
     }
+    
+    // Clean up measure span
+    if (this.measureSpan && this.measureSpan.parentNode) {
+      this.measureSpan.parentNode.removeChild(this.measureSpan);
+    }
+    
     this.isInitialized = false;
     this.eventBus.emit('contact-input:destroyed');
   }
