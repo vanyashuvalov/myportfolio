@@ -1,0 +1,195 @@
+/* ANCHOR: toast_notification_styles */
+/* REUSED: Modal design system with blur effects and shadows */
+/* SCALED FOR: Responsive design, smooth animations, accessibility */
+/* UPDATED COMMENTS: Toast notification component matching Figma specs */
+
+/* ANCHOR: toast_container */
+/* CRITICAL: Fixed container for toast positioning */
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: var(--z-toast);
+  
+  /* UPDATED COMMENTS: Stack toasts vertically with gap */
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 8px;
+  
+  /* SCALED FOR: Prevent pointer events on container, allow on toasts */
+  pointer-events: none;
+}
+
+/* ANCHOR: toast_item */
+/* FIGMA SPECS: max-width 380px, width 95vw, padding 20px, gap 16px, border-radius 14px */
+.toast {
+  /* UPDATED COMMENTS: Auto-layout flex container */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 20px;
+  gap: 16px;
+  
+  /* FIGMA SPECS: Responsive width */
+  width: 95vw;
+  max-width: 380px;
+  height: auto;
+  
+  /* REUSED: Modal background with blur effect */
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  
+  /* REUSED: Widget shadow system from design tokens */
+  box-shadow: var(--widget-shadow-default);
+  
+  /* FIGMA SPECS: Border radius matching modal */
+  border-radius: 14px;
+  
+  /* CRITICAL: Enable pointer events on toast itself */
+  pointer-events: auto;
+  cursor: pointer;
+  
+  /* SCALED FOR: Smooth animations */
+  /* CRITICAL: Initial state for slide-up animation */
+  transform: translateY(20px);
+  opacity: 0;
+  
+  /* REUSED: Universal transition timing from design system */
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow var(--transition-fast);
+  
+  /* SCALED FOR: GPU acceleration for smooth animations */
+  will-change: transform, opacity;
+}
+
+/* CRITICAL: Visible state for animation */
+.toast--visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* UPDATED COMMENTS: Hover effect for interactive feedback */
+.toast:hover {
+  box-shadow: var(--widget-shadow-hovered);
+}
+
+/* ANCHOR: toast_icon */
+/* FIGMA SPECS: 24x24px icon with color #C248A3 */
+.toast__icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  
+  /* Inside auto layout */
+  flex: none;
+  order: 0;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* UPDATED COMMENTS: Icon SVG styling with dynamic color */
+.toast__icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.toast__icon svg path {
+  stroke: var(--toast-icon-color, #C248A3);
+  stroke-width: 2px;
+  fill: none;
+}
+
+/* ANCHOR: toast_text */
+/* FIGMA SPECS: Geist Mono Regular 18px, 130% line-height, white color */
+.toast__text {
+  /* REUSED: Geist Mono font from design system */
+  font-family: 'Geist Mono', var(--font-family-mono);
+  font-style: normal;
+  font-weight: var(--font-weight-normal);
+  font-size: var(--font-size-lg);
+  line-height: 130%;
+  letter-spacing: var(--letter-spacing-normal);
+  color: #FFFFFF;
+  
+  /* Inside auto layout */
+  flex: 1;
+  order: 1;
+  
+  /* UPDATED COMMENTS: Text wrapping for long messages */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* ANCHOR: toast_type_variants */
+/* UPDATED COMMENTS: Color variants for different toast types */
+.toast--info {
+  --toast-icon-color: #C248A3;
+}
+
+.toast--success {
+  --toast-icon-color: #10B981;
+}
+
+.toast--error {
+  --toast-icon-color: #EF4444;
+}
+
+.toast--warning {
+  --toast-icon-color: #F59E0B;
+}
+
+/* ANCHOR: toast_exit_animation */
+/* CRITICAL: Exit animation for smooth dismissal */
+.toast--exiting {
+  transform: translateY(20px);
+  opacity: 0;
+  transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+}
+
+/* ANCHOR: responsive_design */
+/* SCALED FOR: Mobile and tablet breakpoints */
+@media (max-width: 768px) {
+  .toast-container {
+    bottom: 16px;
+    right: 16px;
+    left: 16px;
+  }
+  
+  .toast {
+    width: 100%;
+    max-width: none;
+    padding: 16px;
+    gap: 12px;
+  }
+  
+  .toast__icon {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .toast__text {
+    font-size: var(--font-size-base);
+  }
+}
+
+@media (max-width: 480px) {
+  .toast-container {
+    bottom: 12px;
+    right: 12px;
+    left: 12px;
+  }
+  
+  .toast {
+    padding: 14px;
+    gap: 10px;
+  }
+  
+  .toast__text {
+    font-size: var(--font-size-sm);
+  }
+}

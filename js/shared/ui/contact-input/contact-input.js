@@ -4,6 +4,8 @@
 /* UPDATED COMMENTS: Message input with send functionality */
 
 import { EventBus } from '../../utils/event-bus.js';
+import { toastManager } from '../../utils/toast-manager.js';
+import { TOAST_MESSAGES } from '../toast/toast-messages.js';
 
 /**
  * ContactInput class - Fixed bottom input field for messages
@@ -243,9 +245,10 @@ export class ContactInput {
   handleSend() {
     const message = this.inputElement.value.trim();
     
-    // UPDATED COMMENTS: Validate message length
+    // UPDATED COMMENTS: Validate message length with toast notification
     if (message.length < this.options.minLength) {
-      this.showError(`Message must be at least ${this.options.minLength} characters`);
+      // CRITICAL: Show info toast instead of red border
+      toastManager.showInfo(TOAST_MESSAGES.MESSAGE_TOO_SHORT);
       return;
     }
     
@@ -256,15 +259,12 @@ export class ContactInput {
   /**
    * Show error feedback
    * SCALED FOR: User feedback system
+   * DEPRECATED: Use toast notifications instead
+   * @deprecated Use toastManager.showError() instead
    */
   showError(errorMessage) {
-    // UPDATED COMMENTS: Temporary error indication
-    this.wrapper.style.boxShadow = '0 0 0 2px rgba(255, 0, 0, 0.5)';
-    
-    setTimeout(() => {
-      this.wrapper.style.boxShadow = '';
-    }, 2000);
-    
+    // UPDATED COMMENTS: Show toast notification instead of red border
+    toastManager.showError(errorMessage);
     this.eventBus.emit('contact-input:error', { error: errorMessage });
   }
 
