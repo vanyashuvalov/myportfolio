@@ -67,12 +67,7 @@ export class DesktopCanvas {
       // CRITICAL: Wait a frame to ensure workspace is rendered
       await new Promise(resolve => requestAnimationFrame(resolve));
       
-      // DEBUG: Log workspace state after setup
-      console.log('Workspace state after setup:', {
-        workspaceExists: !!this.workspaceContainer,
-        workspaceRect: this.workspaceContainer?.getBoundingClientRect(),
-        workspaceStyle: this.workspaceContainer ? window.getComputedStyle(this.workspaceContainer) : null
-      });
+      // UPDATED COMMENTS: Workspace setup complete
       
       // Create default widgets
       await this.createDefaultWidgets();
@@ -87,8 +82,6 @@ export class DesktopCanvas {
           widgetCount: this.widgets.size
         });
       }
-      
-      console.log('Desktop canvas initialized successfully');
     } catch (error) {
       console.error('Failed to initialize desktop canvas:', error);
       throw error;
@@ -174,19 +167,6 @@ export class DesktopCanvas {
     setTimeout(() => {
       const rect = this.workspaceContainer.getBoundingClientRect();
       const computedStyle = window.getComputedStyle(this.workspaceContainer);
-      console.log('Workspace container dimensions after insertion:', {
-        element: this.workspaceContainer,
-        rect: rect,
-        computedWidth: computedStyle.width,
-        computedHeight: computedStyle.height,
-        clientWidth: this.workspaceContainer.clientWidth,
-        clientHeight: this.workspaceContainer.clientHeight,
-        offsetWidth: this.workspaceContainer.offsetWidth,
-        offsetHeight: this.workspaceContainer.offsetHeight,
-        scrollWidth: this.workspaceContainer.scrollWidth,
-        scrollHeight: this.workspaceContainer.scrollHeight,
-        parentRect: this.container.getBoundingClientRect()
-      });
     }, 100);
     
     // Force immediate layout recalculation for workspace
@@ -321,10 +301,6 @@ export class DesktopCanvas {
    * SCALED FOR: Full viewport widget placement with minimal margins
    */
   async createDefaultWidgets() {
-    console.log('Canvas initialized - adding portfolio widgets with full-screen workspace');
-    console.log('Workspace: calc(100% - 20px) for maximum space utilization');
-    console.log('Layout: Sticker (left-top), Folders+Resume (left-center area), Clock (right-top), Telegram+Cat (right-side)');
-    
     // UPDATED COMMENTS: Full-screen workspace layout with minimal margins
     // Workspace now uses calc(100vw - 20px) × calc(100vh - 20px) for maximum space
     // Widget positions remain percentage-based for responsive scaling

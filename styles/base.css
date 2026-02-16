@@ -224,41 +224,8 @@ body.loaded .desktop-canvas .workspace-container {
 }
 
 /* ANCHOR: modal_system */
-.modal-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: var(--z-modal-backdrop);
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity var(--transition-normal), visibility var(--transition-normal);
-}
-
-.modal-container.modal-open {
-  opacity: 1;
-  visibility: visible;
-}
-
-.modal-content {
-  background: var(--color-bg-primary);
-  border-radius: 12px;
-  max-width: 90vw;
-  max-height: 90vh;
-  overflow-y: auto;
-  transform: scale(0.9);
-  transition: transform var(--transition-normal);
-  box-shadow: var(--shadow-xl);
-}
-
-.modal-container.modal-open .modal-content {
-  transform: scale(1);
-}
+/* UPDATED COMMENTS: Modal styles moved to contact-modal.css for specificity */
+/* CRITICAL FIX: Removed conflicting background that caused flash */
 
 /* ANCHOR: utility_classes */
 /* REUSED: Common utility classes for rapid development */

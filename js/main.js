@@ -36,8 +36,6 @@ class Application {
    */
   async init() {
     try {
-      console.log('🚀 Starting application initialization...');
-      
       // Initialize core utilities
       this.eventBus = new EventBus();
       this.performanceMonitor = new PerformanceMonitor();
@@ -45,12 +43,10 @@ class Application {
 
       // Wait for DOM to be ready
       if (document.readyState === 'loading') {
-        console.log('⏳ Waiting for DOM...');
         await new Promise(resolve => {
           document.addEventListener('DOMContentLoaded', resolve);
         });
       }
-      console.log('✅ DOM ready');
 
       // Initialize desktop canvas
       const canvasElement = document.getElementById('desktop-canvas');
@@ -58,7 +54,6 @@ class Application {
         throw new Error('Desktop canvas element not found');
       }
 
-      console.log('🎨 Initializing desktop canvas...');
       this.canvas = new DesktopCanvas(canvasElement, {
         eventBus: this.eventBus,
         assetManager: this.assetManager
@@ -71,7 +66,6 @@ class Application {
         throw new Error('Navigation container element not found');
       }
 
-      console.log('🧭 Initializing navigation...');
       this.navigation = new NavigationHeader(navigationContainer, {
         eventBus: this.eventBus,
         userName: 'Shuvalov Ivan',
@@ -89,65 +83,43 @@ class Application {
       });
 
       await this.navigation.init();
-      console.log('✅ Navigation initialized');
 
       // ANCHOR: contact_input_initialization
       // REUSED: Contact input component with shared EventBus
-      console.log('💬 Looking for contact input container...');
       const contactInputContainer = document.getElementById('contact-input-container');
-      console.log('💬 Contact input container found:', !!contactInputContainer, contactInputContainer);
       
       if (!contactInputContainer) {
-        console.error('❌ Contact input container not found - skipping initialization');
-        console.log('Available containers:', {
-          navigation: !!document.getElementById('navigation-container'),
-          contactInput: !!document.getElementById('contact-input-container'),
-          modal: !!document.getElementById('modal-container')
-        });
+        console.error('❌ Contact input container not found');
       } else {
-        console.log('💬 Initializing contact input...');
-        try {
-          this.contactInput = new ContactInput(contactInputContainer, {
-            eventBus: this.eventBus,
-            placeholder: 'Message me right here...',
-            minLength: 10,
-            maxLength: 2000
-          });
+        this.contactInput = new ContactInput(contactInputContainer, {
+          eventBus: this.eventBus,
+          placeholder: 'Message me right here...',
+          minLength: 10,
+          maxLength: 2000
+        });
 
-          await this.contactInput.init();
-          console.log('✅ Contact input initialized successfully');
-          console.log('💬 Contact input HTML:', contactInputContainer.innerHTML.substring(0, 200));
-        } catch (error) {
-          console.error('❌ Failed to initialize contact input:', error);
-          console.error('Error stack:', error.stack);
-        }
+        await this.contactInput.init();
       }
 
       // ANCHOR: contact_modal_initialization
       // REUSED: Contact modal component with shared EventBus
       const modalContainer = document.getElementById('modal-container');
       if (modalContainer) {
-        console.log('📬 Initializing contact modal...');
         this.contactModal = new ContactModal(modalContainer, {
           eventBus: this.eventBus
         });
-        console.log('✅ Contact modal initialized');
         
         // CRITICAL: Listen for send events from contact input
         this.eventBus.on('contact-input:send', ({ message }) => {
-          console.log('📬 Opening contact modal with message:', message);
           this.contactModal.show(message);
         });
         
         // REUSED: Listen for successful message send
-        this.eventBus.on('message:sent', ({ message, contact }) => {
-          console.log('✅ Message sent successfully');
+        this.eventBus.on('message:sent', () => {
           if (this.contactInput) {
             this.contactInput.clearInput();
           }
         });
-      } else {
-        console.warn('⚠️  Modal container not found');
       }
 
       // Setup global event listeners
@@ -156,20 +128,15 @@ class Application {
       // CRITICAL: Wait for window.load event (all resources including images loaded)
       // REUSED: Standard pattern for hiding page loaders
       if (document.readyState === 'complete') {
-        console.log('✅ All resources already loaded');
         this.hideLoadingIndicator();
       } else {
-        console.log('⏳ Waiting for all resources to load...');
         window.addEventListener('load', () => {
-          console.log('✅ All resources loaded');
           this.hideLoadingIndicator();
         });
       }
 
       this.isInitialized = true;
       this.eventBus.emit('app:initialized');
-
-      console.log('✨ Application initialized successfully');
     } catch (error) {
       console.error('❌ Failed to initialize application:', error);
       this.showErrorMessage(error.message);

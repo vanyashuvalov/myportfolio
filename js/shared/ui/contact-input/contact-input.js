@@ -53,8 +53,6 @@ export class ContactInput {
       
       // REUSED: EventBus notification
       this.eventBus.emit('contact-input:initialized', this);
-      
-      console.log('// UPDATED COMMENTS: Contact input initialized successfully');
     } catch (error) {
       console.error('Failed to initialize contact input:', error);
       throw error;
@@ -253,8 +251,6 @@ export class ContactInput {
     
     // CRITICAL: Emit event to open contact modal
     this.eventBus.emit('contact-input:send', { message });
-    
-    console.log('// UPDATED COMMENTS: Message ready to send:', message);
   }
 
   /**
@@ -270,7 +266,6 @@ export class ContactInput {
     }, 2000);
     
     this.eventBus.emit('contact-input:error', { error: errorMessage });
-    console.warn('Contact input error:', errorMessage);
   }
 
   /**
@@ -280,6 +275,13 @@ export class ContactInput {
   clearInput() {
     this.inputElement.value = '';
     this.wrapper.classList.remove('contact-input--has-value');
+    
+    // CRITICAL: Reset size to initial state
+    this.isExpanded = false;
+    this.wrapper.style.width = '467px';
+    this.inputElement.style.height = '26px';
+    this.wrapper.style.minHeight = '64px';
+    
     this.eventBus.emit('contact-input:cleared');
   }
 
@@ -292,7 +294,6 @@ export class ContactInput {
       const response = await fetch('assets/icons/iconamoon_comment.svg');
       return await response.text();
     } catch (error) {
-      console.warn('Failed to load comment icon, using fallback');
       return `
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 13.3613 3.31462 14.6487 3.87595 15.7942L3.35769 18.6423C3.20779 19.4254 3.87595 20.0936 4.65905 19.9437L7.50719 19.4254C8.65267 19.9868 9.94006 20.3014 11.3014 20.3014" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -310,7 +311,6 @@ export class ContactInput {
       const response = await fetch('assets/icons/icon-send-message.svg');
       return await response.text();
     } catch (error) {
-      console.warn('Failed to load send icon, using fallback');
       return `
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M20.3359 11.9998L3.00781 3.33594L6.67578 11.9998L3.00781 20.6637L20.3359 11.9998Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
