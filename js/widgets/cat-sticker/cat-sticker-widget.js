@@ -102,8 +102,6 @@ export class CatStickerWidget extends WidgetBase {
         this.chatButton.element.classList.remove('widget-button--pressed');
       }, 150);
     }
-    
-    console.log('Cat sticker: Chat Me button clicked - opening Telegram');
   }
 
   /**
@@ -160,7 +158,6 @@ export class CatStickerWidget extends WidgetBase {
    */
   onLongPress(data) {
     // Could show cat status menu or edit options
-    console.log('Cat sticker long press - could show cat status');
   }
 
   /**

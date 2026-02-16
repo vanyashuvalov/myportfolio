@@ -45,7 +45,6 @@ export class IconProvider {
         this.iconCache.set(iconName, this.getFallbackIcon(iconName));
       }
     });
-    console.log('// UPDATED COMMENTS: All navigation icons preloaded from files');
   }
 
   /**
@@ -110,7 +109,6 @@ export class IconProvider {
     
     if (xhr.status === 200) {
       this.iconCache.set(iconName, xhr.responseText);
-      console.log(`// UPDATED COMMENTS: Loaded icon "${iconName}" from file`);
     } else {
       throw new Error(`HTTP ${xhr.status}`);
     }
@@ -195,7 +193,6 @@ export class IconProvider {
     
     try {
       await Promise.all(loadPromises);
-      console.log('// UPDATED COMMENTS: All navigation icons preloaded successfully');
     } catch (error) {
       console.error('Failed to preload some icons:', error);
     }

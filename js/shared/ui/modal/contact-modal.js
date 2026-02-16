@@ -29,16 +29,24 @@ export class ContactModal {
   /**
    * Show modal with message
    * UPDATED COMMENTS: Display modal with message preview
+   * CRITICAL FIX: Force reflow to ensure backdrop-filter is computed before animation
    */
   show(message) {
     this.message = message;
     this.contactInfo = '';
+    
     this.render();
     this.cacheElements();
+    
+    // CRITICAL: Force browser to compute backdrop-filter by reading offsetHeight
+    // This ensures blur is ready BEFORE animation starts
+    this.overlay.offsetHeight;
+    
     this.bindEvents();
     this.isVisible = true;
     
-    // SCALED FOR: Smooth appearance animation
+    // CRITICAL: Now start animation after backdrop-filter is computed
+    // SCALED FOR: Smooth appearance without flash
     requestAnimationFrame(() => {
       this.container.classList.add('modal-container--visible');
       // CRITICAL: Remove aria-hidden when modal is visible
@@ -66,43 +74,55 @@ export class ContactModal {
 
   /**
    * Render modal HTML
-   * REUSED: Figma design with button components
+   * REUSED: Figma design with minimal UI
+   * CRITICAL FIX: Removed inline styles to prevent backdrop flash
    */
   render() {
-    this.container.innerHTML = `
-      <div class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-        <div class="modal-content">
-          <!-- ANCHOR: modal_header -->
-          <h2 id="modal-title" class="modal-title">Пожалуйста, дополните свой контакт, чтобы я вам ответил</h2>
-          
-          <!-- ANCHOR: message_preview -->
-          <div class="modal-message-preview">
-            <p>${this.escapeHtml(this.message)}</p>
+    // CRITICAL FIX: Clear container first to ensure clean state
+    this.container.innerHTML = '';
+    
+    // CRITICAL: Create overlay with backdrop-filter BEFORE adding to DOM
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('aria-labelledby', 'modal-title');
+    
+    overlay.innerHTML = `
+      <div class="modal-content">
+        <!-- ANCHOR: modal_description -->
+        <!-- FIGMA SPECS: Description container with icon and text above fields -->
+        <div class="modal-description">
+          <!-- ANCHOR: modal_icon -->
+          <div class="modal-icon">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" stroke="#C248A3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M11.307 9.739L15 9L14.261 12.693C14.1836 13.0801 13.9935 13.4356 13.7145 13.7148C13.4354 13.994 13.08 14.1844 12.693 14.262L9 15L9.739 11.307C9.81654 10.9201 10.0068 10.5648 10.2858 10.2858C10.5648 10.0068 10.9201 9.81654 11.307 9.739Z" stroke="#C248A3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
           </div>
           
-          <!-- ANCHOR: contact_field -->
-          <div class="modal-field">
-            <input 
-              type="text" 
-              class="modal-input" 
-              placeholder="Email, Telegram, или оставьте пустым для анонимной отправки"
-              maxlength="${this.options.maxContactLength}"
-              aria-label="Contact information"
-            />
-          </div>
-          
-          <!-- ANCHOR: modal_actions -->
-          <div class="modal-actions">
-            <button class="modal-button modal-button--secondary" data-action="cancel">
-              Отмена
-            </button>
-            <button class="modal-button modal-button--primary" data-action="send">
-              Отправить анонимно
-            </button>
-          </div>
+          <!-- ANCHOR: modal_title -->
+          <p id="modal-title" class="modal-title">Please, provide your contact info so I could respond you</p>
         </div>
+        
+        <!-- ANCHOR: contact_field -->
+        <input 
+          type="text" 
+          class="modal-input" 
+          placeholder="Email, Telegram, Phone"
+          maxlength="${this.options.maxContactLength}"
+          aria-label="Contact information"
+        />
+        
+        <!-- ANCHOR: modal_button -->
+        <button class="modal-button modal-button--primary" data-action="send">
+          Send anonymously
+        </button>
       </div>
     `;
+    
+    // CRITICAL: Add to DOM so backdrop-filter is computed
+    this.container.appendChild(overlay);
   }
 
   /**
@@ -114,7 +134,6 @@ export class ContactModal {
     this.content = this.container.querySelector('.modal-content');
     this.input = this.container.querySelector('.modal-input');
     this.sendButton = this.container.querySelector('[data-action="send"]');
-    this.cancelButton = this.container.querySelector('[data-action="cancel"]');
   }
 
   /**
@@ -132,9 +151,8 @@ export class ContactModal {
     // UPDATED COMMENTS: Input change updates button text
     this.input.addEventListener('input', this.handleInputChange.bind(this));
     
-    // UPDATED COMMENTS: Button actions
+    // UPDATED COMMENTS: Send button action
     this.sendButton.addEventListener('click', this.handleSend.bind(this));
-    this.cancelButton.addEventListener('click', () => this.hide());
     
     // UPDATED COMMENTS: Escape key closes modal
     document.addEventListener('keydown', this.handleKeydown.bind(this));
@@ -149,10 +167,10 @@ export class ContactModal {
     
     // CRITICAL: Change button text based on contact presence
     if (this.contactInfo.length > 0) {
-      this.sendButton.textContent = 'Отправить';
+      this.sendButton.textContent = 'SEND';
       this.sendButton.classList.remove('modal-button--anonymous');
     } else {
-      this.sendButton.textContent = 'Отправить анонимно';
+      this.sendButton.textContent = 'SEND ANONYMOUSLY';
       this.sendButton.classList.add('modal-button--anonymous');
     }
   }
@@ -162,9 +180,15 @@ export class ContactModal {
    * REUSED: Validation and submission
    */
   async handleSend() {
+    // CRITICAL: Validate contact field if filled (min 5 chars)
+    if (this.contactInfo.length > 0 && this.contactInfo.length < 5) {
+      this.showError('at least 5 characters');
+      return;
+    }
+    
     // UPDATED COMMENTS: Disable button during submission
     this.sendButton.disabled = true;
-    this.sendButton.textContent = 'Отправка...';
+    this.sendButton.textContent = 'SENDING...';
     
     try {
       // CRITICAL: Send message to backend
@@ -180,10 +204,9 @@ export class ContactModal {
         throw new Error(response.error || 'Failed to send message');
       }
     } catch (error) {
-      console.error('Failed to send message:', error);
-      this.showError('Не удалось отправить сообщение. Попробуйте позже.');
+      this.showError('Failed to send a message. Please try again later');
       this.sendButton.disabled = false;
-      this.sendButton.textContent = this.contactInfo ? 'Отправить' : 'Отправить анонимно';
+      this.sendButton.textContent = this.contactInfo ? 'SEND' : 'SEND ANONYMOUSLY';
     }
   }
 
@@ -213,14 +236,22 @@ export class ContactModal {
   /**
    * Show error message
    * SCALED FOR: User feedback
+   * UPDATED COMMENTS: Simple red text error below input field
    */
   showError(errorMessage) {
-    // UPDATED COMMENTS: Temporary error display
+    // UPDATED COMMENTS: Remove existing error if present
+    const existingError = this.content.querySelector('.modal-error');
+    if (existingError) {
+      existingError.remove();
+    }
+    
+    // UPDATED COMMENTS: Create simple red text error
     const errorDiv = document.createElement('div');
     errorDiv.className = 'modal-error';
     errorDiv.textContent = errorMessage;
     
-    this.content.insertBefore(errorDiv, this.content.querySelector('.modal-actions'));
+    // CRITICAL: Insert after input field
+    this.content.insertBefore(errorDiv, this.sendButton);
     
     setTimeout(() => {
       errorDiv.remove();

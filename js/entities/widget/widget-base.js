@@ -232,7 +232,6 @@ export class WidgetBase {
       // CRITICAL: For CSS positioning, don't override with JS transforms
       // Let CSS handle initial positioning, only apply rotation and scale
       this.element.style.transform = `rotate(${this.rotation}deg) scale(${this.scale})`;
-      console.log('CSS POSITIONING: Applied only rotation/scale for', this.type);
       this.currentPosition = { x: 0, y: 0 }; // Will be updated by drag system
     }
     

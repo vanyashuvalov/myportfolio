@@ -56,8 +56,6 @@ export class NavigationHeader {
       
       // REUSED: EventBus pattern for component communication
       this.eventBus.emit('navigation:initialized', this);
-      
-      console.log('// UPDATED COMMENTS: Modular navigation header initialized successfully');
     } catch (error) {
       console.error('Failed to initialize navigation header:', error);
       throw error;

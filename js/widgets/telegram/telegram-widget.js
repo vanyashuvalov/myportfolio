@@ -102,8 +102,6 @@ export class TelegramWidget extends WidgetBase {
           // CRITICAL: Auto-update - only update text content, no recreation
           this.updateContent();
         }
-        
-        console.log(`Telegram widget: Loaded data for ${this.channelUsername}`, response);
       }
       
     } catch (error) {
@@ -402,8 +400,6 @@ export class TelegramWidget extends WidgetBase {
         channelUrl: this.channelUrl
       });
     }
-    
-    console.log('Telegram widget: Channel link clicked!');
   }
 
   /**
@@ -493,7 +489,6 @@ export class TelegramWidget extends WidgetBase {
    */
   onLongPress() {
     // Could show telegram options menu
-    console.log('Telegram widget long press - could show options');
   }
 
   /**

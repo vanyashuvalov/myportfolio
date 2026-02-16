@@ -57,18 +57,6 @@ export class SimpleDragHover {
       // Let CSS positioning work first, then we can drag from there
       this.xOffset = 0;
       this.yOffset = 0;
-      
-      console.log('CSS POSITIONING MODE - NO INITIAL TRANSFORM:', {
-        widget: widget.type,
-        cssClasses: element.className,
-        computedStyle: {
-          position: getComputedStyle(element).position,
-          top: getComputedStyle(element).top,
-          right: getComputedStyle(element).right,
-          bottom: getComputedStyle(element).bottom,
-          left: getComputedStyle(element).left
-        }
-      });
     } else {
       // UPDATED COMMENTS: For JS positioning, use dataset values
       const initialX = parseFloat(element.dataset.initialX) || 100;
@@ -76,11 +64,6 @@ export class SimpleDragHover {
       
       this.xOffset = initialX;
       this.yOffset = initialY;
-      
-      console.log('JS POSITIONING MODE:', {
-        widget: widget.type,
-        initialPosition: { x: initialX, y: initialY }
-      });
     }
     
     // CRITICAL: Hardware acceleration and smooth transform transitions
@@ -126,7 +109,6 @@ export class SimpleDragHover {
       this.setTranslate(this.xOffset, this.yOffset, element, widget.rotation, widget.scale);
     } else {
       // CRITICAL: For CSS positioning, don't apply any transform initially
-      console.log('SKIPPING INITIAL TRANSFORM FOR CSS WIDGET:', widget.type);
     }
     
     // CRITICAL: Ensure widget is visible
@@ -194,8 +176,6 @@ export class SimpleDragHover {
     const isWidgetClick = widget.element === event.target || widget.element.contains(event.target);
     if (!isWidgetClick) return;
     
-    console.log('DRAG START - Widget clicked!', widget.id); // DEBUG
-    
     event.preventDefault();
     
     // CRITICAL: For CSS positioned widgets, get current computed position
@@ -204,7 +184,6 @@ export class SimpleDragHover {
       const rect = widget.element.getBoundingClientRect();
       this.xOffset = rect.left;
       this.yOffset = rect.top;
-      console.log('CSS DRAG START:', { x: rect.left, y: rect.top });
     }
     
     // CRITICAL: Calculate initial position with offset (Kirupa pattern)
@@ -228,8 +207,6 @@ export class SimpleDragHover {
     const container = widget._dragContainer;
     container.addEventListener('mousemove', this.boundMouseMove);
     container.addEventListener('mouseup', this.boundMouseUp);
-    
-    console.log('DRAG INITIALIZED'); // DEBUG
   }
 
   /**
@@ -320,12 +297,6 @@ export class SimpleDragHover {
     
     // CRITICAL: Clear drag widget reference
     this.dragWidget = null;
-    
-    console.log('DRAG END:', {
-      widget: widget.type,
-      finalPosition: { x: this.xOffset, y: this.yOffset },
-      cssPositioning: usesCssPositioning
-    });
   }
 
   /**
@@ -356,17 +327,6 @@ export class SimpleDragHover {
     // getBoundingClientRect accounts for all transforms and positioning
     const actualWidth = rect.width;
     const actualHeight = rect.height;
-    
-    console.log('WIDGET DIMENSIONS:', {
-      element: element.className,
-      measurements: {
-        boundingRect: { width: rect.width, height: rect.height },
-        offset: offset,
-        client: client
-      },
-      transform: { scaleX, scaleY },
-      final: { width: actualWidth, height: actualHeight }
-    });
     
     return { width: actualWidth, height: actualHeight };
   }
@@ -399,20 +359,7 @@ export class SimpleDragHover {
     const constrainedX = Math.max(minX, Math.min(maxX, x));
     const constrainedY = Math.max(minY, Math.min(maxY, y));
     
-    // REUSABLE LOGIC: Debug output for boundary verification
-    console.log('CORRECTED BOUNDARY CALCULATION:', {
-      input: { x, y },
-      output: { x: constrainedX, y: constrainedY },
-      viewport: { width: viewportWidth, height: viewportHeight },
-      widget: dimensions,
-      globalOffset: this.globalBoundaryOffset,
-      boundaries: { minX, maxX, minY, maxY },
-      availableArea: {
-        width: maxX - minX,
-        height: maxY - minY
-      },
-      constrained: constrainedX !== x || constrainedY !== y
-    });
+    // REUSABLE LOGIC: Boundary verification
     
     return { x: constrainedX, y: constrainedY };
   }

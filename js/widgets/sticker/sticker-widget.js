@@ -96,8 +96,6 @@ export class StickerWidget extends WidgetBase {
     if (this.buttonUrl && this.buttonUrl !== '#') {
       window.open(this.buttonUrl, '_blank');
     }
-    
-    console.log(`Sticker button clicked: ${this.buttonText}`);
   }
 
   /**

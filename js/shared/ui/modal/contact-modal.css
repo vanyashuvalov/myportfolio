@@ -1,9 +1,11 @@
 /* ANCHOR: contact_modal_styles */
-/* REUSED: Modal dialog styling with Figma specs */
-/* SCALED FOR: Responsive design and animations */
-/* UPDATED COMMENTS: Contact modal with smooth transitions */
+/* REUSED: Modal dialog styling with Figma specs - EXACT DESIGN TOKENS */
+/* SCALED FOR: Responsive design and smooth animations */
+/* UPDATED COMMENTS: Contact modal with consistent design system integration */
 
 /* ANCHOR: modal_container */
+/* CRITICAL: Container manages visibility and pointer events only */
+/* Background is handled by overlay child element to avoid conflicts */
 .modal-container {
   position: fixed;
   top: 0;
@@ -12,13 +14,16 @@
   bottom: 0;
   z-index: var(--z-modal);
   
-  /* UPDATED COMMENTS: Hidden by default */
+  /* UPDATED COMMENTS: Hidden by default, no background on container */
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
+  
+  /* REUSED: Universal transition timing from design system */
+  transition: opacity var(--transition-normal), visibility var(--transition-normal);
 }
 
+/* CRITICAL: Visible state enables interaction */
 .modal-container--visible {
   opacity: 1;
   visibility: visible;
@@ -26,186 +31,328 @@
 }
 
 /* ANCHOR: modal_overlay */
-.modal-overlay {
+/* CRITICAL: Overlay provides backdrop - NO background to let blur work */
+/* No animation on background to avoid jarring transitions */
+.modal-container .modal-overlay {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
+  z-index: 1;
   
-  /* UPDATED COMMENTS: Dark semi-transparent background */
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(4px);
+  /* UPDATED COMMENTS: Transparent overlay - modal-content provides background */
+  /* CRITICAL: No background here so backdrop-filter can blur original page */
+  background: transparent;
   
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: var(--space-5);
+  
+  /* CRITICAL: Overlay inherits pointer events from container */
+  pointer-events: auto;
 }
 
 /* ANCHOR: modal_content */
-.modal-content {
+/* CRITICAL: Content has higher z-index than overlay for proper layering */
+/* FIGMA SPECS: 520px width, auto height (hug content), padding 40px, gap 26px, border-radius 14px */
+.modal-container .modal-content {
+  /* UPDATED COMMENTS: Auto-layout flex container matching Figma specs */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-10);
+  gap: 26px;
+  
+  /* FIGMA SPECS: Fixed width, auto height to hug content */
+  width: 520px;
+  height: auto;
+  max-width: 95vw;
+  
+  /* FIGMA SPECS: Background rgba(0, 0, 0, 0.8) - 60% opacity with blur 20px for glass effect */
+  /* UPDATED COMMENTS: Semi-transparent black with strong blur creates frosted glass effect */
   background: rgba(0, 0, 0, 0.9);
-  backdrop-filter: blur(10px);
-  border-radius: 24px;
-  padding: 40px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   
-  max-width: 500px;
-  width: 100%;
+  /* REUSED: Widget shadow system from design tokens */
+  box-shadow: var(--widget-shadow-default);
   
-  /* SCALED FOR: Smooth appearance animation */
-  transform: scale(0.9);
-  transition: transform 0.3s ease;
+  /* FIGMA SPECS: Border radius 14px */
+  border-radius: 14px;
+  
+  /* CRITICAL: Higher z-index ensures content is above overlay */
+  position: relative;
+  z-index: 2;
+  
+  /* SCALED FOR: Smooth scale animation on appearance */
+  /* CRITICAL: Only transform animated, opacity inherited from container */
+  transform: scale(0.95);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  
+  /* SCALED FOR: GPU acceleration for smooth animations */
+  will-change: transform;
+  
+  /* CRITICAL: Content blocks pointer events to overlay behind it */
+  pointer-events: auto;
 }
 
+/* CRITICAL: Smooth scale-up when modal becomes visible */
 .modal-container--visible .modal-content {
   transform: scale(1);
 }
 
+/* ANCHOR: modal_description */
+/* FIGMA SPECS: Description container with icon and text */
+/* Auto layout: flex column, align center, gap 16px, width 440px, auto height */
+.modal-container .modal-description {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+  gap: var(--space-4);
+  
+  width: 440px;
+  height: auto;
+  
+  /* Inside auto layout */
+  flex: none;
+  order: 0;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+/* ANCHOR: modal_icon */
+/* FIGMA SPECS: iconamoon:discover - 64px × 64px with pink color #C248A3 */
+.modal-container .modal-icon {
+  width: 64px;
+  height: 64px;
+  
+  /* Inside auto layout */
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* UPDATED COMMENTS: Icon with pink color, NO OUTLINE */
+.modal-container .modal-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.modal-container .modal-icon svg path {
+  stroke: #C248A3;
+  stroke-width: 2px;
+  fill: none;
+}
+
 /* ANCHOR: modal_title */
-.modal-title {
+/* FIGMA SPECS: Text 440px width, auto height, Geist Mono 400, 20px, 150% line-height, center aligned */
+.modal-container .modal-title {
+  width: 440px;
+  height: auto;
+  
   font-family: 'Geist Mono', var(--font-family-mono);
   font-style: normal;
-  font-weight: 500;
-  font-size: 20px;
-  line-height: 130%;
-  color: #FFFFFF;
-  margin: 0 0 24px 0;
-  text-align: center;
-}
-
-/* ANCHOR: message_preview */
-.modal-message-preview {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 24px;
-  max-height: 200px;
-  overflow-y: auto;
-}
-
-.modal-message-preview p {
-  font-family: 'Geist Mono', var(--font-family-mono);
-  font-size: 16px;
+  font-weight: var(--font-weight-normal);
+  font-size: var(--font-size-xl);
   line-height: 150%;
-  color: rgba(255, 255, 255, 0.8);
-  margin: 0;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-}
-
-/* ANCHOR: modal_field */
-.modal-field {
-  margin-bottom: 24px;
-}
-
-.modal-input {
-  width: 100%;
-  padding: 16px 20px;
-  
-  font-family: 'Geist Mono', var(--font-family-mono);
-  font-size: 16px;
-  line-height: 130%;
+  text-align: center;
   color: #FFFFFF;
   
+  margin: 0;
+  
+  /* Inside auto layout */
+  flex: none;
+  order: 1;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+/* ANCHOR: modal_input */
+/* FIGMA SPECS: Input field 440px × 58px, padding 16px 20px, gap 10px */
+/* Auto layout: flex row, justify center, align center */
+.modal-container .modal-input {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-4) var(--space-5);
+  gap: 10px;
+  
+  width: 440px;
+  height: 58px;
+  
+  /* FIGMA SPECS: Background rgba(255, 255, 255, 0.1) - white 10% opacity with blur */
+  /* UPDATED COMMENTS: Light semi-transparent white background for input field */
   background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  
+  border: none;
+  border-radius: 8px;
   outline: none;
   
-  transition: background 0.2s ease, border-color 0.2s ease;
-}
-
-.modal-input::placeholder {
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.modal-input:focus {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.4);
-}
-
-/* ANCHOR: modal_actions */
-.modal-actions {
-  display: flex;
-  gap: 12px;
-  justify-content: flex-end;
-}
-
-/* ANCHOR: modal_buttons */
-.modal-button {
-  padding: 12px 24px;
-  
+  /* FIGMA SPECS: Text styling - Geist Mono 400, 20px, 130% line-height */
   font-family: 'Geist Mono', var(--font-family-mono);
-  font-weight: 500;
-  font-size: 16px;
+  font-style: normal;
+  font-weight: var(--font-weight-normal);
+  font-size: var(--font-size-xl);
   line-height: 130%;
-  text-transform: uppercase;
+  color: #FFFFFF;
+  opacity: 0.8;
+  
+  /* Inside auto layout */
+  flex: none;
+  order: 1;
+  align-self: stretch;
+  flex-grow: 0;
+  
+  /* REUSED: Smooth transition from design system */
+  transition: background var(--transition-fast), opacity var(--transition-fast);
+}
+
+.modal-container .modal-input::placeholder {
+  color: #FFFFFF;
+  opacity: 0.8;
+}
+
+.modal-container .modal-input:focus {
+  background: rgba(255, 255, 255, 0.15);
+  opacity: 1;
+}
+
+/* ANCHOR: modal_button */
+/* FIGMA SPECS: Button 440px × 55px, padding 16px 20px, gap 10px */
+/* Auto layout: flex row, justify center, align center */
+.modal-container .modal-button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-4) var(--space-5);
+  gap: 10px;
+  
+  width: 440px;
+  height: 55px;
+  
+  /* FIGMA SPECS: White background with blur */
+  background: #FFFFFF;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
   
   border: none;
   border-radius: 8px;
   cursor: pointer;
   
-  transition: opacity 0.2s ease, background 0.2s ease;
+  /* FIGMA SPECS: Text styling - Geist Mono 500, 18px, 23px line-height */
+  font-family: 'Geist Mono', var(--font-family-mono);
+  font-style: normal;
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-lg);
+  line-height: 23px;
+  text-align: center;
+  letter-spacing: var(--letter-spacing-tight);
+  text-transform: uppercase;
+  color: #000000;
+  
+  /* Inside auto layout */
+  flex: none;
+  order: 2;
+  align-self: stretch;
+  flex-grow: 0;
+  
+  /* REUSED: Smooth transition from design system */
+  transition: opacity var(--transition-fast), background var(--transition-fast);
 }
 
-.modal-button:hover {
+.modal-container .modal-button:hover {
   opacity: 0.9;
+  background: rgba(255, 255, 255, 0.95);
 }
 
-.modal-button:active {
-  opacity: 0.7;
+.modal-container .modal-button:active {
+  opacity: 0.8;
+  background: rgba(255, 255, 255, 0.9);
 }
 
-.modal-button:disabled {
+.modal-container .modal-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-}
-
-.modal-button--secondary {
-  background: rgba(255, 255, 255, 0.1);
-  color: #FFFFFF;
-}
-
-.modal-button--primary {
-  background: rgba(255, 255, 255, 0.9);
-  color: #000000;
-}
-
-.modal-button--primary:hover {
-  background: #FFFFFF;
+  pointer-events: none;
 }
 
 /* ANCHOR: modal_error */
-.modal-error {
-  background: rgba(255, 0, 0, 0.2);
-  border: 1px solid rgba(255, 0, 0, 0.4);
-  border-radius: 8px;
-  padding: 12px 16px;
-  margin-bottom: 16px;
-  
+/* UPDATED COMMENTS: Simple red text error message below input */
+.modal-container .modal-error {
   font-family: 'Geist Mono', var(--font-family-mono);
-  font-size: 14px;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-normal);
+  line-height: 130%;
   color: #FF6B6B;
   text-align: center;
+  
+  /* Inside auto layout - appears between input and button */
+  flex: none;
+  align-self: stretch;
+  margin: 0;
+  padding: 0;
 }
 
 /* ANCHOR: responsive_design */
+/* SCALED FOR: Mobile and tablet breakpoints */
 @media (max-width: 768px) {
-  .modal-content {
-    padding: 24px;
-    max-width: 100%;
+  .modal-container .modal-content {
+    width: 90vw;
+    height: auto;
+    padding: var(--space-6);
+    gap: var(--space-5);
   }
   
-  .modal-title {
-    font-size: 18px;
-  }
-  
-  .modal-actions {
-    flex-direction: column;
-  }
-  
-  .modal-button {
+  .modal-container .modal-description,
+  .modal-container .modal-title,
+  .modal-container .modal-input,
+  .modal-container .modal-button {
     width: 100%;
+    height: auto;
+  }
+  
+  .modal-container .modal-title {
+    font-size: var(--font-size-lg);
+  }
+  
+  .modal-container .modal-input,
+  .modal-container .modal-button {
+    font-size: var(--font-size-base);
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-container .modal-content {
+    padding: var(--space-5);
+    gap: var(--space-4);
+  }
+  
+  .modal-container .modal-icon {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .modal-container .modal-title {
+    font-size: var(--font-size-base);
+  }
+  
+  .modal-container .modal-input,
+  .modal-container .modal-button {
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--font-size-sm);
   }
 }
