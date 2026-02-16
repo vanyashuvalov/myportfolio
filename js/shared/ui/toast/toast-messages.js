@@ -18,12 +18,16 @@ export const TOAST_MESSAGES = {
   CONTACT_REQUIRED: 'Please provide contact information',
   CONTACT_TOO_SHORT: 'Contact info must be at least 5 characters',
   
+  // Share/Copy messages
+  LINK_COPIED: 'Link copied to clipboard',
+  EMAIL_COPIED: 'Email copied to clipboard',
+  COPY_ERROR: 'Failed to copy',
+  
   // Future messages (examples)
   CAT_FED: 'Cat is happy! Meow~',
   PROJECT_SAVED: 'Project saved successfully',
   THEME_CHANGED: 'Theme updated',
-  COPY_SUCCESS: 'Copied to clipboard',
-  COPY_ERROR: 'Failed to copy to clipboard'
+  COPY_SUCCESS: 'Copied to clipboard'
 };
 
 /**
