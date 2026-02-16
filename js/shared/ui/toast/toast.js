@@ -147,11 +147,11 @@ export class Toast {
       this.dismissTimer = null;
     }
     
-    // UPDATED COMMENTS: Exit animation
+    // UPDATED COMMENTS: Exit animation (fade out + collapse)
     this.element.classList.remove('toast--visible');
     this.element.classList.add('toast--exiting');
     
-    // CRITICAL: Remove from DOM after animation
+    // CRITICAL: Remove from DOM after full animation (200ms fade + 150ms collapse)
     setTimeout(() => {
       if (this.element && this.element.parentNode) {
         this.element.parentNode.removeChild(this.element);
@@ -163,7 +163,7 @@ export class Toast {
       if (this.options.onDismiss) {
         this.options.onDismiss(this);
       }
-    }, 200); // Match CSS exit animation duration
+    }, 350); // Match CSS exit animation duration (200ms + 150ms)
   }
 
   /**

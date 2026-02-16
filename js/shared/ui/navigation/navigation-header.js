@@ -4,6 +4,8 @@
 /* UPDATED COMMENTS: Refactored navigation header with centralized social links */
 
 import { EventBus } from '../../utils/event-bus.js';
+import { toastManager } from '../../utils/toast-manager.js';
+import { TOAST_MESSAGES } from '../toast/toast-messages.js';
 import { UserInfo } from './components/user-info.js';
 import { Breadcrumb } from './components/breadcrumb.js';
 import { ActionButtons } from './components/action-buttons.js';
@@ -172,9 +174,15 @@ export class NavigationHeader {
 
   /**
    * Open social media links
-   * UPDATED COMMENTS: Secure external link handling
+   * UPDATED COMMENTS: Secure external link handling with email copy
    */
   openSocialLink(platform) {
+    // CRITICAL: Email should copy to clipboard instead of opening mailto
+    if (platform === 'email') {
+      this.copyEmailToClipboard();
+      return;
+    }
+    
     const url = this.options.socialLinks[platform];
     if (url) {
       // SCALED FOR: Security - safe external link opening
@@ -185,6 +193,28 @@ export class NavigationHeader {
       link.click();
       
       this.eventBus.emit('navigation:social-click', { platform, url });
+    }
+  }
+
+  /**
+   * Copy email address to clipboard
+   * UPDATED COMMENTS: Direct clipboard copy for email with toast notification
+   */
+  async copyEmailToClipboard() {
+    const emailAddress = SOCIAL_LINKS.email.address;
+    
+    try {
+      // CRITICAL: Direct clipboard copy
+      await navigator.clipboard.writeText(emailAddress);
+      
+      // UPDATED COMMENTS: Show success toast
+      toastManager.showSuccess(TOAST_MESSAGES.EMAIL_COPIED);
+      
+      this.eventBus.emit('navigation:email-copy', { email: emailAddress });
+    } catch (error) {
+      console.error('Failed to copy email:', error);
+      // CRITICAL: Try fallback method
+      this.copyToClipboardFallback(emailAddress);
     }
   }
 
@@ -203,45 +233,40 @@ export class NavigationHeader {
 
   /**
    * Share current page URL
-   * UPDATED COMMENTS: Modern Web Share API with clipboard fallback
+   * UPDATED COMMENTS: Direct clipboard copy without system share dialog
+   * CRITICAL: Always copy to clipboard, never show native share dialog
    */
   async shareCurrentPage() {
     const url = window.location.href;
-    const title = document.title;
     
     try {
-      // SCALED FOR: Modern browsers with Web Share API
-      if (navigator.share) {
-        await navigator.share({ title, url });
-      } else {
-        // REUSED: Clipboard API fallback
-        await navigator.clipboard.writeText(url);
-        this.showShareFeedback();
-      }
+      // CRITICAL: Direct clipboard copy (no Web Share API)
+      await navigator.clipboard.writeText(url);
       
-      this.eventBus.emit('navigation:share', { url, title });
+      // UPDATED COMMENTS: Show success toast after copying
+      toastManager.showSuccess(TOAST_MESSAGES.LINK_COPIED);
+      
+      this.eventBus.emit('navigation:share', { url });
     } catch (error) {
-      console.error('Failed to share:', error);
+      console.error('Failed to copy to clipboard:', error);
+      // CRITICAL: Try fallback method for older browsers
       this.copyToClipboardFallback(url);
     }
   }
 
   /**
    * Show share feedback to user
-   * UPDATED COMMENTS: Temporary visual feedback for copy action
+   * DEPRECATED: Replaced by toast notifications
+   * @deprecated Use toastManager.showSuccess() instead
    */
   showShareFeedback() {
-    const shareButton = this.container.querySelector('[data-action="share-link"] .nav-button__text');
-    if (shareButton) {
-      const originalText = shareButton.textContent;
-      shareButton.textContent = 'Copied!';
-      setTimeout(() => shareButton.textContent = originalText, 2000);
-    }
+    // UPDATED COMMENTS: No longer needed, using toast notifications
+    // Kept for backward compatibility
   }
 
   /**
    * Fallback clipboard copy for older browsers
-   * REUSED: Legacy browser support
+   * REUSED: Legacy browser support with toast notification
    */
   copyToClipboardFallback(text) {
     const textArea = document.createElement('textarea');
@@ -252,10 +277,17 @@ export class NavigationHeader {
     textArea.select();
     
     try {
-      document.execCommand('copy');
-      this.showShareFeedback();
+      const successful = document.execCommand('copy');
+      if (successful) {
+        // UPDATED COMMENTS: Show success toast
+        toastManager.showSuccess(TOAST_MESSAGES.LINK_COPIED);
+      } else {
+        throw new Error('Copy command failed');
+      }
     } catch (error) {
       console.error('Fallback copy failed:', error);
+      // UPDATED COMMENTS: Show error toast
+      toastManager.showError(TOAST_MESSAGES.COPY_ERROR);
     } finally {
       document.body.removeChild(textArea);
     }

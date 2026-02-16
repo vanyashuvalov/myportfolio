@@ -19,8 +19,8 @@ export const SOCIAL_LINKS = {
   },
   
   email: {
-    url: 'mailto:ivan.shuvalov@example.com',
-    address: 'ivan.shuvalov@example.com',
+    url: 'mailto:intjivan@gmail.com',
+    address: 'intjivan@gmail.com',
     displayName: 'Email',
     icon: 'email'
   },

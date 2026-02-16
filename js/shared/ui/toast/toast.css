@@ -11,10 +11,10 @@
   right: 24px;
   z-index: var(--z-toast);
   
-  /* UPDATED COMMENTS: Stack toasts vertically with gap */
+  /* UPDATED COMMENTS: Stack toasts vertically - newest at bottom, oldest at top */
+  /* CRITICAL: column (not column-reverse) so new toasts appear below old ones */
   display: flex;
-  flex-direction: column-reverse;
-  gap: 8px;
+  flex-direction: column;
   
   /* SCALED FOR: Prevent pointer events on container, allow on toasts */
   pointer-events: none;
@@ -36,6 +36,9 @@
   max-width: 380px;
   height: auto;
   
+  /* CRITICAL: Margin-top for smooth stacking animation (toasts stack upward) */
+  margin-top: 8px;
+  
   /* REUSED: Modal background with blur effect */
   background: rgba(0, 0, 0, 0.9);
   backdrop-filter: blur(20px);
@@ -52,21 +55,35 @@
   cursor: pointer;
   
   /* SCALED FOR: Smooth animations */
-  /* CRITICAL: Initial state for slide-up animation */
+  /* CRITICAL: Initial state - collapsed with no height/margin for smooth insertion */
+  max-height: 0;
+  margin-top: 0;
+  padding-top: 0;
+  padding-bottom: 0;
   transform: translateY(20px);
   opacity: 0;
+  overflow: hidden;
   
   /* REUSED: Universal transition timing from design system */
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-              opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+  /* CRITICAL: Two-phase animation - first expand height/margin, then fade in */
+  transition: max-height 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+              margin-top 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+              padding-top 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+              padding-bottom 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) 0.15s,
+              opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1) 0.15s,
               box-shadow var(--transition-fast);
   
   /* SCALED FOR: GPU acceleration for smooth animations */
-  will-change: transform, opacity;
+  will-change: max-height, margin-top, padding-top, padding-bottom, transform, opacity;
 }
 
-/* CRITICAL: Visible state for animation */
+/* CRITICAL: Visible state - expanded with full height and opacity */
 .toast--visible {
+  max-height: 500px; /* Large enough for any toast content */
+  margin-top: 8px;
+  padding-top: 20px;
+  padding-bottom: 20px;
   transform: translateY(0);
   opacity: 1;
 }
@@ -74,6 +91,11 @@
 /* UPDATED COMMENTS: Hover effect for interactive feedback */
 .toast:hover {
   box-shadow: var(--widget-shadow-hovered);
+}
+
+/* UPDATED COMMENTS: First toast has no top margin */
+.toast:first-child {
+  margin-top: 0;
 }
 
 /* ANCHOR: toast_icon */
@@ -144,11 +166,23 @@
 }
 
 /* ANCHOR: toast_exit_animation */
-/* CRITICAL: Exit animation for smooth dismissal */
+/* CRITICAL: Exit animation for smooth dismissal - reverse of entry animation */
 .toast--exiting {
+  /* UPDATED COMMENTS: Two-phase exit - first fade out, then collapse */
+  max-height: 0;
+  margin-top: 0;
+  padding-top: 0;
+  padding-bottom: 0;
   transform: translateY(20px);
   opacity: 0;
-  transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+  
+  /* CRITICAL: Fade out first (200ms), then collapse (150ms) */
+  transition: transform 0.2s ease-out,
+              opacity 0.2s ease-out,
+              max-height 0.15s ease-out 0.2s,
+              margin-top 0.15s ease-out 0.2s,
+              padding-top 0.15s ease-out 0.2s,
+              padding-bottom 0.15s ease-out 0.2s;
 }
 
 /* ANCHOR: responsive_design */
