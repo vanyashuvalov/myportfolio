@@ -4,6 +4,8 @@
 /* UPDATED COMMENTS: Contact modal with optional contact field */
 
 import { EventBus } from '../../utils/event-bus.js';
+import { toastManager } from '../../utils/toast-manager.js';
+import { TOAST_MESSAGES } from '../toast/toast-messages.js';
 
 /**
  * ContactModal class - Modal for collecting contact info before sending message
@@ -182,7 +184,8 @@ export class ContactModal {
   async handleSend() {
     // CRITICAL: Validate contact field if filled (min 5 chars)
     if (this.contactInfo.length > 0 && this.contactInfo.length < 5) {
-      this.showError('at least 5 characters');
+      // UPDATED COMMENTS: Show toast instead of inline error
+      toastManager.showInfo(TOAST_MESSAGES.CONTACT_TOO_SHORT);
       return;
     }
     
@@ -199,12 +202,18 @@ export class ContactModal {
           message: this.message,
           contact: this.contactInfo
         });
+        
+        // UPDATED COMMENTS: Show success toast notification
+        toastManager.showSuccess(TOAST_MESSAGES.MESSAGE_SENT);
+        
         this.hide();
       } else {
         throw new Error(response.error || 'Failed to send message');
       }
     } catch (error) {
-      this.showError('Failed to send a message. Please try again later');
+      // UPDATED COMMENTS: Show error toast notification
+      toastManager.showError(TOAST_MESSAGES.MESSAGE_ERROR);
+      
       this.sendButton.disabled = false;
       this.sendButton.textContent = this.contactInfo ? 'SEND' : 'SEND ANONYMOUSLY';
     }
