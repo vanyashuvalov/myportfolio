@@ -1,0 +1,164 @@
+/* ANCHOR: chip_styles */
+/* FSD: shared/ui/chip → reusable tag/category component */
+/* REUSED: Consistent design system with SF Pro font */
+/* SCALED FOR: Multiple variants and sizes */
+
+/**
+ * Chip Component Styles
+ * UPDATED COMMENTS: Pill-shaped tags for categories, filters, and labels
+ * Based on Figma design: semi-transparent background, uppercase text
+ * 
+ * Usage:
+ * - Project categories
+ * - Filter tags
+ * - Status badges
+ * - Skill labels
+ */
+
+/* ============================================
+   BASE CHIP STYLES
+   ============================================ */
+
+.chip {
+  /* CRITICAL: Base chip styling from Figma spec */
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 4px 8px;
+  gap: 10px;
+  
+  /* UPDATED COMMENTS: Semi-transparent background for dark themes */
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 99px;
+  border: none;
+  
+  /* REUSED: SF Pro font family */
+  font-family: 'SF Pro Display', 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 130%; /* 18px */
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  
+  /* SCALED FOR: Smooth transitions */
+  transition: all 0.2s ease;
+  
+  /* UPDATED COMMENTS: Prevent text selection */
+  user-select: none;
+  -webkit-user-select: none;
+  white-space: nowrap;
+}
+
+/* ============================================
+   CHIP VARIANTS
+   ============================================ */
+
+/* UPDATED COMMENTS: Light variant for light backgrounds */
+.chip--light {
+  background: rgba(14, 22, 33, 0.1);
+  color: #0E1621;
+}
+
+/* CRITICAL: Solid variant for emphasis */
+.chip--solid {
+  background: #FFFFFF;
+  color: #0E1621;
+}
+
+/* REUSED: Primary color variant */
+.chip--primary {
+  background: rgba(194, 72, 163, 0.2);
+  color: #C248A3;
+}
+
+/* SCALED FOR: Interactive chips (clickable/hoverable) */
+.chip--interactive {
+  cursor: pointer;
+}
+
+.chip--interactive:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-1px);
+}
+
+.chip--interactive:active {
+  transform: translateY(0);
+}
+
+/* UPDATED COMMENTS: Light variant hover */
+.chip--light.chip--interactive:hover {
+  background: rgba(14, 22, 33, 0.15);
+}
+
+/* ============================================
+   CHIP SIZES
+   ============================================ */
+
+/* SCALED FOR: Small chip for compact layouts */
+.chip--small {
+  padding: 2px 6px;
+  font-size: 12px;
+  line-height: 130%; /* 16px */
+}
+
+/* REUSED: Large chip for emphasis */
+.chip--large {
+  padding: 6px 12px;
+  font-size: 16px;
+  line-height: 130%; /* 21px */
+}
+
+/* ============================================
+   CHIP CONTAINER
+   ============================================ */
+
+/* CRITICAL: Container for multiple chips */
+.chips-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  align-content: center;
+  gap: 6px;
+}
+
+/* UPDATED COMMENTS: Left-aligned chips */
+.chips-container--left {
+  justify-content: flex-start;
+}
+
+/* REUSED: Right-aligned chips */
+.chips-container--right {
+  justify-content: flex-end;
+}
+
+/* SCALED FOR: Larger gap between chips */
+.chips-container--spaced {
+  gap: 12px;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+  .chip {
+    /* UPDATED COMMENTS: Slightly smaller on mobile */
+    font-size: 13px;
+    padding: 3px 7px;
+  }
+  
+  .chip--small {
+    font-size: 11px;
+    padding: 2px 5px;
+  }
+  
+  .chip--large {
+    font-size: 15px;
+    padding: 5px 10px;
+  }
+}

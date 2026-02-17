@@ -105,6 +105,11 @@
   transform: scale(1);
 }
 
+/* UPDATED COMMENTS: Disable scale animation for fullscreen modals */
+.modal-content--fullscreen {
+  transform: scale(1) !important;
+}
+
 /* ANCHOR: modal_description */
 /* FIGMA SPECS: Description container with icon and text */
 /* Auto layout: flex column, align center, gap 16px, width 440px, auto height */
