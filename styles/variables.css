@@ -132,6 +132,13 @@
   /* UPDATED COMMENTS: Minimum widget dimensions for consistent sizing */
   --widget-min-width: 200px;
   --widget-min-height: 100px;
+  
+  /* ANCHOR: button_backgrounds */
+  /* REUSABLE LOGIC: Universal button background styles */
+  /* SCALED FOR: Consistent frosted glass effect across all buttons */
+  --button-bg-dark: rgba(0, 0, 0, 0.5);
+  --button-bg-light: rgba(255, 255, 255, 0.3);
+  --button-blur: blur(2px);
 }
 
 /* ANCHOR: dark_theme */

@@ -78,6 +78,21 @@ export class ModalManager {
       });
     }
   }
+  
+  /**
+   * Setup close button click listener after modal is rendered
+   * CRITICAL: Must be called after modal HTML is created
+   * REUSED: Click handler pattern for modal controls
+   */
+  setupCloseButtonListener() {
+    const closeButton = this.container.querySelector('.modal-close');
+    if (closeButton) {
+      closeButton.addEventListener('click', () => {
+        console.log('❌ Close button clicked, closing modal');
+        this.close();
+      });
+    }
+  }
 
   /**
    * Register modal type with content renderer
@@ -122,10 +137,17 @@ export class ModalManager {
     
     console.log('✅ Content created, rendering modal...');
     
-    // REUSED: Modal structure with backdrop and content
+    // CRITICAL: Determine if fullscreen modal (projects list)
+    const isFullscreen = type === 'projects-list' || type === 'projects';
+    const fullscreenClass = isFullscreen ? ' modal-content--fullscreen' : '';
+    
+    // REUSED: Modal structure with backdrop, content, and close button
     this.container.innerHTML = `
       <div class="modal-backdrop"></div>
-      <div class="modal-content" role="dialog" aria-modal="true">
+      <button class="modal-close" aria-label="Close modal" tabindex="-1">
+        <img src="/assets/icons/iconamoon_close.svg" alt="Close" />
+      </button>
+      <div class="modal-content${fullscreenClass}" role="dialog" aria-modal="true">
         <div class="modal-body">
           ${modalContent}
         </div>
@@ -134,6 +156,9 @@ export class ModalManager {
     
     // CRITICAL: Add open class BEFORE setting up listeners
     this.container.classList.add('modal-container--open');
+    if (isFullscreen) {
+      this.container.classList.add('modal-container--fullscreen');
+    }
     this.container.setAttribute('aria-hidden', 'false');
     this.container.removeAttribute('aria-hidden');
     
@@ -145,14 +170,17 @@ export class ModalManager {
     // CRITICAL: Setup backdrop click listener
     this.setupBackdropListener();
     
+    // UPDATED COMMENTS: Setup close button click listener
+    this.setupCloseButtonListener();
+    
     console.log('✅ Modal opened successfully');
     
     // UPDATED COMMENTS: Prevent body scroll
     document.body.style.overflow = 'hidden';
     
-    // REUSED: Focus management for accessibility
+    // REUSED: Focus management for accessibility - skip close button
     requestAnimationFrame(() => {
-      const firstFocusable = this.container.querySelector('button, a, input, [tabindex]:not([tabindex="-1"])');
+      const firstFocusable = this.container.querySelector('.modal-body button, .modal-body a, .modal-body input, .modal-body [tabindex]:not([tabindex="-1"])');
       if (firstFocusable) {
         firstFocusable.focus();
       }
@@ -173,6 +201,7 @@ export class ModalManager {
     
     // SCALED FOR: Smooth exit animation
     this.container.classList.remove('modal-container--open');
+    this.container.classList.remove('modal-container--fullscreen');
     this.container.classList.add('modal-container--closing');
     this.container.setAttribute('aria-hidden', 'true');
     this.container.style.visibility = 'hidden';
