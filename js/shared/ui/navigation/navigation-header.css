@@ -10,13 +10,14 @@
 /* ANCHOR: navigation_wrapper */
 /* UPDATED COMMENTS: Full width navigation container with padding */
 /* CRITICAL: Hidden during loading, shown after content is ready */
+/* SCALED FOR: Always above fullscreen modals with z-navigation */
 .navigation-wrapper {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   padding: 20px;
-  z-index: var(--z-fixed);
+  z-index: var(--z-navigation);
   display: flex;
   justify-content: center;
   /* REUSED: Hidden during loading state */

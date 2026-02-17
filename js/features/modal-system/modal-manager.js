@@ -154,8 +154,7 @@ export class ModalManager {
       </div>
     `;
     
-    // CRITICAL: Add open class BEFORE setting up listeners
-    this.container.classList.add('modal-container--open');
+    // CRITICAL: Add fullscreen class first (before open class for animation)
     if (isFullscreen) {
       this.container.classList.add('modal-container--fullscreen');
     }
@@ -164,6 +163,14 @@ export class ModalManager {
     
     // CRITICAL: Force visibility with inline styles to override aria-hidden
     this.container.style.visibility = 'visible';
+    
+    // UPDATED COMMENTS: Add open class with delay to trigger CSS animations
+    // CRITICAL: Use requestAnimationFrame to ensure browser applies initial styles first
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        this.container.classList.add('modal-container--open');
+      });
+    });
     
     this.isOpen = true;
     
@@ -194,10 +201,16 @@ export class ModalManager {
 
   /**
    * Close current modal with smooth animation
-   * UPDATED COMMENTS: Cleanup and focus restoration
+   * UPDATED COMMENTS: Cleanup and focus restoration with proper accessibility
    */
   async close() {
     if (!this.isOpen) return;
+    
+    // CRITICAL: Remove focus from modal elements before hiding
+    // UPDATED COMMENTS: Prevents aria-hidden focus warning
+    if (document.activeElement && this.container.contains(document.activeElement)) {
+      document.activeElement.blur();
+    }
     
     // SCALED FOR: Smooth exit animation
     this.container.classList.remove('modal-container--open');
