@@ -166,7 +166,7 @@ export class SimpleDragHover {
 
   /**
    * Handle mouse down - initialize drag with offset calculation
-   * UPDATED COMMENTS: Kirupa-style offset initialization with CSS positioning support
+   * UPDATED COMMENTS: Kirupa-style offset initialization with CSS positioning support and click detection
    */
   handleMouseDown(event, widget) {
     if (event.button !== 0) return; // Only left mouse button
@@ -177,6 +177,11 @@ export class SimpleDragHover {
     if (!isWidgetClick) return;
     
     event.preventDefault();
+    
+    // UPDATED COMMENTS: Store mouse down position for click detection
+    this.mouseDownX = event.clientX;
+    this.mouseDownY = event.clientY;
+    this.mouseDownTime = Date.now();
     
     // CRITICAL: For CSS positioned widgets, get current computed position
     const usesCssPositioning = widget.config && widget.config.cssPositioning;
@@ -245,12 +250,25 @@ export class SimpleDragHover {
   /**
    * Handle mouse up - end drag with offset preservation
    * SCALED FOR: Clean drag end with optimized transitions for both positioning modes
+   * UPDATED COMMENTS: Added click detection - if mouse didn't move much, trigger onClick
    */
   handleMouseUp(event) {
     if (!this.active || !this.dragWidget) return;
     
     const widget = this.dragWidget;
     const container = widget._dragContainer;
+    
+    // CRITICAL: Detect if this was a click (not a drag)
+    const mouseUpX = event.clientX;
+    const mouseUpY = event.clientY;
+    const mouseUpTime = Date.now();
+    
+    const deltaX = Math.abs(mouseUpX - this.mouseDownX);
+    const deltaY = Math.abs(mouseUpY - this.mouseDownY);
+    const deltaTime = mouseUpTime - this.mouseDownTime;
+    
+    // UPDATED COMMENTS: Click detection thresholds
+    const isClick = deltaX < 5 && deltaY < 5 && deltaTime < 300;
     
     // CRITICAL: Remove global listeners
     container.removeEventListener('mousemove', this.boundMouseMove);
@@ -293,6 +311,14 @@ export class SimpleDragHover {
       widget.state.isHovered = false;
       widget.element.classList.remove('widget--hovered');
       this.setTranslate(this.xOffset, this.yOffset, widget.element, widget.rotation, widget.scale);
+    }
+    
+    // CRITICAL: Trigger onClick if this was a click (not a drag)
+    if (isClick && widget.onClick && typeof widget.onClick === 'function') {
+      console.log('✅ Click detected! Calling onClick for', widget.type);
+      widget.onClick({ event, widget });
+    } else if (isClick) {
+      console.log('⚠️ Click detected but no onClick handler for', widget.type);
     }
     
     // CRITICAL: Clear drag widget reference

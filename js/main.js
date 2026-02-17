@@ -10,6 +10,9 @@ import { EventBus } from './shared/utils/event-bus.js';
 import { NavigationHeader } from './shared/ui/navigation/navigation-header.js';
 import { ContactInput } from './shared/ui/contact-input/contact-input.js';
 import { ContactModal } from './shared/ui/modal/contact-modal.js';
+import { ModalManager } from './features/modal-system/modal-manager.js';
+import { ProjectsListModal } from './features/modal-system/projects-list-modal.js';
+import { PageManager } from './features/page-manager/page-manager.js';
 
 /**
  * Application class - Main application controller
@@ -23,6 +26,8 @@ class Application {
     this.navigation = null;
     this.contactInput = null;
     this.contactModal = null;
+    this.modalManager = null;
+    this.pageManager = null;
     this.performanceMonitor = null;
     this.assetManager = null;
     this.eventBus = null;
@@ -118,6 +123,59 @@ class Application {
         this.eventBus.on('message:sent', () => {
           if (this.contactInput) {
             this.contactInput.clearInput();
+          }
+        });
+      }
+
+      // ANCHOR: modal_manager_initialization
+      // UPDATED COMMENTS: Modal manager for projects list with separate container
+      const projectsModalContainer = document.getElementById('projects-modal-container');
+      
+      if (!projectsModalContainer) {
+        console.error('❌ Projects modal container not found');
+      } else {
+        this.modalManager = new ModalManager({
+          container: projectsModalContainer,
+          eventBus: this.eventBus
+        });
+
+        // ANCHOR: page_manager_initialization
+        // CRITICAL: Page manager for project detail pages
+        this.pageManager = new PageManager({
+          eventBus: this.eventBus,
+          desktopCanvas: this.canvas
+        });
+
+        // REUSED: Register projects list modal renderer
+        const projectsListModal = new ProjectsListModal({
+          eventBus: this.eventBus,
+          pageManager: this.pageManager
+        });
+
+        this.modalManager.registerModalType('projects-list', async (options) => {
+          const html = await projectsListModal.render(options);
+          
+          // CRITICAL: Setup event listeners after modal renders
+          setTimeout(() => {
+            const modalContent = projectsModalContainer.querySelector('.modal-content');
+            if (modalContent) {
+              projectsListModal.setupEventListeners(modalContent);
+            }
+          }, 100);
+          
+          return html;
+        });
+
+        // UPDATED COMMENTS: Listen for folder widget clicks
+        this.eventBus.on('folder:clicked', ({ category }) => {
+          console.log('📥 Received folder:clicked event', { category });
+          console.log('🔍 ModalManager exists?', !!this.modalManager);
+          console.log('🔍 Opening modal with category:', category);
+          
+          try {
+            this.modalManager.open('projects-list', { category });
+          } catch (error) {
+            console.error('❌ Failed to open modal:', error);
           }
         });
       }

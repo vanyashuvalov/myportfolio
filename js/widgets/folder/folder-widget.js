@@ -127,11 +127,26 @@ export class FolderWidget extends WidgetBase {
 
   /**
    * Widget-specific click handler
-   * UPDATED COMMENTS: Click functionality disabled for now
+   * UPDATED COMMENTS: Opens projects list modal
    */
   onClick(data) {
-    // DISABLED - no click functionality needed for now
-    return;
+    console.log('🎯 Folder clicked!', this.title, this.theme);
+    
+    // CRITICAL: Emit folder clicked event to open modal
+    if (this.eventBus) {
+      // UPDATED COMMENTS: Determine category from theme
+      const category = this.theme === 'pink' ? 'fun' : 'work';
+      
+      console.log('📤 Emitting folder:clicked event', { category, title: this.title });
+      
+      this.eventBus.emit('folder:clicked', {
+        widget: this,
+        category: category,
+        title: this.title
+      });
+    } else {
+      console.error('❌ No eventBus available!');
+    }
   }
 
   /**

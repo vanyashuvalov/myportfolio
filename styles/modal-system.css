@@ -1,0 +1,409 @@
+/* ANCHOR: modal_system_styles */
+/* FSD: features/modal-system → modal and page styling */
+/* REUSED: Consistent design system with blur and shadows */
+/* SCALED FOR: Smooth animations and responsive layouts */
+
+/* ============================================
+   MODAL CONTAINER
+   ============================================ */
+
+.modal-container {
+  /* CRITICAL: Hidden by default */
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 99999 !important;
+  display: none !important;
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.modal-container--open {
+  display: flex !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+.modal-container--closing {
+  opacity: 0;
+}
+
+/* ============================================
+   MODAL BACKDROP
+   ============================================ */
+
+.modal-backdrop {
+  /* UPDATED COMMENTS: Blur backdrop for depth */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 1;
+  pointer-events: auto;
+}
+
+/* ============================================
+   MODAL CONTENT
+   ============================================ */
+
+.modal-content {
+  /* SCALED FOR: Centered modal with max dimensions */
+  position: relative;
+  width: 90%;
+  max-width: 1200px;
+  max-height: 90vh;
+  background: #FFFFFF;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+  pointer-events: auto;
+  
+  /* CRITICAL: Smooth entrance animation */
+  animation: modalEnter 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes modalEnter {
+  0% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ============================================
+   MODAL CLOSE BUTTON
+   ============================================ */
+
+.modal-close {
+  /* UPDATED COMMENTS: Fixed close button in top-right */
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+  background: rgba(0, 0, 0, 0.1);
+  transform: scale(1.1);
+}
+
+.modal-close svg {
+  color: #0E1621;
+}
+
+/* ============================================
+   MODAL BODY
+   ============================================ */
+
+.modal-body {
+  /* REUSED: Scrollable content area */
+  flex: 1;
+  overflow-y: auto;
+  padding: 60px 40px 40px;
+}
+
+/* ============================================
+   PROJECTS LIST
+   ============================================ */
+
+.projects-list {
+  /* UPDATED COMMENTS: Projects list container */
+  width: 100%;
+}
+
+.projects-list-header {
+  /* CRITICAL: List header with title and description */
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.projects-list-title {
+  /* SCALED FOR: Large title */
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 48px;
+  font-weight: 700;
+  color: #0E1621;
+  margin: 0 0 16px 0;
+}
+
+.projects-list-description {
+  /* REUSED: Description text */
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 18px;
+  color: rgba(14, 22, 33, 0.6);
+  margin: 0 0 12px 0;
+}
+
+.projects-list-count {
+  /* UPDATED COMMENTS: Project count badge */
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 14px;
+  color: rgba(14, 22, 33, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ============================================
+   PROJECTS GRID
+   ============================================ */
+
+.projects-grid {
+  /* CRITICAL: Responsive grid layout */
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 32px;
+  margin-top: 40px;
+}
+
+/* ============================================
+   PROJECT CARD
+   ============================================ */
+
+.project-card {
+  /* UPDATED COMMENTS: Project card with hover effects */
+  background: #FFFFFF;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(14, 22, 33, 0.1);
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+}
+
+.project-card--hovered {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+}
+
+.project-card-image {
+  /* SCALED FOR: Image container with overlay */
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; /* 16:9 aspect ratio */
+  overflow: hidden;
+  background: #F5F5F5;
+}
+
+.project-card-image img {
+  /* CRITICAL: Cover image */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.project-card-overlay {
+  /* UPDATED COMMENTS: Hover overlay */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.project-card:hover .project-card-overlay {
+  opacity: 1;
+}
+
+.project-card-view {
+  /* REUSED: View button text */
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #FFFFFF;
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  backdrop-filter: blur(10px);
+}
+
+.project-card-content {
+  /* UPDATED COMMENTS: Card content padding */
+  padding: 24px;
+}
+
+.project-card-header {
+  /* CRITICAL: Title and year row */
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.project-card-title {
+  /* SCALED FOR: Card title */
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #0E1621;
+  margin: 0;
+  flex: 1;
+}
+
+.project-card-year {
+  /* REUSED: Year badge */
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 14px;
+  color: rgba(14, 22, 33, 0.5);
+  flex-shrink: 0;
+}
+
+.project-card-description {
+  /* UPDATED COMMENTS: Card description */
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(14, 22, 33, 0.7);
+  margin: 0 0 16px 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.project-card-tags {
+  /* CRITICAL: Tags container */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.project-card-tag {
+  /* REUSED: Tag styling */
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 12px;
+  color: rgba(14, 22, 33, 0.6);
+  background: rgba(14, 22, 33, 0.05);
+  padding: 4px 12px;
+  border-radius: 12px;
+}
+
+.project-card-tag-more {
+  /* UPDATED COMMENTS: More tags indicator */
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 12px;
+  color: rgba(14, 22, 33, 0.4);
+  background: rgba(14, 22, 33, 0.03);
+  padding: 4px 12px;
+  border-radius: 12px;
+}
+
+/* ============================================
+   PAGE CONTAINER
+   ============================================ */
+
+.page-container {
+  /* CRITICAL: Full-page overlay for project details */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #FFFFFF;
+  z-index: 9999;
+  overflow-y: auto;
+  transition: opacity 0.3s ease;
+}
+
+.page-wrapper {
+  /* UPDATED COMMENTS: Page content wrapper */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-header {
+  /* SCALED FOR: Fixed header with back button */
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(14, 22, 33, 0.1);
+  padding: 20px 40px;
+  z-index: 100;
+}
+
+.page-back-button {
+  /* REUSED: Back button styling */
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: rgba(14, 22, 33, 0.05);
+  border: none;
+  border-radius: 8px;
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #0E1621;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.page-back-button:hover {
+  background: rgba(14, 22, 33, 0.1);
+  transform: translateX(-4px);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+  .modal-body {
+    padding: 60px 20px 20px;
+  }
+  
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .projects-list-title {
+    font-size: 32px;
+  }
+  
+  .page-header {
+    padding: 16px 20px;
+  }
+}

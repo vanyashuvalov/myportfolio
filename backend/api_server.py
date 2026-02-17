@@ -3,14 +3,14 @@
 ## ANCHOR POINTS
 - ENTRY: FastAPI server for Telegram channel data and contact messages
 - MAIN: REST API endpoints for frontend consumption
-- EXPORTS: JSON API with channel info, posts, and contact submission
+- EXPORTS: JSON API with channel info, posts, contact submission, and projects
 - DEPS: fastapi, uvicorn, json, pathlib, httpx, python-dotenv
 - TODOs: Authentication, rate limiting, caching
 
 Telegram Data API Server
-UPDATED COMMENTS: FastAPI server serving scraped Telegram channel data
-Provides REST endpoints for frontend widget consumption and contact messages
-SCALED FOR: Multiple channels, caching, error handling, Telegram bot integration
+UPDATED COMMENTS: FastAPI server serving scraped Telegram channel data and project content
+Provides REST endpoints for frontend widget consumption, contact messages, and markdown projects
+SCALED FOR: Multiple channels, caching, error handling, Telegram bot integration, project pages
 """
 
 import json
@@ -24,7 +24,7 @@ import httpx
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
@@ -39,6 +39,9 @@ class APIConfig:
         self.data_dir = Path('data/telegram')
         self.data_file = self.data_dir / 'channels_data.json'
         self.static_dir = self.data_dir
+        
+        # UPDATED COMMENTS: Projects directory for markdown files
+        self.projects_dir = Path('data/projects')
         
         # SCALED FOR: Cache configuration
         self.cache_ttl = 3600  # 1 hour cache
@@ -56,9 +59,9 @@ class ContactMessage(BaseModel):
 
 # FSD: shared/api/telegram → API server implementation
 app = FastAPI(
-    title="Telegram Channel Data API",
-    description="API for serving scraped Telegram channel information",
-    version="1.0.0"
+    title="Portfolio API",
+    description="API for Telegram channel data and project content",
+    version="2.0.0"
 )
 
 # UPDATED COMMENTS: CORS configuration for frontend integration
@@ -141,12 +144,14 @@ def get_channel_data(channel_username: str) -> Optional[Dict]:
 async def root():
     """API root endpoint with basic info"""
     return {
-        "service": "Telegram Channel Data API",
-        "version": "1.0.0",
+        "service": "Portfolio API",
+        "version": "2.0.0",
         "endpoints": {
             "channels": "/api/channels",
             "channel": "/api/channels/{username}",
             "posts": "/api/channels/{username}/posts",
+            "projects": "/api/projects",
+            "project_detail": "/api/projects/{category}/{id}",
             "health": "/health"
         }
     }
@@ -158,6 +163,7 @@ async def health_check():
     SCALED FOR: Monitoring and load balancer integration
     """
     data_exists = config.data_file.exists()
+    projects_exist = config.projects_dir.exists()
     last_update = None
     
     if data_exists:
@@ -168,18 +174,17 @@ async def health_check():
             pass
     
     return {
-        "status": "healthy" if data_exists else "degraded",
+        "status": "healthy" if (data_exists and projects_exist) else "degraded",
         "data_file_exists": data_exists,
+        "projects_dir_exists": projects_exist,
         "last_data_update": last_update,
         "timestamp": datetime.now().isoformat()
     }
 
+# ANCHOR: telegram_endpoints (existing code continues...)
 @app.get("/api/channels")
 async def get_all_channels():
-    """
-    Get list of all available channels
-    UPDATED COMMENTS: Returns channel list with basic metadata
-    """
+    """Get list of all available channels"""
     all_data = load_channels_data()
     
     channels = []
@@ -204,13 +209,7 @@ async def get_all_channels():
 
 @app.get("/api/channels/{username}")
 async def get_channel_info(username: str):
-    """
-    Get detailed channel information
-    REUSED: Channel data retrieval with error handling
-    
-    Args:
-        username: Channel username without @
-    """
+    """Get detailed channel information"""
     channel_data = get_channel_data(username)
     
     if not channel_data:
@@ -233,15 +232,7 @@ async def get_channel_posts(
     username: str,
     limit: int = Query(default=5, ge=1, le=20, description="Number of posts to return")
 ):
-    """
-    Get latest posts from channel
-    UPDATED COMMENTS: Paginated posts with view counts and metadata
-    SCALED FOR: Efficient data transfer with configurable limits
-    
-    Args:
-        username: Channel username without @
-        limit: Maximum number of posts to return (1-20)
-    """
+    """Get latest posts from channel"""
     channel_data = get_channel_data(username)
     
     if not channel_data:
@@ -255,7 +246,6 @@ async def get_channel_posts(
     
     posts = channel_data.get('posts', [])[:limit]
     
-    # UPDATED COMMENTS: Format posts for frontend consumption
     formatted_posts = []
     for post in posts:
         formatted_post = {
@@ -281,25 +271,18 @@ async def get_channel_posts(
 
 @app.get("/api/channels/{username}/latest")
 async def get_channel_latest_post(username: str):
-    """
-    Get the latest post from channel (for widget display)
-    REUSED: Single post retrieval optimized for widgets
-    UPDATED COMMENTS: Works with both MTProto and HTML parser data
-    """
+    """Get the latest post from channel (for widget display)"""
     channel_data = get_channel_data(username)
     
     if not channel_data or not channel_data.get('success'):
-        # UPDATED COMMENTS: Return mock data for development
         return get_mock_latest_post(username)
     
     posts = channel_data.get('posts', [])
     if not posts:
         return get_mock_latest_post(username)
     
-    latest_post = posts[0]  # Posts are ordered by date desc
+    latest_post = posts[0]
     channel_info = channel_data.get('channel_info', {})
-    
-    # UPDATED COMMENTS: Avatar removed - frontend uses static file
     
     return {
         "channel": {
@@ -320,77 +303,137 @@ async def get_channel_latest_post(username: str):
         "last_updated": channel_data.get('scraped_at')
     }
 
-# REUSABLE LOGIC: Utility functions
-def format_post_date(date_str: Optional[str]) -> str:
-    """Format post date for display"""
-    if not date_str:
-        return "Unknown"
+# ANCHOR: projects_endpoints
+@app.get("/api/projects")
+async def get_projects(category: str = Query(default='all', description="Project category: work, fun, or all")):
+    """
+    Get list of projects by category
+    UPDATED COMMENTS: Returns project metadata from markdown frontmatter
+    SCALED FOR: Multiple categories with filtering
+    """
+    try:
+        projects = []
+        
+        # CRITICAL: Determine which categories to scan
+        categories = []
+        if category == 'all':
+            categories = ['work', 'fun']
+        elif category in ['work', 'fun']:
+            categories = [category]
+        else:
+            raise HTTPException(status_code=400, detail=f"Invalid category: {category}")
+        
+        # UPDATED COMMENTS: Scan project directories
+        for cat in categories:
+            cat_dir = config.projects_dir / cat
+            if not cat_dir.exists():
+                continue
+            
+            # SCALED FOR: Read all .md files in category
+            for md_file in cat_dir.glob('*.md'):
+                try:
+                    project_data = parse_project_metadata(md_file, cat)
+                    if project_data:
+                        projects.append(project_data)
+                except Exception as e:
+                    logging.error(f"Error parsing project {md_file}: {e}")
+                    continue
+        
+        return {
+            "projects": projects,
+            "total": len(projects),
+            "category": category
+        }
+        
+    except Exception as e:
+        logging.error(f"Error loading projects: {e}")
+        raise HTTPException(status_code=500, detail="Failed to load projects")
+
+@app.get("/api/projects/{category}/{project_id}")
+async def get_project_detail(category: str, project_id: str):
+    """
+    Get project markdown content
+    UPDATED COMMENTS: Returns raw markdown for frontend parsing
+    SCALED FOR: Category-based project organization
+    """
+    if category not in ['work', 'fun']:
+        raise HTTPException(status_code=400, detail=f"Invalid category: {category}")
+    
+    # CRITICAL: Construct file path
+    project_file = config.projects_dir / category / f"{project_id}.md"
+    
+    if not project_file.exists():
+        raise HTTPException(status_code=404, detail=f"Project {project_id} not found in {category}")
     
     try:
-        post_date = datetime.fromisoformat(date_str.replace('Z', '+00:00'))
-        now = datetime.now(post_date.tzinfo)
+        # UPDATED COMMENTS: Return raw markdown content
+        with open(project_file, 'r', encoding='utf-8') as f:
+            content = f.read()
         
-        diff = now - post_date
+        return PlainTextResponse(content=content, media_type='text/markdown')
         
-        if diff.days > 0:
-            return f"{diff.days}d ago"
-        elif diff.seconds > 3600:
-            hours = diff.seconds // 3600
-            return f"{hours}h ago"
-        elif diff.seconds > 60:
-            minutes = diff.seconds // 60
-            return f"{minutes}m ago"
-        else:
-            return "Just now"
-    except Exception:
-        return "Unknown"
+    except Exception as e:
+        logging.error(f"Error reading project file: {e}")
+        raise HTTPException(status_code=500, detail="Failed to read project content")
 
-def format_number(num: int) -> str:
-    """Format large numbers for display"""
-    if num >= 1000000:
-        return f"{num / 1000000:.1f}M"
-    elif num >= 1000:
-        return f"{num / 1000:.1f}K"
-    else:
-        return str(num)
-
-def get_mock_latest_post(username: str) -> Dict:
+def parse_project_metadata(md_file: Path, category: str) -> Optional[Dict]:
     """
-    Mock data for development/fallback
-    SCALED FOR: Graceful degradation when real data unavailable
+    Parse project metadata from markdown frontmatter
+    REUSED: Frontmatter parsing for project list
     """
-    return {
-        "channel": {
-            "username": username,
-            "title": "Ваня Кнопочкин" if username == "vanyashuvalov" else username.title(),
-            "avatar_url": None,
-            "description": "Product Designer & Creative",
-            "verified": False
-        },
-        "latest_post": {
-            "text": "москва газ соревнования по счету в уме",
-            "views": 43,
-            "date": datetime.now().isoformat(),
-            "formatted_date": "2h ago",
-            "formatted_views": "43",
-            "link": f"https://t.me/{username}/123"
-        },
-        "last_updated": datetime.now().isoformat(),
-        "mock_data": True
-    }
+    try:
+        with open(md_file, 'r', encoding='utf-8') as f:
+            content = f.read()
+        
+        # CRITICAL: Extract frontmatter
+        if not content.startswith('---'):
+            return None
+        
+        parts = content.split('---', 2)
+        if len(parts) < 3:
+            return None
+        
+        frontmatter = parts[1].strip()
+        
+        # UPDATED COMMENTS: Parse YAML-like frontmatter
+        metadata = {}
+        for line in frontmatter.split('\n'):
+            if ':' in line:
+                key, value = line.split(':', 1)
+                key = key.strip()
+                value = value.strip()
+                
+                # SCALED FOR: Parse arrays
+                if value.startswith('[') and value.endswith(']'):
+                    value = [v.strip().strip('"\'') for v in value[1:-1].split(',')]
+                else:
+                    value = value.strip('"\'')
+                
+                metadata[key] = value
+        
+        # REUSED: Project ID from filename
+        project_id = md_file.stem
+        
+        return {
+            "id": project_id,
+            "category": category,
+            "title": metadata.get('title', project_id),
+            "thumbnail": metadata.get('thumbnail', '/assets/images/bg-mountains.jpg'),  # UPDATED: Use existing image as fallback
+            "description": metadata.get('description', ''),
+            "tags": metadata.get('tags', []),
+            "year": metadata.get('year'),
+            "client": metadata.get('client'),
+            "role": metadata.get('role')
+        }
+        
+    except Exception as e:
+        logging.error(f"Error parsing project metadata: {e}")
+        return None
 
 # ANCHOR: contact_message_endpoint
 @app.post("/api/contact/send")
 async def send_contact_message(message: ContactMessage):
-    """
-    Send contact message to Telegram bot
-    UPDATED COMMENTS: Receives message from frontend and forwards to Telegram
-    SCALED FOR: Rate limiting and validation
-    
-    Args:
-        message: ContactMessage with text and optional contact info
-    """
-    # UPDATED COMMENTS: Validate message
+    """Send contact message to Telegram bot"""
     if not message.message or len(message.message.strip()) < 10:
         raise HTTPException(
             status_code=400,
@@ -403,9 +446,7 @@ async def send_contact_message(message: ContactMessage):
             detail="Message must be less than 2000 characters"
         )
     
-    # CRITICAL: Check if Telegram bot is configured
     if not config.telegram_bot_token or not config.telegram_chat_id:
-        # UPDATED COMMENTS: Development mode - just log the message
         logging.info("=" * 60)
         logging.info("📬 New Contact Message (Development Mode)")
         logging.info("=" * 60)
@@ -420,7 +461,6 @@ async def send_contact_message(message: ContactMessage):
             "dev_mode": True
         }
     
-    # CRITICAL: Format message for Telegram
     telegram_text = f"📬 New Contact Message\n\n"
     telegram_text += f"Message:\n{message.message}\n\n"
     
@@ -431,7 +471,6 @@ async def send_contact_message(message: ContactMessage):
     
     telegram_text += f"\nReceived: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
     
-    # SCALED FOR: Send to Telegram with error handling
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(
@@ -468,17 +507,72 @@ async def send_contact_message(message: ContactMessage):
             detail="Internal server error"
         )
 
+# REUSABLE LOGIC: Utility functions
+def format_post_date(date_str: Optional[str]) -> str:
+    """Format post date for display"""
+    if not date_str:
+        return "Unknown"
+    
+    try:
+        post_date = datetime.fromisoformat(date_str.replace('Z', '+00:00'))
+        now = datetime.now(post_date.tzinfo)
+        
+        diff = now - post_date
+        
+        if diff.days > 0:
+            return f"{diff.days}d ago"
+        elif diff.seconds > 3600:
+            hours = diff.seconds // 3600
+            return f"{hours}h ago"
+        elif diff.seconds > 60:
+            minutes = diff.seconds // 60
+            return f"{minutes}m ago"
+        else:
+            return "Just now"
+    except Exception:
+        return "Unknown"
+
+def format_number(num: int) -> str:
+    """Format large numbers for display"""
+    if num >= 1000000:
+        return f"{num / 1000000:.1f}M"
+    elif num >= 1000:
+        return f"{num / 1000:.1f}K"
+    else:
+        return str(num)
+
+def get_mock_latest_post(username: str) -> Dict:
+    """Mock data for development/fallback"""
+    return {
+        "channel": {
+            "username": username,
+            "title": "Ваня Кнопочкин" if username == "vanyashuvalov" else username.title(),
+            "avatar_url": None,
+            "description": "Product Designer & Creative",
+            "verified": False
+        },
+        "latest_post": {
+            "text": "москва газ соревнования по счету в уме",
+            "views": 43,
+            "date": datetime.now().isoformat(),
+            "formatted_date": "2h ago",
+            "formatted_views": "43",
+            "link": f"https://t.me/{username}/123"
+        },
+        "last_updated": datetime.now().isoformat(),
+        "mock_data": True
+    }
+
 # UPDATED COMMENTS: Static file serving for avatars
 app.mount("/static", StaticFiles(directory=str(config.static_dir)), name="static")
 
 if __name__ == "__main__":
     import uvicorn
     
-    # SCALED FOR: Production deployment configuration
     uvicorn.run(
         "api_server:app",
         host="0.0.0.0",
         port=8000,
-        reload=True,  # Disable in production
+        reload=True,
         log_level="info"
     )
