@@ -20,13 +20,15 @@
   transition: opacity 0.3s ease-out;
   align-items: center;
   justify-content: center;
-  pointer-events: none;
+  pointer-events: none !important;
+  visibility: hidden;
 }
 
 .modal-container--open {
   display: flex !important;
   opacity: 1 !important;
   pointer-events: auto !important;
+  visibility: visible !important;
 }
 
 .modal-container--closing {
@@ -38,15 +40,13 @@
    ============================================ */
 
 .modal-backdrop {
-  /* UPDATED COMMENTS: Blur backdrop for depth */
+  /* UPDATED COMMENTS: Simple backdrop without blur */
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: rgba(0, 0, 0, 0.2);
   z-index: 1;
   pointer-events: auto;
 }
@@ -69,9 +69,6 @@
   flex-direction: column;
   z-index: 2;
   pointer-events: auto;
-  
-  /* CRITICAL: Smooth entrance animation */
-  animation: modalEnter 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 @keyframes modalEnter {
@@ -124,7 +121,104 @@
   /* REUSED: Scrollable content area */
   flex: 1;
   overflow-y: auto;
-  padding: 60px 40px 40px;
+  padding: 0;
+}
+
+/* ============================================
+   CONTACT MODAL
+   ============================================ */
+
+.modal-contact {
+  /* UPDATED COMMENTS: Contact modal with 24px gaps */
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
+
+.modal-description {
+  /* UPDATED COMMENTS: Description container */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+
+.modal-icon {
+  /* UPDATED COMMENTS: Icon container */
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-title {
+  /* UPDATED COMMENTS: Modal title text */
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: #0E1621;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.modal-input {
+  /* UPDATED COMMENTS: Contact input field */
+  width: 100%;
+  padding: 16px 20px;
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 16px;
+  color: #0E1621;
+  background: #FFFFFF;
+  border: 1px solid rgba(14, 22, 33, 0.2);
+  border-radius: 12px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.modal-input:focus {
+  border-color: #C248A3;
+}
+
+.modal-input::placeholder {
+  color: rgba(14, 22, 33, 0.4);
+}
+
+.modal-button {
+  /* UPDATED COMMENTS: Modal button */
+  width: 100%;
+  padding: 16px 24px;
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.modal-button--primary {
+  background: #C248A3;
+  color: #FFFFFF;
+}
+
+.modal-button--primary:hover {
+  background: #A83D8A;
+  transform: translateY(-2px);
+}
+
+.modal-button--primary:active {
+  transform: translateY(0);
+}
+
+.modal-button--primary:disabled {
+  background: rgba(194, 72, 163, 0.5);
+  cursor: not-allowed;
+  transform: none;
 }
 
 /* ============================================
