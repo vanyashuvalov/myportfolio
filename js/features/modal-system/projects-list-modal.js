@@ -1,7 +1,10 @@
 /* ANCHOR: projects_list_modal */
 /* FSD: features/modal-system → projects list modal renderer */
 /* REUSED: Modal system for project grid display */
+/* REUSED: Chip component from shared/ui for tags */
 /* SCALED FOR: Category filtering and project navigation */
+
+import { Chip } from '../../shared/ui/chip/chip.js';
 
 /**
  * ProjectsListModal - Renders projects list modal with grid layout
@@ -108,35 +111,32 @@ export class ProjectsListModal {
     } = project;
     
     return `
-      <article class="project-card" data-project-id="${this.escapeHtml(id)}" data-category="${category}">
+      <article class="modal-project-card" data-project-id="${this.escapeHtml(id)}" data-category="${category}">
         <!-- CRITICAL: Project thumbnail -->
-        <div class="project-card-image">
+        <div class="modal-project-card-image">
           <img src="${this.escapeHtml(thumbnail)}" 
                alt="${this.escapeHtml(title)}" 
                loading="lazy" />
-          <div class="project-card-overlay">
-            <span class="project-card-view">View Project</span>
+          <div class="modal-project-card-overlay">
+            <span class="modal-project-card-view">View Project</span>
           </div>
         </div>
         
         <!-- UPDATED COMMENTS: Project metadata -->
-        <div class="project-card-content">
-          <div class="project-card-header">
-            <h3 class="project-card-title">${this.escapeHtml(title)}</h3>
-            ${year ? `<span class="project-card-year">${year}</span>` : ''}
+        <div class="modal-project-card-content">
+          <div class="modal-project-card-header">
+            <h3 class="modal-project-card-title">${this.escapeHtml(title)}</h3>
+            ${year ? `<span class="modal-project-card-year">${year}</span>` : ''}
           </div>
           
           ${description ? `
-            <p class="project-card-description">${this.escapeHtml(description)}</p>
+            <p class="modal-project-card-description">${this.escapeHtml(description)}</p>
           ` : ''}
           
-          <!-- REUSED: Project tags -->
+          <!-- REUSED: Chip component for project tags -->
           ${tags.length > 0 ? `
-            <div class="project-card-tags">
-              ${tags.slice(0, 3).map(tag => `
-                <span class="project-card-tag">${this.escapeHtml(tag)}</span>
-              `).join('')}
-              ${tags.length > 3 ? `<span class="project-card-tag-more">+${tags.length - 3}</span>` : ''}
+            <div class="modal-project-card-tags" data-tags='${JSON.stringify(tags)}'>
+              <!-- Chips will be rendered here by JS -->
             </div>
           ` : ''}
         </div>
@@ -146,11 +146,30 @@ export class ProjectsListModal {
 
   /**
    * Setup event listeners after modal render
-   * CRITICAL: Project card click navigation
+   * CRITICAL: Project card click navigation and chip rendering
+   * UPDATED COMMENTS: Now also renders Chip components for tags
    */
   setupEventListeners(modalContainer) {
+    // UPDATED COMMENTS: Render chips for all project cards
+    const tagsContainers = modalContainer.querySelectorAll('.modal-project-card-tags');
+    tagsContainers.forEach(container => {
+      const tags = JSON.parse(container.dataset.tags || '[]');
+      container.innerHTML = ''; // Clear placeholder
+      
+      // REUSED: Chip component from shared/ui
+      // CRITICAL: Use createElement() to get DOM node, not render() which returns HTML string
+      // UPDATED COMMENTS: Use 'dark' variant for dark background (Figma spec)
+      tags.forEach(tag => {
+        const chip = new Chip({
+          label: tag,
+          variant: 'dark'
+        });
+        container.appendChild(chip.createElement());
+      });
+    });
+    
     // UPDATED COMMENTS: Click on project card navigates to detail page
-    const projectCards = modalContainer.querySelectorAll('.project-card');
+    const projectCards = modalContainer.querySelectorAll('.modal-project-card');
     
     projectCards.forEach(card => {
       card.addEventListener('click', () => {
@@ -172,11 +191,11 @@ export class ProjectsListModal {
       
       // REUSED: Hover effects
       card.addEventListener('mouseenter', () => {
-        card.classList.add('project-card--hovered');
+        card.classList.add('modal-project-card--hovered');
       });
       
       card.addEventListener('mouseleave', () => {
-        card.classList.remove('project-card--hovered');
+        card.classList.remove('modal-project-card--hovered');
       });
     });
   }

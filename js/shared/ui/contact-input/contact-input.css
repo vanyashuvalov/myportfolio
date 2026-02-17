@@ -10,7 +10,7 @@
   /* UPDATED COMMENTS: Fixed position, always visible above widgets and fullscreen modals */
   position: fixed;
   left: 50%;
-  bottom: 40px;
+  bottom: 24px;
   transform: translateX(-50%) translateY(100px);
   z-index: var(--z-contact-input);
   

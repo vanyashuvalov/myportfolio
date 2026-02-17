@@ -142,8 +142,11 @@ export class ModalManager {
     const fullscreenClass = isFullscreen ? ' modal-content--fullscreen' : '';
     
     // REUSED: Modal structure with backdrop, content, and close button
+    // CRITICAL: Don't render backdrop for fullscreen modals (no shadow needed)
+    const backdropHtml = isFullscreen ? '' : '<div class="modal-backdrop"></div>';
+    
     this.container.innerHTML = `
-      <div class="modal-backdrop"></div>
+      ${backdropHtml}
       <button class="modal-close" aria-label="Close modal" tabindex="-1">
         <img src="/assets/icons/iconamoon_close.svg" alt="Close" />
       </button>
@@ -161,14 +164,61 @@ export class ModalManager {
     this.container.setAttribute('aria-hidden', 'false');
     this.container.removeAttribute('aria-hidden');
     
-    // CRITICAL: Force visibility with inline styles to override aria-hidden
-    this.container.style.visibility = 'visible';
+    // UPDATED COMMENTS: Remove inline visibility style to allow CSS animations to work
+    // CRITICAL: CSS will handle visibility through classes, inline style was blocking close button animation
+    
+    // CRITICAL: Force browser to compute initial styles by reading offsetHeight
+    // This ensures opacity: 0 and transform are applied BEFORE animation starts
+    const projectsList = this.container.querySelector('.projects-list');
+    if (projectsList) {
+      // Force reflow
+      projectsList.offsetHeight;
+      console.log('🔄 Forced reflow, initial computed opacity:', window.getComputedStyle(projectsList).opacity);
+    }
     
     // UPDATED COMMENTS: Add open class with delay to trigger CSS animations
     // CRITICAL: Use requestAnimationFrame to ensure browser applies initial styles first
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
+        console.log('🎬 Adding modal-container--open class');
         this.container.classList.add('modal-container--open');
+        
+        // CRITICAL: Debug - check if projects-list exists
+        const projectsList = this.container.querySelector('.projects-list');
+        if (projectsList) {
+          console.log('✅ .projects-list found in DOM');
+          const initialStyles = window.getComputedStyle(projectsList);
+          console.log('📊 Initial opacity:', initialStyles.opacity);
+          console.log('📊 Initial transform:', initialStyles.transform);
+          console.log('📊 Initial transition:', initialStyles.transition);
+          
+          // CRITICAL: Force check after 100ms
+          setTimeout(() => {
+            const afterStyles = window.getComputedStyle(projectsList);
+            console.log('📊 After 100ms opacity:', afterStyles.opacity);
+            console.log('📊 After 100ms transform:', afterStyles.transform);
+          }, 100);
+          
+          // CRITICAL: Check after animation should complete (1000ms)
+          setTimeout(() => {
+            const finalStyles = window.getComputedStyle(projectsList);
+            console.log('📊 After 1000ms opacity:', finalStyles.opacity);
+            console.log('📊 After 1000ms transform:', finalStyles.transform);
+          }, 1000);
+        } else {
+          console.error('❌ .projects-list NOT FOUND in DOM!');
+        }
+        
+        // CRITICAL: Add close button visible class with 100ms delay (like contact-input pattern)
+        // REUSED: Delayed class addition pattern from contact-input component
+        if (isFullscreen) {
+          setTimeout(() => {
+            const closeButton = this.container.querySelector('.modal-close');
+            if (closeButton) {
+              closeButton.classList.add('modal-close--visible');
+            }
+          }, 100); // 100ms delay before animation starts
+        }
       });
     });
     
@@ -217,7 +267,7 @@ export class ModalManager {
     this.container.classList.remove('modal-container--fullscreen');
     this.container.classList.add('modal-container--closing');
     this.container.setAttribute('aria-hidden', 'true');
-    this.container.style.visibility = 'hidden';
+    // UPDATED COMMENTS: Remove inline style, let CSS handle visibility through classes
     
     // CRITICAL: Wait for animation to complete
     await new Promise(resolve => setTimeout(resolve, this.config.animationDuration));
@@ -225,6 +275,8 @@ export class ModalManager {
     // UPDATED COMMENTS: Cleanup
     this.container.innerHTML = '';
     this.container.classList.remove('modal-container--closing');
+    // CRITICAL: Clear any inline styles that might have been set
+    this.container.style.visibility = '';
     this.isOpen = false;
     
     // REUSED: Restore body scroll
