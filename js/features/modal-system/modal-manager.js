@@ -63,13 +63,20 @@ export class ModalManager {
         this.close();
       }
     });
-    
-    // UPDATED COMMENTS: Backdrop click closes modal
-    this.container.addEventListener('click', (event) => {
-      if (event.target === this.container && this.config.closeOnBackdrop) {
+  }
+  
+  /**
+   * Setup backdrop click listener after modal is rendered
+   * UPDATED COMMENTS: Must be called after modal HTML is created
+   */
+  setupBackdropListener() {
+    const backdrop = this.container.querySelector('.modal-backdrop');
+    if (backdrop && this.config.closeOnBackdrop) {
+      backdrop.addEventListener('click', () => {
+        console.log('🔵 Backdrop clicked, closing modal');
         this.close();
-      }
-    });
+      });
+    }
   }
 
   /**
@@ -119,11 +126,6 @@ export class ModalManager {
     this.container.innerHTML = `
       <div class="modal-backdrop"></div>
       <div class="modal-content" role="dialog" aria-modal="true">
-        <button class="modal-close" aria-label="Close modal">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </button>
         <div class="modal-body">
           ${modalContent}
         </div>
@@ -140,28 +142,10 @@ export class ModalManager {
     
     this.isOpen = true;
     
-    // CRITICAL: Setup close button
-    const closeButton = this.container.querySelector('.modal-close');
-    closeButton.addEventListener('click', () => this.close());
+    // CRITICAL: Setup backdrop click listener
+    this.setupBackdropListener();
     
     console.log('✅ Modal opened successfully');
-    console.log('📊 Container classes:', this.container.className);
-    console.log('📊 Container computed display:', window.getComputedStyle(this.container).display);
-    console.log('📊 Container computed opacity:', window.getComputedStyle(this.container).opacity);
-    console.log('📊 Container computed zIndex:', window.getComputedStyle(this.container).zIndex);
-    console.log('📊 Container computed visibility:', window.getComputedStyle(this.container).visibility);
-    console.log('📊 Container computed pointerEvents:', window.getComputedStyle(this.container).pointerEvents);
-    console.log('📊 Container position:', this.container.getBoundingClientRect());
-    console.log('📊 Modal content element:', this.container.querySelector('.modal-content'));
-    console.log('📊 Modal backdrop element:', this.container.querySelector('.modal-backdrop'));
-    
-    // CRITICAL: Debug - add bright background to see if modal is rendering
-    this.container.style.backgroundColor = 'rgba(255, 0, 0, 0.5)';
-    const modalContentElement = this.container.querySelector('.modal-content');
-    if (modalContentElement) {
-      modalContentElement.style.backgroundColor = 'yellow';
-      console.log('📊 Modal content position:', modalContentElement.getBoundingClientRect());
-    }
     
     // UPDATED COMMENTS: Prevent body scroll
     document.body.style.overflow = 'hidden';
@@ -191,6 +175,7 @@ export class ModalManager {
     this.container.classList.remove('modal-container--open');
     this.container.classList.add('modal-container--closing');
     this.container.setAttribute('aria-hidden', 'true');
+    this.container.style.visibility = 'hidden';
     
     // CRITICAL: Wait for animation to complete
     await new Promise(resolve => setTimeout(resolve, this.config.animationDuration));

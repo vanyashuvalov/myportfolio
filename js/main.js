@@ -9,7 +9,6 @@ import { AssetManager } from './shared/utils/asset-manager.js';
 import { EventBus } from './shared/utils/event-bus.js';
 import { NavigationHeader } from './shared/ui/navigation/navigation-header.js';
 import { ContactInput } from './shared/ui/contact-input/contact-input.js';
-import { ContactModal } from './shared/ui/modal/contact-modal.js';
 import { ModalManager } from './features/modal-system/modal-manager.js';
 import { ProjectsListModal } from './features/modal-system/projects-list-modal.js';
 import { PageManager } from './features/page-manager/page-manager.js';
@@ -104,20 +103,6 @@ class Application {
         });
 
         await this.contactInput.init();
-      }
-
-      // ANCHOR: contact_modal_initialization
-      // REUSED: Contact modal component with shared EventBus
-      const modalContainer = document.getElementById('modal-container');
-      if (modalContainer) {
-        this.contactModal = new ContactModal(modalContainer, {
-          eventBus: this.eventBus
-        });
-        
-        // CRITICAL: Listen for send events from contact input
-        this.eventBus.on('contact-input:send', ({ message }) => {
-          this.contactModal.show(message);
-        });
         
         // REUSED: Listen for successful message send
         this.eventBus.on('message:sent', () => {
@@ -165,6 +150,12 @@ class Application {
           
           return html;
         });
+        
+        // CRITICAL: Register contact modal renderer
+        this.modalManager.registerModalType('contact', async (options) => {
+          const { message } = options;
+          return this.renderContactModal(message);
+        });
 
         // UPDATED COMMENTS: Listen for folder widget clicks
         this.eventBus.on('folder:clicked', ({ category }) => {
@@ -177,6 +168,12 @@ class Application {
           } catch (error) {
             console.error('❌ Failed to open modal:', error);
           }
+        });
+        
+        // CRITICAL: Listen for contact input send
+        this.eventBus.on('contact-input:send', ({ message }) => {
+          console.log('🔴 main.js received contact-input:send event', { message });
+          this.modalManager.open('contact', { message });
         });
       }
 
@@ -199,6 +196,49 @@ class Application {
       console.error('❌ Failed to initialize application:', error);
       this.showErrorMessage(error.message);
     }
+  }
+
+  /**
+   * Render contact modal HTML
+   * REUSED: Contact modal renderer for ModalManager
+   */
+  renderContactModal(message) {
+    return `
+      <div class="modal-contact">
+        <div class="modal-description">
+          <div class="modal-icon">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" stroke="#C248A3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M11.307 9.739L15 9L14.261 12.693C14.1836 13.0801 13.9935 13.4356 13.7145 13.7148C13.4354 13.994 13.08 14.1844 12.693 14.262L9 15L9.739 11.307C9.81654 10.9201 10.0068 10.5648 10.2858 10.2858C10.5648 10.0068 10.9201 9.81654 11.307 9.739Z" stroke="#C248A3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <p class="modal-title">Please, provide your contact info so I could respond you</p>
+        </div>
+        
+        <input 
+          type="text" 
+          class="modal-input" 
+          placeholder="Email, Telegram, Phone"
+          maxlength="100"
+          aria-label="Contact information"
+          data-message="${this.escapeHtml(message)}"
+        />
+        
+        <button class="modal-button modal-button--primary modal-button--anonymous" data-action="send-contact">
+          Send anonymously
+        </button>
+      </div>
+    `;
+  }
+
+  /**
+   * Escape HTML to prevent XSS
+   * CRITICAL: Security measure
+   */
+  escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
   }
 
   /**

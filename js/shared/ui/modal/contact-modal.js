@@ -53,6 +53,9 @@ export class ContactModal {
       this.container.classList.add('modal-container--visible');
       // CRITICAL: Remove aria-hidden when modal is visible
       this.container.setAttribute('aria-hidden', 'false');
+      this.container.removeAttribute('aria-hidden');
+      // CRITICAL: Force visibility to override aria-hidden CSS
+      this.container.style.visibility = 'visible';
     });
     
     this.eventBus.emit('modal:opened');
@@ -66,6 +69,7 @@ export class ContactModal {
     this.container.classList.remove('modal-container--visible');
     // CRITICAL: Set aria-hidden when modal is hidden
     this.container.setAttribute('aria-hidden', 'true');
+    this.container.style.visibility = 'hidden';
     
     setTimeout(() => {
       this.container.innerHTML = '';

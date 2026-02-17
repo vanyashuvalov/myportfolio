@@ -164,6 +164,9 @@
   justify-content: center;
   cursor: pointer;
   
+  /* CRITICAL: Disable pointer events when hidden to prevent blocking */
+  pointer-events: none;
+  
   /* SCALED FOR: Smooth appearance */
   transition: opacity 0.2s ease, transform 0.2s ease;
 }
@@ -179,6 +182,8 @@
 /* UPDATED COMMENTS: Show send icon when input has value */
 .contact-input--has-value .contact-input__send {
   opacity: 1;
+  /* CRITICAL: Enable pointer events when visible */
+  pointer-events: auto;
 }
 
 .contact-input__send:hover {

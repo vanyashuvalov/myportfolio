@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Contact Input</title>
+  <link rel="stylesheet" href="styles/reset.css">
+  <link rel="stylesheet" href="styles/variables.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="js/shared/ui/contact-input/contact-input.css">
+  <link rel="stylesheet" href="js/shared/ui/toast/toast.css">
+  <style>
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .test-info {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+      font-family: monospace;
+      max-width: 400px;
+    }
+  </style>
+</head>
+<body>
+  <div class="test-info">
+    <h2>Contact Input Test</h2>
+    <p>1. Type at least 10 characters</p>
+    <p>2. Click the send icon (should appear)</p>
+    <p>3. Check console for logs</p>
+    <div id="event-log"></div>
+  </div>
+
+  <div id="contact-input-container"></div>
+
+  <script type="module">
+    import { ContactInput } from './js/shared/ui/contact-input/contact-input.js';
+    import { EventBus } from './js/shared/utils/event-bus.js';
+
+    const eventBus = new EventBus();
+    const container = document.getElementById('contact-input-container');
+    const eventLog = document.getElementById('event-log');
+
+    function logEvent(message) {
+      console.log(message);
+      const p = document.createElement('p');
+      p.textContent = message;
+      p.style.color = '#4ade80';
+      p.style.margin = '5px 0';
+      eventLog.appendChild(p);
+    }
+
+    // Listen to all events
+    eventBus.on('contact-input:send', ({ message }) => {
+      logEvent(`✅ SEND EVENT: "${message}"`);
+    });
+
+    eventBus.on('contact-input:initialized', () => {
+      logEvent('🟢 Contact input initialized');
+    });
+
+    eventBus.on('contact-input:change', ({ value }) => {
+      logEvent(`📝 Input changed: ${value.length} chars`);
+    });
+
+    // Initialize
+    const contactInput = new ContactInput(container, {
+      eventBus,
+      placeholder: 'Test message input...',
+      minLength: 10
+    });
+
+    contactInput.init().then(() => {
+      logEvent('🚀 Contact input ready!');
+    });
+  </script>
+</body>
+</html>

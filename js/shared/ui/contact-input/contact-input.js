@@ -122,8 +122,13 @@ export class ContactInput {
     this.inputElement.addEventListener('input', this.handleInput.bind(this));
     this.inputElement.addEventListener('keydown', this.handleKeydown.bind(this));
     
-    // UPDATED COMMENTS: Send button click
-    this.sendButton.addEventListener('click', this.handleSend.bind(this));
+    // CRITICAL: Send button click with event capture to ensure it fires
+    this.sendButton.addEventListener('click', (e) => {
+      console.log('🔵 Send button clicked!', e);
+      e.stopPropagation(); // Prevent wrapper click
+      this.handleSend();
+    }, true); // Use capture phase
+    
     this.sendButton.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
@@ -243,16 +248,20 @@ export class ContactInput {
    * REUSED: Validation before opening modal
    */
   handleSend() {
+    console.log('🟢 handleSend called');
     const message = this.inputElement.value.trim();
+    console.log('📝 Message:', message, 'Length:', message.length);
     
     // UPDATED COMMENTS: Validate message length with toast notification
     if (message.length < this.options.minLength) {
       // CRITICAL: Show info toast instead of red border
+      console.log('⚠️ Message too short');
       toastManager.showInfo(TOAST_MESSAGES.MESSAGE_TOO_SHORT);
       return;
     }
     
     // CRITICAL: Emit event to open contact modal
+    console.log('✅ Emitting contact-input:send event');
     this.eventBus.emit('contact-input:send', { message });
   }
 
