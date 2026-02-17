@@ -15,7 +15,9 @@
   width: 100% !important;
   height: 100% !important;
   z-index: var(--z-modal) !important;
-  display: none !important;
+  /* UPDATED COMMENTS: Use flex always, hide with visibility instead of display: none */
+  /* CRITICAL: This allows CSS transitions to work on child elements */
+  display: flex !important;
   opacity: 0;
   transition: opacity 0.3s ease-out;
   align-items: center;
@@ -35,7 +37,7 @@
 }
 
 .modal-container--open {
-  display: flex !important;
+  /* UPDATED COMMENTS: Show modal - no need to change display, just visibility and opacity */
   opacity: 1 !important;
   pointer-events: auto !important;
   visibility: visible !important;
@@ -51,6 +53,7 @@
 
 .modal-backdrop {
   /* UPDATED COMMENTS: Semi-transparent backdrop behind modal */
+  /* CRITICAL: Only rendered for non-fullscreen modals (contact, etc) */
   position: fixed;
   top: 0;
   left: 0;
@@ -90,6 +93,36 @@
   background: #101010 !important; /* UPDATED COMMENTS: Dark background for fullscreen */
   border-radius: 0 !important;
   box-shadow: none !important;
+  padding: 0 !important;
+  
+  /* CRITICAL: Scroll on modal-content, not modal-body */
+  overflow-y: auto !important;
+  overflow-x: visible !important;
+  
+  /* UPDATED COMMENTS: Initial state - transparent background */
+  /* CRITICAL: Background fades in from transparent to #101010 in 300ms */
+  opacity: 0;
+}
+
+/* CRITICAL: Custom scrollbar styling for fullscreen modal */
+/* UPDATED COMMENTS: Hidden scrollbar - invisible but functional */
+.modal-content--fullscreen::-webkit-scrollbar {
+  width: 0px;
+  display: none;
+}
+
+.modal-content--fullscreen {
+  /* CRITICAL: Hide scrollbar for Firefox */
+  scrollbar-width: none;
+  /* CRITICAL: Hide scrollbar for IE/Edge */
+  -ms-overflow-style: none;
+}
+
+/* UPDATED COMMENTS: Fade-in animation for fullscreen background */
+/* CRITICAL: 300ms fade-in when modal opens */
+.modal-container--open .modal-content--fullscreen {
+  opacity: 1;
+  transition: opacity 0.3s ease-out;
 }
 
 @keyframes modalEnter {
@@ -142,27 +175,25 @@
   visibility: hidden;
   pointer-events: none;
   transform: translateY(-50%) translateX(100px);
-  transition: background 0.2s ease;
 }
 
-/* CRITICAL: Show close button only in fullscreen mode with slide-in animation */
-.modal-container--fullscreen .modal-close {
-  /* UPDATED COMMENTS: Enable visibility and pointer events for fullscreen */
+/* UPDATED COMMENTS: Visible state with slide-in animation from right */
+/* REUSED: Same pattern as contact-input-wrapper--visible */
+/* CRITICAL: Added via JS with 1s delay after modal opens */
+.modal-close--visible {
+  opacity: 1;
   visibility: visible;
   pointer-events: auto;
-}
-
-/* UPDATED COMMENTS: Smooth slide-in animation from right with 1s delay when modal opens */
-/* REUSED: Same animation timing as contact-input (0.6s duration, ease-out) but 1s delay */
-.modal-container--open.modal-container--fullscreen .modal-close {
-  opacity: 1;
   transform: translateY(-50%) translateX(0);
-  /* CRITICAL: 1s delay, 0.6s duration, ease-out easing - smooth appearance like message form */
-  transition: opacity 0.6s ease-out 1s, transform 0.6s ease-out 1s, visibility 0.6s ease-out 1s, background 0.2s ease;
+  /* CRITICAL: 0.6s duration, ease-out easing - smooth appearance like message form */
+  /* UPDATED COMMENTS: No delay here - delay is handled by JS setTimeout */
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out, visibility 0.6s ease-out, background 0.2s ease;
 }
 
 .modal-close:hover {
   background: rgba(0, 0, 0, 0.7);
+  /* CRITICAL: Keep only background transition on hover to not interfere with slide-in */
+  transition: background 0.2s ease;
 }
 
 .modal-close:focus {
@@ -190,11 +221,31 @@
    MODAL BODY
    ============================================ */
 
+/* CRITICAL: Custom scrollbar for regular modal body */
+/* UPDATED COMMENTS: Hidden scrollbar - invisible but functional */
+.modal-body::-webkit-scrollbar {
+  width: 0px;
+  display: none;
+}
+
 .modal-body {
   /* REUSED: Scrollable content area */
+  /* CRITICAL: For regular modals (not fullscreen) */
   flex: 1;
   overflow-y: auto;
   padding: 0;
+  /* CRITICAL: Hide scrollbar for Firefox */
+  scrollbar-width: none;
+  /* CRITICAL: Hide scrollbar for IE/Edge */
+  -ms-overflow-style: none;
+}
+
+/* CRITICAL: Fullscreen modal body - no scroll, content handles it */
+.modal-content--fullscreen .modal-body {
+  /* UPDATED COMMENTS: Simple wrapper with padding for fullscreen */
+  /* CRITICAL: Padding moved to projects-list for proper scroll */
+  padding: 0 !important;
+  width: 100% !important;
 }
 
 /* ============================================
@@ -299,13 +350,32 @@
    ============================================ */
 
 .projects-list {
-  /* UPDATED COMMENTS: Projects list container - fullscreen dark theme */
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 60px 40px;
+  /* UPDATED COMMENTS: Projects list container - centered with fixed width */
+  /* CRITICAL: Slide-up animation from bottom with 300ms delay after background appears */
+  /* REUSED: Similar pattern to contact-input slide-up animation */
+  width: 720px !important;
+  max-width: 100% !important;
+  margin: 0 auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  /* CRITICAL: Padding moved here from modal-body for proper scroll */
+  padding: 16vh 40px !important;
+  gap: 0 !important;
+  
+  /* UPDATED COMMENTS: Initial state - hidden below viewport */
+  /* CRITICAL: Always start with these values, transition added when --open class is present */
+  opacity: 0;
+  transform: translateY(100px);
+  transition: opacity 0.5s ease-out 0.3s, 
+              transform 0.5s ease-out 0.3s;
+}
+
+/* CRITICAL: Slide-up animation when modal opens */
+/* UPDATED COMMENTS: Only change opacity and transform, transition is already set above */
+.modal-container--open .projects-list {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .projects-list-header {
@@ -334,12 +404,13 @@
 
 .projects-grid {
   /* CRITICAL: Vertical list layout centered */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 48px;
-  width: 100%;
-  padding: 0;
+  /* UPDATED COMMENTS: 100px gap between project cards */
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 100px !important;
+  width: 100% !important;
+  padding: 0 !important;
 }
 
 /* ============================================
@@ -347,69 +418,70 @@
    ============================================ */
 
 /* CRITICAL: Scope project card styles to modal only to avoid conflicts with folder widget */
-.projects-list .project-card {
+.projects-list .modal-project-card {
   /* UPDATED COMMENTS: Vertical project card for dark theme */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0;
-  gap: 24px;
-  width: 726px;
-  max-width: 90vw;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  transition: opacity 0.2s ease;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  padding: 0 !important;
+  gap: 24px !important;
+  width: 100% !important;
+  background: transparent !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: opacity 0.2s ease !important;
 }
 
-.projects-list .project-card:hover {
+.projects-list .modal-project-card:hover {
   opacity: 0.85;
 }
 
-.projects-list .project-card--hovered {
+.projects-list .modal-project-card--hovered {
   opacity: 0.85;
 }
 
-.projects-list .project-card-image {
+.projects-list .modal-project-card-image {
   /* SCALED FOR: Fixed size image container */
-  position: relative;
-  width: 100%;
-  height: 411px;
-  overflow: hidden;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 14px;
-  flex: none;
+  position: relative !important;
+  width: 100% !important;
+  height: 411px !important;
+  overflow: hidden !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-radius: 14px !important;
+  flex-shrink: 0 !important;
+  /* CRITICAL: Prevent image container from collapsing */
 }
 
-.projects-list .project-card-image img {
+.projects-list .modal-project-card-image img {
   /* CRITICAL: Cover image */
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.projects-list .project-card-overlay {
+.projects-list .modal-project-card-overlay {
   /* UPDATED COMMENTS: No overlay in new design */
   display: none;
 }
 
-.projects-list .project-card-view {
+.projects-list .modal-project-card-view {
   /* REUSED: Hidden in new design */
   display: none;
 }
 
-.projects-list .project-card-content {
+.projects-list .modal-project-card-content {
   /* UPDATED COMMENTS: Description container */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0;
-  gap: 12px;
-  width: 100%;
-  flex: none;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  padding: 0 !important;
+  gap: 12px !important;
+  width: 100% !important;
+  flex-shrink: 0 !important;
+  /* CRITICAL: Prevent content from collapsing */
 }
 
-.projects-list .project-card-header {
+.projects-list .modal-project-card-header {
   /* CRITICAL: Title centered */
   display: flex;
   flex-direction: column;
@@ -418,7 +490,7 @@
   width: 100%;
 }
 
-.projects-list .project-card-title {
+.projects-list .modal-project-card-title {
   /* SCALED FOR: Large centered title */
   font-family: 'SF Pro Display', 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
   font-style: normal;
@@ -432,12 +504,12 @@
   width: 100%;
 }
 
-.projects-list .project-card-year {
+.projects-list .modal-project-card-year {
   /* REUSED: Hidden in new design */
   display: none;
 }
 
-.projects-list .project-card-description {
+.projects-list .modal-project-card-description {
   /* UPDATED COMMENTS: Centered description text */
   font-family: 'SF Pro Display', 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
   font-style: normal;
@@ -450,7 +522,7 @@
   width: 100%;
 }
 
-.projects-list .project-card-tags {
+.projects-list .modal-project-card-tags {
   /* CRITICAL: Chips container */
   display: flex;
   flex-direction: row;
@@ -463,12 +535,12 @@
   width: 100%;
 }
 
-.projects-list .project-card-tag {
+.projects-list .modal-project-card-tag {
   /* REUSED: Old tag styling (will be replaced by Chip component) */
   display: none;
 }
 
-.projects-list .project-card-tag-more {
+.projects-list .modal-project-card-tag-more {
   /* UPDATED COMMENTS: Hidden in new design */
   display: none;
 }
@@ -537,34 +609,35 @@
    ============================================ */
 
 @media (max-width: 768px) {
-  .modal-body {
-    padding: 40px 20px 20px;
+  .modal-content--fullscreen .modal-body {
+    padding: 20px;
   }
   
   .projects-list {
-    padding: 40px 20px;
+    padding: 40px 0;
+    gap: 32px;
   }
   
   .projects-grid {
     gap: 32px;
   }
   
-  .projects-list .project-card {
+  .projects-list .modal-project-card {
     width: 100%;
     gap: 16px;
   }
   
-  .projects-list .project-card-image {
+  .projects-list .modal-project-card-image {
     height: auto;
     aspect-ratio: 726 / 411;
   }
   
-  .projects-list .project-card-title {
+  .projects-list .modal-project-card-title {
     font-size: 18px;
     line-height: 22px;
   }
   
-  .projects-list .project-card-description {
+  .projects-list .modal-project-card-description {
     font-size: 14px;
   }
   
