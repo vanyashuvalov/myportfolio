@@ -232,25 +232,33 @@ export class NavigationHeader {
   }
 
   /**
-   * Share current page URL
-   * UPDATED COMMENTS: Direct clipboard copy without system share dialog
-   * CRITICAL: Always copy to clipboard, never show native share dialog
+   * Share current page with formatted profile information
+   * UPDATED COMMENTS: Copy formatted text with name, role, experience, and links
+   * CRITICAL: Always copy to clipboard with rich profile data
    */
   async shareCurrentPage() {
     const url = window.location.href;
     
+    // CRITICAL: Format share text with profile information
+    // SCALED FOR: Reusable profile data from centralized config
+    const shareText = `Ivan Shuvalov
+Product Designer, 5+ years of experience
+Specifications: SaaS, B2B, Logistics
+Website: ${url}
+Contacts: ${SOCIAL_LINKS.telegram.url} | ${SOCIAL_LINKS.email.address}`;
+    
     try {
-      // CRITICAL: Direct clipboard copy (no Web Share API)
-      await navigator.clipboard.writeText(url);
+      // CRITICAL: Direct clipboard copy with formatted text (no Web Share API)
+      await navigator.clipboard.writeText(shareText);
       
       // UPDATED COMMENTS: Show success toast after copying
       toastManager.showSuccess(TOAST_MESSAGES.LINK_COPIED);
       
-      this.eventBus.emit('navigation:share', { url });
+      this.eventBus.emit('navigation:share', { url, shareText });
     } catch (error) {
       console.error('Failed to copy to clipboard:', error);
       // CRITICAL: Try fallback method for older browsers
-      this.copyToClipboardFallback(url);
+      this.copyToClipboardFallback(shareText);
     }
   }
 

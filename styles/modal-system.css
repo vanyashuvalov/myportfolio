@@ -14,7 +14,7 @@
   left: 0 !important;
   width: 100% !important;
   height: 100% !important;
-  z-index: 99999 !important;
+  z-index: var(--z-modal) !important;
   display: none !important;
   opacity: 0;
   transition: opacity 0.3s ease-out;
@@ -22,6 +22,16 @@
   justify-content: center;
   pointer-events: none !important;
   visibility: hidden;
+}
+
+/* UPDATED COMMENTS: Regular modal container (contact, etc) above everything */
+#modal-container {
+  z-index: var(--z-regular-modal) !important;
+}
+
+/* UPDATED COMMENTS: Fullscreen modal container (projects) below navigation */
+#projects-modal-container {
+  z-index: var(--z-fullscreen-modal) !important;
 }
 
 .modal-container--open {
@@ -101,10 +111,10 @@
 .modal-close {
   /* UPDATED COMMENTS: Fixed close button on right side, vertically centered */
   /* CRITICAL: Figma specs - 64x64px button with frosted glass background */
+  /* REUSED: Slide-in animation pattern from contact-input (similar to message form) */
   position: fixed;
   top: 50%;
   right: 40px;
-  transform: translateY(-50%);
   width: 64px;
   height: 64px;
   
@@ -125,20 +135,34 @@
   padding: 0;
   
   z-index: 10;
-  transition: all 0.2s ease;
   
-  /* UPDATED COMMENTS: Hidden by default, shown only for fullscreen */
-  display: none;
+  /* UPDATED COMMENTS: Hidden by default with slide-right initial position (100px to the right) */
+  /* CRITICAL: Similar to contact-input slide-up animation but from right side */
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(-50%) translateX(100px);
+  transition: background 0.2s ease;
 }
 
-/* CRITICAL: Show close button only in fullscreen mode */
+/* CRITICAL: Show close button only in fullscreen mode with slide-in animation */
 .modal-container--fullscreen .modal-close {
-  display: flex;
+  /* UPDATED COMMENTS: Enable visibility and pointer events for fullscreen */
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* UPDATED COMMENTS: Smooth slide-in animation from right with 1s delay when modal opens */
+/* REUSED: Same animation timing as contact-input (0.6s duration, ease-out) but 1s delay */
+.modal-container--open.modal-container--fullscreen .modal-close {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+  /* CRITICAL: 1s delay, 0.6s duration, ease-out easing - smooth appearance like message form */
+  transition: opacity 0.6s ease-out 1s, transform 0.6s ease-out 1s, visibility 0.6s ease-out 1s, background 0.2s ease;
 }
 
 .modal-close:hover {
-  background: rgba(0, 0, 0, 0.6);
-  transform: translateY(-50%) scale(1.05);
+  background: rgba(0, 0, 0, 0.7);
 }
 
 .modal-close:focus {

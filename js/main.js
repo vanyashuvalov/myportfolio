@@ -24,8 +24,8 @@ class Application {
     this.canvas = null;
     this.navigation = null;
     this.contactInput = null;
-    this.contactModal = null;
-    this.modalManager = null;
+    this.contactModalManager = null;
+    this.projectsModalManager = null;
     this.pageManager = null;
     this.performanceMonitor = null;
     this.assetManager = null;
@@ -113,13 +113,38 @@ class Application {
       }
 
       // ANCHOR: modal_manager_initialization
-      // UPDATED COMMENTS: Modal manager for projects list with separate container
+      // UPDATED COMMENTS: Two separate modal managers for different z-index layers
+      
+      // CRITICAL: Contact modal manager (regular modals above everything)
+      const modalContainer = document.getElementById('modal-container');
+      if (!modalContainer) {
+        console.error('❌ Modal container not found');
+      } else {
+        this.contactModalManager = new ModalManager({
+          container: modalContainer,
+          eventBus: this.eventBus
+        });
+        
+        // CRITICAL: Register contact modal renderer
+        this.contactModalManager.registerModalType('contact', async (options) => {
+          const { message } = options;
+          return this.renderContactModal(message);
+        });
+        
+        // CRITICAL: Listen for contact input send
+        this.eventBus.on('contact-input:send', ({ message }) => {
+          console.log('🔴 main.js received contact-input:send event', { message });
+          this.contactModalManager.open('contact', { message });
+        });
+      }
+      
+      // CRITICAL: Projects modal manager (fullscreen modals below navigation)
       const projectsModalContainer = document.getElementById('projects-modal-container');
       
       if (!projectsModalContainer) {
         console.error('❌ Projects modal container not found');
       } else {
-        this.modalManager = new ModalManager({
+        this.projectsModalManager = new ModalManager({
           container: projectsModalContainer,
           eventBus: this.eventBus
         });
@@ -137,7 +162,7 @@ class Application {
           pageManager: this.pageManager
         });
 
-        this.modalManager.registerModalType('projects-list', async (options) => {
+        this.projectsModalManager.registerModalType('projects-list', async (options) => {
           const html = await projectsListModal.render(options);
           
           // CRITICAL: Setup event listeners after modal renders
@@ -150,30 +175,18 @@ class Application {
           
           return html;
         });
-        
-        // CRITICAL: Register contact modal renderer
-        this.modalManager.registerModalType('contact', async (options) => {
-          const { message } = options;
-          return this.renderContactModal(message);
-        });
 
         // UPDATED COMMENTS: Listen for folder widget clicks
         this.eventBus.on('folder:clicked', ({ category }) => {
           console.log('📥 Received folder:clicked event', { category });
-          console.log('🔍 ModalManager exists?', !!this.modalManager);
+          console.log('🔍 ProjectsModalManager exists?', !!this.projectsModalManager);
           console.log('🔍 Opening modal with category:', category);
           
           try {
-            this.modalManager.open('projects-list', { category });
+            this.projectsModalManager.open('projects-list', { category });
           } catch (error) {
             console.error('❌ Failed to open modal:', error);
           }
-        });
-        
-        // CRITICAL: Listen for contact input send
-        this.eventBus.on('contact-input:send', ({ message }) => {
-          console.log('🔴 main.js received contact-input:send event', { message });
-          this.modalManager.open('contact', { message });
         });
       }
 

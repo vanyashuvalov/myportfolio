@@ -5,13 +5,14 @@
 
 /* ANCHOR: contact_input_container */
 /* CRITICAL: Fixed positioning at bottom center of viewport */
+/* SCALED FOR: Always above fullscreen modals with z-contact-input */
 .contact-input-wrapper {
-  /* UPDATED COMMENTS: Fixed position, always visible above widgets */
+  /* UPDATED COMMENTS: Fixed position, always visible above widgets and fullscreen modals */
   position: fixed;
   left: 50%;
   bottom: 40px;
   transform: translateX(-50%) translateY(100px);
-  z-index: var(--z-fixed);
+  z-index: var(--z-contact-input);
   
   /* SCALED FOR: Hidden by default, shown via JS class */
   opacity: 0;
