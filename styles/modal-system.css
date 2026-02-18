@@ -144,7 +144,6 @@
 .modal-close {
   /* UPDATED COMMENTS: Fixed close button on right side, vertically centered */
   /* CRITICAL: Figma specs - 64x64px button with frosted glass background */
-  /* REUSED: Slide-in animation pattern from contact-input (similar to message form) */
   position: fixed;
   top: 50%;
   right: 40px;
@@ -169,31 +168,19 @@
   
   z-index: 10;
   
-  /* UPDATED COMMENTS: Hidden by default with slide-right initial position (100px to the right) */
-  /* CRITICAL: Similar to contact-input slide-up animation but from right side */
+  /* UPDATED COMMENTS: Simple fade-in with modal, no slide animation */
   opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transform: translateY(-50%) translateX(100px);
+  transform: translateY(-50%);
+  transition: opacity 0.3s ease-out, background 0.2s ease;
 }
 
-/* UPDATED COMMENTS: Visible state with slide-in animation from right */
-/* REUSED: Same pattern as contact-input-wrapper--visible */
-/* CRITICAL: Added via JS with 1s delay after modal opens */
+/* UPDATED COMMENTS: Visible state - simple fade-in */
 .modal-close--visible {
   opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-  transform: translateY(-50%) translateX(0);
-  /* CRITICAL: 0.6s duration, ease-out easing - smooth appearance like message form */
-  /* UPDATED COMMENTS: No delay here - delay is handled by JS setTimeout */
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out, visibility 0.6s ease-out, background 0.2s ease;
 }
 
 .modal-close:hover {
   background: rgba(0, 0, 0, 0.7);
-  /* CRITICAL: Keep only background transition on hover to not interfere with slide-in */
-  transition: background 0.2s ease;
 }
 
 .modal-close:focus {
@@ -590,6 +577,155 @@
 }
 
 /* ============================================
+   PAGE TRANSITION OVERLAY
+   ============================================ */
+
+.page-transition-overlay {
+  /* CRITICAL: Full-screen black overlay for seamless transitions */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #101010;
+  z-index: 10000; /* Above everything */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease-out;
+}
+
+.page-transition-overlay--active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ============================================
+   PROJECTS LIST PAGE
+   ============================================ */
+
+.projects-list-page {
+  /* CRITICAL: Same layout as project detail page */
+  width: 720px !important;
+  max-width: 100% !important;
+  margin: 0 auto !important;
+  padding: 16vh 40px !important;
+  /* UPDATED COMMENTS: White text on dark background */
+  color: #FFFFFF !important;
+}
+
+.projects-list-page .projects-grid {
+  /* CRITICAL: Vertical list layout centered */
+  /* UPDATED COMMENTS: 100px gap between project cards */
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 100px !important;
+  width: 100% !important;
+  padding: 0 !important;
+}
+
+/* CRITICAL: Project cards on page (not in modal) */
+.projects-list-page .modal-project-card {
+  /* UPDATED COMMENTS: Vertical project card for dark theme */
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  padding: 0 !important;
+  gap: 24px !important;
+  width: 100% !important;
+  background: transparent !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: opacity 0.2s ease !important;
+}
+
+.projects-list-page .modal-project-card:hover {
+  opacity: 0.85;
+}
+
+.projects-list-page .modal-project-card--hovered {
+  opacity: 0.85;
+}
+
+.projects-list-page .modal-project-card-image {
+  /* SCALED FOR: Fixed size image container */
+  position: relative !important;
+  width: 100% !important;
+  height: 411px !important;
+  overflow: hidden !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-radius: 14px !important;
+  flex-shrink: 0 !important;
+}
+
+.projects-list-page .modal-project-card-image img {
+  /* CRITICAL: Cover image */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.projects-list-page .modal-project-card-content {
+  /* UPDATED COMMENTS: Description container */
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  padding: 0 !important;
+  gap: 12px !important;
+  width: 100% !important;
+  flex-shrink: 0 !important;
+}
+
+.projects-list-page .modal-project-card-header {
+  /* CRITICAL: Title centered */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.projects-list-page .modal-project-card-title {
+  /* SCALED FOR: Large centered title */
+  font-family: 'SF Pro Display', 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-style: normal;
+  font-weight: 590;
+  font-size: 20px;
+  line-height: 24px;
+  text-align: center;
+  letter-spacing: -0.02em;
+  color: #FFFFFF;
+  margin: 0;
+  width: 100%;
+}
+
+.projects-list-page .modal-project-card-description {
+  /* UPDATED COMMENTS: Centered description text */
+  font-family: 'SF Pro Display', 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 130%;
+  text-align: center;
+  color: #FFFFFF;
+  margin: 0;
+  width: 100%;
+}
+
+.projects-list-page .modal-project-card-tags {
+  /* CRITICAL: Chips container */
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  align-content: center;
+  padding: 0;
+  gap: 6px;
+  width: 100%;
+}
+
+/* ============================================
    PROJECT DETAIL PAGE
    ============================================ */
 
@@ -618,25 +754,19 @@
   
   z-index: 10;
   
-  /* UPDATED COMMENTS: Hidden by default with slide-left animation (from left side) */
+  /* UPDATED COMMENTS: Simple fade-in with page, no slide animation */
   opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transform: translateY(-50%) translateX(-100px); /* Slide from left */
+  transform: translateY(-50%);
+  transition: opacity 0.3s ease-out, background 0.2s ease;
 }
 
-/* UPDATED COMMENTS: Visible state with slide-in animation from left */
+/* UPDATED COMMENTS: Visible state - simple fade-in */
 .page-back--visible {
   opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-  transform: translateY(-50%) translateX(0);
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out, visibility 0.6s ease-out, background 0.2s ease;
 }
 
 .page-back:hover {
   background: rgba(0, 0, 0, 0.7);
-  transition: background 0.2s ease;
 }
 
 .page-back:focus {
@@ -682,25 +812,19 @@
   
   z-index: 10;
   
-  /* UPDATED COMMENTS: Hidden by default with slide-right animation */
+  /* UPDATED COMMENTS: Simple fade-in with page, no slide animation */
   opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transform: translateY(-50%) translateX(100px);
+  transform: translateY(-50%);
+  transition: opacity 0.3s ease-out, background 0.2s ease;
 }
 
-/* UPDATED COMMENTS: Visible state with slide-in animation */
+/* UPDATED COMMENTS: Visible state - simple fade-in */
 .page-close--visible {
   opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-  transform: translateY(-50%) translateX(0);
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out, visibility 0.6s ease-out, background 0.2s ease;
 }
 
 .page-close:hover {
   background: rgba(0, 0, 0, 0.7);
-  transition: background 0.2s ease;
 }
 
 .page-close:focus {
