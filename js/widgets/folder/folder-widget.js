@@ -130,14 +130,10 @@ export class FolderWidget extends WidgetBase {
    * UPDATED COMMENTS: Navigates to projects list page
    */
   onClick(data) {
-    console.log('🎯 Folder clicked!', this.title, this.theme);
-    
     // CRITICAL: Navigate to projects list page instead of opening modal
     if (this.eventBus) {
       // UPDATED COMMENTS: Determine category from theme
       const category = this.theme === 'pink' ? 'fun' : 'work';
-      
-      console.log('📤 Emitting folder:navigate event', { category, title: this.title });
       
       this.eventBus.emit('folder:navigate', {
         widget: this,

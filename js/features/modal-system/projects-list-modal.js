@@ -28,17 +28,12 @@ export class ProjectsListModal {
   async render(options = {}) {
     const { category = 'work' } = options;
     
-    console.log('🎨 ProjectsListModal.render called with category:', category);
-    
     try {
       // UPDATED COMMENTS: Load projects from backend API
-      console.log('📡 Fetching projects from API...');
       const projects = await this.loadProjects(category);
-      console.log('✅ Projects loaded:', projects.length, 'projects');
       
       // SCALED FOR: Render project grid
       const html = this.renderProjectsGrid(projects, category);
-      console.log('✅ HTML generated, length:', html.length);
       return html;
       
     } catch (error) {
@@ -53,18 +48,13 @@ export class ProjectsListModal {
    * CRITICAL: Use backend URL (port 8000) not frontend URL (port 8080)
    */
   async loadProjects(category) {
-    console.log('📡 Making API request to:', `http://localhost:8000/api/projects?category=${category}`);
-    
     const response = await fetch(`http://localhost:8000/api/projects?category=${category}`);
-    
-    console.log('📡 API response status:', response.status, response.statusText);
     
     if (!response.ok) {
       throw new Error(`Failed to load projects: ${response.statusText}`);
     }
     
     const data = await response.json();
-    console.log('📡 API response data:', data);
     
     return data.projects || [];
   }

@@ -17,6 +17,7 @@ export const TOAST_MESSAGES = {
   MESSAGE_TOO_SHORT: 'Message must be at least 10 characters',
   CONTACT_REQUIRED: 'Please provide contact information',
   CONTACT_TOO_SHORT: 'Contact info must be at least 5 characters',
+  RATE_LIMIT_EXCEEDED: 'You have sent too many messages. Please wait a moment',
   
   // Share/Copy messages
   RESUME_COPIED: 'Resume copied to clipboard',

@@ -261,7 +261,6 @@ export class ContactInput {
     }
     
     // CRITICAL: Emit event to open contact modal
-    console.log('✅ Emitting contact-input:send event');
     this.eventBus.emit('contact-input:send', { message });
   }
 

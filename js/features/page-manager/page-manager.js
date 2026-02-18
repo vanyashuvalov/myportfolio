@@ -539,8 +539,6 @@ export class PageManager {
    */
   async showProjectsListPage(category = 'work') {
     try {
-      console.log('📋 Showing projects list page:', category);
-      
       // CRITICAL: Show transition overlay before loading
       await this.showTransitionOverlay();
       
@@ -582,8 +580,6 @@ export class PageManager {
    * @returns {Promise<Array>} Projects array
    */
   async loadProjects(category) {
-    console.log('📡 Loading projects:', category);
-    
     const response = await fetch(`http://localhost:8000/api/projects?category=${category}`);
     
     if (!response.ok) {
