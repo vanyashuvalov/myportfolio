@@ -145,8 +145,6 @@ class Application {
 
       // UPDATED COMMENTS: Listen for folder widget clicks
       this.eventBus.on('folder:navigate', ({ url }) => {
-        console.log('📥 Received folder:navigate event', { url });
-        
         // CRITICAL: Navigate to projects list page
         if (this.pageManager) {
           this.pageManager.router.navigate(url);

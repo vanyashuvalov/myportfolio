@@ -95,6 +95,126 @@ export class ModalManager {
   }
 
   /**
+   * Setup contact modal specific event listeners
+   * CRITICAL: Handle input changes and send button clicks
+   * UPDATED COMMENTS: Changes button text based on contact input
+   */
+  setupContactModalListeners() {
+    const input = this.container.querySelector('.modal-input');
+    const sendButton = this.container.querySelector('[data-action="send-contact"]');
+    
+    if (!input || !sendButton) {
+      console.error('❌ Contact modal elements not found');
+      return;
+    }
+    
+    // CRITICAL: Store message from data attribute
+    const message = input.dataset.message || '';
+    
+    // UPDATED COMMENTS: Input change updates button text
+    input.addEventListener('input', (event) => {
+      const contactInfo = event.target.value.trim();
+      
+      // CRITICAL: Change button text based on contact presence
+      if (contactInfo.length > 0) {
+        sendButton.textContent = 'Send';
+        sendButton.classList.remove('modal-button--anonymous');
+      } else {
+        sendButton.textContent = 'Send anonymously';
+        sendButton.classList.add('modal-button--anonymous');
+      }
+    });
+    
+    // UPDATED COMMENTS: Send button action
+    sendButton.addEventListener('click', async () => {
+      const contactInfo = input.value.trim();
+      
+      // CRITICAL: Check rate limit BEFORE validation
+      const { globalRateLimiter } = await import('../../shared/utils/rate-limiter.js');
+      
+      if (!globalRateLimiter.isAllowed('send-message')) {
+        const { toastManager } = await import('../../shared/utils/toast-manager.js');
+        const { TOAST_MESSAGES } = await import('../../shared/ui/toast/toast-messages.js');
+        toastManager.showWarning(TOAST_MESSAGES.RATE_LIMIT_EXCEEDED);
+        return;
+      }
+      
+      // CRITICAL: Validate contact field if filled (min 5 chars)
+      if (contactInfo.length > 0 && contactInfo.length < 5) {
+        const { toastManager } = await import('../../shared/utils/toast-manager.js');
+        const { TOAST_MESSAGES } = await import('../../shared/ui/toast/toast-messages.js');
+        toastManager.showInfo(TOAST_MESSAGES.CONTACT_TOO_SHORT);
+        return;
+      }
+      
+      // UPDATED COMMENTS: Disable button during submission
+      sendButton.disabled = true;
+      sendButton.textContent = 'Sending...';
+      
+      try {
+        // CRITICAL: Send message to backend
+        const response = await this.sendContactMessage(message, contactInfo);
+        
+        if (response.success) {
+          // CRITICAL: Record successful action for rate limiting
+          globalRateLimiter.recordAction('send-message');
+          
+          // UPDATED COMMENTS: Show success toast notification
+          const { toastManager } = await import('../../shared/utils/toast-manager.js');
+          const { TOAST_MESSAGES } = await import('../../shared/ui/toast/toast-messages.js');
+          toastManager.showSuccess(TOAST_MESSAGES.MESSAGE_SENT);
+          
+          // REUSED: Emit event for contact input to clear
+          if (this.eventBus) {
+            this.eventBus.emit('message:sent', {
+              message,
+              contact: contactInfo
+            });
+          }
+          
+          this.close();
+        } else {
+          throw new Error(response.error || 'Failed to send message');
+        }
+      } catch (error) {
+        console.error('Failed to send message:', error);
+        
+        // UPDATED COMMENTS: Show error toast notification
+        const { toastManager } = await import('../../shared/utils/toast-manager.js');
+        const { TOAST_MESSAGES } = await import('../../shared/ui/toast/toast-messages.js');
+        toastManager.showError(TOAST_MESSAGES.MESSAGE_ERROR);
+        
+        sendButton.disabled = false;
+        sendButton.textContent = contactInfo ? 'Send' : 'Send anonymously';
+      }
+    });
+  }
+
+  /**
+   * Send contact message to backend
+   * SCALED FOR: API integration with error handling
+   * REUSED: Same logic as ContactModal
+   */
+  async sendContactMessage(message, contact) {
+    const apiUrl = window.location.hostname === 'localhost' 
+      ? 'http://localhost:8000/api/contact/send'
+      : '/api/contact/send';
+    
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        message: message,
+        contact: contact || null
+      })
+    });
+    
+    return await response.json();
+  }
+
+  /**
    * Register modal type with content renderer
    * REUSED: Plugin pattern for extensible modal types
    * 
@@ -125,19 +245,14 @@ export class ModalManager {
     const renderer = this.modalTypes.get(type);
     if (!renderer) {
       console.error(`❌ Modal type "${type}" not registered`);
-      console.log('📋 Available types:', Array.from(this.modalTypes.keys()));
       return;
     }
-    
-    console.log('✅ Renderer found, creating content...');
     
     // CRITICAL: Store current focus for restoration
     this.previousFocus = document.activeElement;
     
     // UPDATED COMMENTS: Create modal content
     const modalContent = await renderer(options);
-    
-    console.log('✅ Content created, rendering modal...');
     
     // CRITICAL: Determine if fullscreen modal (projects list)
     const isFullscreen = type === 'projects-list' || type === 'projects';
@@ -217,34 +332,7 @@ export class ModalManager {
       // UPDATED COMMENTS: Normal animation with requestAnimationFrame
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
-          console.log('🎬 Adding modal-container--open class');
           this.container.classList.add('modal-container--open');
-          
-          // CRITICAL: Debug - check if projects-list exists
-          const projectsList = this.container.querySelector('.projects-list');
-          if (projectsList) {
-            console.log('✅ .projects-list found in DOM');
-            const initialStyles = window.getComputedStyle(projectsList);
-            console.log('📊 Initial opacity:', initialStyles.opacity);
-            console.log('📊 Initial transform:', initialStyles.transform);
-            console.log('📊 Initial transition:', initialStyles.transition);
-            
-            // CRITICAL: Force check after 100ms
-            setTimeout(() => {
-              const afterStyles = window.getComputedStyle(projectsList);
-              console.log('📊 After 100ms opacity:', afterStyles.opacity);
-              console.log('📊 After 100ms transform:', afterStyles.transform);
-            }, 100);
-            
-            // CRITICAL: Check after animation should complete (1000ms)
-            setTimeout(() => {
-              const finalStyles = window.getComputedStyle(projectsList);
-              console.log('📊 After 1000ms opacity:', finalStyles.opacity);
-              console.log('📊 After 1000ms transform:', finalStyles.transform);
-            }, 1000);
-          } else {
-            console.error('❌ .projects-list NOT FOUND in DOM!');
-          }
           
           // CRITICAL: Add close button visible class with 100ms delay (like contact-input pattern)
           // UPDATED COMMENTS: Skip animation if returning from project page (button already visible)
@@ -268,7 +356,12 @@ export class ModalManager {
     // UPDATED COMMENTS: Setup close button click listener
     this.setupCloseButtonListener();
     
-    console.log('✅ Modal opened successfully');
+    // CRITICAL: Setup contact modal specific listeners if it's a contact modal
+    if (type === 'contact') {
+      this.setupContactModalListeners();
+    }
+    
+    // UPDATED COMMENTS: Prevent body scroll
     
     // UPDATED COMMENTS: Prevent body scroll
     document.body.style.overflow = 'hidden';

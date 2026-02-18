@@ -315,7 +315,6 @@ export class SimpleDragHover {
     
     // CRITICAL: Trigger onClick if this was a click (not a drag)
     if (isClick && widget.onClick && typeof widget.onClick === 'function') {
-      console.log('✅ Click detected! Calling onClick for', widget.type);
       widget.onClick({ event, widget });
     } else if (isClick) {
       console.log('⚠️ Click detected but no onClick handler for', widget.type);
