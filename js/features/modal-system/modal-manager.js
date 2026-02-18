@@ -108,6 +108,7 @@ export class ModalManager {
   /**
    * Open modal with specified type and options
    * SCALED FOR: Smooth entrance animations and focus management
+   * UPDATED COMMENTS: Support scroll position restoration for seamless back navigation
    * 
    * @param {string} type - Modal type (projects, project-detail, about, reviews)
    * @param {Object} options - Modal configuration and data
@@ -163,6 +164,16 @@ export class ModalManager {
     }
     this.container.setAttribute('aria-hidden', 'false');
     this.container.removeAttribute('aria-hidden');
+    
+    // UPDATED COMMENTS: Restore scroll position if provided
+    // CRITICAL: Must be done before animation starts
+    if (options.scrollPosition !== undefined && isFullscreen) {
+      const modalContent = this.container.querySelector('.modal-content--fullscreen');
+      if (modalContent) {
+        modalContent.scrollTop = options.scrollPosition;
+        console.log('📜 Restored scroll position:', options.scrollPosition);
+      }
+    }
     
     // UPDATED COMMENTS: Remove inline visibility style to allow CSS animations to work
     // CRITICAL: CSS will handle visibility through classes, inline style was blocking close button animation
