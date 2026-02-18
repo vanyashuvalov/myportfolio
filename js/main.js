@@ -10,7 +10,6 @@ import { EventBus } from './shared/utils/event-bus.js';
 import { NavigationHeader } from './shared/ui/navigation/navigation-header.js';
 import { ContactInput } from './shared/ui/contact-input/contact-input.js';
 import { ModalManager } from './features/modal-system/modal-manager.js';
-import { ProjectsListModal } from './features/modal-system/projects-list-modal.js';
 import { PageManager } from './features/page-manager/page-manager.js';
 
 /**
@@ -25,7 +24,6 @@ class Application {
     this.navigation = null;
     this.contactInput = null;
     this.contactModalManager = null;
-    this.projectsModalManager = null;
     this.pageManager = null;
     this.performanceMonitor = null;
     this.assetManager = null;
@@ -113,7 +111,7 @@ class Application {
       }
 
       // ANCHOR: modal_manager_initialization
-      // UPDATED COMMENTS: Two separate modal managers for different z-index layers
+      // UPDATED COMMENTS: Contact modal manager for regular modals
       
       // CRITICAL: Contact modal manager (regular modals above everything)
       const modalContainer = document.getElementById('modal-container');
@@ -137,58 +135,25 @@ class Application {
           this.contactModalManager.open('contact', { message });
         });
       }
-      
-      // CRITICAL: Projects modal manager (fullscreen modals below navigation)
-      const projectsModalContainer = document.getElementById('projects-modal-container');
-      
-      if (!projectsModalContainer) {
-        console.error('❌ Projects modal container not found');
-      } else {
-        this.projectsModalManager = new ModalManager({
-          container: projectsModalContainer,
-          eventBus: this.eventBus
-        });
 
-        // ANCHOR: page_manager_initialization
-        // CRITICAL: Page manager for project detail pages
-        this.pageManager = new PageManager({
-          eventBus: this.eventBus,
-          desktopCanvas: this.canvas
-        });
+      // ANCHOR: page_manager_initialization
+      // CRITICAL: Page manager for project pages
+      this.pageManager = new PageManager({
+        eventBus: this.eventBus,
+        desktopCanvas: this.canvas
+      });
 
-        // REUSED: Register projects list modal renderer
-        const projectsListModal = new ProjectsListModal({
-          eventBus: this.eventBus,
-          pageManager: this.pageManager
-        });
-
-        this.projectsModalManager.registerModalType('projects-list', async (options) => {
-          const html = await projectsListModal.render(options);
-          
-          // CRITICAL: Setup event listeners after modal renders
-          setTimeout(() => {
-            const modalContent = projectsModalContainer.querySelector('.modal-content');
-            if (modalContent) {
-              projectsListModal.setupEventListeners(modalContent);
-            }
-          }, 100);
-          
-          return html;
-        });
-
-        // UPDATED COMMENTS: Listen for folder widget clicks
-        this.eventBus.on('folder:clicked', ({ category }) => {
-          console.log('📥 Received folder:clicked event', { category });
-          console.log('🔍 ProjectsModalManager exists?', !!this.projectsModalManager);
-          console.log('🔍 Opening modal with category:', category);
-          
-          try {
-            this.projectsModalManager.open('projects-list', { category });
-          } catch (error) {
-            console.error('❌ Failed to open modal:', error);
-          }
-        });
-      }
+      // UPDATED COMMENTS: Listen for folder widget clicks
+      this.eventBus.on('folder:navigate', ({ url }) => {
+        console.log('📥 Received folder:navigate event', { url });
+        
+        // CRITICAL: Navigate to projects list page
+        if (this.pageManager) {
+          this.pageManager.router.navigate(url);
+        } else {
+          console.error('❌ PageManager not available');
+        }
+      });
 
       // Setup global event listeners
       this.setupGlobalEvents();

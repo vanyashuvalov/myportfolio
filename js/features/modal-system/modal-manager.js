@@ -109,6 +109,7 @@ export class ModalManager {
    * Open modal with specified type and options
    * SCALED FOR: Smooth entrance animations and focus management
    * UPDATED COMMENTS: Support scroll position restoration for seamless back navigation
+   * UPDATED COMMENTS: Skip close button animation when returning from project page
    * 
    * @param {string} type - Modal type (projects, project-detail, about, reviews)
    * @param {Object} options - Modal configuration and data
@@ -161,6 +162,16 @@ export class ModalManager {
     // CRITICAL: Add fullscreen class first (before open class for animation)
     if (isFullscreen) {
       this.container.classList.add('modal-container--fullscreen');
+      
+      // CRITICAL: Skip background fade-in if returning from project page
+      if (options.skipBackgroundAnimation) {
+        const modalContent = this.container.querySelector('.modal-content--fullscreen');
+        if (modalContent) {
+          modalContent.style.opacity = '1';
+          modalContent.style.transition = 'none';
+          console.log('⚡ Background shown immediately (no fade-in)');
+        }
+      }
     }
     this.container.setAttribute('aria-hidden', 'false');
     this.container.removeAttribute('aria-hidden');
@@ -189,49 +200,65 @@ export class ModalManager {
     
     // UPDATED COMMENTS: Add open class with delay to trigger CSS animations
     // CRITICAL: Use requestAnimationFrame to ensure browser applies initial styles first
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        console.log('🎬 Adding modal-container--open class');
-        this.container.classList.add('modal-container--open');
-        
-        // CRITICAL: Debug - check if projects-list exists
-        const projectsList = this.container.querySelector('.projects-list');
-        if (projectsList) {
-          console.log('✅ .projects-list found in DOM');
-          const initialStyles = window.getComputedStyle(projectsList);
-          console.log('📊 Initial opacity:', initialStyles.opacity);
-          console.log('📊 Initial transform:', initialStyles.transform);
-          console.log('📊 Initial transition:', initialStyles.transition);
-          
-          // CRITICAL: Force check after 100ms
-          setTimeout(() => {
-            const afterStyles = window.getComputedStyle(projectsList);
-            console.log('📊 After 100ms opacity:', afterStyles.opacity);
-            console.log('📊 After 100ms transform:', afterStyles.transform);
-          }, 100);
-          
-          // CRITICAL: Check after animation should complete (1000ms)
-          setTimeout(() => {
-            const finalStyles = window.getComputedStyle(projectsList);
-            console.log('📊 After 1000ms opacity:', finalStyles.opacity);
-            console.log('📊 After 1000ms transform:', finalStyles.transform);
-          }, 1000);
-        } else {
-          console.error('❌ .projects-list NOT FOUND in DOM!');
+    // CRITICAL: Skip animation delay if returning from project page
+    if (options.skipBackgroundAnimation) {
+      // CRITICAL: Add open class immediately without animation delay
+      console.log('⚡ Adding modal-container--open class immediately (no animation)');
+      this.container.classList.add('modal-container--open');
+      
+      // CRITICAL: Show close button immediately
+      if (isFullscreen) {
+        const closeButton = this.container.querySelector('.modal-close');
+        if (closeButton) {
+          closeButton.classList.add('modal-close--visible');
         }
-        
-        // CRITICAL: Add close button visible class with 100ms delay (like contact-input pattern)
-        // REUSED: Delayed class addition pattern from contact-input component
-        if (isFullscreen) {
-          setTimeout(() => {
+      }
+    } else {
+      // UPDATED COMMENTS: Normal animation with requestAnimationFrame
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          console.log('🎬 Adding modal-container--open class');
+          this.container.classList.add('modal-container--open');
+          
+          // CRITICAL: Debug - check if projects-list exists
+          const projectsList = this.container.querySelector('.projects-list');
+          if (projectsList) {
+            console.log('✅ .projects-list found in DOM');
+            const initialStyles = window.getComputedStyle(projectsList);
+            console.log('📊 Initial opacity:', initialStyles.opacity);
+            console.log('📊 Initial transform:', initialStyles.transform);
+            console.log('📊 Initial transition:', initialStyles.transition);
+            
+            // CRITICAL: Force check after 100ms
+            setTimeout(() => {
+              const afterStyles = window.getComputedStyle(projectsList);
+              console.log('📊 After 100ms opacity:', afterStyles.opacity);
+              console.log('📊 After 100ms transform:', afterStyles.transform);
+            }, 100);
+            
+            // CRITICAL: Check after animation should complete (1000ms)
+            setTimeout(() => {
+              const finalStyles = window.getComputedStyle(projectsList);
+              console.log('📊 After 1000ms opacity:', finalStyles.opacity);
+              console.log('📊 After 1000ms transform:', finalStyles.transform);
+            }, 1000);
+          } else {
+            console.error('❌ .projects-list NOT FOUND in DOM!');
+          }
+          
+          // CRITICAL: Add close button visible class with 100ms delay (like contact-input pattern)
+          // UPDATED COMMENTS: Skip animation if returning from project page (button already visible)
+          // REUSED: Simple fade-in with modal content
+          if (isFullscreen) {
             const closeButton = this.container.querySelector('.modal-close');
             if (closeButton) {
+              // CRITICAL: Show button immediately - CSS handles fade-in
               closeButton.classList.add('modal-close--visible');
             }
-          }, 100); // 100ms delay before animation starts
-        }
+          }
+        });
       });
-    });
+    }
     
     this.isOpen = true;
     

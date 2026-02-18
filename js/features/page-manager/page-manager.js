@@ -16,11 +16,15 @@ export class PageManager {
   constructor(options = {}) {
     this.eventBus = options.eventBus;
     this.desktopCanvas = options.desktopCanvas;
+    this.projectsModalManager = options.projectsModalManager; // CRITICAL: Direct access to projects modal manager
     
     // CRITICAL: Page container (will be created)
     this.pageContainer = null;
     this.currentPage = null;
     this.isPageMode = false;
+    
+    // UPDATED COMMENTS: Transition overlay for seamless navigation
+    this.transitionOverlay = null;
     
     // UPDATED COMMENTS: Modal state for seamless back navigation
     // CRITICAL: Store scroll position and category for return to modal
@@ -46,7 +50,19 @@ export class PageManager {
     
     // SCALED FOR: Register routes for project pages
     this.router.register('/projects/:id', (context) => {
-      this.showProjectPage(context.params.id, 'work');
+      // CRITICAL: Check if :id is actually a project ID or just "projects"
+      const id = context.params.id;
+      
+      // If no ID or ID looks like a category, show projects list
+      if (!id || id === 'work' || id === 'fun') {
+        this.showProjectsListPage(id || 'work');
+      } else {
+        this.showProjectPage(id, 'work');
+      }
+    });
+    
+    this.router.register('/projects', () => {
+      this.showProjectsListPage('work');
     });
     
     this.router.register('/fun/:id', (context) => {
@@ -82,6 +98,40 @@ export class PageManager {
     } else {
       document.body.appendChild(this.pageContainer);
     }
+    
+    // CRITICAL: Create transition overlay for seamless navigation
+    this.createTransitionOverlay();
+  }
+
+  /**
+   * Create transition overlay for seamless page transitions
+   * CRITICAL: Black #101010 overlay that covers everything during navigation
+   */
+  createTransitionOverlay() {
+    this.transitionOverlay = document.createElement('div');
+    this.transitionOverlay.id = 'page-transition-overlay';
+    this.transitionOverlay.className = 'page-transition-overlay';
+    document.body.appendChild(this.transitionOverlay);
+  }
+
+  /**
+   * Show transition overlay
+   * CRITICAL: Fade-in black overlay before navigation
+   */
+  async showTransitionOverlay() {
+    this.transitionOverlay.classList.add('page-transition-overlay--active');
+    // Wait for fade-in animation
+    await new Promise(resolve => setTimeout(resolve, 300));
+  }
+
+  /**
+   * Hide transition overlay
+   * CRITICAL: Fade-out black overlay after navigation
+   */
+  async hideTransitionOverlay() {
+    this.transitionOverlay.classList.remove('page-transition-overlay--active');
+    // Wait for fade-out animation
+    await new Promise(resolve => setTimeout(resolve, 300));
   }
 
   /**
@@ -286,18 +336,33 @@ export class PageManager {
       this.isReturningToModal = false;
       console.log('🔄 Returning to projects modal instead of desktop');
       
-      // UPDATED COMMENTS: Open projects modal with saved state
-      if (this.eventBus) {
-        this.eventBus.emit('modal:open', {
-          type: 'projects-list',
-          options: { 
-            category: this.lastModalCategory,
-            scrollPosition: this.lastModalScrollPosition 
-          }
-        });
+      const desktopCanvas = document.getElementById('desktop-canvas');
+      
+      // CRITICAL: Show desktop canvas behind modal
+      if (desktopCanvas) {
+        desktopCanvas.style.display = 'flex';
+        desktopCanvas.style.opacity = '1';
       }
       
-      // CRITICAL: Hide page container
+      // CRITICAL: Remove page-mode class to restore gradient background
+      document.body.classList.remove('page-mode');
+      
+      // CRITICAL: Open modal BEFORE hiding page container to prevent flash
+      // UPDATED COMMENTS: Modal opens with #101010 background instantly
+      if (this.projectsModalManager) {
+        this.projectsModalManager.open('projects-list', { 
+          category: this.lastModalCategory,
+          scrollPosition: this.lastModalScrollPosition,
+          skipBackgroundAnimation: true // CRITICAL: Instant background, no fade
+        });
+        
+        // CRITICAL: Wait a bit for modal to render, then hide page
+        await new Promise(resolve => setTimeout(resolve, 50));
+      } else {
+        console.error('❌ projectsModalManager not available');
+      }
+      
+      // CRITICAL: Hide page container AFTER modal is visible
       this.pageContainer.style.display = 'none';
       this.isPageMode = false;
       this.currentPage = null;
@@ -352,10 +417,8 @@ export class PageManager {
         await this.transitionBackToProjects(category);
       });
       
-      // REUSED: Slide-in animation with delay like close button
-      setTimeout(() => {
-        backButton.classList.add('page-back--visible');
-      }, 100);
+      // REUSED: Simple fade-in with page content
+      backButton.classList.add('page-back--visible');
     }
     
     // CRITICAL: Back to desktop button
@@ -373,10 +436,8 @@ export class PageManager {
         this.router.navigate('/');
       });
       
-      // REUSED: Slide-in animation with delay like modal close button
-      setTimeout(() => {
-        closeButton.classList.add('page-close--visible');
-      }, 100);
+      // REUSED: Simple fade-in with page content
+      closeButton.classList.add('page-close--visible');
     }
   }
 
@@ -466,6 +527,224 @@ export class PageManager {
   }
 
   /**
+   * Show projects list page
+   * CRITICAL: Render projects list as a page (not modal)
+   * UPDATED COMMENTS: Reuses ProjectsListModal renderer
+   * UPDATED COMMENTS: Uses transition overlay for seamless navigation
+   * 
+   * @param {string} category - Project category (work/fun)
+   */
+  async showProjectsListPage(category = 'work') {
+    try {
+      console.log('📋 Showing projects list page:', category);
+      
+      // CRITICAL: Show transition overlay before loading
+      await this.showTransitionOverlay();
+      
+      // UPDATED COMMENTS: Load projects from backend
+      const projects = await this.loadProjects(category);
+      
+      // CRITICAL: Render projects list page HTML
+      const pageHtml = this.renderProjectsListPage(projects, category);
+      
+      // SCALED FOR: Smooth transition to page mode
+      await this.transitionToPage(pageHtml);
+      
+      // CRITICAL: Setup click handlers and render chips BEFORE hiding overlay
+      await this.setupProjectsListEventListeners(category);
+      
+      // CRITICAL: Hide transition overlay after page is ready with chips
+      await this.hideTransitionOverlay();
+      
+      // REUSED: Emit page shown event
+      if (this.eventBus) {
+        this.eventBus.emit('page:shown', { 
+          type: 'projects-list', 
+          category 
+        });
+      }
+      
+    } catch (error) {
+      console.error('Failed to show projects list page:', error);
+      await this.hideTransitionOverlay();
+      this.showErrorPage(error.message);
+    }
+  }
+
+  /**
+   * Load projects from backend API
+   * REUSED: Same logic as ProjectsListModal
+   * 
+   * @param {string} category - Project category
+   * @returns {Promise<Array>} Projects array
+   */
+  async loadProjects(category) {
+    console.log('📡 Loading projects:', category);
+    
+    const response = await fetch(`http://localhost:8000/api/projects?category=${category}`);
+    
+    if (!response.ok) {
+      throw new Error(`Failed to load projects: ${response.statusText}`);
+    }
+    
+    const data = await response.json();
+    return data.projects || [];
+  }
+
+  /**
+   * Render projects list page HTML
+   * REUSED: Layout from ProjectsListModal
+   * UPDATED COMMENTS: Added back and close buttons
+   * 
+   * @param {Array} projects - Projects array
+   * @param {string} category - Project category
+   * @returns {string} HTML content
+   */
+  renderProjectsListPage(projects, category) {
+    const categoryTitle = category === 'work' ? 'Projects' : 'Fun';
+    
+    return `
+      <div class="page-wrapper" data-category="${category}">
+        <!-- CRITICAL: Back button to return to desktop -->
+        <button class="page-back" data-action="back-to-desktop" aria-label="Back to desktop">
+          <img src="/assets/icons/iconamoon_arrow-down-2.svg" alt="Back" style="transform: rotate(90deg);" />
+        </button>
+        
+        <!-- CRITICAL: Close button to return to desktop -->
+        <button class="page-close" data-action="back-to-desktop" aria-label="Close page">
+          <img src="/assets/icons/iconamoon_close.svg" alt="Close" />
+        </button>
+        
+        <div class="projects-list-page">
+          <div class="projects-grid">
+            ${projects.map(project => this.renderProjectCardForPage(project, category)).join('')}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  /**
+   * Render single project card for page
+   * REUSED: Card layout from ProjectsListModal
+   * 
+   * @param {Object} project - Project data
+   * @param {string} category - Project category
+   * @returns {string} HTML content
+   */
+  renderProjectCardForPage(project, category) {
+    const {
+      id,
+      title,
+      thumbnail,
+      description,
+      tags = []
+    } = project;
+    
+    return `
+      <article class="modal-project-card" data-project-id="${this.escapeHtml(id)}" data-category="${category}">
+        <div class="modal-project-card-image">
+          <img src="${this.escapeHtml(thumbnail)}" 
+               alt="${this.escapeHtml(title)}" 
+               loading="lazy" />
+        </div>
+        
+        <div class="modal-project-card-content">
+          <div class="modal-project-card-header">
+            <h3 class="modal-project-card-title">${this.escapeHtml(title)}</h3>
+          </div>
+          
+          ${description ? `
+            <p class="modal-project-card-description">${this.escapeHtml(description)}</p>
+          ` : ''}
+          
+          ${tags.length > 0 ? `
+            <div class="modal-project-card-tags" data-tags='${JSON.stringify(tags)}'>
+              <!-- Chips will be rendered here by JS -->
+            </div>
+          ` : ''}
+        </div>
+      </article>
+    `;
+  }
+
+  /**
+   * Setup event listeners for projects list page
+   * CRITICAL: Project card clicks and chip rendering
+   * UPDATED COMMENTS: Returns promise to wait for chips rendering
+   * 
+   * @param {string} category - Project category
+   * @returns {Promise} Resolves when chips are rendered
+   */
+  async setupProjectsListEventListeners(category) {
+    // CRITICAL: Import Chip component and render chips
+    const { Chip } = await import('../../shared/ui/chip/chip.js');
+    
+    // UPDATED COMMENTS: Render chips for all project cards
+    const tagsContainers = this.pageContainer.querySelectorAll('.modal-project-card-tags');
+    tagsContainers.forEach(container => {
+      const tags = JSON.parse(container.dataset.tags || '[]');
+      container.innerHTML = '';
+      
+      tags.forEach(tag => {
+        const chip = new Chip({
+          label: tag,
+          variant: 'dark'
+        });
+        container.appendChild(chip.createElement());
+      });
+    });
+    
+    // CRITICAL: Click on project card navigates to detail page
+    const projectCards = this.pageContainer.querySelectorAll('.modal-project-card');
+    
+    projectCards.forEach(card => {
+      card.addEventListener('click', async () => {
+        const projectId = card.dataset.projectId;
+        const cardCategory = card.dataset.category;
+        
+        if (projectId) {
+          // CRITICAL: Seamless transition to project detail
+          await this.transitionToProjectFromList(projectId, cardCategory);
+        }
+      });
+      
+      // REUSED: Hover effects
+      card.addEventListener('mouseenter', () => {
+        card.classList.add('modal-project-card--hovered');
+      });
+      
+      card.addEventListener('mouseleave', () => {
+        card.classList.remove('modal-project-card--hovered');
+      });
+    });
+  }
+
+  /**
+   * Transition from projects list to project detail
+   * CRITICAL: Fade-out list content, keep #101010 background, navigate
+   * 
+   * @param {string} projectId - Project ID
+   * @param {string} category - Project category
+   */
+  async transitionToProjectFromList(projectId, category) {
+    // CRITICAL: Fade-out projects list content
+    const projectsList = this.pageContainer.querySelector('.projects-list-page');
+    
+    if (projectsList) {
+      projectsList.style.transition = 'opacity 0.3s ease-out';
+      projectsList.style.opacity = '0';
+      
+      // SCALED FOR: Wait for fade-out to complete
+      await new Promise(resolve => setTimeout(resolve, 300));
+    }
+    
+    // CRITICAL: Navigate to project detail (background already #101010)
+    const url = category === 'work' ? `/projects/${projectId}` : `/fun/${projectId}`;
+    this.router.navigate(url);
+  }
+
+  /**
    * Transition back to projects modal
    * CRITICAL: Seamless transition from project page back to modal
    * UPDATED COMMENTS: Fade-out page content, keep #101010 background, open modal
@@ -473,7 +752,7 @@ export class PageManager {
    * @param {string} category - Project category to restore
    */
   async transitionBackToProjects(category) {
-    console.log('⬅️ Transitioning back to projects modal');
+    console.log('⬅️ Transitioning back to projects list page');
     
     // CRITICAL: Fade-out page content
     const projectPage = this.pageContainer.querySelector('.project-page');
@@ -485,10 +764,7 @@ export class PageManager {
       await new Promise(resolve => setTimeout(resolve, 300));
     }
     
-    // CRITICAL: Set flag to open modal instead of showing desktop
-    this.isReturningToModal = true;
-    
-    // UPDATED COMMENTS: Navigate to root (will trigger showDesktopCanvas)
-    this.router.navigate('/');
+    // CRITICAL: Navigate back to projects list page
+    this.router.navigate('/projects');
   }
 }
