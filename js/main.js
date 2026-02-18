@@ -155,6 +155,29 @@ class Application {
         }
       });
 
+      // CRITICAL: Listen for router navigation events to update navigation header
+      // UPDATED COMMENTS: Update currentPage based on URL path
+      this.eventBus.on('router:navigate', ({ url }) => {
+        this.updateNavigationPage(url);
+      });
+
+      // CRITICAL: Listen for page shown events to update navigation
+      this.eventBus.on('page:shown', ({ type, projectId, category }) => {
+        if (type === 'project' && projectId) {
+          // UPDATED COMMENTS: Will be updated when project data loads
+          this.updateNavigationForProject(projectId, category);
+        } else if (type === 'projects-list') {
+          this.navigation.updateCurrentPage('Projects');
+        }
+      });
+
+      // CRITICAL: Listen for page hidden events (return to desktop)
+      this.eventBus.on('page:hidden', ({ type }) => {
+        if (type === 'desktop-canvas') {
+          this.navigation.updateCurrentPage('Home');
+        }
+      });
+
       // Setup global event listeners
       this.setupGlobalEvents();
 
@@ -341,6 +364,69 @@ class Application {
   handleUnhandledRejection(event) {
     console.error('Unhandled promise rejection:', event.reason);
     this.eventBus.emit('app:error', event.reason);
+  }
+
+  /**
+   * Update navigation page based on URL
+   * CRITICAL: Parse URL and update navigation header
+   * UPDATED COMMENTS: Shows current page name in navigation WITHOUT re-rendering
+   * 
+   * @param {string} url - Current URL path
+   */
+  updateNavigationPage(url) {
+    if (!this.navigation) return;
+
+    // CRITICAL: Parse URL to determine page name
+    if (url === '/' || url === '') {
+      this.navigation.updateCurrentPage('Home');
+    } else if (url === '/projects' || url.startsWith('/projects/')) {
+      // UPDATED COMMENTS: Will be updated with project title when loaded
+      this.navigation.updateCurrentPage('Projects');
+    } else if (url.startsWith('/fun/')) {
+      this.navigation.updateCurrentPage('Fun');
+    } else {
+      // SCALED FOR: Default fallback
+      this.navigation.updateCurrentPage('Home');
+    }
+  }
+
+  /**
+   * Update navigation for specific project
+   * CRITICAL: Fetch project data and update navigation with title
+   * UPDATED COMMENTS: Shows project title in navigation breadcrumb WITHOUT re-rendering
+   * 
+   * @param {string} projectId - Project ID
+   * @param {string} category - Project category
+   */
+  async updateNavigationForProject(projectId, category) {
+    if (!this.navigation) return;
+
+    try {
+      // CRITICAL: Fetch project metadata from backend
+      const response = await fetch(`http://localhost:8000/api/projects/${category}/${projectId}`);
+      
+      if (!response.ok) {
+        console.error('Failed to fetch project metadata');
+        return;
+      }
+
+      const markdown = await response.text();
+      
+      // REUSED: Parse frontmatter to get title
+      const frontmatterMatch = markdown.match(/^---\n([\s\S]*?)\n---/);
+      
+      if (frontmatterMatch) {
+        const frontmatter = frontmatterMatch[1];
+        const titleMatch = frontmatter.match(/title:\s*["']?([^"'\n]+)["']?/);
+        
+        if (titleMatch) {
+          const projectTitle = titleMatch[1].trim();
+          this.navigation.updateCurrentPage(projectTitle);
+        }
+      }
+    } catch (error) {
+      console.error('Failed to update navigation for project:', error);
+    }
   }
 }
 
