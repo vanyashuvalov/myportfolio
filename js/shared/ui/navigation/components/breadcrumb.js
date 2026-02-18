@@ -28,7 +28,7 @@ export class Breadcrumb {
   /**
    * Render page section as dropdown button
    * REUSED: New dropdown button variant with text and arrow
-   * UPDATED COMMENTS: Single button component with text and arrow icon
+   * UPDATED COMMENTS: Single button component with text only (no arrow icon)
    */
   renderPageSection() {
     return `
@@ -37,9 +37,6 @@ export class Breadcrumb {
               aria-haspopup="true"
               data-dropdown="page">
         <span class="nav-button__text">${this.options.currentPage}</span>
-        <div class="nav-button__icon">
-          ${this.iconProvider.getArrowSVG()}
-        </div>
       </button>
     `;
   }
@@ -47,7 +44,7 @@ export class Breadcrumb {
   /**
    * Render language section as dropdown button with flag
    * REUSED: New dropdown button variant with flag, text and arrow
-   * UPDATED COMMENTS: Single button component with flag, text and arrow icon
+   * UPDATED COMMENTS: Single button component with flag and text only (no arrow icon)
    */
   renderLanguageSection() {
     return `
@@ -59,9 +56,6 @@ export class Breadcrumb {
           ${this.iconProvider.getFlagSVG()}
         </div>
         <span class="nav-button__text">${this.options.currentLanguage}</span>
-        <div class="nav-button__icon">
-          ${this.iconProvider.getArrowSVG()}
-        </div>
       </button>
     `;
   }

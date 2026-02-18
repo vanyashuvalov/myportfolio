@@ -67,14 +67,15 @@ export class NavigationHeader {
   /**
    * Render navigation header HTML structure
    * REUSED: Dynamic breadcrumb generation with separators between ALL THREE elements
-   * UPDATED COMMENTS: Three separate elements: [User+Status] / [HOME] / [EN]
+   * UPDATED COMMENTS: Three separate elements: [User+Status] / [EN] / [HOME]
    */
   render() {
     // REUSED: Three distinct navigation elements for proper separation
+    // UPDATED COMMENTS: Swapped order - language section now comes before page section
     const breadcrumbElements = [
       this.userInfo.render(),
-      this.breadcrumb.renderPageSection(),
-      this.breadcrumb.renderLanguageSection()
+      this.breadcrumb.renderLanguageSection(),
+      this.breadcrumb.renderPageSection()
     ];
     
     // UPDATED COMMENTS: Generate separators dynamically between each of THREE elements
@@ -252,7 +253,7 @@ Contacts: ${SOCIAL_LINKS.telegram.url} | ${SOCIAL_LINKS.email.address}`;
       await navigator.clipboard.writeText(shareText);
       
       // UPDATED COMMENTS: Show success toast after copying
-      toastManager.showSuccess(TOAST_MESSAGES.LINK_COPIED);
+      toastManager.showSuccess(TOAST_MESSAGES.RESUME_COPIED);
       
       this.eventBus.emit('navigation:share', { url, shareText });
     } catch (error) {
@@ -288,7 +289,7 @@ Contacts: ${SOCIAL_LINKS.telegram.url} | ${SOCIAL_LINKS.email.address}`;
       const successful = document.execCommand('copy');
       if (successful) {
         // UPDATED COMMENTS: Show success toast
-        toastManager.showSuccess(TOAST_MESSAGES.LINK_COPIED);
+        toastManager.showSuccess(TOAST_MESSAGES.RESUME_COPIED);
       } else {
         throw new Error('Copy command failed');
       }
@@ -342,6 +343,25 @@ Contacts: ${SOCIAL_LINKS.telegram.url} | ${SOCIAL_LINKS.email.address}`;
     if (this.isInitialized) {
       this.render();
       this.bindEvents();
+    }
+  }
+
+  /**
+   * Update only the current page text without re-rendering
+   * CRITICAL: Prevents navigation flicker by updating DOM directly
+   * UPDATED COMMENTS: Smooth page name updates without full re-render
+   * 
+   * @param {string} pageName - New page name to display
+   */
+  updateCurrentPage(pageName) {
+    // CRITICAL: Update internal state
+    this.options.currentPage = pageName;
+    this.breadcrumb.updateBreadcrumb({ currentPage: pageName });
+    
+    // CRITICAL: Update DOM directly without re-rendering
+    const pageButton = this.container.querySelector('[data-dropdown="page"] .nav-button__text');
+    if (pageButton) {
+      pageButton.textContent = pageName;
     }
   }
 

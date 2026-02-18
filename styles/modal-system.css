@@ -611,6 +611,21 @@
   padding: 16vh 40px !important;
   /* UPDATED COMMENTS: White text on dark background */
   color: #FFFFFF !important;
+  /* CRITICAL: Add gradient overlay under header */
+  position: relative;
+}
+
+/* CRITICAL: Gradient overlay under navigation header for projects list page */
+.projects-list-page::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(180deg, #101010 0%, rgba(16, 16, 16, 0) 100%);
+  z-index: 5;
+  pointer-events: none;
 }
 
 .projects-list-page .projects-grid {
@@ -853,6 +868,21 @@
   padding: 16vh 40px !important;
   /* UPDATED COMMENTS: White text on dark background */
   color: #FFFFFF !important;
+  /* CRITICAL: Add gradient overlay under header */
+  position: relative;
+}
+
+/* CRITICAL: Gradient overlay under navigation header for project detail page */
+.project-page::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(180deg, #101010 0%, rgba(16, 16, 16, 0) 100%);
+  z-index: 5;
+  pointer-events: none;
 }
 
 .project-page-content {

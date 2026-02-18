@@ -19,7 +19,7 @@ export const TOAST_MESSAGES = {
   CONTACT_TOO_SHORT: 'Contact info must be at least 5 characters',
   
   // Share/Copy messages
-  LINK_COPIED: 'Link copied to clipboard',
+  RESUME_COPIED: 'Resume copied to clipboard',
   EMAIL_COPIED: 'Email copied to clipboard',
   COPY_ERROR: 'Failed to copy',
   

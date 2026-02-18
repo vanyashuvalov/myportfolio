@@ -90,7 +90,7 @@
   
   /* ANCHOR: z_index */
   /* UPDATED COMMENTS: Z-index layering system with proper modal hierarchy */
-  /* CRITICAL: Regular modals must be above fullscreen modals and navigation */
+  /* CRITICAL: Toast must be above everything including transition overlay */
   --z-dropdown: 1000;
   --z-sticky: 1020;
   --z-fixed: 1030;
@@ -98,11 +98,11 @@
   --z-modal: 1050;
   --z-popover: 1060;
   --z-tooltip: 1070;
-  --z-toast: 1080;
   --z-fullscreen-modal: 99999;
   --z-navigation: 100000;
   --z-contact-input: 100000;
   --z-regular-modal: 100001;
+  --z-toast: 100002;
   
   /* ANCHOR: breakpoints */
   --breakpoint-sm: 640px;

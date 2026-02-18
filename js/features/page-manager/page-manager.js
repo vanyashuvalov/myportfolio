@@ -278,7 +278,7 @@ export class PageManager {
   /**
    * Transition to page mode
    * CRITICAL: Seamless transition from modal #101010 background to page
-   * UPDATED COMMENTS: Show page immediately, fade-in content, hide desktop
+   * UPDATED COMMENTS: Show page immediately, fade-in content, hide desktop, scroll to top
    */
   async transitionToPage(pageHtml) {
     const desktopCanvas = document.getElementById('desktop-canvas');
@@ -296,6 +296,9 @@ export class PageManager {
     // UPDATED COMMENTS: Must be visible BEFORE modal closes
     this.pageContainer.style.display = 'block';
     this.pageContainer.style.opacity = '1';
+    
+    // CRITICAL: Scroll to top of page container
+    this.pageContainer.scrollTop = 0;
     
     // REUSED: Hide desktop canvas immediately
     if (desktopCanvas) {
