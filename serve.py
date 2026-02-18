@@ -21,7 +21,28 @@ class CORSHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     """
     HTTP Request Handler with CORS support
     UPDATED COMMENTS: Enables cross-origin requests for development
+    CRITICAL: SPA routing - fallback to index.html for client-side routes
     """
+    
+    def do_GET(self):
+        # CRITICAL: SPA routing fallback
+        # UPDATED COMMENTS: If path doesn't exist and is not a file request, serve index.html
+        parsed_path = urlparse(self.path)
+        path = parsed_path.path
+        
+        # CRITICAL: Get basename and check for file extension
+        basename = os.path.basename(path)
+        has_extension = '.' in basename and not basename.startswith('.')
+        
+        # SCALED FOR: Check if file exists
+        if path != '/' and not os.path.exists('.' + path):
+            # CRITICAL: Only serve index.html for routes WITHOUT file extensions
+            # UPDATED COMMENTS: If it has extension (.js, .css, .jpg, etc), let it 404
+            if not has_extension:
+                # REUSED: Serve index.html for SPA routes
+                self.path = '/index.html'
+        
+        return super().do_GET()
     
     def end_headers(self):
         # CRITICAL: CORS headers for development

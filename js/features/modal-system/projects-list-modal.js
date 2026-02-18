@@ -172,20 +172,14 @@ export class ProjectsListModal {
     const projectCards = modalContainer.querySelectorAll('.modal-project-card');
     
     projectCards.forEach(card => {
-      card.addEventListener('click', () => {
+      card.addEventListener('click', async () => {
         const projectId = card.dataset.projectId;
         const category = card.dataset.category;
         
         if (projectId && this.pageManager) {
-          // CRITICAL: Close modal and navigate to project page
-          if (this.eventBus) {
-            this.eventBus.emit('modal:close');
-          }
-          
-          // SCALED FOR: Navigate to project detail page
-          setTimeout(() => {
-            this.pageManager.navigateToProject(projectId, category);
-          }, 300); // Wait for modal close animation
+          // CRITICAL: Seamless transition through #101010 background
+          // UPDATED COMMENTS: Fade-out content, keep background, navigate, close modal
+          await this.transitionToProject(modalContainer, projectId, category);
         }
       });
       
@@ -198,6 +192,39 @@ export class ProjectsListModal {
         card.classList.remove('modal-project-card--hovered');
       });
     });
+  }
+
+  /**
+   * Seamless transition to project page
+   * CRITICAL: Show page BEFORE closing modal to prevent desktop flash
+   * UPDATED COMMENTS: User sees only #101010 background during transition
+   * 
+   * @param {HTMLElement} modalContainer - Modal container element
+   * @param {string} projectId - Project ID
+   * @param {string} category - Project category
+   */
+  async transitionToProject(modalContainer, projectId, category) {
+    // CRITICAL: Find projects list content
+    const projectsList = modalContainer.querySelector('.projects-list');
+    
+    if (projectsList) {
+      // UPDATED COMMENTS: Fade-out content only, keep #101010 background
+      projectsList.style.transition = 'opacity 0.3s ease-out';
+      projectsList.style.opacity = '0';
+      
+      // SCALED FOR: Wait for fade-out to complete
+      await new Promise(resolve => setTimeout(resolve, 300));
+    }
+    
+    // CRITICAL: Navigate and wait for page to show BEFORE closing modal
+    // UPDATED COMMENTS: This prevents desktop flash
+    await this.pageManager.navigateToProjectWithTransition(projectId, category);
+    
+    // UPDATED COMMENTS: Close modal AFTER page is visible
+    // REUSED: EventBus pattern for modal communication
+    if (this.eventBus) {
+      this.eventBus.emit('modal:close');
+    }
   }
 
   /**
