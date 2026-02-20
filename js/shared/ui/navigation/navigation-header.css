@@ -227,6 +227,67 @@ body.loaded .navigation-wrapper {
   opacity: 0.7;
 }
 
+/* ANCHOR: dropdown_button */
+/* UPDATED COMMENTS: Clickable dropdown button for page navigation */
+/* CRITICAL: Minimal button styling with hover state */
+.nav-button--dropdown {
+  /* REUSED: Reset button styles */
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  
+  /* UPDATED COMMENTS: Flexbox layout for text alignment */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  height: 29px;
+  
+  /* REUSED: Geist Mono font matching navigation style */
+  font-family: 'Geist Mono', var(--font-family-mono);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 29px;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  
+  /* SCALED FOR: Smooth hover transitions */
+  transition: opacity 0.2s ease;
+}
+
+.nav-button--dropdown:hover {
+  opacity: 0.7;
+}
+
+.nav-button--dropdown:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* UPDATED COMMENTS: Flag variant with icon */
+.nav-button--dropdown--flag {
+  gap: 10px;
+}
+
+.nav-button__flag {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-button__text {
+  white-space: nowrap;
+  flex: none;
+}
+
 .dropdown-arrow {
   width: 20px;
   height: 20px;

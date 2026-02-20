@@ -4,6 +4,8 @@
 /* UPDATED COMMENTS: Modular breadcrumb component with dropdown support */
 
 import { IconProvider } from './icon-provider.js';
+import { PageDropdown } from '../../dropdown/page-dropdown.js';
+import { LanguageDropdown } from '../../dropdown/language-dropdown.js';
 
 /**
  * Breadcrumb class - Navigation breadcrumb with page and language selectors
@@ -16,6 +18,7 @@ export class Breadcrumb {
     this.options = {
       currentPage: 'Home',
       currentLanguage: 'EN',
+      eventBus: options.eventBus,
       ...options
     };
     this.iconProvider = new IconProvider();
@@ -23,6 +26,18 @@ export class Breadcrumb {
       page: false,
       language: false
     };
+    
+    // CRITICAL: Initialize page dropdown
+    this.pageDropdown = new PageDropdown({
+      eventBus: this.options.eventBus,
+      currentPage: this.options.currentPage
+    });
+    
+    // CRITICAL: Initialize language dropdown
+    this.languageDropdown = new LanguageDropdown({
+      eventBus: this.options.eventBus,
+      currentLanguage: this.options.currentLanguage
+    });
   }
 
   /**
@@ -73,10 +88,20 @@ export class Breadcrumb {
 
   /**
    * Toggle dropdown state
-   * UPDATED COMMENTS: Dropdown state management
+   * UPDATED COMMENTS: Dropdown state management with PageDropdown and LanguageDropdown integration
    */
-  toggleDropdown(type) {
+  toggleDropdown(type, buttonElement) {
     this.dropdownStates[type] = !this.dropdownStates[type];
+    
+    // CRITICAL: Handle page dropdown toggle
+    if (type === 'page' && this.pageDropdown) {
+      this.pageDropdown.toggle(buttonElement);
+    }
+    
+    // CRITICAL: Handle language dropdown toggle
+    if (type === 'language' && this.languageDropdown) {
+      this.languageDropdown.toggle(buttonElement);
+    }
   }
 
   /**
@@ -85,5 +110,28 @@ export class Breadcrumb {
    */
   updateBreadcrumb(newData) {
     Object.assign(this.options, newData);
+    
+    // CRITICAL: Update page dropdown current page
+    if (newData.currentPage && this.pageDropdown) {
+      this.pageDropdown.updateCurrentPage(newData.currentPage);
+    }
+    
+    // CRITICAL: Update language dropdown current language
+    if (newData.currentLanguage && this.languageDropdown) {
+      this.languageDropdown.updateCurrentLanguage(newData.currentLanguage);
+    }
+  }
+  
+  /**
+   * Destroy breadcrumb and cleanup
+   * SCALED FOR: Memory management
+   */
+  destroy() {
+    if (this.pageDropdown) {
+      this.pageDropdown.destroy();
+    }
+    if (this.languageDropdown) {
+      this.languageDropdown.destroy();
+    }
   }
 }
