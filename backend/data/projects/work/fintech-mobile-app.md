@@ -1,17 +1,41 @@
 ---
 title: FinTech Mobile Banking App
+slug: fintech-mobile-app
 category: work
-tags: [FinTech, Mobile Design, iOS, Banking]
+status: published
+
 year: 2023
+duration: 8 months
 client: Digital Banking Startup
 role: Senior Product Designer
+team: [Senior Designer, iOS Engineer, Android Engineer, Backend Engineer, Product Manager]
+
 description: Redesigning mobile banking experience for Gen Z users, focusing on intuitive money management and financial literacy
+hero_image: /assets/images/bg-mountains.jpg
 thumbnail: /assets/images/bg-mountains.jpg
+
+meta_title: FinTech Mobile Banking App - Gen Z UX Case Study
+meta_description: How we achieved 4.8 star rating and 60% increase in daily active users
+og_image: /assets/images/bg-mountains.jpg
+
+tags: [FinTech, Mobile Design, iOS, Banking]
+skills: [Mobile UX, iOS Design, Prototyping, User Research, Design Systems]
+industry: FinTech
+project_type: B2C Mobile App
+
+featured: true
+show_in_portfolio: true
+order: 3
+color_theme: "#C248A3"
 ---
 
 ## Project Overview
 
 The FinTech Mobile Banking App project aimed to create a modern, user-friendly banking experience tailored specifically for Gen Z users (ages 18-25). The challenge was to make financial management intuitive, engaging, and educational without overwhelming young users with complex banking jargon.
+
+::: callout info
+💡 **Mission**: Make banking accessible and engaging for Gen Z without sacrificing security or functionality
+:::
 
 ## The Challenge
 
@@ -28,10 +52,18 @@ Traditional banking apps were failing to engage younger users:
 
 Conducted 25+ interviews with Gen Z users to understand their banking pain points:
 
-> "I avoid checking my bank app because it makes me anxious. I just want to know if I can afford something without doing math."
-> — College Student, Age 21
+::: quote College Student, Age 21
+I avoid checking my bank app because it makes me anxious. I just want to know if I can afford something without doing math.
+:::
 
 ### Key Insights
+
+::: stats
+- **25+** user interviews conducted
+- **73%** felt anxious about banking apps
+- **89%** wanted visual spending insights
+- **92%** interested in savings goals
+:::
 
 1. **Visual First**: Users wanted to see their financial health at a glance
 2. **Contextual Help**: Needed explanations without leaving the flow
@@ -119,22 +151,27 @@ Worked with iOS and Android teams to ensure:
 
 ### Quantitative Metrics
 
-- **4.8 star rating** on App Store (up from 3.2)
-- **60% increase** in daily active users
-- **45% reduction** in support tickets
-- **3x increase** in savings goal creation
+::: metrics
+- App Store Rating: 3.2 → 4.8 stars (+50%)
+- Daily Active Users: +60% increase
+- Support Tickets: -45% reduction
+- Savings Goals Created: 3x increase
+:::
 
 ### Qualitative Feedback
 
-> "This is the first banking app that doesn't make me feel stupid. I actually understand where my money goes now."
-> — Beta Tester, Age 23
+::: quote Beta Tester, Age 23
+This is the first banking app that doesn't make me feel stupid. I actually understand where my money goes now.
+:::
 
 ### Business Impact
 
-- **150,000+ downloads** in first 3 months
-- **Featured by Apple** in "Apps We Love"
-- **$2M seed funding** raised after launch
-- **Recognized** at FinTech Innovation Awards 2023
+::: stats
+- **150,000+** downloads in 3 months
+- **Featured by Apple** in Apps We Love
+- **$2M** seed funding raised
+- **FinTech Innovation Award** 2023
+:::
 
 ## Lessons Learned
 
@@ -169,11 +206,13 @@ Worked with iOS and Android teams to ensure:
 
 ### Timeline
 
-- **Research & Discovery**: 3 weeks
-- **Design & Prototyping**: 10 weeks
-- **Testing & Iteration**: 4 weeks
-- **Implementation Support**: 16 weeks
-- **Total Project Duration**: 8 months
+::: metrics
+- Research & Discovery: 3 weeks
+- Design & Prototyping: 10 weeks
+- Testing & Iteration: 4 weeks
+- Implementation Support: 16 weeks
+- Total Duration: 8 months
+:::
 
 ## Conclusion
 

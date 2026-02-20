@@ -1,10 +1,12 @@
 /* ANCHOR: markdown_parser */
 /* REUSED: Markdown to HTML conversion for project content */
 /* SCALED FOR: Safe HTML rendering with XSS prevention */
+/* UPDATED COMMENTS: Added Notion-like custom blocks support */
 
 /**
- * MarkdownParser - Simple markdown parser for project content
+ * MarkdownParser - Enhanced markdown parser with Notion-like blocks
  * Supports: headings, paragraphs, lists, links, images, code blocks
+ * Custom blocks: callouts, stats, galleries, videos, quotes, tables
  * 
  * @class MarkdownParser
  */
@@ -23,13 +25,17 @@ export class MarkdownParser {
       orderedList: /^\d+\.\s+(.+)$/gm,
       blockquote: /^>\s+(.+)$/gm,
       horizontalRule: /^---$/gm,
-      paragraph: /^(?!#|[\*\-]|\d+\.|>|```|---).+$/gm
+      paragraph: /^(?!#|[\*\-]|\d+\.|>|```|---|:::).+$/gm,
+      // CRITICAL: Custom block patterns (Notion-like)
+      customBlock: /^:::\s*(\w+)(?:\s+(.+))?\n([\s\S]*?)^:::$/gm,
+      table: /^\|(.+)\|\n\|[-:\s|]+\|\n((?:\|.+\|\n?)+)/gm
     };
   }
 
   /**
    * Parse markdown string to HTML
    * CRITICAL: XSS prevention with safe HTML escaping
+   * UPDATED COMMENTS: Added custom blocks parsing
    * 
    * @param {string} markdown - Markdown content
    * @returns {string} HTML content
@@ -41,31 +47,37 @@ export class MarkdownParser {
     
     // UPDATED COMMENTS: Parse in specific order to avoid conflicts
     
-    // 1. Code blocks (must be first to protect code content)
+    // 1. Custom blocks (must be first to protect custom content)
+    html = this.parseCustomBlocks(html);
+    
+    // 2. Code blocks (protect code content)
     html = this.parseCodeBlocks(html);
     
-    // 2. Images (before links to avoid conflicts)
+    // 3. Tables (before other formatting)
+    html = this.parseTables(html);
+    
+    // 4. Images (before links to avoid conflicts)
     html = this.parseImages(html);
     
-    // 3. Links
+    // 5. Links
     html = this.parseLinks(html);
     
-    // 4. Headings
+    // 6. Headings
     html = this.parseHeadings(html);
     
-    // 5. Lists
+    // 7. Lists
     html = this.parseLists(html);
     
-    // 6. Blockquotes
+    // 8. Blockquotes
     html = this.parseBlockquotes(html);
     
-    // 7. Horizontal rules
+    // 9. Horizontal rules
     html = this.parseHorizontalRules(html);
     
-    // 8. Inline formatting (bold, italic, code)
+    // 10. Inline formatting (bold, italic, code)
     html = this.parseInlineFormatting(html);
     
-    // 9. Paragraphs (must be last)
+    // 11. Paragraphs (must be last)
     html = this.parseParagraphs(html);
     
     return html;
@@ -186,6 +198,253 @@ export class MarkdownParser {
    */
   parseHorizontalRules(text) {
     return text.replace(this.patterns.horizontalRule, '<hr />');
+  }
+
+  /**
+   * Parse custom blocks (Notion-like components)
+   * CRITICAL: Callouts, stats, galleries, videos, quotes
+   * SCALED FOR: Extensible block system
+   * 
+   * Syntax:
+   * ::: blockType optionalParam
+   * content
+   * :::
+   */
+  parseCustomBlocks(text) {
+    return text.replace(this.patterns.customBlock, (match, blockType, param, content) => {
+      const trimmedContent = content.trim();
+      
+      switch (blockType.toLowerCase()) {
+        case 'callout':
+          return this.renderCallout(param || 'info', trimmedContent);
+        
+        case 'stats':
+          return this.renderStats(trimmedContent);
+        
+        case 'gallery':
+          return this.renderGallery(trimmedContent);
+        
+        case 'video':
+          return this.renderVideo(trimmedContent);
+        
+        case 'quote':
+          return this.renderQuote(trimmedContent, param);
+        
+        case 'metrics':
+          return this.renderMetrics(trimmedContent);
+        
+        default:
+          // UPDATED COMMENTS: Unknown block type, render as div
+          return `<div class="custom-block custom-block--${this.escapeHtml(blockType)}">${trimmedContent}</div>`;
+      }
+    });
+  }
+
+  /**
+   * Render callout block (info, warning, success, error)
+   * REUSED: Notion-style callout component
+   */
+  renderCallout(type, content) {
+    const icons = {
+      info: '💡',
+      warning: '⚠️',
+      success: '✅',
+      error: '❌',
+      tip: '💡',
+      note: '📝'
+    };
+    
+    const icon = icons[type] || icons.info;
+    
+    return `
+      <div class="callout callout--${this.escapeHtml(type)}">
+        <div class="callout-icon">${icon}</div>
+        <div class="callout-content">${content}</div>
+      </div>
+    `;
+  }
+
+  /**
+   * Render stats block (key metrics)
+   * SCALED FOR: Visual metric display
+   */
+  renderStats(content) {
+    const lines = content.split('\n').filter(line => line.trim());
+    const stats = lines.map(line => {
+      // Parse "- 70% reduction in time" or "- **70%** reduction"
+      const match = line.match(/^[\*\-]\s*(.+)$/);
+      if (match) {
+        return `<div class="stat-item">${match[1]}</div>`;
+      }
+      return '';
+    }).filter(Boolean).join('');
+    
+    return `
+      <div class="stats-block">
+        ${stats}
+      </div>
+    `;
+  }
+
+  /**
+   * Render image gallery
+   * CRITICAL: Multiple images in grid layout
+   */
+  renderGallery(content) {
+    const imageRegex = /!\[([^\]]*)\]\(([^)]+)\)/g;
+    const images = [];
+    let match;
+    
+    while ((match = imageRegex.exec(content)) !== null) {
+      images.push({
+        alt: match[1],
+        src: match[2]
+      });
+    }
+    
+    if (images.length === 0) return '';
+    
+    const imageHtml = images.map(img => `
+      <div class="gallery-item">
+        <img src="${this.escapeHtml(img.src)}" 
+             alt="${this.escapeHtml(img.alt)}" 
+             loading="lazy" />
+        ${img.alt ? `<div class="gallery-caption">${this.escapeHtml(img.alt)}</div>` : ''}
+      </div>
+    `).join('');
+    
+    return `
+      <div class="image-gallery">
+        ${imageHtml}
+      </div>
+    `;
+  }
+
+  /**
+   * Render video embed (YouTube, Vimeo)
+   * UPDATED COMMENTS: Auto-detect video platform
+   */
+  renderVideo(content) {
+    const url = content.trim();
+    
+    // YouTube
+    const youtubeMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/);
+    if (youtubeMatch) {
+      const videoId = youtubeMatch[1];
+      return `
+        <div class="video-embed">
+          <iframe 
+            src="https://www.youtube.com/embed/${this.escapeHtml(videoId)}" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+          </iframe>
+        </div>
+      `;
+    }
+    
+    // Vimeo
+    const vimeoMatch = url.match(/vimeo\.com\/(\d+)/);
+    if (vimeoMatch) {
+      const videoId = vimeoMatch[1];
+      return `
+        <div class="video-embed">
+          <iframe 
+            src="https://player.vimeo.com/video/${this.escapeHtml(videoId)}" 
+            frameborder="0" 
+            allow="autoplay; fullscreen; picture-in-picture" 
+            allowfullscreen>
+          </iframe>
+        </div>
+      `;
+    }
+    
+    // CRITICAL: Unknown video format
+    return `<p class="video-error">Unsupported video URL: ${this.escapeHtml(url)}</p>`;
+  }
+
+  /**
+   * Render quote block with optional author
+   * REUSED: Enhanced blockquote styling
+   */
+  renderQuote(content, author) {
+    return `
+      <blockquote class="quote-block">
+        <div class="quote-content">${content}</div>
+        ${author ? `<div class="quote-author">— ${this.escapeHtml(author)}</div>` : ''}
+      </blockquote>
+    `;
+  }
+
+  /**
+   * Render metrics block (table-like stats)
+   * SCALED FOR: Before/After comparisons
+   */
+  renderMetrics(content) {
+    const lines = content.split('\n').filter(line => line.trim());
+    const metrics = lines.map(line => {
+      // Parse "Metric: Before → After (Impact)"
+      const match = line.match(/^[\*\-]\s*(.+?):\s*(.+?)(?:\s*→\s*(.+?))?(?:\s*\((.+?)\))?$/);
+      if (match) {
+        const [, label, before, after, impact] = match;
+        return `
+          <div class="metric-row">
+            <div class="metric-label">${this.escapeHtml(label)}</div>
+            <div class="metric-values">
+              <span class="metric-before">${this.escapeHtml(before)}</span>
+              ${after ? `<span class="metric-arrow">→</span><span class="metric-after">${this.escapeHtml(after)}</span>` : ''}
+              ${impact ? `<span class="metric-impact">${this.escapeHtml(impact)}</span>` : ''}
+            </div>
+          </div>
+        `;
+      }
+      return '';
+    }).filter(Boolean).join('');
+    
+    return `
+      <div class="metrics-block">
+        ${metrics}
+      </div>
+    `;
+  }
+
+  /**
+   * Parse markdown tables
+   * CRITICAL: GitHub-flavored markdown tables
+   */
+  parseTables(text) {
+    return text.replace(this.patterns.table, (match, headerRow, bodyRows) => {
+      // Parse header
+      const headers = headerRow.split('|')
+        .map(h => h.trim())
+        .filter(Boolean);
+      
+      // Parse body rows
+      const rows = bodyRows.trim().split('\n')
+        .map(row => {
+          const cells = row.split('|')
+            .map(c => c.trim())
+            .filter(Boolean);
+          return cells;
+        });
+      
+      const headerHtml = headers.map(h => `<th>${this.escapeHtml(h)}</th>`).join('');
+      const bodyHtml = rows.map(row => {
+        const cellsHtml = row.map(cell => `<td>${this.escapeHtml(cell)}</td>`).join('');
+        return `<tr>${cellsHtml}</tr>`;
+      }).join('');
+      
+      return `
+        <table class="markdown-table">
+          <thead>
+            <tr>${headerHtml}</tr>
+          </thead>
+          <tbody>
+            ${bodyHtml}
+          </tbody>
+        </table>
+      `;
+    });
   }
 
   /**
