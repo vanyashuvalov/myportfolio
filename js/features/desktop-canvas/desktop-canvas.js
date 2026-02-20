@@ -404,16 +404,19 @@ export class DesktopCanvas {
     this.createWidget(catStickerWidget.type, null, catStickerWidget.config, catStickerWidget.cssPositionClass);
     
     // Store remaining planned widgets for future incremental addition
+    // UPDATED COMMENTS: Cat widget temporarily hidden (not deleted)
     this.plannedWidgets = [
       {
         type: 'cat',
         cssPositionClass: 'widget-position--cat',
-        config: { name: 'Pixel' }
+        config: { name: 'Pixel' },
+        hidden: true // CRITICAL: Widget hidden but code preserved
       },
       {
         type: 'feed-button',
         cssPositionClass: 'widget-position--feed-button',
-        config: { targetCat: 'cat' }
+        config: { targetCat: 'cat' },
+        hidden: true // CRITICAL: Feed button also hidden (depends on cat)
       }
     ];
     

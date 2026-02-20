@@ -1,0 +1,89 @@
+/* ANCHOR: language_dropdown_styles */
+/* FSD: shared/ui/dropdown → Minimal language dropdown styling */
+/* SCALED FOR: Smooth animations and hover states */
+/* UPDATED COMMENTS: Clean minimalist design matching page dropdown */
+
+.language-dropdown {
+  /* CRITICAL: Positioning and layout */
+  position: absolute;
+  z-index: 10000;
+  min-width: 100px;
+  
+  /* UPDATED COMMENTS: Minimal design with subtle background */
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 12px;
+  padding: 8px;
+  
+  /* REUSED: Subtle shadow for depth */
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.08),
+    0 0 0 1px rgba(0, 0, 0, 0.04);
+  
+  /* SCALED FOR: Smooth animations */
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* ANCHOR: dropdown_item */
+.language-dropdown__item {
+  /* CRITICAL: Full-width button layout */
+  display: block;
+  width: 100%;
+  padding: 10px 16px;
+  
+  /* UPDATED COMMENTS: Clean text styling */
+  font-family: var(--font-primary, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--color-text-primary, #1a1a1a);
+  text-align: left;
+  
+  /* REUSED: Reset button styles */
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  
+  /* SCALED FOR: Smooth hover transitions */
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+/* UPDATED COMMENTS: Hover state with subtle background */
+.language-dropdown__item:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+/* CRITICAL: Active language indicator */
+.language-dropdown__item--active {
+  color: var(--color-primary, #C248A3);
+  font-weight: 600;
+  background-color: rgba(194, 72, 163, 0.08);
+}
+
+.language-dropdown__item--active:hover {
+  background-color: rgba(194, 72, 163, 0.12);
+}
+
+/* REUSED: Focus state for accessibility */
+.language-dropdown__item:focus {
+  outline: 2px solid var(--color-primary, #C248A3);
+  outline-offset: -2px;
+}
+
+/* SCALED FOR: Smooth focus transitions */
+.language-dropdown__item:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* UPDATED COMMENTS: Responsive adjustments */
+@media (max-width: 768px) {
+  .language-dropdown {
+    min-width: 80px;
+  }
+  
+  .language-dropdown__item {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+}

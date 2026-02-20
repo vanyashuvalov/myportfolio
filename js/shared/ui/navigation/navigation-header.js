@@ -48,12 +48,13 @@ export class NavigationHeader {
 
   /**
    * Initialize navigation header component
-   * UPDATED COMMENTS: Async initialization with modular components
+   * UPDATED COMMENTS: Async initialization with modular components and page dropdown navigation
    */
   async init() {
     try {
       this.render();
       this.bindEvents();
+      this.setupPageDropdownNavigation();
       this.isInitialized = true;
       
       // REUSED: EventBus pattern for component communication
@@ -61,6 +62,48 @@ export class NavigationHeader {
     } catch (error) {
       console.error('Failed to initialize navigation header:', error);
       throw error;
+    }
+  }
+  
+  /**
+   * Setup page dropdown navigation listener
+   * CRITICAL: Listen for page selection and trigger router navigation
+   * UPDATED COMMENTS: Integrates dropdown with router for seamless navigation
+   */
+  setupPageDropdownNavigation() {
+    // CRITICAL: Listen for page dropdown selection
+    this.eventBus.on('page-dropdown:select', ({ url, label }) => {
+      console.log('🔵 Page dropdown selected:', { url, label });
+      
+      // UPDATED COMMENTS: Trigger folder navigation event for router
+      this.eventBus.emit('folder:navigate', { url });
+    });
+    
+    // CRITICAL: Listen for language dropdown selection (frontend only)
+    this.eventBus.on('language-dropdown:select', ({ langId, langLabel }) => {
+      console.log('🌐 Language dropdown selected:', { langId, langLabel });
+      
+      // UPDATED COMMENTS: Update language in navigation (no backend logic yet)
+      this.updateCurrentLanguage(langLabel);
+    });
+  }
+  
+  /**
+   * Update current language display
+   * CRITICAL: Frontend-only language update without re-rendering
+   * UPDATED COMMENTS: Updates language text in navigation header
+   * 
+   * @param {string} langLabel - New language label (EN/RU)
+   */
+  updateCurrentLanguage(langLabel) {
+    // CRITICAL: Update internal state
+    this.options.currentLanguage = langLabel;
+    this.breadcrumb.updateBreadcrumb({ currentLanguage: langLabel });
+    
+    // CRITICAL: Update DOM directly without re-rendering
+    const langButton = this.container.querySelector('[data-dropdown="language"] .nav-button__text');
+    if (langButton) {
+      langButton.textContent = langLabel;
     }
   }
 
@@ -121,7 +164,7 @@ export class NavigationHeader {
 
   /**
    * Handle click events on navigation elements
-   * UPDATED COMMENTS: Centralized click handling with action routing
+   * UPDATED COMMENTS: Centralized click handling with action routing and dropdown support
    */
   handleClick(event) {
     const button = event.target.closest('button');
@@ -304,10 +347,10 @@ Contacts: ${SOCIAL_LINKS.telegram.url} | ${SOCIAL_LINKS.email.address}`;
 
   /**
    * Toggle dropdown menus
-   * UPDATED COMMENTS: Dropdown state management with modular components
+   * UPDATED COMMENTS: Dropdown state management with modular components and button element
    */
   toggleDropdown(type, button) {
-    this.breadcrumb.toggleDropdown(type);
+    this.breadcrumb.toggleDropdown(type, button);
     this.eventBus.emit('navigation:dropdown-toggle', { type, button });
   }
 
