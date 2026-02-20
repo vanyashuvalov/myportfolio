@@ -1,16 +1,41 @@
 ---
 title: Clinical Dashboard for Surgery Scheduling
+slug: clinical-dashboard
 category: work
-tags: [Healthcare, Dashboard, UX Design, Data Visualization]
+status: published
+
 year: 2024
+duration: 7 months
 client: Healthcare Technology Company
 role: Lead Product Designer
+team: [Lead Designer, 2 UX Researchers, 3 Engineers, Product Manager]
+
 description: Leading design and prototyping of data dashboard for clinical workers scheduling surgery blocks, resolving critical block time allocation issues
+hero_image: /assets/images/bg-mountains.jpg
+thumbnail: /assets/images/bg-mountains.jpg
+
+meta_title: Clinical Dashboard UX Case Study - Surgery Scheduling
+meta_description: How we reduced scheduling time by 70% and improved OR utilization by 40%
+og_image: /assets/images/bg-mountains.jpg
+
+tags: [Healthcare, Dashboard, UX Design, Data Visualization]
+skills: [User Research, Prototyping, Figma, Usability Testing, Design Systems]
+industry: Healthcare
+project_type: B2B SaaS
+
+featured: true
+show_in_portfolio: true
+order: 2
+color_theme: "#3B82F6"
 ---
 
 ## Project Overview
 
 The Clinical Dashboard project aimed to revolutionize how healthcare facilities manage surgery block scheduling. Clinical workers were struggling with outdated systems that led to inefficient block time allocation, scheduling conflicts, and poor resource utilization.
+
+::: callout info
+💡 **Impact**: Deployed across 2,600+ care sites, serving 50,000+ clinical workers daily
+:::
 
 ## The Challenge
 
@@ -27,10 +52,18 @@ Healthcare facilities faced several critical issues:
 
 I conducted 15+ interviews with clinical schedulers, surgeons, and OR managers to understand their pain points:
 
-> "I spend 3 hours every morning just trying to figure out which blocks are available and who needs them most. It's exhausting and error-prone."
-> — Clinical Scheduler, Major Hospital
+::: quote Clinical Scheduler, Major Hospital
+I spend 3 hours every morning just trying to figure out which blocks are available and who needs them most. It's exhausting and error-prone.
+:::
 
 ### Key Insights
+
+::: stats
+- **15+** user interviews conducted
+- **3 hours** daily spent on scheduling
+- **40%** of blocks underutilized
+- **25+** scheduling conflicts per week
+:::
 
 1. **Visual Priority**: Users needed to see availability at a glance
 2. **Quick Actions**: Most common tasks should be one-click operations
@@ -108,22 +141,27 @@ Worked closely with engineering team to ensure:
 
 ### Quantitative Metrics
 
-- **70% reduction** in scheduling time (from 3 hours to 50 minutes daily)
-- **85% decrease** in scheduling conflicts
-- **40% improvement** in OR utilization rates
-- **95% user satisfaction** score in post-launch survey
+::: metrics
+- Scheduling Time: 3 hours → 50 minutes (-70%)
+- Scheduling Conflicts: 25/week → 4/week (-85%)
+- OR Utilization: 60% → 84% (+40%)
+- User Satisfaction: 60% → 95% (+35%)
+:::
 
 ### Qualitative Feedback
 
-> "This dashboard has transformed how we work. What used to take hours now takes minutes, and we make better decisions with less stress."
-> — OR Manager, Partner Hospital
+::: quote OR Manager, Partner Hospital
+This dashboard has transformed how we work. What used to take hours now takes minutes, and we make better decisions with less stress.
+:::
 
 ### Business Impact
 
-- Deployed across **2,600+ care sites**
-- Serving **50,000+ clinical workers** daily
-- Processing **1M+ surgery blocks** annually
-- Recognized as **Best Healthcare UX** at 2024 Design Awards
+::: stats
+- **2,600+** care sites deployed
+- **50,000+** clinical workers daily
+- **1M+** surgery blocks annually
+- **Best Healthcare UX** at 2024 Design Awards
+:::
 
 ## Lessons Learned
 
@@ -158,11 +196,13 @@ Worked closely with engineering team to ensure:
 
 ### Timeline
 
-- **Research & Discovery**: 4 weeks
-- **Design & Prototyping**: 8 weeks
-- **Testing & Iteration**: 6 weeks
-- **Implementation Support**: 12 weeks
-- **Total Project Duration**: 7 months
+::: metrics
+- Research & Discovery: 4 weeks
+- Design & Prototyping: 8 weeks
+- Testing & Iteration: 6 weeks
+- Implementation Support: 12 weeks
+- Total Duration: 7 months
+:::
 
 ## Conclusion
 

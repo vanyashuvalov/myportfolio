@@ -1,10 +1,12 @@
 /* ANCHOR: page_manager */
 /* FSD: features/page-manager → page rendering and transitions */
 /* REUSED: Router for navigation, MarkdownParser for content */
+/* REUSED: Chip component for tags display */
 /* SCALED FOR: Smooth page transitions and desktop canvas integration */
 
 import { Router } from './router.js';
 import { markdownParser } from '../modal-system/markdown-parser.js';
+import { Chip } from '../../shared/ui/chip/chip.js';
 
 /**
  * PageManager - Manages page rendering and transitions
@@ -220,47 +222,43 @@ export class PageManager {
         </header>
         
         <article class="project-page">
-          <!-- UPDATED COMMENTS: Hero section -->
-          ${hero_image ? `
-            <div class="project-hero">
-              <img src="${this.escapeHtml(hero_image)}" 
-                   alt="${this.escapeHtml(title)}" 
-                   loading="eager" />
-            </div>
-          ` : ''}
-          
           <!-- SCALED FOR: Project metadata -->
           <div class="project-page-content">
+            <!-- UPDATED COMMENTS: New hero section with title, meta row, and image -->
             <header class="project-header">
-              <div class="project-meta">
-                <span class="project-category">${this.escapeHtml(category)}</span>
-                ${year ? `<span class="project-year">${year}</span>` : ''}
-              </div>
-              
+              <!-- CRITICAL: Title (SF Pro Semibold 42px) -->
               <h1 class="project-title">${this.escapeHtml(title)}</h1>
               
-              ${description ? `
-                <p class="project-description">${this.escapeHtml(description)}</p>
-              ` : ''}
-              
-              ${tags.length > 0 ? `
-                <div class="project-tags">
-                  ${tags.map(tag => `
-                    <span class="project-tag">${this.escapeHtml(tag)}</span>
-                  `).join('')}
+              <!-- CRITICAL: Meta row with tags, year, and read time -->
+              <div class="project-meta-row">
+                <!-- REUSED: Chips for tags (fill width) -->
+                ${tags.length > 0 ? `
+                  <div class="project-tags" data-tags='${JSON.stringify(tags)}'>
+                    <!-- Chips will be rendered here by JS -->
+                  </div>
+                ` : ''}
+                
+                <!-- UPDATED COMMENTS: Year with calendar icon -->
+                ${year ? `
+                  <div class="project-meta-item">
+                    <img src="/assets/icons/iconamoon_calendar-1.svg" alt="" class="project-meta-icon project-meta-icon--light" />
+                    <span>${year}</span>
+                  </div>
+                ` : ''}
+                
+                <!-- CRITICAL: Read time with clock icon (calculated from content) -->
+                <div class="project-meta-item" data-read-time>
+                  <img src="/assets/icons/iconamoon_clock.svg" alt="" class="project-meta-icon project-meta-icon--dark" />
+                  <span><!-- Will be calculated by JS --></span>
                 </div>
-              ` : ''}
+              </div>
               
-              ${(client || role) ? `
-                <div class="project-info">
-                  ${client ? `<div class="project-info-item">
-                    <span class="project-info-label">Client:</span>
-                    <span class="project-info-value">${this.escapeHtml(client)}</span>
-                  </div>` : ''}
-                  ${role ? `<div class="project-info-item">
-                    <span class="project-info-label">Role:</span>
-                    <span class="project-info-value">${this.escapeHtml(role)}</span>
-                  </div>` : ''}
+              <!-- UPDATED COMMENTS: Hero image with 14px border radius -->
+              ${hero_image ? `
+                <div class="project-hero">
+                  <img src="${this.escapeHtml(hero_image)}" 
+                       alt="${this.escapeHtml(title)}" 
+                       loading="eager" />
                 </div>
               ` : ''}
             </header>
@@ -288,6 +286,9 @@ export class PageManager {
     
     // SCALED FOR: Setup page event listeners
     this.setupPageEventListeners();
+    
+    // CRITICAL: Render chips for project tags
+    this.setupProjectChips();
     
     // CRITICAL: Add page-mode class to body to hide mountains
     document.body.classList.add('page-mode');
@@ -442,6 +443,63 @@ export class PageManager {
       // REUSED: Simple fade-in with page content
       closeButton.classList.add('page-close--visible');
     }
+  }
+
+  /**
+   * Setup chips rendering for project tags
+   * REUSED: Same pattern as projects-list-modal
+   * CRITICAL: Renders Chip components for tags on project detail page
+   * UPDATED COMMENTS: Also calculates read time from content
+   */
+  setupProjectChips() {
+    // UPDATED COMMENTS: Render chips for project tags
+    const tagsContainer = this.pageContainer.querySelector('.project-tags');
+    if (tagsContainer) {
+      const tags = JSON.parse(tagsContainer.dataset.tags || '[]');
+      tagsContainer.innerHTML = ''; // Clear placeholder
+      
+      // REUSED: Chip component from shared/ui
+      // CRITICAL: Use 'dark' variant for dark background (same as projects list)
+      tags.forEach(tag => {
+        const chip = new Chip({
+          label: tag,
+          variant: 'dark'
+        });
+        tagsContainer.appendChild(chip.createElement());
+      });
+    }
+    
+    // CRITICAL: Calculate and display read time
+    this.calculateReadTime();
+  }
+
+  /**
+   * Calculate read time based on content length
+   * SCALED FOR: Average reading speed 200 words/min + image viewing time
+   * UPDATED COMMENTS: Counts text words and images for accurate estimate
+   */
+  calculateReadTime() {
+    const readTimeElement = this.pageContainer.querySelector('[data-read-time] span');
+    if (!readTimeElement) return;
+    
+    const contentElement = this.pageContainer.querySelector('.markdown-content');
+    if (!contentElement) return;
+    
+    // CRITICAL: Count words in text content
+    const text = contentElement.textContent || '';
+    const wordCount = text.trim().split(/\s+/).length;
+    
+    // UPDATED COMMENTS: Count images (each adds ~12 seconds viewing time)
+    const imageCount = contentElement.querySelectorAll('img').length;
+    
+    // SCALED FOR: Reading speed calculation
+    // 200 words per minute average reading speed
+    // 12 seconds per image (0.2 minutes)
+    const readingTimeMinutes = (wordCount / 200) + (imageCount * 0.2);
+    const readTime = Math.max(1, Math.ceil(readingTimeMinutes)); // Minimum 1 minute
+    
+    // REUSED: Display read time
+    readTimeElement.textContent = `${readTime} min read`;
   }
 
   /**

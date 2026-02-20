@@ -1,9 +1,11 @@
 /* ANCHOR: project_modal */
 /* FSD: features/modal-system → project detail modal renderer */
 /* REUSED: MarkdownParser for content rendering */
+/* REUSED: Chip component for tags display */
 /* SCALED FOR: Rich project content with images and galleries */
 
 import { markdownParser } from './markdown-parser.js';
+import { Chip } from '../../shared/ui/chip/chip.js';
 
 /**
  * ProjectModal - Renders project detail modal from markdown content
@@ -100,12 +102,10 @@ export class ProjectModal {
             <p class="project-description">${this.escapeHtml(description)}</p>
           ` : ''}
           
-          <!-- REUSED: Project tags -->
+          <!-- REUSED: Chip component for project tags (rendered via JS) -->
           ${tags.length > 0 ? `
-            <div class="project-tags">
-              ${tags.map(tag => `
-                <span class="project-tag">${this.escapeHtml(tag)}</span>
-              `).join('')}
+            <div class="project-tags" data-tags='${JSON.stringify(tags)}'>
+              <!-- Chips will be rendered here by JS -->
             </div>
           ` : ''}
           
@@ -167,5 +167,31 @@ export class ProjectModal {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
+  }
+
+  /**
+   * Setup chips rendering after HTML is inserted into DOM
+   * REUSED: Same pattern as projects-list-modal
+   * CRITICAL: Must be called after render() HTML is inserted
+   * 
+   * @param {HTMLElement} container - Container element with project detail
+   */
+  setupChips(container) {
+    // UPDATED COMMENTS: Render chips for project tags
+    const tagsContainer = container.querySelector('.project-tags');
+    if (!tagsContainer) return;
+    
+    const tags = JSON.parse(tagsContainer.dataset.tags || '[]');
+    tagsContainer.innerHTML = ''; // Clear placeholder
+    
+    // REUSED: Chip component from shared/ui
+    // CRITICAL: Use 'dark' variant for dark background (same as projects list)
+    tags.forEach(tag => {
+      const chip = new Chip({
+        label: tag,
+        variant: 'dark'
+      });
+      tagsContainer.appendChild(chip.createElement());
+    });
   }
 }

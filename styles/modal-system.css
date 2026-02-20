@@ -865,11 +865,14 @@
   width: 720px !important;
   max-width: 100% !important;
   margin: 0 auto !important;
-  padding: 16vh 40px !important;
+  padding: 30vh 40px !important; /* Increased top padding from 16vh to 20vh */
   /* UPDATED COMMENTS: White text on dark background */
   color: #FFFFFF !important;
   /* CRITICAL: Add gradient overlay under header */
   position: relative;
+  /* UPDATED COMMENTS: Prevent content overflow */
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 /* CRITICAL: Gradient overlay under navigation header for project detail page */
@@ -886,8 +889,11 @@
 }
 
 .project-page-content {
-  /* UPDATED COMMENTS: Content wrapper */
+  /* UPDATED COMMENTS: Content wrapper with overflow prevention */
   width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 /* ============================================
