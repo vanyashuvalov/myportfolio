@@ -1,0 +1,50 @@
+/* ANCHOR: reading_progress_styles */
+/* FSD: shared/ui/reading-progress → reading progress indicator styles */
+/* REUSED: Minimalist design with smooth transitions */
+/* SCALED FOR: Desktop only, hidden on mobile */
+
+/* ============================================
+   READING PROGRESS BAR
+   ============================================ */
+
+.reading-progress {
+  /* CRITICAL: Fixed at top of viewport */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  
+  /* UPDATED COMMENTS: White with 30% opacity for minimalist look */
+  background: rgba(255, 255, 255, 0.3);
+  
+  /* CRITICAL: Above navigation header (z-index: 100000) */
+  z-index: 100003;
+  
+  /* CRITICAL: Smooth width transition */
+  transition: width 0.1s ease-out, opacity 0.3s ease;
+  
+  /* UPDATED COMMENTS: Don't block pointer events */
+  pointer-events: none;
+  
+  /* CRITICAL: Initial opacity */
+  opacity: 1;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+/* CRITICAL: Hide on mobile (desktop only) */
+@media (max-width: 768px) {
+  .reading-progress {
+    display: none;
+  }
+}
+
+/* UPDATED COMMENTS: Hide on tablets too */
+@media (max-width: 1024px) {
+  .reading-progress {
+    display: none;
+  }
+}
