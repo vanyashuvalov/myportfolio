@@ -2,13 +2,13 @@
 """
 ## ANCHOR POINTS
 - ENTRY: Vercel serverless function for FastAPI
-- MAIN: Wraps backend/api_server.py for Vercel deployment
+- MAIN: Single entry point for all API routes
 - EXPORTS: ASGI app for Vercel Python runtime
 - DEPS: fastapi, backend/api_server
 - TODOs: None
 
-UPDATED COMMENTS: Vercel serverless entry point
-CRITICAL: Imports FastAPI app from backend with correct path resolution
+UPDATED COMMENTS: Vercel serverless entry point (renamed from app.py to index.py)
+CRITICAL: Vercel expects api/index.py as the main entry point
 SCALED FOR: Production serverless deployment on Vercel
 """
 
