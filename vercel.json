@@ -1,12 +1,7 @@
 {
-  "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "/api/app"
-    },
-    {
-      "source": "/health",
-      "destination": "/api/app"
+  "functions": {
+    "api/*.py": {
+      "runtime": "python3.9"
     }
-  ]
+  }
 }
