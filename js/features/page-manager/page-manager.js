@@ -71,6 +71,11 @@ export class PageManager {
       this.showProjectsListPage('work');
     });
     
+    // CRITICAL: Fun projects list route
+    this.router.register('/fun', () => {
+      this.showProjectsListPage('fun');
+    });
+    
     this.router.register('/fun/:id', (context) => {
       this.showProjectPage(context.params.id, 'fun');
     });

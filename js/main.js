@@ -144,10 +144,13 @@ class Application {
       });
 
       // UPDATED COMMENTS: Listen for folder widget clicks
-      this.eventBus.on('folder:navigate', ({ url }) => {
-        // CRITICAL: Navigate to projects list page
+      // CRITICAL: Handle category-based navigation for work/fun projects
+      this.eventBus.on('folder:navigate', ({ url, category }) => {
+        // CRITICAL: Navigate to projects list page with category
         if (this.pageManager) {
-          this.pageManager.router.navigate(url);
+          // UPDATED COMMENTS: Determine URL based on category
+          const targetUrl = category === 'fun' ? '/fun' : '/projects';
+          this.pageManager.router.navigate(targetUrl);
         } else {
           console.error('❌ PageManager not available');
         }
@@ -368,6 +371,7 @@ class Application {
    * Update navigation page based on URL
    * CRITICAL: Parse URL and update navigation header
    * UPDATED COMMENTS: Shows current page name in navigation WITHOUT re-rendering
+   * UPDATED COMMENTS: Added support for /fun route (projects list)
    * 
    * @param {string} url - Current URL path
    */
@@ -380,7 +384,11 @@ class Application {
     } else if (url === '/projects' || url.startsWith('/projects/')) {
       // UPDATED COMMENTS: Will be updated with project title when loaded
       this.navigation.updateCurrentPage('Projects');
+    } else if (url === '/fun') {
+      // CRITICAL: Fun projects list page
+      this.navigation.updateCurrentPage('Fun');
     } else if (url.startsWith('/fun/')) {
+      // UPDATED COMMENTS: Will be updated with project title when loaded
       this.navigation.updateCurrentPage('Fun');
     } else {
       // SCALED FOR: Default fallback
