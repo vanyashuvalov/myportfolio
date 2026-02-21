@@ -494,11 +494,11 @@
   transform: translateY(-2px);
 }
 
-/* CRITICAL: Bold numbers in stats - white for minimalism */
+/* UPDATED COMMENTS: Regular weight numbers in stats - white for minimalism */
 .stat-item strong {
   display: block;
   font-size: 32px;
-  font-weight: 700;
+  font-weight: 500;
   color: #FFFFFF;
   margin-bottom: 8px;
 }
