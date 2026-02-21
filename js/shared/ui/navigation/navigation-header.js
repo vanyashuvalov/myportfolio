@@ -263,16 +263,19 @@ export class NavigationHeader {
   }
 
   /**
-   * Download CV file
-   * REUSED: File download with analytics tracking
+   * Open CV in PDF viewer modal
+   * UPDATED COMMENTS: Opens fullscreen PDF viewer instead of downloading
+   * REUSED: Same event pattern as Resume widget click
+   * CRITICAL: Emits event to open PDF viewer with resume file
    */
   downloadCV() {
-    const link = document.createElement('a');
-    link.href = this.options.cvUrl;
-    link.download = 'Ivan_Shuvalov_CV.pdf';
-    link.click();
+    // CRITICAL: Emit event to open PDF viewer (same as Resume widget)
+    this.eventBus.emit('resume:open-pdf', {
+      pdfUrl: '/assets/documents/Шувалов Иван резюме.pdf',
+      title: 'Шувалов Иван - Резюме'
+    });
     
-    this.eventBus.emit('navigation:cv-download', { url: this.options.cvUrl });
+    this.eventBus.emit('navigation:cv-open', { url: this.options.cvUrl });
   }
 
   /**
