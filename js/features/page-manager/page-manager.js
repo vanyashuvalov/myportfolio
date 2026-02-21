@@ -7,6 +7,7 @@
 import { Router } from './router.js';
 import { markdownParser } from '../modal-system/markdown-parser.js';
 import { Chip } from '../../shared/ui/chip/chip.js';
+import { ReadingProgress } from '../../shared/ui/reading-progress/reading-progress.js';
 
 /**
  * PageManager - Manages page rendering and transitions
@@ -38,6 +39,9 @@ export class PageManager {
     this.router = new Router({
       eventBus: this.eventBus
     });
+    
+    // CRITICAL: Reading progress indicator instance
+    this.readingProgress = null;
     
     this.initialize();
   }
@@ -324,6 +328,9 @@ export class PageManager {
     // CRITICAL: Wait for content fade-in to complete before returning
     // UPDATED COMMENTS: This ensures page is fully visible before modal closes
     await new Promise(resolve => setTimeout(resolve, 300));
+    
+    // CRITICAL: Initialize reading progress indicator for project pages
+    this.initializeReadingProgress();
   }
 
   /**
@@ -400,6 +407,9 @@ export class PageManager {
     
     this.isPageMode = false;
     this.currentPage = null;
+    
+    // CRITICAL: Destroy reading progress indicator
+    this.destroyReadingProgress();
     
     // REUSED: Emit event
     if (this.eventBus) {
@@ -811,6 +821,9 @@ export class PageManager {
   async transitionBackToProjects(category) {
     console.log('⬅️ Transitioning back to projects list page');
     
+    // CRITICAL: Destroy reading progress indicator before transition
+    this.destroyReadingProgress();
+    
     // CRITICAL: Fade-out page content
     const projectPage = this.pageContainer.querySelector('.project-page');
     if (projectPage) {
@@ -823,5 +836,37 @@ export class PageManager {
     
     // CRITICAL: Navigate back to projects list page
     this.router.navigate('/projects');
+  }
+
+  /**
+   * Initialize reading progress indicator
+   * CRITICAL: Create progress bar for project detail pages only
+   * UPDATED COMMENTS: Tracks scroll on page container, not window
+   */
+  initializeReadingProgress() {
+    // SCALED FOR: Only show on project detail pages, not projects list
+    if (this.currentPage !== 'project') return;
+    
+    // UPDATED COMMENTS: Destroy existing instance if any
+    this.destroyReadingProgress();
+    
+    // CRITICAL: Create reading progress with page container as scroll target
+    this.readingProgress = new ReadingProgress({
+      container: this.pageContainer,
+      color: 'rgba(255, 255, 255, 0.3)', // White with 30% opacity
+      height: 2, // 2px thin bar like Notion
+      zIndex: 100003 // Above navigation (z-index: 100000)
+    });
+  }
+
+  /**
+   * Destroy reading progress indicator
+   * CRITICAL: Cleanup when leaving project page
+   */
+  destroyReadingProgress() {
+    if (this.readingProgress) {
+      this.readingProgress.destroy();
+      this.readingProgress = null;
+    }
   }
 }

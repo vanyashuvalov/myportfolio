@@ -102,6 +102,9 @@
   /* UPDATED COMMENTS: Initial state - transparent background */
   /* CRITICAL: Background fades in from transparent to #101010 in 300ms */
   opacity: 0;
+  
+  /* UPDATED COMMENTS: Native smooth scrolling for modal content */
+  scroll-behavior: smooth;
 }
 
 /* CRITICAL: Custom scrollbar styling for fullscreen modal */
@@ -225,6 +228,8 @@
   scrollbar-width: none;
   /* CRITICAL: Hide scrollbar for IE/Edge */
   -ms-overflow-style: none;
+  /* UPDATED COMMENTS: Native smooth scrolling */
+  scroll-behavior: smooth;
 }
 
 /* CRITICAL: Fullscreen modal body - no scroll, content handles it */
@@ -550,6 +555,8 @@
   /* CRITICAL: Hide scrollbar */
   scrollbar-width: none;
   -ms-overflow-style: none;
+  /* UPDATED COMMENTS: Native smooth scrolling for better reading experience */
+  scroll-behavior: smooth;
 }
 
 /* CRITICAL: Hide scrollbar for webkit browsers */
