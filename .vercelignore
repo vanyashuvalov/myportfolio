@@ -11,7 +11,6 @@ __pycache__/
 *$py.class
 
 # Environment files (use Vercel env vars instead)
-.env
 .env.local
 backend/.env
 
@@ -25,6 +24,7 @@ Thumbs.db
 docs/archive/
 DEPLOYMENT.md
 VERCEL_SETUP.md
+VERCEL_FIX.md
 *_SUMMARY.md
 CLEANUP_SUMMARY.md
 CRITICAL_FIXES_SUMMARY.md
@@ -48,11 +48,21 @@ serve.js
 start.py
 backend/check_setup.py
 backend/test_html_parser.py
+backend/telegram_scraper.py
+backend/telegram_html_parser.py
+backend/unified_scraper.py
 
 # Docker files (not needed on Vercel)
 backend/docker-compose.yml
 backend/Dockerfile
 backend/nginx.conf.example
 
-# Backend data files (not needed for static deployment)
-backend/data/
+# Backend setup docs (not needed in production)
+backend/QUICK_START.md
+backend/QUICK_START_PARSERS.md
+backend/README_PARSERS.md
+backend/setup_instructions.md
+backend/TELEGRAM_BOT_SETUP.md
+
+# CRITICAL: Keep backend/data/ - needed for API to serve projects and telegram data
+# Only exclude specific unnecessary subdirectories if needed

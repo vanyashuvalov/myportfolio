@@ -33,24 +33,30 @@
 
 **Framework Preset**: Other (leave as is)  
 **Root Directory**: `./` (default)  
-**Build Command**: Leave empty (static site)  
+**Build Command**: Leave empty (static site + Python API)  
 **Output Directory**: Leave empty
 
-### Step 3: Add Environment Variables
+**CRITICAL**: Vercel will automatically detect:
+- Static files (HTML/CSS/JS) in root
+- Python API in `/api/index.py`
+- Dependencies from `requirements.txt`
 
-Click "Environment Variables" and add:
+### Step 3: Add Environment Variables (Optional)
+
+**UPDATED COMMENTS**: Environment variables are optional. The site works without them using mock data.
+
+If you want real Telegram data, click "Environment Variables" and add:
 
 ```bash
 # CRITICAL: Get these from https://my.telegram.org/apps
-TELEGRAM_API_ID = your_api_id_here
-TELEGRAM_API_HASH = your_api_hash_here
-TELEGRAM_PHONE = +1234567890
+TELEGRAM_BOT_TOKEN = your_bot_token_here
+TELEGRAM_CHAT_ID = your_chat_id_here
 
-# SCALED FOR: Production settings
-API_HOST = 0.0.0.0
-API_PORT = 8000
+# SCALED FOR: Production settings (optional)
 DEBUG = false
 ```
+
+**Note**: Without these variables, the site will use mock data for Telegram widget.
 
 ### Step 4: Deploy
 
