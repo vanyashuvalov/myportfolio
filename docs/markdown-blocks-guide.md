@@ -158,6 +158,38 @@ Display before/after comparisons with impact.
 :::
 ```
 
+### Pie Chart Blocks
+
+Display circular data visualization with legend for percentage breakdowns.
+
+**Syntax:**
+```markdown
+::: piechart
+- percentage% | label | optional_time
+- percentage% | label | optional_time
+:::
+```
+
+**Example:**
+
+```markdown
+::: piechart
+- 40% | Ведение перевозки и общение с водителем | 3.2 часа
+- 20% | Актуализация статусов в системах | 1.6 часа
+- 15% | Координация с логистами | 1.2 часа
+- 10% | Решение форс-мажоров | 0.8 часа
+- 10% | Документооборот | 0.8 часа
+- 5% | Прочее | 0.4 часа
+:::
+```
+
+**Features:**
+- Minimalist SVG-based design
+- Automatic color assignment (primary accent + white gradients)
+- Legend with percentages and optional time values
+- Responsive layout (side-by-side on desktop, stacked on mobile)
+- No external libraries required
+
 ### Quote Blocks
 
 Enhanced blockquotes with optional author attribution.

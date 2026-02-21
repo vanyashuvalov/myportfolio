@@ -2,6 +2,7 @@
 /* REUSED: Markdown to HTML conversion for project content */
 /* SCALED FOR: Safe HTML rendering with XSS prevention */
 /* UPDATED COMMENTS: Added Notion-like custom blocks support */
+/* VERSION: 1.0.1 - Fixed pie chart rendering (2024-02-21) */
 
 /**
  * MarkdownParser - Enhanced markdown parser with Notion-like blocks
@@ -9,9 +10,14 @@
  * Custom blocks: callouts, stats, galleries, videos, quotes, tables
  * 
  * @class MarkdownParser
+ * @version 1.0.1
  */
 export class MarkdownParser {
   constructor() {
+    // CRITICAL: Parser version for debugging
+    this.version = '1.0.1';
+    console.log(`[MarkdownParser] Loaded version ${this.version}`);
+    
     // UPDATED COMMENTS: Regex patterns for markdown syntax
     this.patterns = {
       heading: /^(#{1,6})\s+(.+)$/gm,
@@ -27,7 +33,10 @@ export class MarkdownParser {
       horizontalRule: /^---$/gm,
       paragraph: /^(?!#|[\*\-]|\d+\.|>|```|---|:::).+$/gm,
       // CRITICAL: Custom block patterns (Notion-like)
-      customBlock: /^:::\s*(\w+)(?:\s+(.+))?\n([\s\S]*?)^:::$/gm,
+      // UPDATED COMMENTS: Negative lookahead to prevent capturing list items as param
+      // Format: ::: blockType [param]\n content \n:::
+      // Param must NOT start with - or * (list markers)
+      customBlock: /^:::\s*(\w+)(?:\s+(?![-*\d])(.+?))?\s*\n([\s\S]*?)^:::$/gm,
       table: /^\|(.+)\|\n\|[-:\s|]+\|\n((?:\|.+\|\n?)+)/gm
     };
   }
@@ -233,6 +242,9 @@ export class MarkdownParser {
         case 'metrics':
           return this.renderMetrics(trimmedContent);
         
+        case 'piechart':
+          return this.renderPieChart(trimmedContent);
+        
         default:
           // UPDATED COMMENTS: Unknown block type, render as div
           return `<div class="custom-block custom-block--${this.escapeHtml(blockType)}">${trimmedContent}</div>`;
@@ -409,6 +421,88 @@ export class MarkdownParser {
         ${metrics}
       </div>
     `;
+  }
+
+  /**
+   * Render pie chart block (circular data visualization)
+   * CRITICAL: SVG-based pie chart using stroke-dasharray technique
+   * SCALED FOR: Minimalist design with legend
+   * 
+   * Syntax:
+   * ::: piechart
+   * - percentage% | label | optional_time
+   * :::
+   * 
+   * Example:
+   * - 40% | Ведение перевозки | 3.2 часа
+   * - 20% | Актуализация статусов | 1.6 часа
+   */
+  renderPieChart(content) {
+    // UPDATED COMMENTS: Parse pie chart data from markdown lines
+    const lines = content.split('\n').filter(line => line.trim());
+    const segments = [];
+    
+    for (const line of lines) {
+      // CRITICAL: Parse format "- percentage% | label | time"
+      // UPDATED COMMENTS: Use non-greedy match for label to handle long text with Cyrillic
+      const match = line.match(/^[\*\-]\s*(\d+(?:\.\d+)?)%\s*\|\s*([^|]+)(?:\s*\|\s*(.+))?$/);
+      if (match) {
+        const [, percentage, label, time] = match;
+        segments.push({
+          percentage: parseFloat(percentage),
+          label: label.trim(),
+          time: time ? time.trim() : null
+        });
+      }
+    }
+    
+    if (segments.length === 0) {
+      return '<p class="piechart-error">No valid pie chart data found</p>';
+    }
+    
+    // UPDATED COMMENTS: SVG circle constants (based on research)
+    const RADIUS = 25; // Half of final radius for stroke technique
+    const STROKE_WIDTH = 50; // Thickness equals radius for solid circle
+    const CIRCUMFERENCE = 2 * Math.PI * RADIUS; // ≈ 157.08
+    const START_OFFSET = CIRCUMFERENCE / 4; // Start from top (90° rotation)
+    
+    // CRITICAL: Color palette - balanced saturation for dark theme
+    const colors = [
+      '#C248A3',  // Primary pink (brand color)
+      '#5B7FDB',  // Medium blue
+      '#9D7FDB',  // Medium purple
+      '#DB7FA8',  // Medium rose
+      '#DBA05B',  // Medium orange
+      '#5BDB9D'   // Medium teal
+    ];
+    
+    // SCALED FOR: Generate SVG circles for each segment
+    let accumulatedPercentage = 0;
+    const circles = segments.map((segment, index) => {
+      const { percentage } = segment;
+      const color = colors[index % colors.length];
+      
+      // UPDATED COMMENTS: Calculate dash length and offset
+      const dashLength = (percentage / 100) * CIRCUMFERENCE;
+      const gapLength = CIRCUMFERENCE - dashLength;
+      const offset = START_OFFSET - (accumulatedPercentage / 100) * CIRCUMFERENCE;
+      
+      accumulatedPercentage += percentage;
+      
+      // CRITICAL: SVG circle with stroke-dasharray technique + data-index for hover interaction
+      return `<circle cx="50" cy="50" r="${RADIUS}" fill="transparent" stroke="${color}" stroke-width="${STROKE_WIDTH}" stroke-dasharray="${dashLength} ${gapLength}" stroke-dashoffset="${offset}" class="piechart-segment" data-segment-index="${index}" />`;
+    }).join('');
+    
+    // REUSED: Generate legend items (single line to avoid paragraph wrapping) + data-index for hover
+    const legendItems = segments.map((segment, index) => {
+      const { percentage, label, time } = segment;
+      const color = colors[index % colors.length];
+      
+      return `<div class="piechart-legend-item" data-segment-index="${index}"><div class="piechart-legend-color" style="background-color: ${color};"></div><div class="piechart-legend-text"><span class="piechart-legend-label">${this.escapeHtml(label)}</span><span class="piechart-legend-value">${percentage}%${time ? ` · ${this.escapeHtml(time)}` : ''}</span></div></div>`;
+    }).join('');
+    
+    // CRITICAL: Complete pie chart with SVG and legend (single line SVG to avoid paragraph parsing)
+    return `<div class="piechart-block"><div class="piechart-svg-container"><svg viewBox="0 0 100 100" class="piechart-svg">${circles}</svg></div><div class="piechart-legend">${legendItems}</div></div>`;
   }
 
   /**

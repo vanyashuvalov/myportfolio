@@ -690,6 +690,152 @@
 }
 
 /* ============================================
+   PIE CHART BLOCKS
+   ============================================ */
+
+.piechart-block {
+  /* CRITICAL: Minimalist pie chart with legend */
+  display: flex;
+  align-items: center;
+  gap: 48px;
+  margin: 48px 0;
+  padding: 32px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.piechart-svg-container {
+  /* UPDATED COMMENTS: SVG container with fixed size */
+  flex-shrink: 0;
+  width: 280px;
+  height: 280px;
+}
+
+.piechart-svg {
+  /* CRITICAL: SVG viewBox for responsive scaling */
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg); /* Start from top */
+}
+
+.piechart-segment {
+  /* REUSED: Smooth transitions for hover effects */
+  transition: opacity 0.2s ease, filter 0.2s ease;
+  cursor: pointer;
+}
+
+/* CRITICAL: Hover state - brighten segment */
+.piechart-segment:hover {
+  filter: brightness(1.2);
+}
+
+/* UPDATED COMMENTS: Dim non-hovered segments when segment is hovered */
+.piechart-block:has(.piechart-segment:hover) .piechart-segment:not(:hover) {
+  opacity: 0.3;
+}
+
+/* CRITICAL: Dim all segments except hovered when legend item is hovered */
+.piechart-block:has(.piechart-legend-item:hover) .piechart-segment {
+  opacity: 0.3;
+}
+
+/* UPDATED COMMENTS: Highlight specific segment when its legend item is hovered */
+.piechart-block:has(.piechart-legend-item[data-segment-index="0"]:hover) .piechart-segment[data-segment-index="0"],
+.piechart-block:has(.piechart-legend-item[data-segment-index="1"]:hover) .piechart-segment[data-segment-index="1"],
+.piechart-block:has(.piechart-legend-item[data-segment-index="2"]:hover) .piechart-segment[data-segment-index="2"],
+.piechart-block:has(.piechart-legend-item[data-segment-index="3"]:hover) .piechart-segment[data-segment-index="3"],
+.piechart-block:has(.piechart-legend-item[data-segment-index="4"]:hover) .piechart-segment[data-segment-index="4"],
+.piechart-block:has(.piechart-legend-item[data-segment-index="5"]:hover) .piechart-segment[data-segment-index="5"] {
+  filter: brightness(1.2);
+  opacity: 1;
+}
+
+.piechart-legend {
+  /* SCALED FOR: Legend items list */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.piechart-legend-item {
+  /* UPDATED COMMENTS: Legend item with color indicator + hover interaction */
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+  padding: 8px;
+  margin: -8px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+/* CRITICAL: Hover state for legend items */
+.piechart-legend-item:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* UPDATED COMMENTS: Dim non-hovered legend items when one is active */
+.piechart-block:has(.piechart-legend-item:hover) .piechart-legend-item:not(:hover) {
+  opacity: 0.4;
+}
+
+/* CRITICAL: Highlight legend when segment is hovered */
+.piechart-block:has(.piechart-segment[data-segment-index="0"]:hover) .piechart-legend-item[data-segment-index="0"],
+.piechart-block:has(.piechart-segment[data-segment-index="1"]:hover) .piechart-legend-item[data-segment-index="1"],
+.piechart-block:has(.piechart-segment[data-segment-index="2"]:hover) .piechart-legend-item[data-segment-index="2"],
+.piechart-block:has(.piechart-segment[data-segment-index="3"]:hover) .piechart-legend-item[data-segment-index="3"],
+.piechart-block:has(.piechart-segment[data-segment-index="4"]:hover) .piechart-legend-item[data-segment-index="4"],
+.piechart-block:has(.piechart-segment[data-segment-index="5"]:hover) .piechart-legend-item[data-segment-index="5"] {
+  background-color: rgba(255, 255, 255, 0.05);
+  opacity: 1;
+}
+
+.piechart-legend-color {
+  /* CRITICAL: Color indicator circle */
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.piechart-legend-text {
+  /* REUSED: Text content container */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.piechart-legend-label {
+  /* UPDATED COMMENTS: Label text - white regular */
+  font-size: 16px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 140%;
+}
+
+.piechart-legend-value {
+  /* CRITICAL: Percentage and time - dimmed */
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 140%;
+}
+
+.piechart-error {
+  /* REUSED: Error state styling */
+  padding: 24px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+}
+
+/* ============================================
    RESPONSIVE
    ============================================ */
 
@@ -793,5 +939,21 @@
   /* CRITICAL: Disable sticky headers on mobile for better performance */
   .markdown-table thead {
     position: relative;
+  }
+  
+  /* UPDATED COMMENTS: Pie chart responsive - stack vertically on mobile */
+  .piechart-block {
+    flex-direction: column;
+    gap: 32px;
+    padding: 24px;
+  }
+  
+  .piechart-svg-container {
+    width: 220px;
+    height: 220px;
+  }
+  
+  .piechart-legend {
+    width: 100%;
   }
 }
