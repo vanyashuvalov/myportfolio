@@ -1,5 +1,6 @@
 # UPDATED COMMENTS: Files to exclude from Vercel deployment
 # CRITICAL: Keep deployment size minimal and secure
+# REUSED: Standard ignore patterns for production deployment
 
 # Development files
 *.log
@@ -20,19 +21,28 @@ backend/.env
 .DS_Store
 Thumbs.db
 
-# Documentation (optional - remove if you want docs deployed)
+# Documentation markdown files (keep README.md)
 docs/archive/
-*.md
-!README.md
-
-# Test files
-test-*.html
-test-*.js
+DEPLOYMENT.md
+VERCEL_SETUP.md
+*_SUMMARY.md
+CLEANUP_SUMMARY.md
+CRITICAL_FIXES_SUMMARY.md
+PHASE2_PLAN.md
+PHASE2_SUMMARY.md
+QUICK_TEST.md
 TESTING_GUIDE.md
 RUN_TESTS.md
-QUICK_TEST.md
+RESTART_SERVERS.md
+RESUME_PDF_SUMMARY.md
+FUN_PROJECTS_SUMMARY.md
+FUN_PROJECTS_AND_RESUME_SUMMARY.md
 
-# Development scripts
+# Test files (exclude test HTML/JS files)
+test-*.html
+test-*.js
+
+# Development scripts (not needed in production)
 serve.py
 serve.js
 start.py
@@ -44,7 +54,5 @@ backend/docker-compose.yml
 backend/Dockerfile
 backend/nginx.conf.example
 
-# Summary files
-*_SUMMARY.md
-CLEANUP_SUMMARY.md
-CRITICAL_FIXES_SUMMARY.md
+# Backend data files (not needed for static deployment)
+backend/data/
