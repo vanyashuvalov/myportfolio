@@ -1,26 +1,12 @@
 {
-  "version": 2,
-  "builds": [
+  "rewrites": [
     {
-      "src": "api/app.py",
-      "use": "@vercel/python"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "api/app.py"
+      "source": "/api/(.*)",
+      "destination": "/api/app"
     },
     {
-      "src": "/health",
-      "dest": "api/app.py"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
+      "source": "/health",
+      "destination": "/api/app"
     }
-  ],
-  "env": {
-    "PYTHONPATH": "/var/task/backend"
-  }
+  ]
 }
