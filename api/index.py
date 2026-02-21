@@ -12,5 +12,5 @@ sys.path.insert(0, str(backend_path))
 from api_server import app
 
 # SCALED FOR: Vercel serverless deployment
-# This exports the FastAPI app as a serverless function
-handler = app
+# CRITICAL: Vercel expects 'app' not 'handler' for FastAPI
+# The app variable is automatically used by Vercel's Python runtime
