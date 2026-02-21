@@ -42,8 +42,8 @@ export class TelegramApiClient {
       if (hostname === 'localhost' || hostname === '127.0.0.1') {
         return 'http://localhost:8000';
       } else {
-        // SCALED FOR: Production API endpoint
-        return 'https://api.your-domain.com';
+        // SCALED FOR: Production API endpoint on Vercel
+        return window.location.origin; // Use same domain as frontend
       }
     }
     
