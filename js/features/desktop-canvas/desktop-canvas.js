@@ -321,26 +321,30 @@ export class DesktopCanvas {
     };
     
     // REUSED: Widget creation logic for Projects folder (центр-лево)
+    // UPDATED COMMENTS: Now uses real project count from API
+    const projectData = await this.getProjectData();
     const projectsFolderWidget = {
       type: 'folder',
       cssPositionClass: 'widget-position--projects-folder',
       config: {
         title: 'Projects',
-        itemCount: 17,
+        itemCount: projectData.count, // CRITICAL: Real count from API
         theme: 'default', // CRITICAL: Default theme uses regular SVGs
-        projects: await this.getProjectData()
+        projects: projectData.projects
       }
     };
     
     // REUSED: Widget creation logic for Fun folder (центр-право)
+    // UPDATED COMMENTS: Now uses real fun project count from API
+    const funData = await this.getFunProjectData();
     const funFolderWidget = {
       type: 'folder',
       cssPositionClass: 'widget-position--fun-folder',
       config: {
         title: 'Fun',
-        itemCount: 12, // UPDATED COMMENTS: 12 items as requested
+        itemCount: funData.count, // CRITICAL: Real count from API
         theme: 'pink', // CRITICAL: Pink theme uses pink SVGs
-        projects: await this.getFunProjectData()
+        projects: funData.projects
       }
     };
     
@@ -383,6 +387,8 @@ export class DesktopCanvas {
     };
     
     // CRITICAL: Cat sticker widget with blue gradient theme (правая сторона, низ)
+    // UPDATED COMMENTS: Temporarily hidden - code preserved for future use
+    /*
     const catStickerWidget = {
       type: 'cat-sticker',
       cssPositionClass: 'widget-position--cat-sticker',
@@ -393,15 +399,16 @@ export class DesktopCanvas {
         targetCat: null // Will be set when cat widget is added
       }
     };
+    */
     
-    // Create all seven widgets with organized workspace positioning
+    // Create all widgets (cat-sticker temporarily hidden)
     this.createWidget(stickerWidget.type, null, stickerWidget.config, stickerWidget.cssPositionClass);
     this.createWidget(projectsFolderWidget.type, null, projectsFolderWidget.config, projectsFolderWidget.cssPositionClass);
     this.createWidget(funFolderWidget.type, null, funFolderWidget.config, funFolderWidget.cssPositionClass);
     this.createWidget(resumeWidget.type, null, resumeWidget.config, resumeWidget.cssPositionClass);
     this.createWidget(clockWidget.type, null, clockWidget.config, clockWidget.cssPositionClass);
     this.createWidget(telegramWidget.type, null, telegramWidget.config, telegramWidget.cssPositionClass);
-    this.createWidget(catStickerWidget.type, null, catStickerWidget.config, catStickerWidget.cssPositionClass);
+    // this.createWidget(catStickerWidget.type, null, catStickerWidget.config, catStickerWidget.cssPositionClass); // CRITICAL: Temporarily hidden
     
     // Store remaining planned widgets for future incremental addition
     // UPDATED COMMENTS: Cat widget temporarily hidden (not deleted)
@@ -427,58 +434,72 @@ export class DesktopCanvas {
   /**
    * Get project data for folder widget
    * REUSED: Project data loading utility with realistic portfolio projects
+   * UPDATED COMMENTS: Now fetches real project count from backend API
    */
   async getProjectData() {
-    // UPDATED COMMENTS: Real portfolio projects with proper image paths
-    return [
-      { 
-        id: 'clinical-dashboard', 
-        title: 'Clinical Dashboard', 
-        image: '/assets/images/projects/clinical-dashboard.jpg',
-        rotation: -0.33
-      },
-      { 
-        id: 'maternity-app', 
-        title: 'Maternity App', 
-        image: '/assets/images/projects/maternity-app.jpg',
-        rotation: 5.67
-      },
-      { 
-        id: 'surgery-scheduling', 
-        title: 'Surgery Scheduling', 
-        image: '/assets/images/projects/surgery-scheduling.jpg',
-        rotation: 11.67
+    try {
+      // CRITICAL: Fetch real project count from backend API
+      const response = await fetch('http://localhost:8000/api/projects?category=work');
+      
+      if (!response.ok) {
+        console.warn('Failed to fetch projects, using fallback count');
+        return { count: 17, projects: [] }; // Fallback to hardcoded value
       }
-    ];
+      
+      const data = await response.json();
+      const projects = data.projects || []; // CRITICAL: Extract projects array from response object
+      
+      // UPDATED COMMENTS: Return real project count from API
+      return {
+        count: projects.length,
+        projects: projects.slice(0, 3).map((project, index) => ({
+          id: project.slug || project.id,
+          title: project.title,
+          image: project.thumbnail || '/assets/images/projects/placeholder.jpg',
+          rotation: [-0.33, 5.67, 11.67][index] || 0
+        }))
+      };
+    } catch (error) {
+      console.error('Error fetching project data:', error);
+      // SCALED FOR: Graceful fallback on API failure
+      return { count: 17, projects: [] };
+    }
   }
 
   /**
    * Get fun project data for pink folder widget
    * REUSED: Fun project data loading utility with creative/personal projects
    * SCALED FOR: Different project categories with theme-appropriate content
+   * UPDATED COMMENTS: Now fetches real fun project count from backend API
    */
   async getFunProjectData() {
-    // UPDATED COMMENTS: Fun/creative projects for pink folder theme
-    return [
-      { 
-        id: 'pixel-art', 
-        title: 'Pixel Art Collection', 
-        image: '/assets/images/projects/pixel-art.jpg',
-        rotation: -2.5
-      },
-      { 
-        id: 'ui-experiments', 
-        title: 'UI Experiments', 
-        image: '/assets/images/projects/ui-experiments.jpg',
-        rotation: 4.2
-      },
-      { 
-        id: 'animation-studies', 
-        title: 'Animation Studies', 
-        image: '/assets/images/projects/animation-studies.jpg',
-        rotation: 8.8
+    try {
+      // CRITICAL: Fetch real fun project count from backend API
+      const response = await fetch('http://localhost:8000/api/projects?category=fun');
+      
+      if (!response.ok) {
+        console.warn('Failed to fetch fun projects, using fallback count');
+        return { count: 12, projects: [] }; // Fallback to hardcoded value
       }
-    ];
+      
+      const data = await response.json();
+      const projects = data.projects || []; // CRITICAL: Extract projects array from response object
+      
+      // UPDATED COMMENTS: Return real fun project count from API
+      return {
+        count: projects.length,
+        projects: projects.slice(0, 3).map((project, index) => ({
+          id: project.slug || project.id,
+          title: project.title,
+          image: project.thumbnail || '/assets/images/projects/placeholder.jpg',
+          rotation: [-2.5, 4.2, 8.8][index] || 0
+        }))
+      };
+    } catch (error) {
+      console.error('Error fetching fun project data:', error);
+      // SCALED FOR: Graceful fallback on API failure
+      return { count: 12, projects: [] };
+    }
   }
 
   /**

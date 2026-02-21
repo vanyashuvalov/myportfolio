@@ -34,14 +34,17 @@ export class FolderWidget extends WidgetBase {
 
   /**
    * Create simple folder structure with project preview cards
-   * UPDATED COMMENTS: Added theme support for pink/default SVG variants
-   * SCALED FOR: Project showcase with theme-based visual styling
+   * UPDATED COMMENTS: Added theme support for pink/default SVG variants and project images
+   * SCALED FOR: Project showcase with theme-based visual styling and real project thumbnails
    */
   createFolderStructure() {
     const targetElement = this.innerElement || this.element;
     
     // REUSED: Theme-based SVG path selection
     const svgPaths = this.getSvgPaths();
+    
+    // CRITICAL: Generate project preview cards with images
+    const projectCardsHTML = this.generateProjectCards();
     
     targetElement.innerHTML = `
       <div class="folder-container folder-container--${this.theme}">
@@ -52,11 +55,9 @@ export class FolderWidget extends WidgetBase {
           <!-- Layer 1.5: SVG shadow overlay -->
           <img class="folder-back-shadow" src="/assets/images/folder-back-shadow.svg" alt="Folder shadow" />
           
-          <!-- Layer 2: Project preview cards -->
+          <!-- Layer 2: Project preview cards with images -->
           <div class="project-previews">
-            <div class="project-card project-card--1"></div>
-            <div class="project-card project-card--2"></div>
-            <div class="project-card project-card--3"></div>
+            ${projectCardsHTML}
           </div>
           
           <!-- Layer 3: Front folder SVG -->
@@ -70,6 +71,32 @@ export class FolderWidget extends WidgetBase {
         </div>
       </div>
     `;
+  }
+
+  /**
+   * Generate project preview cards HTML with images
+   * UPDATED COMMENTS: Creates 3 project cards with background images from project data
+   * SCALED FOR: Dynamic project thumbnails with fallback to placeholder
+   */
+  generateProjectCards() {
+    // CRITICAL: Use last 3 projects or create empty cards
+    const projectsToShow = this.projects.slice(0, 3);
+    
+    let cardsHTML = '';
+    for (let i = 0; i < 3; i++) {
+      const project = projectsToShow[i];
+      const cardClass = `project-card project-card--${i + 1}`;
+      
+      if (project && project.image) {
+        // UPDATED COMMENTS: Card with project thumbnail as background
+        cardsHTML += `<div class="${cardClass}" style="background-image: url('${this.escapeHtml(project.image)}'); background-size: cover; background-position: center;"></div>`;
+      } else {
+        // REUSED: Empty card with default styling
+        cardsHTML += `<div class="${cardClass}"></div>`;
+      }
+    }
+    
+    return cardsHTML;
   }
 
   /**
