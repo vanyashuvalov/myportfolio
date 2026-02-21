@@ -1,0 +1,89 @@
+/* ANCHOR: dropdown_styles */
+/* FSD: shared/ui/dropdown → Universal dropdown component styling */
+/* SCALED FOR: Reusable across all dropdown types (language, page, etc.) */
+/* UPDATED COMMENTS: Dark theme dropdown with configurable styling */
+
+.dropdown {
+  /* CRITICAL: Positioning and layout */
+  position: absolute;
+  z-index: 10000;
+  min-width: 100px;
+  
+  /* UPDATED COMMENTS: Dark theme with black background */
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 12px;
+  padding: 8px;
+  
+  /* REUSED: Subtle shadow for depth */
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+  
+  /* SCALED FOR: Smooth animations */
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* ANCHOR: dropdown_item */
+.dropdown__item {
+  /* CRITICAL: Full-width button layout */
+  display: block;
+  width: 100%;
+  padding: 10px 16px;
+  
+  /* UPDATED COMMENTS: White text on dark background */
+  font-family: var(--font-primary, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: #FFFFFF;
+  text-align: left;
+  
+  /* REUSED: Reset button styles */
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  
+  /* SCALED FOR: Smooth hover transitions */
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+/* UPDATED COMMENTS: Hover state with subtle white background */
+.dropdown__item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* CRITICAL: Active item indicator with gray background */
+.dropdown__item--active {
+  color: #FFFFFF;
+  font-weight: 600;
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.dropdown__item--active:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* REUSED: Focus state for accessibility */
+.dropdown__item:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: -2px;
+}
+
+/* SCALED FOR: Smooth focus transitions */
+.dropdown__item:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* UPDATED COMMENTS: Responsive adjustments */
+@media (max-width: 768px) {
+  .dropdown {
+    min-width: 80px;
+  }
+  
+  .dropdown__item {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+}
