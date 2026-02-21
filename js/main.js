@@ -179,6 +179,23 @@ class Application {
         }
       });
 
+      // ANCHOR: pdf_viewer_initialization
+      // CRITICAL: PDF viewer for resume display
+      // REUSED: PDFViewer component from shared/ui
+      const { PDFViewer } = await import('./shared/ui/pdf-viewer/pdf-viewer.js');
+      this.pdfViewer = new PDFViewer({
+        eventBus: this.eventBus
+      });
+
+      // UPDATED COMMENTS: Listen for resume widget PDF open event
+      this.eventBus.on('resume:open-pdf', ({ pdfUrl, title }) => {
+        if (this.pdfViewer) {
+          this.pdfViewer.open(pdfUrl, title);
+        } else {
+          console.error('❌ PDFViewer not available');
+        }
+      });
+
       // Setup global event listeners
       this.setupGlobalEvents();
 
