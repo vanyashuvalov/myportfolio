@@ -36,12 +36,13 @@ class APIConfig:
     """API server configuration"""
     
     def __init__(self):
-        self.data_dir = Path('data/telegram')
+        # CRITICAL: Use backend/data paths for correct file location
+        self.data_dir = Path(__file__).parent / 'data' / 'telegram'
         self.data_file = self.data_dir / 'channels_data.json'
         self.static_dir = self.data_dir
         
         # UPDATED COMMENTS: Projects directory for markdown files
-        self.projects_dir = Path('data/projects')
+        self.projects_dir = Path(__file__).parent / 'data' / 'projects'
         
         # SCALED FOR: Cache configuration
         self.cache_ttl = 3600  # 1 hour cache
