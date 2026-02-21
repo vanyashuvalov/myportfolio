@@ -243,6 +243,7 @@ export class MarkdownParser {
   /**
    * Render callout block (info, warning, success, error)
    * REUSED: Notion-style callout component
+   * UPDATED COMMENTS: Note type uses SVG bookmark icon instead of emoji
    */
   renderCallout(type, content) {
     const icons = {
@@ -251,7 +252,9 @@ export class MarkdownParser {
       success: '✅',
       error: '❌',
       tip: '💡',
-      note: '📝'
+      note: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M8 2C7.20435 2 6.44129 2.31607 5.87868 2.87868C5.31607 3.44129 5 4.20435 5 5V21C5.00009 21.1704 5.04372 21.3379 5.12674 21.4867C5.20977 21.6355 5.32944 21.7606 5.47439 21.8502C5.61935 21.9398 5.78479 21.9908 5.95501 21.9985C6.12522 22.0061 6.29458 21.9702 6.447 21.894L12 19.118L17.553 21.894C17.7054 21.9702 17.8748 22.0061 18.045 21.9985C18.2152 21.9908 18.3806 21.9398 18.5256 21.8502C18.6706 21.7606 18.7902 21.6355 18.8733 21.4867C18.9563 21.3379 18.9999 21.1704 19 21V5C19 4.20435 18.6839 3.44129 18.1213 2.87868C17.5587 2.31607 16.7956 2 16 2H8Z" fill="#F8990B"/>
+</svg>`
     };
     
     const icon = icons[type] || icons.info;
