@@ -2,10 +2,12 @@
 /* FSD: features/modal-system → project detail modal renderer */
 /* REUSED: MarkdownParser for content rendering */
 /* REUSED: Chip component for tags display */
+/* REUSED: ImageViewer for fullscreen image viewing */
 /* SCALED FOR: Rich project content with images and galleries */
 
 import { markdownParser } from './markdown-parser.js';
 import { Chip } from '../../shared/ui/chip/chip.js';
+import { ImageViewer } from '../../shared/ui/image-viewer/image-viewer.js';
 
 /**
  * ProjectModal - Renders project detail modal from markdown content
@@ -16,6 +18,8 @@ import { Chip } from '../../shared/ui/chip/chip.js';
 export class ProjectModal {
   constructor(options = {}) {
     this.eventBus = options.eventBus;
+    // REUSED: ImageViewer for fullscreen image viewing
+    this.imageViewer = new ImageViewer({ eventBus: this.eventBus });
   }
 
   /**
@@ -193,5 +197,37 @@ export class ProjectModal {
       });
       tagsContainer.appendChild(chip.createElement());
     });
+  }
+
+  /**
+   * Setup image click handlers for fullscreen viewing
+   * CRITICAL: Attach click handlers to all images in project content
+   * UPDATED COMMENTS: Opens ImageViewer on image click
+   * 
+   * @param {HTMLElement} container - Container element with project detail
+   */
+  setupImageViewers(container) {
+    // CRITICAL: Find all images in project content
+    const images = container.querySelectorAll('.project-content img, .project-hero img');
+    
+    images.forEach(img => {
+      // UPDATED COMMENTS: Make images clickable
+      img.style.cursor = 'pointer';
+      
+      // REUSED: ImageViewer for fullscreen viewing
+      img.addEventListener('click', () => {
+        this.imageViewer.open(img.src, img.alt);
+      });
+    });
+  }
+
+  /**
+   * Cleanup and destroy
+   * SCALED FOR: Memory management
+   */
+  destroy() {
+    if (this.imageViewer) {
+      this.imageViewer.destroy();
+    }
   }
 }
