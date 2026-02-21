@@ -14,5 +14,5 @@ sys.path.insert(0, str(backend_path))
 from api_server import app
 
 # CRITICAL: Export app for Vercel
-# Vercel's Python runtime automatically wraps FastAPI apps
-# No need for manual handler - just export 'app'
+# Vercel's Python runtime automatically wraps FastAPI apps as ASGI
+# The 'app' variable is the ASGI application that Vercel will serve
