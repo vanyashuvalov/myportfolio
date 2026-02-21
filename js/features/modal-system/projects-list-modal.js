@@ -45,10 +45,15 @@ export class ProjectsListModal {
   /**
    * Load projects from backend API
    * UPDATED COMMENTS: Fetches project list with metadata from backend server
-   * CRITICAL: Use backend URL (port 8000) not frontend URL (port 8080)
+   * CRITICAL: Use relative URL for production deployment
    */
   async loadProjects(category) {
-    const response = await fetch(`http://localhost:8000/api/projects?category=${category}`);
+    // UPDATED COMMENTS: Use relative URL for production compatibility
+    const apiUrl = window.location.hostname === 'localhost' 
+      ? `http://localhost:8000/api/projects?category=${category}`
+      : `/api/projects?category=${category}`;
+    
+    const response = await fetch(apiUrl);
     
     if (!response.ok) {
       throw new Error(`Failed to load projects: ${response.statusText}`);
