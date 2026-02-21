@@ -179,10 +179,15 @@ export class PageManager {
   /**
    * Load project markdown from backend
    * UPDATED COMMENTS: Fetch .md file via API from backend server
-   * CRITICAL: Use backend URL (port 8000) not frontend URL (port 8080)
+   * CRITICAL: Use relative URL for production deployment
    */
   async loadProjectMarkdown(projectId, category) {
-    const response = await fetch(`http://localhost:8000/api/projects/${category}/${projectId}`);
+    // UPDATED COMMENTS: Use relative URL for production compatibility
+    const apiUrl = window.location.hostname === 'localhost' 
+      ? `http://localhost:8000/api/projects/${category}/${projectId}`
+      : `/api/projects/${category}/${projectId}`;
+    
+    const response = await fetch(apiUrl);
     
     if (!response.ok) {
       throw new Error(`Failed to load project: ${response.statusText}`);
@@ -680,12 +685,18 @@ export class PageManager {
   /**
    * Load projects from backend API
    * REUSED: Same logic as ProjectsListModal
+   * UPDATED COMMENTS: Use relative URL for production deployment
    * 
    * @param {string} category - Project category
    * @returns {Promise<Array>} Projects array
    */
   async loadProjects(category) {
-    const response = await fetch(`http://localhost:8000/api/projects?category=${category}`);
+    // UPDATED COMMENTS: Use relative URL for production compatibility
+    const apiUrl = window.location.hostname === 'localhost' 
+      ? `http://localhost:8000/api/projects?category=${category}`
+      : `/api/projects?category=${category}`;
+    
+    const response = await fetch(apiUrl);
     
     if (!response.ok) {
       throw new Error(`Failed to load projects: ${response.statusText}`);

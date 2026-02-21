@@ -426,7 +426,12 @@ class Application {
 
     try {
       // CRITICAL: Fetch project metadata from backend
-      const response = await fetch(`http://localhost:8000/api/projects/${category}/${projectId}`);
+      // UPDATED COMMENTS: Use relative URL for production deployment
+      const apiUrl = window.location.hostname === 'localhost' 
+        ? `http://localhost:8000/api/projects/${category}/${projectId}`
+        : `/api/projects/${category}/${projectId}`;
+      
+      const response = await fetch(apiUrl);
       
       if (!response.ok) {
         console.error('Failed to fetch project metadata');
