@@ -1,39 +1,25 @@
-# Telegram MTProto Scraper Dependencies
-# UPDATED COMMENTS: Production-ready dependencies with version pinning
+# UPDATED COMMENTS: Python dependencies for Telegram API and FastAPI backend
+# CRITICAL: Production-ready versions with security updates
+# SCALED FOR: Serverless deployment on Vercel
 
-# Core Telegram MTProto library
-telethon==1.35.1
-
-# Task scheduling
-schedule==1.2.0
-
-# HTTP server for API endpoints
+# FastAPI framework for REST API
 fastapi==0.104.1
-uvicorn==0.24.0
+uvicorn[standard]==0.24.0
 
-# CORS handling for frontend integration
-fastapi-cors==0.0.6
+# Telegram MTProto client
+telethon==1.33.1
 
 # Environment variables management
 python-dotenv==1.0.0
 
-# Async HTTP client for external APIs
-aiohttp==3.9.1
+# Async support
+aiofiles==23.2.1
 
-# HTML parsing for fallback scraper
-beautifulsoup4==4.12.2
-lxml==4.9.3
+# CORS middleware
+starlette==0.27.0
 
-# Image processing for avatars
-Pillow==10.1.0
+# Pydantic for data validation
+pydantic==2.5.0
 
-# Logging enhancements
-structlog==23.2.0
-
-# Development dependencies
-pytest==7.4.3
-pytest-asyncio==0.21.1
-black==23.11.0
-flake8==6.1.0
-
-httpx==0.25.2
+# Cryptography for Telegram
+cryptography==41.0.7
