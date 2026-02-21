@@ -11,12 +11,12 @@ role: Product Designer
 team: [Product Designer, Business Analyst, Project Manager, Frontend Dev, Backend Dev, Tech Lead]
 
 description: Создал рабочий стол диспетчера с вертикальным kanban для управления перевозками
-hero_image: /assets/images/bg-mountains.jpg
-thumbnail: /assets/images/bg-mountains.jpg
+hero_image: assets\projects\logistics-ux-pattern\images\hero.webp
+thumbnail: assets\projects\logistics-ux-pattern\images\hero.webp
 
 meta_title: Вертикальный Kanban для диспетчеров - UX кейс
 meta_description: Как вертикальный kanban повысил эффективность диспетчеров на 35%
-og_image: /assets/images/bg-mountains.jpg
+og_image: assets\projects\logistics-ux-pattern\images\hero.webp
 
 tags: [UX Design, Logistics, B2B, TMS, Research]
 skills: [User Research, Interaction Design, Prototyping, Field Studies]
