@@ -1,0 +1,172 @@
+/* ANCHOR: pdf_viewer_styles */
+/* FSD: shared/ui/pdf-viewer → Fullscreen PDF viewer styling */
+/* REUSED: ImageViewer styling pattern */
+/* SCALED FOR: Smooth animations and responsive design */
+/* UPDATED COMMENTS: Dark overlay with centered PDF iframe at 95% screen size */
+
+.pdf-viewer {
+  /* CRITICAL: Fullscreen overlay positioning */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100000;
+  
+  /* UPDATED COMMENTS: Hidden by default, shown with --visible class */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* ANCHOR: visible_state */
+.pdf-viewer--visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ANCHOR: overlay */
+.pdf-viewer__overlay {
+  /* CRITICAL: Dark background overlay */
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.95);
+  cursor: pointer;
+}
+
+/* ANCHOR: container */
+.pdf-viewer__container {
+  /* CRITICAL: Centered container for PDF iframe */
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5vh 2.5vw;
+  pointer-events: none;
+}
+
+/* ANCHOR: iframe */
+.pdf-viewer__iframe {
+  /* CRITICAL: PDF iframe at 95% of screen size */
+  width: 95vw;
+  height: 95vh;
+  max-width: 1200px;
+  
+  /* UPDATED COMMENTS: White background for PDF */
+  background: #FFFFFF;
+  border: none;
+  border-radius: 8px;
+  
+  /* SCALED FOR: Smooth fade-in */
+  animation: pdfViewerFadeIn 0.3s ease;
+  pointer-events: auto;
+  
+  /* CRITICAL: Shadow for depth */
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+/* ANCHOR: close_button */
+.pdf-viewer__close {
+  /* REUSED: Same styling as image-viewer__close */
+  position: fixed;
+  right: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+  
+  /* UPDATED COMMENTS: Button styling matching page-close */
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  /* REUSED: Same background as page-close */
+  background: var(--button-bg-dark, rgba(0, 0, 0, 0.5));
+  backdrop-filter: var(--button-blur, blur(2px));
+  -webkit-backdrop-filter: var(--button-blur, blur(2px));
+  
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  
+  /* SCALED FOR: Smooth transitions */
+  transition: opacity 0.3s ease-out, background 0.2s ease;
+  pointer-events: auto;
+  
+  /* CRITICAL: Above overlay */
+  z-index: 1;
+  
+  /* UPDATED COMMENTS: Hidden by default, shown with --visible class */
+  opacity: 0;
+}
+
+/* UPDATED COMMENTS: Visible state - simple fade-in */
+.pdf-viewer__close--visible {
+  opacity: 1;
+}
+
+.pdf-viewer__close:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.pdf-viewer__close:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.pdf-viewer__close:focus {
+  outline: none;
+}
+
+.pdf-viewer__close:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+}
+
+.pdf-viewer__close img {
+  width: 32px;
+  height: 32px;
+  color: #FFFFFF;
+  fill: #FFFFFF;
+  flex: none;
+}
+
+/* ANCHOR: animations */
+@keyframes pdfViewerFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ANCHOR: responsive */
+/* UPDATED COMMENTS: Mobile adjustments */
+@media (max-width: 768px) {
+  .pdf-viewer__close {
+    right: 20px;
+    width: 40px;
+    height: 40px;
+  }
+  
+  .pdf-viewer__close img {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .pdf-viewer__container {
+    padding: 5vh 5vw;
+  }
+  
+  .pdf-viewer__iframe {
+    width: 90vw;
+    height: 90vh;
+  }
+}

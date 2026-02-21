@@ -129,16 +129,17 @@ export class ResumeWidget extends WidgetBase {
 
   /**
    * Widget-specific click handler
-   * UPDATED COMMENTS: Click to expand/collapse sections
+   * UPDATED COMMENTS: Opens fullscreen PDF viewer
+   * CRITICAL: Emits event to open PDF viewer with resume file
+   * UPDATED COMMENTS: Using actual uploaded resume file
    */
   onClick(data) {
-    // Toggle expanded state
-    this.element.classList.toggle('resume--expanded');
-    
+    // CRITICAL: Emit event to open PDF viewer
     if (this.eventBus) {
-      this.eventBus.emit('resume:clicked', {
+      this.eventBus.emit('resume:open-pdf', {
         widget: this,
-        expanded: this.element.classList.contains('resume--expanded')
+        pdfUrl: '/assets/documents/Шувалов Иван резюме.pdf',
+        title: 'Шувалов Иван - Резюме'
       });
     }
   }
