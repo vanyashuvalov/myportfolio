@@ -29,8 +29,10 @@ ENV/
 Thumbs.db
 
 # Environment variables
+.env
 .env.local
 .env.*.local
+backend/.env
 
 # Telegram session files
 *.session

@@ -1,0 +1,50 @@
+# UPDATED COMMENTS: Files to exclude from Vercel deployment
+# CRITICAL: Keep deployment size minimal and secure
+
+# Development files
+*.log
+*.session
+*.session-journal
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment files (use Vercel env vars instead)
+.env
+.env.local
+backend/.env
+
+# IDE and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Documentation (optional - remove if you want docs deployed)
+docs/archive/
+*.md
+!README.md
+
+# Test files
+test-*.html
+test-*.js
+TESTING_GUIDE.md
+RUN_TESTS.md
+QUICK_TEST.md
+
+# Development scripts
+serve.py
+serve.js
+start.py
+backend/check_setup.py
+backend/test_html_parser.py
+
+# Docker files (not needed on Vercel)
+backend/docker-compose.yml
+backend/Dockerfile
+backend/nginx.conf.example
+
+# Summary files
+*_SUMMARY.md
+CLEANUP_SUMMARY.md
+CRITICAL_FIXES_SUMMARY.md
