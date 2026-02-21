@@ -439,7 +439,12 @@ export class DesktopCanvas {
   async getProjectData() {
     try {
       // CRITICAL: Fetch real project count from backend API
-      const response = await fetch('http://localhost:8000/api/projects?category=work');
+      // UPDATED COMMENTS: Use relative URL for production compatibility
+      const apiUrl = window.location.hostname === 'localhost' 
+        ? 'http://localhost:8000/api/projects?category=work'
+        : '/api/projects?category=work';
+      
+      const response = await fetch(apiUrl);
       
       if (!response.ok) {
         console.warn('Failed to fetch projects, using fallback count');
@@ -475,7 +480,12 @@ export class DesktopCanvas {
   async getFunProjectData() {
     try {
       // CRITICAL: Fetch real fun project count from backend API
-      const response = await fetch('http://localhost:8000/api/projects?category=fun');
+      // UPDATED COMMENTS: Use relative URL for production compatibility
+      const apiUrl = window.location.hostname === 'localhost' 
+        ? 'http://localhost:8000/api/projects?category=fun'
+        : '/api/projects?category=fun';
+      
+      const response = await fetch(apiUrl);
       
       if (!response.ok) {
         console.warn('Failed to fetch fun projects, using fallback count');
