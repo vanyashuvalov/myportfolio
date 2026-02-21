@@ -428,10 +428,10 @@
 }
 
 .projects-list .modal-project-card-image {
-  /* SCALED FOR: Fixed size image container */
+  /* SCALED FOR: Fixed size image container with 16:9 aspect ratio */
   position: relative !important;
   width: 100% !important;
-  height: 411px !important;
+  aspect-ratio: 16 / 9 !important; /* UPDATED COMMENTS: Modern 16:9 aspect ratio (replaces fixed 405px height) */
   overflow: hidden !important;
   background: rgba(255, 255, 255, 0.05) !important;
   border-radius: 14px !important;
@@ -663,10 +663,10 @@
 }
 
 .projects-list-page .modal-project-card-image {
-  /* SCALED FOR: Fixed size image container */
+  /* SCALED FOR: Fixed size image container with 16:9 aspect ratio */
   position: relative !important;
   width: 100% !important;
-  height: 411px !important;
+  aspect-ratio: 16 / 9 !important; /* UPDATED COMMENTS: Modern 16:9 aspect ratio (replaces fixed 405px height) */
   overflow: hidden !important;
   background: rgba(255, 255, 255, 0.05) !important;
   border-radius: 14px !important;
@@ -921,7 +921,7 @@
   
   .projects-list .modal-project-card-image {
     height: auto;
-    aspect-ratio: 726 / 411;
+    aspect-ratio: 16 / 9; /* UPDATED COMMENTS: 16:9 aspect ratio for responsive */
   }
   
   .projects-list .modal-project-card-title {
