@@ -12,9 +12,6 @@ html {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  /* CRITICAL: Native smooth scrolling for better UX */
-  /* UPDATED COMMENTS: Applies to all scrollable containers on page */
-  scroll-behavior: smooth;
 }
 
 body {
