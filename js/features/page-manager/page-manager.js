@@ -459,7 +459,7 @@ export class PageManager {
    * Setup chips rendering for project tags
    * REUSED: Same pattern as projects-list-modal
    * CRITICAL: Renders Chip components for tags on project detail page
-   * UPDATED COMMENTS: Also calculates read time from content
+   * UPDATED COMMENTS: Also calculates read time from content and sets up image viewers
    */
   setupProjectChips() {
     // UPDATED COMMENTS: Render chips for project tags
@@ -481,6 +481,38 @@ export class PageManager {
     
     // CRITICAL: Calculate and display read time
     this.calculateReadTime();
+    
+    // CRITICAL: Setup image click handlers for fullscreen viewing
+    this.setupImageViewers();
+  }
+
+  /**
+   * Setup image click handlers for fullscreen viewing
+   * REUSED: ImageViewer component from shared/ui
+   * CRITICAL: Attach click handlers to all images in project content
+   * UPDATED COMMENTS: Opens ImageViewer on image click
+   */
+  async setupImageViewers() {
+    // REUSED: Import ImageViewer component
+    const { ImageViewer } = await import('../../shared/ui/image-viewer/image-viewer.js');
+    
+    // CRITICAL: Create ImageViewer instance if not exists
+    if (!this.imageViewer) {
+      this.imageViewer = new ImageViewer({ eventBus: this.eventBus });
+    }
+    
+    // CRITICAL: Find all images in project content
+    const images = this.pageContainer.querySelectorAll('.project-content img, .project-hero img');
+    
+    images.forEach(img => {
+      // UPDATED COMMENTS: Make images clickable
+      img.style.cursor = 'pointer';
+      
+      // REUSED: ImageViewer for fullscreen viewing
+      img.addEventListener('click', () => {
+        this.imageViewer.open(img.src, img.alt);
+      });
+    });
   }
 
   /**
