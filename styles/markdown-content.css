@@ -484,13 +484,11 @@
   font-size: 16px;
   line-height: 150%;
   color: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.1);
   transition: all 0.2s ease;
 }
 
 .stat-item:hover {
   background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.15);
   transform: translateY(-2px);
 }
 
@@ -702,7 +700,6 @@
   padding: 32px;
   background: rgba(255, 255, 255, 0.03);
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .piechart-svg-container {
