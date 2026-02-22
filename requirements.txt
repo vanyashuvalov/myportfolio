@@ -1,19 +1,12 @@
 # UPDATED COMMENTS: Python dependencies for Vercel serverless deployment
 # CRITICAL: Root requirements.txt required by Vercel Python runtime
-# REUSED: Dependencies from backend/requirements.txt
+# CRITICAL: Compatible with Python 3.12+ (Vercel default runtime)
 
 # FastAPI framework for REST API
-fastapi==0.104.1
-uvicorn[standard]==0.24.0
+fastapi==0.115.0
 
 # HTTP client for Telegram bot API
-httpx==0.25.2
+httpx==0.27.0
 
 # Environment variables management
-python-dotenv==1.0.0
-
-# CORS middleware (included in starlette)
-starlette==0.27.0
-
-# Pydantic for data validation
-pydantic==2.5.0
+python-dotenv==1.0.1
