@@ -1,43 +1,12 @@
 {
-  "functions": {
-    "api/main.py": {
-      "runtime": "python3.12",
-      "maxDuration": 10
-    }
-  },
-  "builds": [
+  "rewrites": [
     {
-      "src": "api/main.py",
-      "use": "@vercel/python"
+      "source": "/api/(.*)",
+      "destination": "/api/main.py"
     },
     {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "."
-      }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "api/main.py"
-    },
-    {
-      "src": "/health",
-      "dest": "api/main.py"
-    },
-    {
-      "src": "/",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/(.*\\.(js|css|jpg|jpeg|png|gif|svg|webp|woff|woff2|ttf|otf|eot|ico|json))",
-      "dest": "/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
+      "source": "/health",
+      "destination": "/api/main.py"
     }
   ]
 }
