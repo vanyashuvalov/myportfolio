@@ -8,5 +8,8 @@
       "source": "/health",
       "destination": "/api/main.py"
     }
-  ]
+  ],
+  "buildCommand": "echo 'Static site - no build needed'",
+  "outputDirectory": ".",
+  "installCommand": "echo 'No frontend dependencies'"
 }
