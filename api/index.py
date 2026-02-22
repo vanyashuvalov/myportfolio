@@ -1,9 +1,18 @@
-# UPDATED COMMENTS: Vercel serverless entry point
-# CRITICAL: Vercel expects handler in api/index.py or uses filename-based routing
-# REUSED: Import FastAPI app from main.py
+"""
+## ANCHOR POINTS
+- ENTRY: Vercel serverless entry point
+- MAIN: ASGI handler for all API routes
+- EXPORTS: app as handler
+- DEPS: fastapi from main.py
+- TODOs: None
 
-from main import app
+UPDATED COMMENTS: Vercel Python serverless function entry point
+CRITICAL: Must be in api/ folder for Vercel auto-detection
+REUSED: FastAPI app from main.py module
+"""
 
-# CRITICAL: Vercel serverless handler
-# UPDATED COMMENTS: Export app for Vercel Python runtime
-handler = app
+from api.main import app
+
+# CRITICAL: Vercel serverless handler export
+# UPDATED COMMENTS: Vercel Python runtime expects 'app' or 'handler' variable
+# SCALED FOR: Production serverless deployment
