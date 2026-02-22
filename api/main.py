@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 ## ANCHOR POINTS
 - ENTRY: Vercel serverless FastAPI function
@@ -9,7 +8,8 @@
 
 UPDATED COMMENTS: Standalone FastAPI for Vercel serverless
 CRITICAL: Self-contained, no imports from backend/
-SCALED FOR: Production deployment
+CRITICAL: No shebang - Vercel handles Python execution
+SCALED FOR: Production deployment with stateless architecture
 """
 
 import json
@@ -25,15 +25,19 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import PlainTextResponse
 from pydantic import BaseModel
 
-# CRITICAL: Configuration for Vercel environment
+# CRITICAL: Configuration for Vercel serverless environment
+# UPDATED COMMENTS: Stateless configuration - no persistent storage
 class APIConfig:
     def __init__(self):
-        # UPDATED COMMENTS: Use api/data paths for Vercel
+        # UPDATED COMMENTS: Use api/data paths for Vercel deployment
+        # CRITICAL: Files are read-only in serverless, included in deployment bundle
         base_dir = Path(__file__).parent
         self.data_dir = base_dir / 'data' / 'telegram'
         self.data_file = self.data_dir / 'channels_data.json'
         self.projects_dir = base_dir / 'data' / 'projects'
-        self.cache_ttl = 3600
+        
+        # UPDATED COMMENTS: Telegram bot credentials from environment variables
+        # CRITICAL: Set these in Vercel dashboard → Project Settings → Environment Variables
         self.telegram_bot_token = os.getenv('TELEGRAM_BOT_TOKEN')
         self.telegram_chat_id = os.getenv('TELEGRAM_CHAT_ID')
 
@@ -54,26 +58,9 @@ app.add_middleware(
 
 config = APIConfig()
 
-# SCALED FOR: In-memory cache
-class DataCache:
-    def __init__(self):
-        self._cache = {}
-        self._timestamps = {}
-    
-    def get(self, key: str) -> Optional[Dict]:
-        if key in self._cache:
-            if datetime.now() - self._timestamps[key] < timedelta(seconds=config.cache_ttl):
-                return self._cache[key]
-            else:
-                del self._cache[key]
-                del self._timestamps[key]
-        return None
-    
-    def set(self, key: str, data: Dict):
-        self._cache[key] = data
-        self._timestamps[key] = datetime.now()
-
-cache = DataCache()
+# UPDATED COMMENTS: Removed in-memory cache - ineffective in serverless
+# CRITICAL: Each function invocation is stateless, cache doesn't persist
+# SCALED FOR: Use Vercel KV (Redis) or Edge Config for persistent caching if needed
 
 def load_channels_data() -> Dict:
     try:
@@ -86,18 +73,19 @@ def load_channels_data() -> Dict:
         return {}
 
 def get_channel_data(channel_username: str) -> Optional[Dict]:
-    cache_key = f"channel_{channel_username}"
-    cached_data = cache.get(cache_key)
-    if cached_data:
-        return cached_data
+    """
+    Get specific channel data from JSON file
+    UPDATED COMMENTS: Direct file read - no caching in serverless
+    CRITICAL: File system is read-only, data updated via Git deployment
     
+    Args:
+        channel_username: Telegram channel username
+    
+    Returns:
+        Channel data dict or None if not found
+    """
     all_data = load_channels_data()
-    channel_data = all_data.get(channel_username)
-    
-    if channel_data:
-        cache.set(cache_key, channel_data)
-    
-    return channel_data
+    return all_data.get(channel_username)
 
 @app.get("/")
 async def root():
