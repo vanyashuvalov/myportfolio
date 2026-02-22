@@ -123,7 +123,7 @@ async def health_check():
         "timestamp": datetime.now().isoformat()
     }
 
-@app.get("/api/channels")
+@app.get("/channels")
 async def get_all_channels():
     all_data = load_channels_data()
     channels = []
@@ -141,7 +141,7 @@ async def get_all_channels():
             })
     return {"channels": channels, "total": len(channels)}
 
-@app.get("/api/channels/{username}")
+@app.get("/channels/{username}")
 async def get_channel_info(username: str):
     channel_data = get_channel_data(username)
     if not channel_data:
@@ -154,7 +154,7 @@ async def get_channel_info(username: str):
         "posts_available": len(channel_data.get('posts', []))
     }
 
-@app.get("/api/channels/{username}/posts")
+@app.get("/channels/{username}/posts")
 async def get_channel_posts(username: str, limit: int = Query(default=5, ge=1, le=20)):
     channel_data = get_channel_data(username)
     if not channel_data:
@@ -179,7 +179,7 @@ async def get_channel_posts(username: str, limit: int = Query(default=5, ge=1, l
         })
     return {"posts": formatted_posts, "channel": username, "total_returned": len(formatted_posts)}
 
-@app.get("/api/channels/{username}/latest")
+@app.get("/channels/{username}/latest")
 async def get_channel_latest_post(username: str):
     channel_data = get_channel_data(username)
     if not channel_data or not channel_data.get('success'):
@@ -209,7 +209,7 @@ async def get_channel_latest_post(username: str):
         }
     }
 
-@app.get("/api/projects")
+@app.get("/projects")
 async def get_projects(category: str = Query(default='all')):
     try:
         projects = []
@@ -236,7 +236,7 @@ async def get_projects(category: str = Query(default='all')):
         logging.error(f"Error loading projects: {e}")
         raise HTTPException(status_code=500, detail="Failed to load projects")
 
-@app.get("/api/projects/{category}/{project_id}")
+@app.get("/projects/{category}/{project_id}")
 async def get_project_detail(category: str, project_id: str):
     if category not in ['work', 'fun']:
         raise HTTPException(status_code=400, detail=f"Invalid category: {category}")
@@ -254,7 +254,7 @@ async def get_project_detail(category: str, project_id: str):
         logging.error(f"Error reading project file: {e}")
         raise HTTPException(status_code=500, detail="Failed to read project content")
 
-@app.post("/api/contact/send")
+@app.post("/contact/send")
 async def send_contact_message(message: ContactMessage):
     if not message.message or len(message.message.strip()) < 10:
         raise HTTPException(status_code=400, detail="Message must be at least 10 characters long")
