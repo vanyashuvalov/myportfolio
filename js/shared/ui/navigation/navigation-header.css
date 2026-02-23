@@ -372,8 +372,63 @@ body.loaded .navigation-wrapper {
   flex-grow: 0;
 }
 
-/* ANCHOR: responsive_design */
-/* SCALED FOR: Mobile and tablet breakpoints */
+/* ============================================
+   BURGER MENU BUTTON
+   ============================================ */
+
+.burger-button {
+  /* CRITICAL: Hidden on desktop, shown on mobile */
+  display: none;
+  width: 40px;
+  height: 40px;
+  
+  /* REUSED: Button reset */
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  
+  /* SCALED FOR: Flexbox centering */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  
+  /* REUSED: Smooth transitions */
+  transition: opacity 0.2s ease;
+}
+
+.burger-button:hover {
+  opacity: 0.7;
+}
+
+.burger-button__line {
+  /* CRITICAL: Burger menu lines */
+  width: 24px;
+  height: 2px;
+  background: #FFFFFF;
+  border-radius: 1px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* CRITICAL: Animated burger to X transformation */
+.burger-button--open .burger-button__line:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.burger-button--open .burger-button__line:nth-child(2) {
+  opacity: 0;
+}
+
+.burger-button--open .burger-button__line:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+/* ANCHOR: tablet_breakpoint */
 @media (max-width: 1024px) {
   .navigation-wrapper {
     padding: 20px;
@@ -393,24 +448,53 @@ body.loaded .navigation-wrapper {
   }
 }
 
+/* ANCHOR: mobile_breakpoint */
 @media (max-width: 768px) {
   .navigation-wrapper {
     padding: 16px;
   }
   
   .navigation-header {
-    flex-direction: column;
-    height: auto;
-    gap: 16px;
-    background: rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px);
-    border-radius: 12px;
-    padding: 16px;
+    /* CRITICAL: Mobile layout - avatar left, burger right */
+    height: 40px;
+    gap: 0;
   }
   
-  .nav-section,
+  .nav-section {
+    /* CRITICAL: Show only user photo and name on mobile */
+    gap: 12px;
+  }
+  
+  /* CRITICAL: Hide breadcrumb elements on mobile */
+  .breadcrumb-separator,
+  .user-name-section .status-badge,
+  .nav-button--dropdown {
+    display: none !important;
+  }
+  
+  /* CRITICAL: Hide desktop action buttons on mobile */
   .action-buttons {
-    width: 100%;
-    justify-content: center;
+    display: none !important;
+  }
+  
+  /* CRITICAL: Show burger button on mobile */
+  .burger-button {
+    display: flex;
+    /* CRITICAL: Fixed position to stay above menu */
+    position: fixed !important;
+    top: 16px !important;
+    right: 16px !important;
+    z-index: 100003 !important;
+  }
+  
+  /* UPDATED COMMENTS: Adjust user photo size for mobile */
+  .user-photo {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .user-name {
+    font-size: 18px;
+    line-height: 24px;
   }
 }

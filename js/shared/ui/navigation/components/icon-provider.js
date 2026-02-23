@@ -24,7 +24,8 @@ export class IconProvider {
       copy: 'assets/icons/iconamoon_copy.svg',
       heart: 'assets/icons/iconamoon_heart.svg',
       eye: 'assets/icons/iconamoon_eye.svg',
-      clock: 'assets/icons/iconamoon_clock.svg'
+      clock: 'assets/icons/iconamoon_clock.svg',
+      close: 'assets/icons/iconamoon_close.svg'
     };
     
     // UPDATED COMMENTS: Preload all icons on initialization
@@ -130,7 +131,8 @@ export class IconProvider {
       heart: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19.0712 13.1437L13.4142 18.8017C13.0391 19.1767 12.5305 19.3873 12.0002 19.3873C11.4699 19.3873 10.9613 19.1767 10.5862 18.8017L4.9292 13.1447C4.46157 12.6812 4.09011 12.1298 3.83613 11.5223C3.58216 10.9148 3.45067 10.2632 3.44923 9.6047C3.44779 8.94625 3.57642 8.294 3.82773 7.68539C4.07904 7.07679 4.44809 6.52381 4.91369 6.05822C5.37928 5.59262 5.93226 5.22357 6.54086 4.97226C7.14947 4.72095 7.80172 4.59232 8.46017 4.59376C9.11862 4.5952 9.7703 4.72669 10.3778 4.98066C10.9853 5.23464 11.5367 5.6061 12.0002 6.07373C12.9418 5.15561 14.2072 4.6454 15.5222 4.65364C16.8373 4.66188 18.0962 5.1879 19.0262 6.11776C19.9562 7.04761 20.4824 8.30643 20.4908 9.62151C20.4992 10.9366 19.9892 12.202 19.0712 13.1437Z" stroke="#101828" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
       eye: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g opacity="0.6"><path d="M14.999 12C14.999 12.7956 14.683 13.5587 14.1203 14.1213C13.5577 14.6839 12.7947 15 11.999 15C11.2034 15 10.4403 14.6839 9.8777 14.1213C9.31509 13.5587 8.99902 12.7956 8.99902 12C8.99902 11.2044 9.31509 10.4413 9.8777 9.87868C10.4403 9.31607 11.2034 9 11.999 9C12.7947 9 13.5577 9.31607 14.1203 9.87868C14.683 10.4413 14.999 11.2044 14.999 12Z" stroke="#0E1621" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M1.99805 12C3.59805 7.903 7.33405 5 11.998 5C16.662 5 20.398 7.903 21.998 12C20.398 16.097 16.662 19 11.998 19C7.33405 19 3.59805 16.097 1.99805 12Z" stroke="#0E1621" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g></svg>`,
       clock: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g opacity="0.6"><path d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" stroke="#0E1621" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.999 8V13H15.999" stroke="#0E1621" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g></svg>`,
-      copy: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 3H4V16" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 7H20V19C20 19.5304 19.7893 20.0391 19.4142 20.4142C19.0391 20.7893 18.5304 21 18 21H10C9.46957 21 8.96086 20.7893 8.58579 20.4142C8.21071 20.0391 8 19.5304 8 19V7Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+      copy: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 3H4V16" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 7H20V19C20 19.5304 19.7893 20.0391 19.4142 20.4142C19.0391 20.7893 18.5304 21 18 21H10C9.46957 21 8.96086 20.7893 8.58579 20.4142C8.21071 20.0391 8 19.5304 8 19V7Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+      close: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 6L6 18M6 6L18 18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`
     };
     
     return fallbacks[iconName] || '';
@@ -181,6 +183,14 @@ export class IconProvider {
 
   getClockSVG() {
     return this.getIcon('clock');
+  }
+
+  getCloseSVG() {
+    return this.getIcon('close');
+  }
+
+  getFlagUSASVG() {
+    return this.getIcon('flag');
   }
 
   /**

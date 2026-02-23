@@ -9,6 +9,7 @@ import { TOAST_MESSAGES } from '../toast/toast-messages.js';
 import { UserInfo } from './components/user-info.js';
 import { Breadcrumb } from './components/breadcrumb.js';
 import { ActionButtons } from './components/action-buttons.js';
+import { MobileMenu } from './components/mobile-menu.js';
 import { SOCIAL_LINKS } from '../../config/social-links.js';
 
 /**
@@ -42,6 +43,11 @@ export class NavigationHeader {
     this.userInfo = new UserInfo(this.options);
     this.breadcrumb = new Breadcrumb(this.options);
     this.actionButtons = new ActionButtons(this.options);
+    this.mobileMenu = new MobileMenu({
+      eventBus: this.eventBus,
+      currentPage: this.options.currentPage,
+      currentLanguage: this.options.currentLanguage
+    });
     
     this.isInitialized = false;
   }
@@ -55,6 +61,8 @@ export class NavigationHeader {
       this.render();
       this.bindEvents();
       this.setupPageDropdownNavigation();
+      this.setupMobileMenuListeners();
+      this.mobileMenu.init();
       this.isInitialized = true;
       
       // REUSED: EventBus pattern for component communication
@@ -63,6 +71,24 @@ export class NavigationHeader {
       console.error('Failed to initialize navigation header:', error);
       throw error;
     }
+  }
+  
+  /**
+   * Setup mobile menu event listeners
+   * CRITICAL: Listen for mobile menu close to reset burger button
+   * UPDATED COMMENTS: Syncs burger button animation with menu state
+   */
+  setupMobileMenuListeners() {
+    // CRITICAL: Reset burger button when menu closes
+    this.eventBus.on('mobile-menu:reset-burger', () => {
+      const burgerButton = this.container.querySelector('.burger-button');
+      if (burgerButton) {
+        burgerButton.classList.remove('burger-button--open');
+        console.log('✅ Burger button reset to hamburger');
+      } else {
+        console.warn('⚠️ Burger button not found in container');
+      }
+    });
   }
   
   /**
@@ -91,7 +117,7 @@ export class NavigationHeader {
   /**
    * Update current language display
    * CRITICAL: Frontend-only language update without re-rendering
-   * UPDATED COMMENTS: Updates language text in navigation header
+   * UPDATED COMMENTS: Updates language text in navigation header + mobile menu sync
    * 
    * @param {string} langLabel - New language label (EN/RU)
    */
@@ -99,6 +125,7 @@ export class NavigationHeader {
     // CRITICAL: Update internal state
     this.options.currentLanguage = langLabel;
     this.breadcrumb.updateBreadcrumb({ currentLanguage: langLabel });
+    this.mobileMenu.updateCurrentLanguage(langLabel);
     
     // CRITICAL: Update DOM directly without re-rendering
     const langButton = this.container.querySelector('[data-dropdown="language"] .nav-button__text');
@@ -111,6 +138,7 @@ export class NavigationHeader {
    * Render navigation header HTML structure
    * REUSED: Dynamic breadcrumb generation with separators between ALL THREE elements
    * UPDATED COMMENTS: Three separate elements: [User+Status] / [EN] / [HOME]
+   * CRITICAL: Burger button rendered OUTSIDE navigation-wrapper for proper z-index
    */
   render() {
     // REUSED: Three distinct navigation elements for proper separation
@@ -140,6 +168,14 @@ export class NavigationHeader {
           </div>
         </nav>
       </div>
+      
+      <!-- ANCHOR: burger_button -->
+      <!-- CRITICAL: Burger button OUTSIDE navigation-wrapper for proper z-index layering -->
+      <button class="burger-button" data-action="toggle-mobile-menu" aria-label="Toggle mobile menu">
+        <span class="burger-button__line"></span>
+        <span class="burger-button__line"></span>
+        <span class="burger-button__line"></span>
+      </button>
     `;
   }
 
@@ -196,6 +232,9 @@ export class NavigationHeader {
    */
   handleAction(action, button) {
     switch (action) {
+      case 'toggle-mobile-menu':
+        this.toggleMobileMenu(button);
+        break;
       case 'telegram':
       case 'linkedin':
       case 'email':
@@ -214,6 +253,30 @@ export class NavigationHeader {
     
     // REUSED: EventBus for component communication
     this.eventBus.emit('navigation:action', { action, button });
+  }
+
+  /**
+   * Toggle mobile menu
+   * CRITICAL: Open/close mobile burger menu with button animation
+   * UPDATED COMMENTS: Syncs burger button animation with actual menu state
+   * 
+   * @param {HTMLElement} button - Burger button element
+   */
+  toggleMobileMenu(button) {
+    this.mobileMenu.toggle();
+    
+    // CRITICAL: Sync burger button animation with actual menu state
+    // UPDATED COMMENTS: Check menu.isOpen AFTER toggle to get correct state
+    if (this.mobileMenu.isOpen) {
+      button.classList.add('burger-button--open');
+    } else {
+      button.classList.remove('burger-button--open');
+    }
+    
+    // REUSED: EventBus pattern
+    this.eventBus.emit('navigation:mobile-menu-toggle', { 
+      isOpen: this.mobileMenu.isOpen 
+    });
   }
 
   /**
@@ -395,7 +458,7 @@ Contacts: ${SOCIAL_LINKS.telegram.url} | ${SOCIAL_LINKS.email.address}`;
   /**
    * Update only the current page text without re-rendering
    * CRITICAL: Prevents navigation flicker by updating DOM directly
-   * UPDATED COMMENTS: Smooth page name updates without full re-render
+   * UPDATED COMMENTS: Smooth page name updates without full re-render + mobile menu sync
    * 
    * @param {string} pageName - New page name to display
    */
@@ -403,6 +466,7 @@ Contacts: ${SOCIAL_LINKS.telegram.url} | ${SOCIAL_LINKS.email.address}`;
     // CRITICAL: Update internal state
     this.options.currentPage = pageName;
     this.breadcrumb.updateBreadcrumb({ currentPage: pageName });
+    this.mobileMenu.updateCurrentPage(pageName);
     
     // CRITICAL: Update DOM directly without re-rendering
     const pageButton = this.container.querySelector('[data-dropdown="page"] .nav-button__text');
@@ -416,6 +480,9 @@ Contacts: ${SOCIAL_LINKS.telegram.url} | ${SOCIAL_LINKS.email.address}`;
    * SCALED FOR: Memory management with modular cleanup
    */
   destroy() {
+    if (this.mobileMenu) {
+      this.mobileMenu.destroy();
+    }
     if (this.container) {
       this.container.innerHTML = '';
     }
