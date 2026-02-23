@@ -12,6 +12,7 @@ import { SOCIAL_LINKS } from '../../../config/social-links.js';
  * ActionButtons class - Social media and action buttons
  * Uses universal Button component for consistent styling and behavior
  * CRITICAL: All links centralized in social-links.js config
+ * UPDATED COMMENTS: Supports mobile variant with text labels
  * 
  * @class ActionButtons
  */
@@ -22,6 +23,7 @@ export class ActionButtons {
     
     this.options = {
       cvUrl: SOCIAL_LINKS.resume.url,
+      isMobile: false, // UPDATED COMMENTS: Mobile variant flag
       ...options
     };
     
@@ -33,43 +35,51 @@ export class ActionButtons {
    * Create button instances
    * REUSED: Universal Button component for all button types
    * CRITICAL: Uses centralized SOCIAL_LINKS configuration
+   * UPDATED COMMENTS: Creates icon+text buttons for mobile, icon-only for desktop
    */
   createButtons() {
+    // CRITICAL: Mobile uses text buttons, desktop uses icon-only
+    const socialButtonType = this.options.isMobile ? 'text' : 'icon';
+    
     return {
-      // UPDATED COMMENTS: Icon-only buttons (square, 40x40px) with centralized URLs
+      // UPDATED COMMENTS: Social buttons - icon-only on desktop, icon+text on mobile
       telegram: new Button({
-        type: 'icon',
+        type: socialButtonType,
         icon: this.iconProvider.getTelegramSVG(),
+        text: this.options.isMobile ? 'Telegram' : null,
         action: 'telegram',
         ariaLabel: 'Contact via Telegram',
         url: this.socialLinks.telegram.url
       }),
       
       linkedin: new Button({
-        type: 'icon',
+        type: socialButtonType,
         icon: this.iconProvider.getLinkedInSVG(),
+        text: this.options.isMobile ? 'LinkedIn' : null,
         action: 'linkedin',
         ariaLabel: 'View LinkedIn profile',
         url: this.socialLinks.linkedin.url
       }),
       
       email: new Button({
-        type: 'icon',
+        type: socialButtonType,
         icon: this.iconProvider.getEmailSVG(),
+        text: this.options.isMobile ? 'Email' : null,
         action: 'email',
         ariaLabel: 'Send email',
         url: this.socialLinks.email.url
       }),
       
       github: new Button({
-        type: 'icon',
+        type: socialButtonType,
         icon: this.iconProvider.getGitHubSVG(),
+        text: this.options.isMobile ? 'GitHub' : null,
         action: 'github',
         ariaLabel: 'View GitHub profile',
         url: this.socialLinks.github.url
       }),
       
-      // UPDATED COMMENTS: Icon+text buttons (rectangular, custom widths)
+      // UPDATED COMMENTS: Icon+text buttons (same for desktop and mobile)
       cv: new Button({
         type: 'text',
         icon: this.iconProvider.getDownloadSVG(),

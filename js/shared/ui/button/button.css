@@ -79,9 +79,8 @@
 .nav-button--text .nav-button__icon svg {
   width: 100%;
   height: 100%;
-  stroke: #FFFFFF;
-  fill: none;
-  /* UPDATED COMMENTS: Keep stroke for action icons like download/copy */
+  /* UPDATED COMMENTS: Let SVG define its own fill/stroke */
+  color: #FFFFFF;
 }
 
 .nav-button--text .nav-button__icon iconify-icon {
