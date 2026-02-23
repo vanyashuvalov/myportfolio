@@ -87,8 +87,8 @@
 
 .mobile-menu__content {
   /* CRITICAL: Content wrapper with padding */
-  /* UPDATED COMMENTS: Flat layout with divider between button groups */
-  padding: 120px 24px 80px;
+  /* UPDATED COMMENTS: Increased top padding for better spacing */
+  padding: 100px 24px 40px;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -148,36 +148,49 @@
 
 .mobile-menu__item {
   /* CRITICAL: Touch-friendly menu item */
+  /* UPDATED COMMENTS: Match nav-button styles from button.css */
   width: 100%;
   min-height: 48px;
-  padding: 12px 16px;
+  padding: 10px;
   
-  /* REUSED: Button reset */
-  background: transparent;
+  /* REUSED: Button styling from nav-button */
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(2px);
   border: none;
   border-radius: 8px;
   cursor: pointer;
   
-  /* UPDATED COMMENTS: Text styling */
-  font-family: 'SF Pro Display', var(--font-family-primary);
+  /* UPDATED COMMENTS: Typography matching nav-button--text */
+  font-family: 'Geist Mono', var(--font-family-mono);
   font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 24px;
-  text-align: left;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 23px;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  text-align: center;
   color: #FFFFFF;
   
-  /* SCALED FOR: Flexbox for icons */
+  /* SCALED FOR: Flexbox for centering */
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: center;
+  gap: 10px;
   
   /* REUSED: Smooth transitions */
-  transition: background 0.2s ease, color 0.2s ease;
+  transition: opacity 0.2s ease, background 0.2s ease;
+  will-change: opacity, background;
 }
 
 .mobile-menu__item:hover {
-  background: rgba(255, 255, 255, 0.05);
+  opacity: 0.9;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.mobile-menu__item:active {
+  opacity: 0.7;
+  background: rgba(0, 0, 0, 0.7);
+}
 }
 
 .mobile-menu__item--active {

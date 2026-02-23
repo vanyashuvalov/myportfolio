@@ -64,6 +64,7 @@ export class NavigationHeader {
       this.bindEvents();
       this.setupPageDropdownNavigation();
       this.setupMobileMenuListeners();
+      this.setupMobileMenuActions();
       this.mobileMenu.init();
       this.isInitialized = true;
       
@@ -89,6 +90,36 @@ export class NavigationHeader {
         console.log('✅ Burger button reset to hamburger');
       } else {
         console.warn('⚠️ Burger button not found in container');
+      }
+    });
+  }
+  
+  /**
+   * Setup mobile menu action handlers
+   * CRITICAL: Listen for actions from mobile menu buttons and execute them
+   * UPDATED COMMENTS: Delegates mobile menu button actions to NavigationHeader handlers
+   */
+  setupMobileMenuActions() {
+    // CRITICAL: Listen for navigation:action events from mobile menu
+    this.eventBus.on('navigation:action', ({ action, button }) => {
+      console.log('🔵 NavigationHeader received action from mobile menu:', action);
+      
+      // CRITICAL: Execute the action using existing handlers
+      switch (action) {
+        case 'telegram':
+        case 'linkedin':
+        case 'email':
+        case 'github':
+          this.openSocialLink(action);
+          break;
+        case 'download-cv':
+          this.downloadCV();
+          break;
+        case 'share-link':
+          this.shareCurrentPage();
+          break;
+        default:
+          console.warn(`Unknown action from mobile menu: ${action}`);
       }
     });
   }
