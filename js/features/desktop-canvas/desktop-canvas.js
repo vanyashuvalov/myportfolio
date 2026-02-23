@@ -140,15 +140,15 @@ export class DesktopCanvas {
     this.workspaceContainer.dataset.workspaceId = this.generateId();
     
     // UPDATED COMMENTS: Clean workspace without visual debugging elements
-    // CRITICAL: Minimum dimensions for comfortable widget layout on all devices
-    this.workspaceContainer.style.width = 'calc(100vw - 20px)';
-    this.workspaceContainer.style.height = 'calc(100vh - 20px)';
+    // CRITICAL: Full viewport dimensions without any margins
+    this.workspaceContainer.style.width = '100vw';
+    this.workspaceContainer.style.height = '100vh';
     this.workspaceContainer.style.minWidth = '1000px';
     this.workspaceContainer.style.minHeight = '720px';
     this.workspaceContainer.style.maxWidth = 'none';
     this.workspaceContainer.style.maxHeight = 'none';
     this.workspaceContainer.style.border = 'none';
-    this.workspaceContainer.style.background = 'transparent';
+    // CRITICAL: Don't set background - CSS handles gradient
     this.workspaceContainer.style.backdropFilter = 'none';
     this.workspaceContainer.style.position = 'relative';
     this.workspaceContainer.style.boxSizing = 'border-box';
