@@ -257,16 +257,28 @@ class TelegramHTMLParser:
     def _parse_single_post(self, widget, channel_username: str) -> Optional[Dict]:
         """
         Parse single post widget
-        REUSABLE LOGIC: Post data extraction
+        REUSABLE LOGIC: Post data extraction with proper nested div handling
+        FIX: Handles nested tgme_widget_message_text divs correctly
         """
         # UPDATED COMMENTS: Extract post ID from data attribute
         post_id = widget.get('data-post', '').split('/')[-1]
         if not post_id:
             return None
         
-        # UPDATED COMMENTS: Extract post text
+        # CRITICAL FIX: Extract post text from nested divs properly
+        # UPDATED COMMENTS: Telegram uses nested divs with same class
         text_elem = widget.find('div', class_='tgme_widget_message_text')
-        text = text_elem.get_text(strip=True) if text_elem else ''
+        if text_elem:
+            # REUSABLE LOGIC: Check if there's a nested div with same class
+            nested_text_elem = text_elem.find('div', class_='tgme_widget_message_text')
+            if nested_text_elem:
+                # CRITICAL: Use inner div for text extraction
+                text = nested_text_elem.get_text(strip=True)
+            else:
+                # REUSABLE LOGIC: Fallback to outer div if no nesting
+                text = text_elem.get_text(strip=True)
+        else:
+            text = ''
         
         # UPDATED COMMENTS: Extract view count
         views = 0
