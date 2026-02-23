@@ -35,9 +35,17 @@ export class SimpleDragHover {
     // UPDATED COMMENTS: Now reads from CSS variable --drag-boundary-offset with fallback
     this.globalBoundaryOffset = options.boundaryOffset ?? this.getBoundaryOffsetFromCSS();
     
-    // CRITICAL: Bind global handlers once
+    // CRITICAL: Bind global handlers once (mouse and touch)
     this.boundMouseMove = this.handleMouseMove.bind(this);
     this.boundMouseUp = this.handleMouseUp.bind(this);
+    this.boundTouchMove = this.handleTouchMove.bind(this);
+    this.boundTouchEnd = this.handleTouchEnd.bind(this);
+    
+    // SCALED FOR: Touch gesture tracking
+    this.touchStartX = 0;
+    this.touchStartY = 0;
+    this.touchMoveThreshold = 10; // pixels
+    this.isTouchDragging = false;
     
     // CRITICAL: Track active listeners for cleanup
     this.activeListeners = new WeakMap();
@@ -68,6 +76,7 @@ export class SimpleDragHover {
   /**
    * Initialize drag and hover for a widget
    * // UPDATED COMMENTS: Simplified - assumes CSS positioning for all widgets
+   * // SCALED FOR: Touch and mouse event handling for mobile compatibility
    * 
    * @param {Object} widget - Widget instance
    */
@@ -90,22 +99,32 @@ export class SimpleDragHover {
     element.style.backfaceVisibility = 'hidden';
     element.style.transition = 'transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)';
     
-    // CRITICAL: Event listeners
+    // CRITICAL: Event listeners (mouse and touch)
     const container = element.parentElement || document.body;
     
     const hoverStartHandler = () => this.handleHoverStart(widget);
     const hoverEndHandler = () => this.handleHoverEnd(widget);
     const mouseDownHandler = (e) => this.handleMouseDown(e, widget);
+    const touchStartHandler = (e) => this.handleTouchStart(e, widget);
     
+    // UPDATED COMMENTS: Mouse events for desktop
     element.addEventListener('mouseenter', hoverStartHandler);
     element.addEventListener('mouseleave', hoverEndHandler);
     container.addEventListener('mousedown', mouseDownHandler);
+    
+    // SCALED FOR: Touch events for mobile
+    container.addEventListener('touchstart', touchStartHandler, { passive: false });
     
     // CRITICAL: Store for cleanup
     this.activeListeners.set(widget, {
       element,
       container,
-      handlers: { hoverStart: hoverStartHandler, hoverEnd: hoverEndHandler, mouseDown: mouseDownHandler }
+      handlers: { 
+        hoverStart: hoverStartHandler, 
+        hoverEnd: hoverEndHandler, 
+        mouseDown: mouseDownHandler,
+        touchStart: touchStartHandler
+      }
     });
     
     widget._simpleDragHover = this;
@@ -271,6 +290,144 @@ export class SimpleDragHover {
   }
 
   /**
+   * Handle touch start - begin touch interaction
+   * // SCALED FOR: Touch gesture detection for mobile widget dragging
+   * // UPDATED COMMENTS: Differentiates between tap, drag, and canvas pan
+   * 
+   * @param {TouchEvent} event
+   * @param {Object} widget
+   */
+  handleTouchStart(event, widget) {
+    if (!widget.config.isDraggable) return;
+    
+    // CRITICAL: Check if touch is on widget element
+    const touch = event.touches[0];
+    const isWidgetTouch = widget.element === event.target || widget.element.contains(event.target);
+    if (!isWidgetTouch) return;
+    
+    // UPDATED COMMENTS: Prevent default to stop canvas scrolling during widget drag
+    event.preventDefault();
+    
+    // CRITICAL: Store touch start position for gesture detection
+    this.touchStartX = touch.clientX;
+    this.touchStartY = touch.clientY;
+    this.isTouchDragging = false;
+    
+    // CRITICAL: Get current position from CSS
+    const rect = widget.element.getBoundingClientRect();
+    this.xOffset = rect.left;
+    this.yOffset = rect.top;
+    
+    // CRITICAL: Calculate offset
+    this.initialX = touch.clientX - this.xOffset;
+    this.initialY = touch.clientY - this.yOffset;
+    
+    // CRITICAL: Set drag state
+    this.active = true;
+    this.dragWidget = widget;
+    
+    widget.state.isDragging = true;
+    widget.element.classList.add('widget--dragging');
+    widget.element.style.zIndex = widget.zIndex + 1000;
+    widget.element.style.transition = 'transform 0.1s ease-out';
+    
+    // CRITICAL: Attach global touch listeners
+    const container = widget._dragContainer;
+    container.addEventListener('touchmove', this.boundTouchMove, { passive: false });
+    container.addEventListener('touchend', this.boundTouchEnd);
+    container.addEventListener('touchcancel', this.boundTouchEnd);
+  }
+
+  /**
+   * Handle touch move - update position during drag
+   * // CRITICAL: Hardware-accelerated touch dragging with gesture detection
+   * 
+   * @param {TouchEvent} event
+   */
+  handleTouchMove(event) {
+    if (!this.active || !this.dragWidget) return;
+    
+    const touch = event.touches[0];
+    const widget = this.dragWidget;
+    
+    // CRITICAL: Check if movement exceeds threshold for drag
+    const deltaX = Math.abs(touch.clientX - this.touchStartX);
+    const deltaY = Math.abs(touch.clientY - this.touchStartY);
+    
+    if (!this.isTouchDragging && (deltaX > this.touchMoveThreshold || deltaY > this.touchMoveThreshold)) {
+      this.isTouchDragging = true;
+    }
+    
+    // UPDATED COMMENTS: Only prevent default if actually dragging
+    if (this.isTouchDragging) {
+      event.preventDefault();
+      
+      // CRITICAL: Calculate new position
+      let newX = touch.clientX - this.initialX;
+      let newY = touch.clientY - this.initialY;
+      
+      // UPDATED: Round to prevent blur
+      newX = Math.round(newX);
+      newY = Math.round(newY);
+      
+      this.currentX = newX;
+      this.currentY = newY;
+      this.xOffset = newX;
+      this.yOffset = newY;
+      
+      // REUSED: Apply hover effects during drag
+      const hoverRotation = widget.rotation + 3;
+      const hoverScale = widget.scale * 1.02;
+      
+      // CRITICAL: Apply transform
+      this.setTranslate(this.currentX, this.currentY, widget.element, hoverRotation, hoverScale);
+    }
+  }
+
+  /**
+   * Handle touch end - finish touch interaction
+   * // SCALED FOR: Clean touch drag end with tap detection
+   * 
+   * @param {TouchEvent} event
+   */
+  handleTouchEnd(event) {
+    if (!this.active || !this.dragWidget) return;
+    
+    const widget = this.dragWidget;
+    const container = widget._dragContainer;
+    
+    // CRITICAL: Remove global touch listeners
+    container.removeEventListener('touchmove', this.boundTouchMove);
+    container.removeEventListener('touchend', this.boundTouchEnd);
+    container.removeEventListener('touchcancel', this.boundTouchEnd);
+    
+    // CRITICAL: If no drag occurred, treat as tap (click)
+    if (!this.isTouchDragging) {
+      // UPDATED COMMENTS: Trigger click event for tap gesture
+      widget.element.click();
+    }
+    
+    // CRITICAL: Preserve position
+    this.initialX = this.currentX;
+    this.initialY = this.currentY;
+    
+    // UPDATED: Reset drag state
+    this.active = false;
+    this.isTouchDragging = false;
+    widget.state.isDragging = false;
+    
+    widget.element.style.transition = 'transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)';
+    widget.element.classList.remove('widget--dragging');
+    widget.element.style.zIndex = widget.zIndex;
+    
+    // UPDATED COMMENTS: Reset to base transform (no hover on touch)
+    widget.element.classList.remove('widget--hovered');
+    this.setTranslate(this.xOffset, this.yOffset, widget.element, widget.rotation, widget.scale);
+    
+    this.dragWidget = null;
+  }
+
+  /**
    * Set element transform
    * // REUSABLE LOGIC: Hardware-accelerated transform
    * 
@@ -289,7 +446,8 @@ export class SimpleDragHover {
 
   /**
    * Destroy drag hover system
-   * // UPDATED COMMENTS: Comprehensive cleanup
+   * // UPDATED COMMENTS: Comprehensive cleanup including touch events
+   * // SCALED FOR: Complete memory cleanup for mobile and desktop
    * 
    * @param {Object} widget - Widget to cleanup
    */
@@ -302,11 +460,18 @@ export class SimpleDragHover {
     if (listenerData) {
       const { element, container, handlers } = listenerData;
       
+      // CRITICAL: Remove mouse event listeners
       element.removeEventListener('mouseenter', handlers.hoverStart);
       element.removeEventListener('mouseleave', handlers.hoverEnd);
       container.removeEventListener('mousedown', handlers.mouseDown);
       container.removeEventListener('mousemove', this.boundMouseMove);
       container.removeEventListener('mouseup', this.boundMouseUp);
+      
+      // CRITICAL: Remove touch event listeners
+      container.removeEventListener('touchstart', handlers.touchStart);
+      container.removeEventListener('touchmove', this.boundTouchMove);
+      container.removeEventListener('touchend', this.boundTouchEnd);
+      container.removeEventListener('touchcancel', this.boundTouchEnd);
       
       this.activeListeners.delete(widget);
     }
@@ -314,6 +479,9 @@ export class SimpleDragHover {
     if (widget._dragContainer) {
       widget._dragContainer.removeEventListener('mousemove', this.boundMouseMove);
       widget._dragContainer.removeEventListener('mouseup', this.boundMouseUp);
+      widget._dragContainer.removeEventListener('touchmove', this.boundTouchMove);
+      widget._dragContainer.removeEventListener('touchend', this.boundTouchEnd);
+      widget._dragContainer.removeEventListener('touchcancel', this.boundTouchEnd);
     }
     
     delete widget._simpleDragHover;
