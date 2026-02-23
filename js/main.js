@@ -139,13 +139,26 @@ class Application {
         desktopCanvas: this.canvas
       });
 
-      // UPDATED COMMENTS: Listen for folder widget clicks
-      // CRITICAL: Handle category-based navigation for work/fun projects
+      // UPDATED COMMENTS: Listen for folder widget clicks and navigation events
+      // CRITICAL: Handle both direct URL navigation and category-based navigation
       this.eventBus.on('folder:navigate', ({ url, category }) => {
-        // CRITICAL: Navigate to projects list page with category
         if (this.pageManager) {
-          // UPDATED COMMENTS: Determine URL based on category
-          const targetUrl = category === 'fun' ? '/fun' : '/projects';
+          // CRITICAL: Priority 1 - Use direct URL if provided (from navigation menu)
+          // CRITICAL: Priority 2 - Use category to determine URL (from folder widget)
+          let targetUrl;
+          
+          if (url) {
+            // UPDATED COMMENTS: Direct URL from navigation menu or breadcrumb
+            targetUrl = url;
+          } else if (category) {
+            // UPDATED COMMENTS: Category-based URL from folder widget
+            targetUrl = category === 'fun' ? '/fun' : '/projects';
+          } else {
+            // UPDATED COMMENTS: Fallback to projects if neither provided
+            console.warn('⚠️ folder:navigate called without url or category, defaulting to /projects');
+            targetUrl = '/projects';
+          }
+          
           this.pageManager.router.navigate(targetUrl);
         } else {
           console.error('❌ PageManager not available');
@@ -159,12 +172,16 @@ class Application {
       });
 
       // CRITICAL: Listen for page shown events to update navigation
+      // UPDATED COMMENTS: Use category to determine correct page name (Projects vs Fun)
       this.eventBus.on('page:shown', ({ type, projectId, category }) => {
         if (type === 'project' && projectId) {
           // UPDATED COMMENTS: Will be updated when project data loads
           this.updateNavigationForProject(projectId, category);
         } else if (type === 'projects-list') {
-          this.navigation.updateCurrentPage('Projects');
+          // CRITICAL: Use category to determine page name
+          // UPDATED COMMENTS: category='fun' → 'Fun', otherwise 'Projects'
+          const pageName = category === 'fun' ? 'Fun' : 'Projects';
+          this.navigation.updateCurrentPage(pageName);
         }
       });
 

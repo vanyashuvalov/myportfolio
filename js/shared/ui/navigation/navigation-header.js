@@ -9,6 +9,7 @@ import { TOAST_MESSAGES } from '../toast/toast-messages.js';
 import { UserInfo } from './components/user-info.js';
 import { Breadcrumb } from './components/breadcrumb.js';
 import { ActionButtons } from './components/action-buttons.js';
+import { BurgerButton } from './components/burger-button.js';
 import { MobileMenu } from './components/mobile-menu.js';
 import { SOCIAL_LINKS } from '../../config/social-links.js';
 
@@ -43,6 +44,7 @@ export class NavigationHeader {
     this.userInfo = new UserInfo(this.options);
     this.breadcrumb = new Breadcrumb(this.options);
     this.actionButtons = new ActionButtons(this.options);
+    this.burgerButton = new BurgerButton();
     this.mobileMenu = new MobileMenu({
       eventBus: this.eventBus,
       currentPage: this.options.currentPage,
@@ -139,6 +141,7 @@ export class NavigationHeader {
    * REUSED: Dynamic breadcrumb generation with separators between ALL THREE elements
    * UPDATED COMMENTS: Three separate elements: [User+Status] / [EN] / [HOME]
    * CRITICAL: Burger button rendered OUTSIDE navigation-wrapper for proper z-index
+   * UPDATED COMMENTS: Uses BurgerButton component instead of hardcoded HTML
    */
   render() {
     // REUSED: Three distinct navigation elements for proper separation
@@ -171,11 +174,8 @@ export class NavigationHeader {
       
       <!-- ANCHOR: burger_button -->
       <!-- CRITICAL: Burger button OUTSIDE navigation-wrapper for proper z-index layering -->
-      <button class="burger-button" data-action="toggle-mobile-menu" aria-label="Toggle mobile menu">
-        <span class="burger-button__line"></span>
-        <span class="burger-button__line"></span>
-        <span class="burger-button__line"></span>
-      </button>
+      <!-- REUSED: BurgerButton component -->
+      ${this.burgerButton.render()}
     `;
   }
 

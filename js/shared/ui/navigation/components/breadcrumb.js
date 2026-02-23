@@ -1,15 +1,17 @@
 /* ANCHOR: breadcrumb_component */
 /* REUSED: Breadcrumb navigation with dropdowns */
 /* SCALED FOR: Dynamic page and language switching */
-/* UPDATED COMMENTS: Modular breadcrumb component with dropdown support */
+/* UPDATED COMMENTS: Modular breadcrumb component with Button component integration */
 
 import { IconProvider } from './icon-provider.js';
 import { PageDropdown } from '../../dropdown/page-dropdown.js';
 import { LanguageDropdown } from '../../dropdown/language-dropdown.js';
+import { Button } from '../../button/button.js';
 
 /**
  * Breadcrumb class - Navigation breadcrumb with page and language selectors
  * Handles page navigation and language switching with dropdown menus
+ * UPDATED COMMENTS: Uses Button component instead of hardcoded HTML
  * 
  * @class Breadcrumb
  */
@@ -42,37 +44,35 @@ export class Breadcrumb {
 
   /**
    * Render page section as dropdown button
-   * REUSED: New dropdown button variant with text and arrow
-   * UPDATED COMMENTS: Single button component with text only (no arrow icon)
+   * REUSED: Button component with dropdown variant
+   * UPDATED COMMENTS: Uses Button component instead of hardcoded HTML
    */
   renderPageSection() {
-    return `
-      <button class="nav-button--dropdown" 
-              aria-expanded="${this.dropdownStates.page}" 
-              aria-haspopup="true"
-              data-dropdown="page">
-        <span class="nav-button__text">${this.options.currentPage}</span>
-      </button>
-    `;
+    const pageButton = new Button({
+      type: 'dropdown',
+      text: this.options.currentPage,
+      dropdown: 'page',
+      ariaExpanded: this.dropdownStates.page
+    });
+    
+    return pageButton.render();
   }
 
   /**
    * Render language section as dropdown button with flag
-   * REUSED: New dropdown button variant with flag, text and arrow
-   * UPDATED COMMENTS: Single button component with flag and text only (no arrow icon)
+   * REUSED: Button component with dropdown-flag variant
+   * UPDATED COMMENTS: Uses Button component instead of hardcoded HTML
    */
   renderLanguageSection() {
-    return `
-      <button class="nav-button--dropdown nav-button--dropdown--flag" 
-              aria-expanded="${this.dropdownStates.language}" 
-              aria-haspopup="true"
-              data-dropdown="language">
-        <div class="nav-button__flag">
-          ${this.iconProvider.getFlagSVG()}
-        </div>
-        <span class="nav-button__text">${this.options.currentLanguage}</span>
-      </button>
-    `;
+    const languageButton = new Button({
+      type: 'dropdown-flag',
+      text: this.options.currentLanguage,
+      customContent: this.iconProvider.getFlagSVG(),
+      dropdown: 'language',
+      ariaExpanded: this.dropdownStates.language
+    });
+    
+    return languageButton.render();
   }
 
   /**

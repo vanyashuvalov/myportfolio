@@ -2,15 +2,16 @@
 /* FSD: shared/ui/navigation/components → Mobile burger menu */
 /* REUSED: EventBus pattern for component communication */
 /* SCALED FOR: Touch-friendly mobile navigation */
-/* UPDATED COMMENTS: Fullscreen overlay menu with sections for pages, language, social links, and actions */
+/* UPDATED COMMENTS: Uses Button component instead of hardcoded HTML */
 
 import { IconProvider } from './icon-provider.js';
 import { SOCIAL_LINKS } from '../../../config/social-links.js';
+import { Button } from '../../button/button.js';
 
 /**
  * MobileMenu class - Burger menu for mobile navigation
  * CRITICAL: Fullscreen overlay with all navigation options
- * REUSED: Same structure as desktop navigation but vertical layout
+ * REUSED: Button component for all interactive elements
  * 
  * @class MobileMenu
  */
@@ -66,10 +67,104 @@ export class MobileMenu {
 
   /**
    * Render menu content HTML
-   * REUSED: Same sections as desktop navigation
-   * UPDATED COMMENTS: No close button - burger button handles closing
+   * REUSED: Button component for all interactive elements
+   * UPDATED COMMENTS: Uses Button component instead of hardcoded HTML
    */
   renderMenuContent() {
+    // REUSED: Create navigation buttons using Button component
+    const homeButton = new Button({
+      type: 'menu-item',
+      text: 'Home',
+      action: 'navigate',
+      isActive: this.options.currentPage === 'Home',
+      dataAttrs: { url: '/', page: 'Home' }
+    });
+    
+    const projectsButton = new Button({
+      type: 'menu-item',
+      text: 'Projects',
+      action: 'navigate',
+      isActive: this.options.currentPage === 'Projects',
+      dataAttrs: { url: '/projects', page: 'Projects' }
+    });
+    
+    const funButton = new Button({
+      type: 'menu-item',
+      text: 'Fun',
+      action: 'navigate',
+      isActive: this.options.currentPage === 'Fun',
+      dataAttrs: { url: '/fun', page: 'Fun' }
+    });
+    
+    // REUSED: Create language buttons using Button component
+    const enButton = new Button({
+      type: 'menu-item',
+      text: 'English',
+      action: 'change-language',
+      isActive: this.options.currentLanguage === 'EN',
+      customContent: this.iconProvider.getFlagUSASVG(),
+      dataAttrs: { lang: 'EN' }
+    });
+    
+    const ruButton = new Button({
+      type: 'menu-item',
+      text: 'Русский',
+      action: 'change-language',
+      isActive: this.options.currentLanguage === 'RU',
+      customContent: '<span>🇷🇺</span>',
+      dataAttrs: { lang: 'RU' }
+    });
+    
+    // REUSED: Create social buttons using Button component
+    const telegramButton = new Button({
+      type: 'menu-social',
+      text: 'Telegram',
+      icon: this.iconProvider.getTelegramSVG(),
+      action: 'telegram',
+      ariaLabel: 'Contact via Telegram'
+    });
+    
+    const linkedinButton = new Button({
+      type: 'menu-social',
+      text: 'LinkedIn',
+      icon: this.iconProvider.getLinkedInSVG(),
+      action: 'linkedin',
+      ariaLabel: 'View LinkedIn profile'
+    });
+    
+    const emailButton = new Button({
+      type: 'menu-social',
+      text: 'Email',
+      icon: this.iconProvider.getEmailSVG(),
+      action: 'email',
+      ariaLabel: 'Send email'
+    });
+    
+    const githubButton = new Button({
+      type: 'menu-social',
+      text: 'GitHub',
+      icon: this.iconProvider.getGitHubSVG(),
+      action: 'github',
+      ariaLabel: 'View GitHub profile'
+    });
+    
+    // REUSED: Create action buttons using Button component
+    const cvButton = new Button({
+      type: 'menu-action',
+      text: 'Get CV',
+      icon: this.iconProvider.getDownloadSVG(),
+      action: 'download-cv',
+      isPrimary: true
+    });
+    
+    const shareButton = new Button({
+      type: 'menu-action',
+      text: 'Share',
+      icon: this.iconProvider.getCopySVG(),
+      action: 'share-link',
+      isPrimary: false
+    });
+    
     return `
       <!-- ANCHOR: menu_sections -->
       <div class="mobile-menu__content">
@@ -77,24 +172,9 @@ export class MobileMenu {
         <div class="mobile-menu__section">
           <h3 class="mobile-menu__section-title">Pages</h3>
           <nav class="mobile-menu__nav">
-            <button class="mobile-menu__item ${this.options.currentPage === 'Home' ? 'mobile-menu__item--active' : ''}" 
-                    data-action="navigate" 
-                    data-url="/" 
-                    data-page="Home">
-              Home
-            </button>
-            <button class="mobile-menu__item ${this.options.currentPage === 'Projects' ? 'mobile-menu__item--active' : ''}" 
-                    data-action="navigate" 
-                    data-url="/projects" 
-                    data-page="Projects">
-              Projects
-            </button>
-            <button class="mobile-menu__item ${this.options.currentPage === 'Fun' ? 'mobile-menu__item--active' : ''}" 
-                    data-action="navigate" 
-                    data-url="/fun" 
-                    data-page="Fun">
-              Fun
-            </button>
+            ${homeButton.render()}
+            ${projectsButton.render()}
+            ${funButton.render()}
           </nav>
         </div>
         
@@ -102,18 +182,8 @@ export class MobileMenu {
         <div class="mobile-menu__section">
           <h3 class="mobile-menu__section-title">Language</h3>
           <div class="mobile-menu__language">
-            <button class="mobile-menu__item ${this.options.currentLanguage === 'EN' ? 'mobile-menu__item--active' : ''}" 
-                    data-action="change-language" 
-                    data-lang="EN">
-              ${this.iconProvider.getFlagUSASVG()}
-              <span>English</span>
-            </button>
-            <button class="mobile-menu__item ${this.options.currentLanguage === 'RU' ? 'mobile-menu__item--active' : ''}" 
-                    data-action="change-language" 
-                    data-lang="RU">
-              <span>🇷🇺</span>
-              <span>Русский</span>
-            </button>
+            ${enButton.render()}
+            ${ruButton.render()}
           </div>
         </div>
         
@@ -121,45 +191,17 @@ export class MobileMenu {
         <div class="mobile-menu__section">
           <h3 class="mobile-menu__section-title">Social</h3>
           <div class="mobile-menu__social">
-            <button class="mobile-menu__social-button" 
-                    data-action="telegram" 
-                    aria-label="Contact via Telegram">
-              ${this.iconProvider.getTelegramSVG()}
-              <span>Telegram</span>
-            </button>
-            <button class="mobile-menu__social-button" 
-                    data-action="linkedin" 
-                    aria-label="View LinkedIn profile">
-              ${this.iconProvider.getLinkedInSVG()}
-              <span>LinkedIn</span>
-            </button>
-            <button class="mobile-menu__social-button" 
-                    data-action="email" 
-                    aria-label="Send email">
-              ${this.iconProvider.getEmailSVG()}
-              <span>Email</span>
-            </button>
-            <button class="mobile-menu__social-button" 
-                    data-action="github" 
-                    aria-label="View GitHub profile">
-              ${this.iconProvider.getGitHubSVG()}
-              <span>GitHub</span>
-            </button>
+            ${telegramButton.render()}
+            ${linkedinButton.render()}
+            ${emailButton.render()}
+            ${githubButton.render()}
           </div>
         </div>
         
         <!-- Actions Section -->
         <div class="mobile-menu__section mobile-menu__section--actions">
-          <button class="mobile-menu__action-button mobile-menu__action-button--primary" 
-                  data-action="download-cv">
-            ${this.iconProvider.getDownloadSVG()}
-            <span>Get CV</span>
-          </button>
-          <button class="mobile-menu__action-button" 
-                  data-action="share-link">
-            ${this.iconProvider.getCopySVG()}
-            <span>Share</span>
-          </button>
+          ${cvButton.render()}
+          ${shareButton.render()}
         </div>
       </div>
     `;
@@ -200,6 +242,14 @@ export class MobileMenu {
    * UPDATED COMMENTS: Removed close-menu action - burger button handles closing
    */
   handleAction(action, button) {
+    // CRITICAL: Debug logging to check button data attributes
+    console.log('🔵 MobileMenu action:', action, {
+      url: button.dataset.url,
+      page: button.dataset.page,
+      lang: button.dataset.lang,
+      buttonElement: button
+    });
+    
     switch (action) {
       case 'navigate':
         const url = button.dataset.url;
@@ -281,12 +331,19 @@ export class MobileMenu {
   /**
    * Close menu
    * CRITICAL: Hide overlay and menu with animation
-   * UPDATED COMMENTS: Emit event to reset burger button animation
+   * UPDATED COMMENTS: Emit event to reset burger button animation + remove focus from menu items
    */
   close() {
     if (!this.isOpen) return;
     
     this.isOpen = false;
+    
+    // CRITICAL: Remove focus from any focused element inside menu (accessibility fix)
+    // UPDATED COMMENTS: Prevents "aria-hidden on focused element" warning
+    const focusedElement = this.menuElement.querySelector(':focus');
+    if (focusedElement) {
+      focusedElement.blur();
+    }
     
     // CRITICAL: Restore body scroll
     document.body.style.overflow = '';
