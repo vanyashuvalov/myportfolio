@@ -63,6 +63,7 @@ class Application {
 
       // ANCHOR: navigation_initialization
       // REUSED: Navigation header component with shared EventBus
+      // CRITICAL: Uses centralized social links from config
       const navigationContainer = document.getElementById('navigation-container');
       if (!navigationContainer) {
         throw new Error('Navigation container element not found');
@@ -74,14 +75,9 @@ class Application {
         userPhoto: 'assets/images/avatar.jpg',
         statusText: 'Open for work',
         currentPage: 'Home',
-        currentLanguage: 'EN',
-        socialLinks: {
-          telegram: 'https://t.me/shuvalov_ivan',
-          linkedin: 'https://linkedin.com/in/shuvalov-ivan',
-          email: 'mailto:ivan.shuvalov@example.com',
-          github: 'https://github.com/shuvalov-ivan'
-        },
-        cvUrl: 'assets/documents/Ivan_Shuvalov_CV.pdf'
+        currentLanguage: 'EN'
+        // CRITICAL: Social links are now managed in NavigationHeader via action-buttons.js
+        // which imports from shared/config/social-links.js
       });
 
       await this.navigation.init();
