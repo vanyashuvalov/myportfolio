@@ -4,6 +4,9 @@
 /* SCALED FOR: Touch-friendly mobile interactions */
 /* UPDATED COMMENTS: Fullscreen overlay menu with smooth animations */
 
+/* CRITICAL: Import button styles for ActionButtons component */
+@import url('../../button/button.css');
+
 /* ============================================
    MOBILE MENU OVERLAY
    ============================================ */
@@ -84,15 +87,27 @@
 
 .mobile-menu__content {
   /* CRITICAL: Content wrapper with padding */
-  /* UPDATED COMMENTS: Reduced top padding - no close button */
-  padding: 40px 24px 40px;
+  /* UPDATED COMMENTS: Flat layout with divider between button groups */
+  padding: 120px 24px 80px;
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 12px;
 }
 
 /* ============================================
-   MENU SECTIONS
+   MENU DIVIDER
+   ============================================ */
+
+.mobile-menu__divider {
+  /* CRITICAL: Visual separator between navigation and action buttons */
+  width: 100%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 12px 0;
+}
+
+/* ============================================
+   MENU SECTIONS (DEPRECATED)
    ============================================ */
 
 .mobile-menu__section {
@@ -100,6 +115,11 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+/* UPDATED COMMENTS: Pages section with bottom padding for symmetry */
+.mobile-menu__section--pages {
+  padding-bottom: 24px;
 }
 
 .mobile-menu__section-title {
@@ -248,69 +268,21 @@
    ACTION BUTTONS
    ============================================ */
 
-.mobile-menu__section--actions {
-  /* CRITICAL: Actions section with larger gap */
-  gap: 12px;
-  margin-top: 20px;
+/* CRITICAL: Make desktop buttons full width in mobile menu */
+/* UPDATED COMMENTS: Keep ALL desktop styles, only change width */
+.mobile-menu__content .nav-button {
+  width: 100% !important;
+  min-width: 100% !important;
 }
 
-.mobile-menu__action-button {
-  /* CRITICAL: Touch-friendly action button */
-  width: 100%;
-  min-height: 56px;
-  padding: 16px 24px;
-  
-  /* REUSED: Button styling */
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
-  cursor: pointer;
-  
-  /* SCALED FOR: Flexbox layout */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  
-  /* UPDATED COMMENTS: Text styling */
-  font-family: 'SF Pro Display', var(--font-family-primary);
-  font-style: normal;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 24px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: #FFFFFF;
-  
-  /* REUSED: Smooth transitions */
-  transition: background 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+.mobile-menu__content .nav-button--icon {
+  width: 100% !important;
 }
 
-.mobile-menu__action-button:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.3);
-}
-
-.mobile-menu__action-button:active {
-  transform: scale(0.98);
-}
-
-.mobile-menu__action-button--primary {
-  /* CRITICAL: Primary action button */
-  background: #C248A3;
-  border-color: #C248A3;
-}
-
-.mobile-menu__action-button--primary:hover {
-  background: #A83D8A;
-  border-color: #A83D8A;
-}
-
-.mobile-menu__action-button svg {
-  width: 20px;
-  height: 20px;
-  color: #FFFFFF;
-  fill: #FFFFFF;
+.mobile-menu__content .nav-button--cv,
+.mobile-menu__content .nav-button--share {
+  width: 100% !important;
+  min-width: 100% !important;
 }
 
 /* ============================================

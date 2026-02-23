@@ -2,16 +2,17 @@
 /* FSD: shared/ui/navigation/components → Mobile burger menu */
 /* REUSED: EventBus pattern for component communication */
 /* SCALED FOR: Touch-friendly mobile navigation */
-/* UPDATED COMMENTS: Uses Button component instead of hardcoded HTML */
+/* UPDATED COMMENTS: Uses Button component and ActionButtons for consistency */
 
 import { IconProvider } from './icon-provider.js';
 import { SOCIAL_LINKS } from '../../../config/social-links.js';
 import { Button } from '../../button/button.js';
+import { ActionButtons } from './action-buttons.js';
 
 /**
  * MobileMenu class - Burger menu for mobile navigation
  * CRITICAL: Fullscreen overlay with all navigation options
- * REUSED: Button component for all interactive elements
+ * REUSED: Button component and ActionButtons for consistency with desktop
  * 
  * @class MobileMenu
  */
@@ -30,6 +31,13 @@ export class MobileMenu {
     this.isOpen = false;
     this.menuElement = null;
     this.overlayElement = null;
+    
+    // REUSED: ActionButtons component from desktop navigation
+    // CRITICAL: Pass isMobile flag to render text labels on social buttons
+    this.actionButtons = new ActionButtons({
+      ...this.options,
+      isMobile: true
+    });
   }
 
   /**
@@ -67,8 +75,8 @@ export class MobileMenu {
 
   /**
    * Render menu content HTML
-   * REUSED: Button component for all interactive elements
-   * UPDATED COMMENTS: Uses Button component instead of hardcoded HTML
+   * REUSED: Button component for navigation and ActionButtons for social/actions
+   * UPDATED COMMENTS: Uses ActionButtons component instead of custom buttons
    */
   renderMenuContent() {
     // REUSED: Create navigation buttons using Button component
@@ -96,113 +104,19 @@ export class MobileMenu {
       dataAttrs: { url: '/fun', page: 'Fun' }
     });
     
-    // REUSED: Create language buttons using Button component
-    const enButton = new Button({
-      type: 'menu-item',
-      text: 'English',
-      action: 'change-language',
-      isActive: this.options.currentLanguage === 'EN',
-      customContent: this.iconProvider.getFlagUSASVG(),
-      dataAttrs: { lang: 'EN' }
-    });
-    
-    const ruButton = new Button({
-      type: 'menu-item',
-      text: 'Русский',
-      action: 'change-language',
-      isActive: this.options.currentLanguage === 'RU',
-      customContent: '<span>🇷🇺</span>',
-      dataAttrs: { lang: 'RU' }
-    });
-    
-    // REUSED: Create social buttons using Button component
-    const telegramButton = new Button({
-      type: 'menu-social',
-      text: 'Telegram',
-      icon: this.iconProvider.getTelegramSVG(),
-      action: 'telegram',
-      ariaLabel: 'Contact via Telegram'
-    });
-    
-    const linkedinButton = new Button({
-      type: 'menu-social',
-      text: 'LinkedIn',
-      icon: this.iconProvider.getLinkedInSVG(),
-      action: 'linkedin',
-      ariaLabel: 'View LinkedIn profile'
-    });
-    
-    const emailButton = new Button({
-      type: 'menu-social',
-      text: 'Email',
-      icon: this.iconProvider.getEmailSVG(),
-      action: 'email',
-      ariaLabel: 'Send email'
-    });
-    
-    const githubButton = new Button({
-      type: 'menu-social',
-      text: 'GitHub',
-      icon: this.iconProvider.getGitHubSVG(),
-      action: 'github',
-      ariaLabel: 'View GitHub profile'
-    });
-    
-    // REUSED: Create action buttons using Button component
-    const cvButton = new Button({
-      type: 'menu-action',
-      text: 'Get CV',
-      icon: this.iconProvider.getDownloadSVG(),
-      action: 'download-cv',
-      isPrimary: true
-    });
-    
-    const shareButton = new Button({
-      type: 'menu-action',
-      text: 'Share',
-      icon: this.iconProvider.getCopySVG(),
-      action: 'share-link',
-      isPrimary: false
-    });
-    
     return `
       <!-- ANCHOR: menu_sections -->
       <div class="mobile-menu__content">
-        <!-- Pages Section -->
-        <div class="mobile-menu__section">
-          <h3 class="mobile-menu__section-title">Pages</h3>
-          <nav class="mobile-menu__nav">
-            ${homeButton.render()}
-            ${projectsButton.render()}
-            ${funButton.render()}
-          </nav>
-        </div>
+        <!-- Navigation Buttons -->
+        ${homeButton.render()}
+        ${projectsButton.render()}
+        ${funButton.render()}
         
-        <!-- Language Section -->
-        <div class="mobile-menu__section">
-          <h3 class="mobile-menu__section-title">Language</h3>
-          <div class="mobile-menu__language">
-            ${enButton.render()}
-            ${ruButton.render()}
-          </div>
-        </div>
+        <!-- Divider -->
+        <div class="mobile-menu__divider"></div>
         
-        <!-- Social Links Section -->
-        <div class="mobile-menu__section">
-          <h3 class="mobile-menu__section-title">Social</h3>
-          <div class="mobile-menu__social">
-            ${telegramButton.render()}
-            ${linkedinButton.render()}
-            ${emailButton.render()}
-            ${githubButton.render()}
-          </div>
-        </div>
-        
-        <!-- Actions Section -->
-        <div class="mobile-menu__section mobile-menu__section--actions">
-          ${cvButton.render()}
-          ${shareButton.render()}
-        </div>
+        <!-- Action Buttons -->
+        ${this.actionButtons.render()}
       </div>
     `;
   }
@@ -239,14 +153,13 @@ export class MobileMenu {
   /**
    * Handle menu actions
    * SCALED FOR: Extensible action system
-   * UPDATED COMMENTS: Removed close-menu action - burger button handles closing
+   * UPDATED COMMENTS: Handles navigation and delegates social/action buttons to NavigationHeader
    */
   handleAction(action, button) {
     // CRITICAL: Debug logging to check button data attributes
     console.log('🔵 MobileMenu action:', action, {
       url: button.dataset.url,
       page: button.dataset.page,
-      lang: button.dataset.lang,
       buttonElement: button
     });
     
@@ -257,21 +170,14 @@ export class MobileMenu {
         this.navigate(url, page);
         break;
         
-      case 'change-language':
-        const lang = button.dataset.lang;
-        this.changeLanguage(lang);
-        break;
-        
       case 'telegram':
       case 'linkedin':
       case 'email':
       case 'github':
-        this.eventBus.emit('navigation:action', { action, button });
-        this.close();
-        break;
-        
       case 'download-cv':
       case 'share-link':
+        // CRITICAL: Delegate to NavigationHeader action handler
+        // UPDATED COMMENTS: These actions are handled by NavigationHeader
         this.eventBus.emit('navigation:action', { action, button });
         this.close();
         break;
@@ -288,19 +194,6 @@ export class MobileMenu {
   navigate(url, page) {
     this.eventBus.emit('folder:navigate', { url });
     this.updateCurrentPage(page);
-    this.close();
-  }
-
-  /**
-   * Change language
-   * CRITICAL: Emit language-dropdown:select event
-   */
-  changeLanguage(lang) {
-    this.eventBus.emit('language-dropdown:select', { 
-      langId: lang.toLowerCase(), 
-      langLabel: lang 
-    });
-    this.updateCurrentLanguage(lang);
     this.close();
   }
 
@@ -386,24 +279,6 @@ export class MobileMenu {
     const items = this.menuElement.querySelectorAll('[data-action="navigate"]');
     items.forEach(item => {
       if (item.dataset.page === pageName) {
-        item.classList.add('mobile-menu__item--active');
-      } else {
-        item.classList.remove('mobile-menu__item--active');
-      }
-    });
-  }
-
-  /**
-   * Update current language
-   * CRITICAL: Update active state in menu
-   */
-  updateCurrentLanguage(lang) {
-    this.options.currentLanguage = lang;
-    
-    // CRITICAL: Update active state in DOM
-    const items = this.menuElement.querySelectorAll('[data-action="change-language"]');
-    items.forEach(item => {
-      if (item.dataset.lang === lang) {
         item.classList.add('mobile-menu__item--active');
       } else {
         item.classList.remove('mobile-menu__item--active');
