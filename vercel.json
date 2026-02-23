@@ -1,5 +1,11 @@
 {
   "buildCommand": "echo 'Static site'",
   "outputDirectory": ".",
-  "installCommand": "echo 'No frontend deps'"
+  "installCommand": "echo 'No frontend deps'",
+  "rewrites": [
+    {
+      "source": "/api/projects/:category/:id",
+      "destination": "/api/projects/[category]/[id].py"
+    }
+  ]
 }

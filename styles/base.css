@@ -129,18 +129,11 @@ body.loaded .desktop-canvas .workspace-container {
 /* ANCHOR: workspace_container */
 /* REUSED: Centralized workspace wrapper for all widgets */
 /* SCALED FOR: Invisible workspace container without visual elements */
+/* UPDATED COMMENTS: Dimensions controlled by JS in desktop-canvas.js */
 .workspace-container {
   /* CRITICAL: Flex item properties for proper centering */
   flex-shrink: 0;
   position: relative;
-  /* UPDATED COMMENTS: Full-screen workspace with 10px margins on all sides */
-  width: calc(100vw - 20px);
-  height: calc(100vh - 20px);
-  /* CRITICAL: Remove restrictive max/min dimensions for full utilization */
-  max-width: none;
-  max-height: none;
-  min-width: 320px;
-  min-height: 240px;
   /* UPDATED COMMENTS: Invisible workspace - no visual elements */
   border: none;
   border-radius: 0;
@@ -152,7 +145,29 @@ body.loaded .desktop-canvas .workspace-container {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
-  /* UPDATED COMMENTS: Ensure proper flex behavior */
+}
+
+/* ANCHOR: mobile_canvas_adaptation */
+/* UPDATED COMMENTS: Mobile canvas with touch pan/scroll */
+/* SCALED FOR: Touch navigation on mobile devices */
+@media (max-width: 768px) {
+  .desktop-canvas {
+    /* CRITICAL: Enable scrolling for oversized canvas */
+    overflow: auto;
+    /* REUSED: Smooth momentum scrolling on iOS */
+    -webkit-overflow-scrolling: touch;
+    /* CRITICAL: Align content to top-left for natural scroll start */
+    align-items: flex-start;
+    justify-content: flex-start;
+    /* SCALED FOR: Hardware-accelerated scrolling */
+    will-change: scroll-position;
+  }
+  
+  .workspace-container {
+    /* CRITICAL: Add padding for comfortable edge scrolling */
+    padding: 20px;
+    box-sizing: border-box;
+  }
 }
 
 /* ANCHOR: loading_system */
