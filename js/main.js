@@ -91,7 +91,6 @@ class Application {
       } else {
         this.contactInput = new ContactInput(contactInputContainer, {
           eventBus: this.eventBus,
-          placeholder: 'Message me right here...',
           minLength: 10,
           maxLength: 2000
         });
