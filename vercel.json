@@ -1,15 +1,1 @@
-{
-  "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "/api/main.py"
-    },
-    {
-      "source": "/health",
-      "destination": "/api/main.py"
-    }
-  ],
-  "buildCommand": "echo 'Static site - no build needed'",
-  "outputDirectory": ".",
-  "installCommand": "echo 'No frontend dependencies'"
-}
+{}
