@@ -14,9 +14,9 @@ import { Dropdown } from './dropdown.js';
  */
 export class LanguageDropdown {
   constructor(options = {}) {
+    // UPDATED COMMENTS: Only EN language available for now (RU removed)
     const languages = options.languages || [
-      { id: 'en', label: 'EN', flag: 'usa' },
-      { id: 'ru', label: 'RU', flag: 'russia' }
+      { id: 'en', label: 'EN', flag: 'usa' }
     ];
     
     const currentLanguage = options.currentLanguage || 'EN';
