@@ -122,32 +122,37 @@ class handler(BaseHTTPRequestHandler):
             desc_match = re.search(r'<div class="tgme_channel_info_description[^"]*">([^<]+)</div>', html)
             description = desc_match.group(1) if desc_match else ''
             
-            # CRITICAL: Extract post text - it's the large text block after channel info
-            # UPDATED COMMENTS: Find all text between divs, take the longest one (that's the post)
-            # Pattern: large text block that's not in channel info
-            text_blocks = re.findall(r'<div[^>]*>\s*([А-Яа-яA-Za-z].{50,}?)\s*</div>', html, re.DOTALL)
+            # CRITICAL: Extract post text from nested divs
+            # UPDATED COMMENTS: Text is in <div class="tgme_widget_message_text">
+            text_pattern = r'<div class="tgme_widget_message_text js-message_text"[^>]*>(.*?)</div>\s*<div class="tgme_widget_message_reactions'
+            text_matches = re.findall(text_pattern, html, re.DOTALL)
             
             text = ''
-            if text_blocks:
-                # CRITICAL: Take the first large text block (latest post)
-                # UPDATED COMMENTS: Remove HTML tags and clean whitespace
-                text_html = text_blocks[0]
+            if text_matches:
+                # CRITICAL: Take LAST match (latest post, they're in reverse order)
+                text_html = text_matches[-1]
+                # UPDATED COMMENTS: Remove nested div wrapper
+                text_html = re.sub(r'<div class="tgme_widget_message_text[^>]*>', '', text_html)
+                text_html = re.sub(r'</div>$', '', text_html)
+                # CRITICAL: Remove all HTML tags
                 text = re.sub(r'<[^>]+>', '', text_html)
                 text = re.sub(r'\s+', ' ', text).strip()
                 # CRITICAL: Limit to reasonable length
-                if len(text) > 500:
-                    text = text[:500] + '...'
+                if len(text) > 300:
+                    text = text[:300] + '...'
             
-            # UPDATED COMMENTS: Extract views - find the LAST number (latest post views)
-            views_matches = re.findall(r'>(\d+)<', html)
+            # UPDATED COMMENTS: Extract views - find ALL numbers, take LAST (latest post)
+            views_pattern = r'<span class="tgme_widget_message_views">([^<]+)</span>'
+            views_matches = re.findall(views_pattern, html)
             views = 0
             if views_matches:
-                # CRITICAL: Last number is the latest post views
-                views = int(views_matches[-1])
+                # CRITICAL: Last views number is the latest post
+                views_str = views_matches[-1].strip()
+                views = int(views_str.replace(' ', ''))
             
-            # UPDATED COMMENTS: Extract date from any time tag
-            date_match = re.search(r'<time[^>]*datetime="([^"]+)"', html)
-            date = date_match.group(1) if date_match else datetime.now().isoformat()
+            # UPDATED COMMENTS: Extract date - find ALL dates, take LAST
+            date_matches = re.findall(r'<time[^>]*datetime="([^"]+)"', html)
+            date = date_matches[-1] if date_matches else datetime.now().isoformat()
             
             # UPDATED COMMENTS: Build post link from username
             link = f"https://t.me/{username}"
