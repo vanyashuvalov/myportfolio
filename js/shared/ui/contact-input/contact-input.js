@@ -19,7 +19,7 @@ export class ContactInput {
     this.container = container;
     this.eventBus = options.eventBus || new EventBus();
     this.options = {
-      placeholder: 'Message me',
+      placeholder: 'Message me...',
       minLength: 10,
       maxLength: 2000,
       ...options
