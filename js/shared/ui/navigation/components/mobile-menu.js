@@ -76,12 +76,12 @@ export class MobileMenu {
   /**
    * Render menu content HTML
    * REUSED: Button component for navigation and ActionButtons for social/actions
-   * UPDATED COMMENTS: Uses ActionButtons component instead of custom buttons
+   * UPDATED COMMENTS: Uses Button component with text variant for all buttons
    */
   renderMenuContent() {
-    // REUSED: Create navigation buttons using Button component
+    // REUSED: Create navigation buttons using Button component with text variant
     const homeButton = new Button({
-      type: 'menu-item',
+      type: 'text',
       text: 'Home',
       action: 'navigate',
       isActive: this.options.currentPage === 'Home',
@@ -89,7 +89,7 @@ export class MobileMenu {
     });
     
     const projectsButton = new Button({
-      type: 'menu-item',
+      type: 'text',
       text: 'Projects',
       action: 'navigate',
       isActive: this.options.currentPage === 'Projects',
@@ -97,7 +97,7 @@ export class MobileMenu {
     });
     
     const funButton = new Button({
-      type: 'menu-item',
+      type: 'text',
       text: 'Fun',
       action: 'navigate',
       isActive: this.options.currentPage === 'Fun',

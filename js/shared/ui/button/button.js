@@ -76,9 +76,14 @@ export class Button {
    * UPDATED COMMENTS: Rectangular button with icon and text, for actions like "GET CV"
    */
   renderTextButton(baseClasses, sizeClasses) {
+    const dataAttrs = Object.entries(this.options.dataAttrs || {})
+      .map(([key, value]) => `data-${key}="${value}"`)
+      .join(' ');
+    
     return `
       <button class="${baseClasses} nav-button--text ${sizeClasses} ${this.options.className}" 
               data-action="${this.options.action}" 
+              ${dataAttrs}
               aria-label="${this.options.ariaLabel}">
         ${this.options.icon ? `<div class="nav-button__icon">${this.options.icon}</div>` : ''}
         <span class="nav-button__text">${this.options.text}</span>
