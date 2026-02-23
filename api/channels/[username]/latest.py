@@ -7,8 +7,9 @@
 - TODOs: Add caching
 
 UPDATED COMMENTS: Live Telegram HTML parser in serverless
-CRITICAL: Parses t.me/s/{username} on each request
+CRITICAL: Parses t.me/s/{username} on each request with proper nested div handling
 SCALED FOR: Fallback to static JSON if parsing fails
+FIX: Properly extracts text from nested divs and sorts by date
 """
 
 import json
@@ -99,9 +100,10 @@ class handler(BaseHTTPRequestHandler):
     def parse_telegram_html(self, username):
         """
         Parse Telegram public channel HTML
-        UPDATED COMMENTS: Scrapes t.me/s/{username} for latest post
-        CRITICAL: No authentication required
-        SCALED FOR: Production use with timeout
+        UPDATED COMMENTS: Scrapes t.me/s/{username} for latest post with proper nested div handling
+        CRITICAL: No authentication required, handles nested HTML structure correctly
+        SCALED FOR: Production use with timeout and proper post sorting by date
+        FIX: Properly extracts text from nested divs and sorts posts by date instead of HTML order
         """
         url = f"https://t.me/s/{username}"
         
@@ -118,65 +120,119 @@ class handler(BaseHTTPRequestHandler):
             title_match = re.search(r'<div class="tgme_channel_info_header_title[^"]*"><span[^>]*>([^<]+)</span>', html)
             title = title_match.group(1) if title_match else username
             
-            # CRITICAL: Extract description
-            desc_match = re.search(r'<div class="tgme_channel_info_description[^"]*">([^<]+)</div>', html)
-            description = desc_match.group(1) if desc_match else ''
+            # CRITICAL FIX: Extract description - handle multiline with <br/>
+            desc_match = re.search(r'<div class="tgme_channel_info_description[^"]*">(.*?)</div>', html, re.DOTALL)
+            if desc_match:
+                description = desc_match.group(1)
+                # REUSABLE LOGIC: Remove HTML tags but keep text
+                description = re.sub(r'<br\s*/?>', ' ', description)
+                description = re.sub(r'<[^>]+>', '', description)
+                description = re.sub(r'\s+', ' ', description).strip()
+            else:
+                description = ''
             
-            # CRITICAL: Extract post text from nested divs
-            # UPDATED COMMENTS: Text is in <div class="tgme_widget_message_text">
-            text_pattern = r'<div class="tgme_widget_message_text js-message_text"[^>]*>(.*?)</div>\s*<div class="tgme_widget_message_reactions'
-            text_matches = re.findall(text_pattern, html, re.DOTALL)
+            # CRITICAL FIX: Extract ALL posts with their data, then sort by date
+            # UPDATED COMMENTS: Parse multiple posts to find the actual latest one
+            posts = []
             
-            text = ''
-            if text_matches:
-                # CRITICAL: Take LAST match (latest post, they're in reverse order)
-                text_html = text_matches[-1]
-                # UPDATED COMMENTS: Remove nested div wrapper
-                text_html = re.sub(r'<div class="tgme_widget_message_text[^>]*>', '', text_html)
-                text_html = re.sub(r'</div>$', '', text_html)
-                # CRITICAL: Remove all HTML tags
-                text = re.sub(r'<[^>]+>', '', text_html)
-                text = re.sub(r'\s+', ' ', text).strip()
-                # CRITICAL: Limit to reasonable length
-                if len(text) > 300:
-                    text = text[:300] + '...'
+            # REUSABLE LOGIC: Find all message blocks with post IDs
+            message_blocks = re.findall(
+                r'<div class="tgme_widget_message[^"]*"[^>]*data-post="[^/]+/(\d+)"[^>]*>(.*?)(?=<div class="tgme_widget_message_wrap|</section>)',
+                html,
+                re.DOTALL
+            )
             
-            # UPDATED COMMENTS: Extract views - find ALL numbers, take LAST (latest post)
-            views_pattern = r'<span class="tgme_widget_message_views">([^<]+)</span>'
-            views_matches = re.findall(views_pattern, html)
-            views = 0
-            if views_matches:
-                # CRITICAL: Last views number is the latest post
-                views_str = views_matches[-1].strip()
-                views = int(views_str.replace(' ', ''))
+            # SCALED FOR: Process up to 20 posts for performance
+            for post_id, post_html in message_blocks[:20]:
+                try:
+                    # CRITICAL FIX: Extract text from NESTED divs properly
+                    # Pattern: outer div -> inner div -> actual text
+                    text_pattern = r'<div class="tgme_widget_message_text js-message_text"[^>]*>\s*<div class="tgme_widget_message_text js-message_text"[^>]*>(.*?)</div>\s*</div>'
+                    text_match = re.search(text_pattern, post_html, re.DOTALL)
+                    
+                    if not text_match:
+                        # REUSABLE LOGIC: Fallback to single div (some posts might not have nested structure)
+                        text_pattern_single = r'<div class="tgme_widget_message_text js-message_text"[^>]*>(.*?)</div>'
+                        text_match = re.search(text_pattern_single, post_html, re.DOTALL)
+                    
+                    if text_match:
+                        text_html = text_match.group(1)
+                        # CRITICAL: Remove all HTML tags
+                        text = re.sub(r'<[^>]+>', '', text_html)
+                        # UPDATED COMMENTS: Normalize whitespace
+                        text = re.sub(r'\s+', ' ', text).strip()
+                        # SCALED FOR: Limit length for performance
+                        if len(text) > 300:
+                            text = text[:300] + '...'
+                    else:
+                        text = ''
+                    
+                    # CRITICAL: Skip posts without text
+                    if not text:
+                        continue
+                    
+                    # UPDATED COMMENTS: Extract views
+                    views_match = re.search(r'<span class="tgme_widget_message_views">([^<]+)</span>', post_html)
+                    views = 0
+                    if views_match:
+                        views_str = views_match.group(1).strip().replace(' ', '')
+                        try:
+                            views = int(views_str)
+                        except ValueError:
+                            views = 0
+                    
+                    # UPDATED COMMENTS: Extract date
+                    date_match = re.search(r'<time[^>]*datetime="([^"]+)"', post_html)
+                    date = date_match.group(1) if date_match else None
+                    
+                    # CRITICAL: Skip posts without date (can't sort them)
+                    if not date:
+                        continue
+                    
+                    posts.append({
+                        'id': post_id,
+                        'text': text,
+                        'views': views,
+                        'date': date
+                    })
+                    
+                except Exception:
+                    # SCALED FOR: Skip problematic posts and continue
+                    continue
             
-            # UPDATED COMMENTS: Extract date - find ALL dates, take LAST
-            date_matches = re.findall(r'<time[^>]*datetime="([^"]+)"', html)
-            date = date_matches[-1] if date_matches else datetime.now().isoformat()
-            
-            # UPDATED COMMENTS: Build post link from username
-            link = f"https://t.me/{username}"
-            
-            # CRITICAL: Build response
-            return {
-                "channel": {
-                    "username": username,
-                    "title": title,
-                    "description": description,
-                    "verified": False
-                },
-                "latest_post": {
-                    "text": text,
-                    "views": views,
-                    "date": date,
-                    "formatted_date": self.format_date(date),
-                    "formatted_views": self.format_number(views),
-                    "link": link
-                },
-                "source": "live_html"
-            }
+            # CRITICAL FIX: Sort posts by date (newest first) and take the first one
+            if posts:
+                # REUSABLE LOGIC: Sort by ISO datetime string (works correctly for ISO format)
+                posts.sort(key=lambda x: x['date'], reverse=True)
+                latest = posts[0]
+                
+                # UPDATED COMMENTS: Build post link with actual post ID
+                link = f"https://t.me/{username}/{latest['id']}"
+                
+                # CRITICAL: Build response with properly extracted data
+                return {
+                    "channel": {
+                        "username": username,
+                        "title": title,
+                        "description": description,
+                        "verified": False
+                    },
+                    "latest_post": {
+                        "text": latest['text'],
+                        "views": latest['views'],
+                        "date": latest['date'],
+                        "formatted_date": self.format_date(latest['date']),
+                        "formatted_views": self.format_number(latest['views']),
+                        "link": link
+                    },
+                    "source": "live_html"
+                }
+            else:
+                # CRITICAL: No posts found
+                return None
             
         except (URLError, Exception):
+            # SCALED FOR: Return None to trigger fallback
             return None
     
     def send_json(self, data):
