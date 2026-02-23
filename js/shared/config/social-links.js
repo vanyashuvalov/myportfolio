@@ -28,14 +28,14 @@ export const SOCIAL_LINKS = {
   
   // ANCHOR: professional_links
   linkedin: {
-    url: 'https://linkedin.com/in/ivanshuvalov',
+    url: 'https://www.linkedin.com/in/ivan-shuvalov-19ba39259',
     username: 'ivanshuvalov',
     displayName: 'LinkedIn',
     icon: 'linkedin'
   },
   
   github: {
-    url: 'https://github.com/ivanshuvalov',
+    url: 'https://github.com/vanyashuvalov',
     username: 'ivanshuvalov',
     displayName: 'GitHub',
     icon: 'github'
@@ -43,11 +43,12 @@ export const SOCIAL_LINKS = {
   
   // ANCHOR: portfolio_links
   portfolio: {
-    url: 'https://ivanshuvalov.design',
+    url: 'https://ivanshuvalov.vercel.app',
     displayName: 'Portfolio',
     icon: 'external-link'
   },
   
+  // ЗАМЕНИТЬ
   resume: {
     url: '/assets/documents/ivan-shuvalov-resume.pdf',
     displayName: 'Resume PDF',
