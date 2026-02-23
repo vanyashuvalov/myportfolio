@@ -122,42 +122,30 @@ class handler(BaseHTTPRequestHandler):
             desc_match = re.search(r'<div class="tgme_channel_info_description[^"]*">([^<]+)</div>', html)
             description = desc_match.group(1) if desc_match else ''
             
-            # CRITICAL: Find first message block
-            message_match = re.search(r'<div class="tgme_widget_message[^"]*"[^>]*>(.*?)</div>\s*</div>\s*</div>', html, re.DOTALL)
+            # CRITICAL: Extract post text (simple structure without widget classes)
+            # UPDATED COMMENTS: Text is between channel info and view count
+            text_pattern = r'<div class="tgme_channel_info_description">.*?</div>\s*</div>\s*</div>\s*</div>\s*<div[^>]*>\s*<div[^>]*>\s*<div[^>]*>\s*<div[^>]*>\s*(.*?)\s*<div'
+            text_match = re.search(text_pattern, html, re.DOTALL)
             
-            if not message_match:
-                return None
-            
-            message_html = message_match.group(1)
-            
-            # UPDATED COMMENTS: Extract post text
-            text_match = re.search(r'<div class="tgme_widget_message_text[^"]*"[^>]*>(.*?)</div>', message_html, re.DOTALL)
             text = ''
             if text_match:
                 text_html = text_match.group(1)
-                # CRITICAL: Remove HTML tags
+                # CRITICAL: Remove HTML tags but keep text
                 text = re.sub(r'<[^>]+>', '', text_html)
-                text = text.strip()
+                text = re.sub(r'\s+', ' ', text).strip()
             
-            # UPDATED COMMENTS: Extract views
-            views_match = re.search(r'<span class="tgme_widget_message_views">([0-9.KM]+)</span>', message_html)
+            # UPDATED COMMENTS: Extract views (simple number format)
+            views_match = re.search(r'>(\d+)<', html)
             views = 0
             if views_match:
-                views_str = views_match.group(1)
-                if 'K' in views_str:
-                    views = int(float(views_str.replace('K', '')) * 1000)
-                elif 'M' in views_str:
-                    views = int(float(views_str.replace('M', '')) * 1000000)
-                else:
-                    views = int(views_str)
+                views = int(views_match.group(1))
             
-            # UPDATED COMMENTS: Extract date
-            date_match = re.search(r'<time[^>]*datetime="([^"]+)"', message_html)
+            # UPDATED COMMENTS: Extract date from any time tag
+            date_match = re.search(r'<time[^>]*datetime="([^"]+)"', html)
             date = date_match.group(1) if date_match else datetime.now().isoformat()
             
-            # UPDATED COMMENTS: Extract post link
-            link_match = re.search(r'<a[^>]*href="(https://t\.me/[^"]+)"', message_html)
-            link = link_match.group(1) if link_match else f"https://t.me/{username}"
+            # UPDATED COMMENTS: Build post link from username
+            link = f"https://t.me/{username}"
             
             # CRITICAL: Build response
             return {
