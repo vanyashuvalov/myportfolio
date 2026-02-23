@@ -4,8 +4,9 @@
 
 /* ANCHOR: mobile_first */
 /* Base styles for mobile devices (320px+) */
+/* CRITICAL: No padding on desktop-canvas - workspace-container handles layout */
 .desktop-canvas {
-  padding: var(--space-4);
+  padding: 0;
 }
 
 .widget {
@@ -49,8 +50,9 @@
 
 /* ANCHOR: tablet_styles */
 @media (min-width: 640px) {
+  /* CRITICAL: No padding on desktop-canvas */
   .desktop-canvas {
-    padding: var(--space-6);
+    padding: 0;
   }
   
   .clock-widget {
@@ -84,8 +86,9 @@
 
 /* ANCHOR: desktop_styles */
 @media (min-width: 1024px) {
+  /* CRITICAL: No padding on desktop-canvas */
   .desktop-canvas {
-    padding: var(--space-8);
+    padding: 0;
   }
   
   .clock-widget {
@@ -125,8 +128,9 @@
 
 /* ANCHOR: large_desktop */
 @media (min-width: 1280px) {
+  /* CRITICAL: No padding on desktop-canvas */
   .desktop-canvas {
-    padding: var(--space-10);
+    padding: 0;
   }
   
   /* Larger widgets for high-resolution displays */

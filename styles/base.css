@@ -12,12 +12,13 @@ html {
   margin: 0;
   padding: 0;
   overflow: hidden;
+  position: relative;
 }
 
 body {
   font-family: var(--font-family-primary);
-  /* UPDATED COMMENTS: Solid dark background during loading, gradient shown after */
-  /* CRITICAL: Start with #101010, switch to gradient when loaded */
+  /* UPDATED COMMENTS: Solid dark background only */
+  /* CRITICAL: Background moved to workspace-container for scroll behavior */
   background: #101010;
   
   width: 100%;
@@ -30,56 +31,16 @@ body {
   position: relative;
 }
 
-/* UPDATED COMMENTS: Show gradient background after loading */
+/* UPDATED COMMENTS: Background removed from body - now on workspace-container */
 body.loaded {
-  /* REUSED: Multi-layer background system with gradient and dot texture */
-  background: 
-    /* Layer 2: Dot texture pattern (top layer) */
-    radial-gradient(circle at center, rgba(0, 0, 0, 0.07) 1.5px, transparent 1.5px),
-    /* Layer 1: Base gradient (bottom layer) */
-    linear-gradient(180deg, #8A547D 0%, #A76697 100%);
-  
-  /* REUSED: Background positioning and sizing for layered effect */
-  background-size: 
-    16px 16px,           /* Dot pattern grid size */
-    100% 100%;           /* Gradient covers full area */
-  
-  background-position: 
-    0 0,                 /* Dot pattern from top-left */
-    center center;       /* Gradient centered */
-  
-  background-repeat: 
-    repeat,              /* Dot pattern repeats */
-    no-repeat;           /* Gradient doesn't repeat */
-  
+  background: #101010;
   transition: background 0.5s ease-in;
 }
 
 /* ANCHOR: mountain_overlay */
-/* UPDATED COMMENTS: Mountain silhouette with 30% opacity using pseudo-element */
-/* CRITICAL: Hidden during loading, shown after content is ready */
+/* UPDATED COMMENTS: Mountains removed from body - now on workspace-container */
 body::before {
-  content: '';
-  position: fixed;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  height: 100%;
-  background: url('../assets/images/bg-mountains.jpg') bottom center / 100% auto no-repeat;
-  /* UPDATED COMMENTS: Minimum width to prevent mountains from becoming too narrow */
-  min-width: 1000px;
-  opacity: 0;
-  pointer-events: none;
-  z-index: 0;
-  /* SCALED FOR: Mountain layer with proper blend mode */
-  mix-blend-mode: darken;
-  transition: opacity 0.5s ease-in;
-}
-
-/* REUSED: Show mountains after loading is complete */
-body.loaded::before {
-  opacity: 0.3;
+  display: none;
 }
 
 /* CRITICAL: Hide mountains and gradient when in page mode */
@@ -95,12 +56,13 @@ body.page-mode::before {
 /* ANCHOR: desktop_canvas */
 /* UPDATED COMMENTS: Fullscreen canvas container with perfect flexbox centering */
 /* CRITICAL: Always visible, but content inside fades in after loading */
+/* SCALED FOR: Background scrolls with canvas on mobile */
 .desktop-canvas {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
   z-index: 2;
   /* CRITICAL: Perfect flexbox centering */
@@ -109,8 +71,14 @@ body.page-mode::before {
   justify-content: center;
   /* UPDATED COMMENTS: Ensure flexbox works properly */
   flex-direction: column;
-  /* SCALED FOR: Proper containment without interfering with flexbox */
-  contain: layout style;
+  /* CRITICAL: Solid dark background - gradient on workspace-container */
+  background: #101010;
+}
+
+/* ANCHOR: canvas_mountain_overlay */
+/* CRITICAL: Mountains removed from desktop-canvas - now on workspace-container */
+.desktop-canvas::before {
+  display: none;
 }
 
 /* CRITICAL: Widgets inside canvas are hidden during loading */
@@ -128,24 +96,61 @@ body.loaded .desktop-canvas .workspace-container {
 
 /* ANCHOR: workspace_container */
 /* REUSED: Centralized workspace wrapper for all widgets */
-/* SCALED FOR: Invisible workspace container without visual elements */
+/* SCALED FOR: Gradient background on workspace for proper sizing */
 /* UPDATED COMMENTS: Dimensions controlled by JS in desktop-canvas.js */
 .workspace-container {
   /* CRITICAL: Flex item properties for proper centering */
   flex-shrink: 0;
   position: relative;
-  /* UPDATED COMMENTS: Invisible workspace - no visual elements */
-  border: none;
-  border-radius: 0;
-  background: transparent;
-  backdrop-filter: none;
+  /* CRITICAL: Gradient background on workspace-container */
+  background: 
+    radial-gradient(circle at center, rgba(0, 0, 0, 0.07) 1.5px, transparent 1.5px),
+    linear-gradient(180deg, #8A547D 0%, #A76697 100%);
+  background-size: 
+    16px 16px,
+    100% 100%;
+  background-position: 
+    0 0,
+    center center;
+  background-repeat: 
+    repeat,
+    no-repeat;
   /* CRITICAL: Internal coordinate system for widgets */
   overflow: visible;
   /* CRITICAL: Force dimensions and remove any padding/margin */
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+  /* CRITICAL: NO z-index - it creates stacking context and blocks mix-blend-mode */
 }
+
+/* ANCHOR: workspace_mountain_overlay */
+/* CRITICAL: Mountains at bottom of workspace-container, full workspace width */
+/* UPDATED COMMENTS: Background positioned relative to workspace, not viewport */
+/* CRITICAL: No z-index - positioned behind widgets by DOM order */
+.workspace-container::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../assets/images/bg-mountains.jpg');
+  background-position: bottom center;
+  background-size: 100% auto;
+  background-repeat: no-repeat;
+  opacity: 0;
+  pointer-events: none;
+  mix-blend-mode: darken;
+  transition: opacity 0.5s ease-in;
+}
+
+/* CRITICAL: Show mountains after loading */
+body.loaded .workspace-container::before {
+  opacity: 0.3;
+}
+
+
 
 /* ANCHOR: mobile_canvas_adaptation */
 /* UPDATED COMMENTS: Mobile canvas with touch pan/scroll */
@@ -164,8 +169,8 @@ body.loaded .desktop-canvas .workspace-container {
   }
   
   .workspace-container {
-    /* CRITICAL: Add padding for comfortable edge scrolling */
-    padding: 20px;
+    /* CRITICAL: No padding - full edge-to-edge layout */
+    padding: 0;
     box-sizing: border-box;
   }
 }

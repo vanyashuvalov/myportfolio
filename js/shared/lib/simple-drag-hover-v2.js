@@ -387,6 +387,7 @@ export class SimpleDragHover {
   /**
    * Handle touch end - finish touch interaction
    * // SCALED FOR: Clean touch drag end with tap detection
+   * // UPDATED COMMENTS: Properly triggers widget onClick handler for tap gestures
    * 
    * @param {TouchEvent} event
    */
@@ -403,8 +404,10 @@ export class SimpleDragHover {
     
     // CRITICAL: If no drag occurred, treat as tap (click)
     if (!this.isTouchDragging) {
-      // UPDATED COMMENTS: Trigger click event for tap gesture
-      widget.element.click();
+      // UPDATED COMMENTS: Trigger widget onClick handler directly for tap gesture
+      if (widget.onClick && typeof widget.onClick === 'function') {
+        widget.onClick({ event, widget });
+      }
     }
     
     // CRITICAL: Preserve position
