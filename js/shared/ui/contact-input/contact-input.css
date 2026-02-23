@@ -33,7 +33,7 @@
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   padding: 20px 26px;
   gap: 10px;
   
@@ -200,36 +200,44 @@
 /* SCALED FOR: Mobile and tablet breakpoints */
 @media (max-width: 768px) {
   .contact-input-wrapper {
-    bottom: 20px;
+    /* CRITICAL: Override desktop centering with left/right positioning */
     left: 20px;
     right: 20px;
-    transform: none;
+    bottom: 20px;
+    transform: translateY(100px);
+  }
+  
+  .contact-input-wrapper--visible {
+    transform: translateY(0);
   }
   
   .contact-input {
     width: 100%;
-    padding: 10px 20px;
+    /* CRITICAL: Keep original padding - don't change on mobile */
+    /* padding remains 20px 26px from desktop */
   }
   
   .contact-input__field {
     width: auto;
-    font-size: 16px;
+    /* CRITICAL: Keep original font size - don't change on mobile */
+    /* font-size remains 20px from desktop */
   }
 }
 
 @media (max-width: 480px) {
   .contact-input {
-    padding: 8px 16px;
-    height: 56px;
+    /* CRITICAL: Keep original padding and height - don't change on mobile */
+    /* padding remains 20px 26px, min-height remains 64px from desktop */
   }
   
   .contact-input__icon,
   .contact-input__send {
-    width: 20px;
-    height: 20px;
+    /* CRITICAL: Keep original icon size - don't change on mobile */
+    /* width and height remain 24px from desktop */
   }
   
   .contact-input__field {
-    font-size: 14px;
+    /* CRITICAL: Keep original font size - don't change on mobile */
+    /* font-size remains 20px from desktop */
   }
 }
