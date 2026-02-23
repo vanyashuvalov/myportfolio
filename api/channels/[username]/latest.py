@@ -122,23 +122,28 @@ class handler(BaseHTTPRequestHandler):
             desc_match = re.search(r'<div class="tgme_channel_info_description[^"]*">([^<]+)</div>', html)
             description = desc_match.group(1) if desc_match else ''
             
-            # CRITICAL: Extract post text (simple structure without widget classes)
-            # UPDATED COMMENTS: Text is between channel info and view count
-            text_pattern = r'<div class="tgme_channel_info_description">.*?</div>\s*</div>\s*</div>\s*</div>\s*<div[^>]*>\s*<div[^>]*>\s*<div[^>]*>\s*<div[^>]*>\s*(.*?)\s*<div'
-            text_match = re.search(text_pattern, html, re.DOTALL)
+            # CRITICAL: Extract post text - it's the large text block after channel info
+            # UPDATED COMMENTS: Find all text between divs, take the longest one (that's the post)
+            # Pattern: large text block that's not in channel info
+            text_blocks = re.findall(r'<div[^>]*>\s*([А-Яа-яA-Za-z].{50,}?)\s*</div>', html, re.DOTALL)
             
             text = ''
-            if text_match:
-                text_html = text_match.group(1)
-                # CRITICAL: Remove HTML tags but keep text
+            if text_blocks:
+                # CRITICAL: Take the first large text block (latest post)
+                # UPDATED COMMENTS: Remove HTML tags and clean whitespace
+                text_html = text_blocks[0]
                 text = re.sub(r'<[^>]+>', '', text_html)
                 text = re.sub(r'\s+', ' ', text).strip()
+                # CRITICAL: Limit to reasonable length
+                if len(text) > 500:
+                    text = text[:500] + '...'
             
-            # UPDATED COMMENTS: Extract views (simple number format)
-            views_match = re.search(r'>(\d+)<', html)
+            # UPDATED COMMENTS: Extract views - find the LAST number (latest post views)
+            views_matches = re.findall(r'>(\d+)<', html)
             views = 0
-            if views_match:
-                views = int(views_match.group(1))
+            if views_matches:
+                # CRITICAL: Last number is the latest post views
+                views = int(views_matches[-1])
             
             # UPDATED COMMENTS: Extract date from any time tag
             date_match = re.search(r'<time[^>]*datetime="([^"]+)"', html)
