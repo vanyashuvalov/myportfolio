@@ -377,25 +377,13 @@ export class TelegramWidget extends WidgetBase {
   setupExternalLink() {
     const externalLink = this.element.querySelector('.telegram-external-link');
     
-    // CRITICAL: Debug logging to verify element exists
+    // CRITICAL: Verify element exists
     if (!externalLink) {
-      console.error('❌ Telegram external link element not found!', {
-        element: this.element,
-        innerHTML: this.element.innerHTML.substring(0, 200)
-      });
       return;
     }
     
-    console.log('✅ Telegram external link found, setting up click handler', {
-      channelUrl: this.channelUrl
-    });
-    
     // UPDATED COMMENTS: Click handler for opening telegram channel
     externalLink.addEventListener('click', (event) => {
-      console.log('🔵 Telegram external link clicked!', {
-        channelUrl: this.channelUrl,
-        event
-      });
       event.stopPropagation(); // Prevent widget drag
       this.handleExternalLinkClick();
     });
@@ -416,18 +404,9 @@ export class TelegramWidget extends WidgetBase {
    * CRITICAL: Opens channel URL in new tab
    */
   handleExternalLinkClick() {
-    console.log('🟢 handleExternalLinkClick called', {
-      channelUrl: this.channelUrl,
-      channelData: this.channelData,
-      latestPost: this.latestPost
-    });
-    
     // CRITICAL: Open telegram channel in new tab
     if (this.channelUrl && this.channelUrl !== '#') {
-      console.log('🟢 Opening URL:', this.channelUrl);
       window.open(this.channelUrl, '_blank', 'noopener,noreferrer');
-    } else {
-      console.error('❌ Invalid channelUrl:', this.channelUrl);
     }
     
     // UPDATED COMMENTS: Emit external link event

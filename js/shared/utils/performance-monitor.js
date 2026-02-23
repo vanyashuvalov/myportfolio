@@ -129,10 +129,7 @@ export class PerformanceMonitor {
         this.frameCount = 0;
         this.lastSampleTime = currentTime;
         
-        // Log performance warnings
-        if (fps < 30) {
-          console.warn(`Low FPS detected: ${fps} (avg: ${this.metrics.avgFps})`);
-        }
+        // UPDATED COMMENTS: Silent FPS tracking without console spam
       }
     }
     
@@ -153,11 +150,8 @@ export class PerformanceMonitor {
         limit: Math.round(memory.jsHeapSizeLimit / 1024 / 1024) // MB
       };
       
-      // Warn about high memory usage
+      // UPDATED COMMENTS: Silent memory tracking without console spam
       const usagePercent = (memory.usedJSHeapSize / memory.jsHeapSizeLimit) * 100;
-      if (usagePercent > 80) {
-        console.warn(`High memory usage: ${usagePercent.toFixed(1)}%`);
-      }
     }
   }
 
@@ -182,10 +176,7 @@ export class PerformanceMonitor {
       this.metrics.interactionLatency.shift();
     }
     
-    // Warn about slow interactions
-    if (latency > 100) { // 100ms threshold for noticeable lag
-      console.warn(`Slow ${type} interaction: ${latency.toFixed(2)}ms`);
-    }
+    // UPDATED COMMENTS: Silent interaction tracking without console spam
     
     return interaction;
   }

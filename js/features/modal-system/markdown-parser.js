@@ -16,7 +16,6 @@ export class MarkdownParser {
   constructor() {
     // CRITICAL: Parser version for debugging
     this.version = '1.0.1';
-    console.log(`[MarkdownParser] Loaded version ${this.version}`);
     
     // UPDATED COMMENTS: Regex patterns for markdown syntax
     this.patterns = {

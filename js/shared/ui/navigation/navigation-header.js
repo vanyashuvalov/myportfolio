@@ -87,9 +87,6 @@ export class NavigationHeader {
       const burgerButton = this.container.querySelector('.burger-button');
       if (burgerButton) {
         burgerButton.classList.remove('burger-button--open');
-        console.log('✅ Burger button reset to hamburger');
-      } else {
-        console.warn('⚠️ Burger button not found in container');
       }
     });
   }
@@ -102,8 +99,6 @@ export class NavigationHeader {
   setupMobileMenuActions() {
     // CRITICAL: Listen for navigation:action events from mobile menu
     this.eventBus.on('navigation:action', ({ action, button }) => {
-      console.log('🔵 NavigationHeader received action from mobile menu:', action);
-      
       // CRITICAL: Execute the action using existing handlers
       switch (action) {
         case 'telegram':
@@ -118,8 +113,6 @@ export class NavigationHeader {
         case 'share-link':
           this.shareCurrentPage();
           break;
-        default:
-          console.warn(`Unknown action from mobile menu: ${action}`);
       }
     });
   }
@@ -132,16 +125,12 @@ export class NavigationHeader {
   setupPageDropdownNavigation() {
     // CRITICAL: Listen for page dropdown selection
     this.eventBus.on('page-dropdown:select', ({ url, label }) => {
-      console.log('🔵 Page dropdown selected:', { url, label });
-      
       // UPDATED COMMENTS: Trigger folder navigation event for router
       this.eventBus.emit('folder:navigate', { url });
     });
     
     // CRITICAL: Listen for language dropdown selection (frontend only)
     this.eventBus.on('language-dropdown:select', ({ langId, langLabel }) => {
-      console.log('🌐 Language dropdown selected:', { langId, langLabel });
-      
       // UPDATED COMMENTS: Update language in navigation (no backend logic yet)
       this.updateCurrentLanguage(langLabel);
     });
