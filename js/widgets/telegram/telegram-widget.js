@@ -4,12 +4,14 @@
 
 import { WidgetBase } from '../../entities/widget/widget-base.js';
 import { telegramApi } from '../../shared/api/telegram-api.js';
+import { SOCIAL_LINKS } from '../../shared/config/social-links.js';
 
 /**
  * TelegramWidget - Latest post from telegram channel display
  * Features: Channel avatar, name, post content, views, timestamp, external link
  * UPDATED COMMENTS: Now supports real-time data from MTProto API backend
  * SCALED FOR: Multiple channels, automatic updates, error handling
+ * CRITICAL: Uses centralized channel configuration from social-links.js
  * 
  * @class TelegramWidget
  * @extends WidgetBase
@@ -18,8 +20,11 @@ export class TelegramWidget extends WidgetBase {
   constructor(element, options = {}) {
     super(element, { ...options, type: 'telegram' });
     
+    // CRITICAL: Use centralized channel configuration
+    const telegramChannel = SOCIAL_LINKS.telegramChannel;
+    
     // UPDATED COMMENTS: Channel configuration with API integration
-    this.channelUsername = options.channelUsername || 'vanyashuvalov';
+    this.channelUsername = options.channelUsername || telegramChannel.username;
     this.updateInterval = options.updateInterval || 300000; // 5 minutes
     this.autoUpdate = options.autoUpdate !== false;
     
@@ -53,13 +58,16 @@ export class TelegramWidget extends WidgetBase {
   /**
    * Initialize widget with data loading
    * UPDATED COMMENTS: Async initialization with error handling
+   * CRITICAL: Setup external link AFTER content is created
    */
   async initializeWidget() {
     this.createTelegramContent();
-    this.setupExternalLink();
     
     // SCALED FOR: Initial data loading
     await this.loadChannelData();
+    
+    // CRITICAL: Setup external link after content is created
+    this.setupExternalLink();
     
     // REUSED: Auto-update setup
     if (this.autoUpdate) {

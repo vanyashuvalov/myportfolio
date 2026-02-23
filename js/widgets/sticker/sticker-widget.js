@@ -52,6 +52,7 @@ export class StickerWidget extends WidgetBase {
   /**
    * Create button using shared WidgetButton component
    * REUSED: Shared button component for consistent styling
+   * CRITICAL: Uses centralized Telegram link from social-links.js
    */
   createButton() {
     const buttonContainer = this.element.querySelector('.sticker-button-container');
@@ -64,15 +65,19 @@ export class StickerWidget extends WidgetBase {
       </svg>
     `;
     
-    // SCALED FOR: Button creation with shared component and social links
+    // CRITICAL: Get centralized Telegram link
     const telegramLink = getSocialLink('telegram');
     
+    // SCALED FOR: Button creation with shared component and centralized URL
     this.button = new WidgetButton({
       text: this.buttonText,
       icon: telegramIcon,
       onClick: () => this.handleButtonClick(),
       className: 'sticker-button'
     });
+    
+    // CRITICAL: Store centralized URL for button click
+    this.buttonUrl = telegramLink ? telegramLink.url : this.buttonUrl;
     
     const buttonElement = this.button.createElement();
     buttonContainer.appendChild(buttonElement);

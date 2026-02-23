@@ -1,6 +1,7 @@
 /* ANCHOR: social_links_config */
 /* FSD: shared/config → centralized social media and contact links */
 /* REUSED: Single source of truth for all external links */
+/* CRITICAL: All social links must be managed here, nowhere else */
 
 /**
  * Social Links Configuration
@@ -51,6 +52,15 @@ export const SOCIAL_LINKS = {
     url: '/assets/documents/ivan-shuvalov-resume.pdf',
     displayName: 'Resume PDF',
     icon: 'download'
+  },
+  
+  // ANCHOR: telegram_channels
+  // CRITICAL: Telegram channel configuration for widgets
+  telegramChannel: {
+    username: 'vanya_knopochkin', // Channel username without @
+    url: 'https://t.me/vanya_knopochkin',
+    displayName: 'Telegram Channel',
+    icon: 'telegram'
   }
 };
 

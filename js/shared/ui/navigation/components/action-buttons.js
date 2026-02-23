@@ -1,29 +1,30 @@
 /* ANCHOR: action_buttons_component */
 /* REUSED: Action buttons with universal button system */
 /* SCALED FOR: Extensible button system with two variants */
-/* UPDATED COMMENTS: Uses universal Button component for consistency */
+/* UPDATED COMMENTS: Uses universal Button component and centralized social links */
+/* CRITICAL: All social links come from shared/config/social-links.js */
 
 import { IconProvider } from './icon-provider.js';
 import { Button } from '../../../ui/button/button.js';
+import { SOCIAL_LINKS } from '../../../config/social-links.js';
 
 /**
  * ActionButtons class - Social media and action buttons
  * Uses universal Button component for consistent styling and behavior
+ * CRITICAL: All links centralized in social-links.js config
  * 
  * @class ActionButtons
  */
 export class ActionButtons {
   constructor(options = {}) {
+    // CRITICAL: Use centralized social links, no hardcoded URLs
+    this.socialLinks = SOCIAL_LINKS;
+    
     this.options = {
-      socialLinks: {
-        telegram: 'https://t.me/yourusername',
-        linkedin: 'https://linkedin.com/in/yourusername',
-        email: 'mailto:your.email@example.com',
-        github: 'https://github.com/yourusername'
-      },
-      cvUrl: 'assets/documents/cv.pdf',
+      cvUrl: SOCIAL_LINKS.resume.url,
       ...options
     };
+    
     this.iconProvider = new IconProvider();
     this.buttons = this.createButtons();
   }
@@ -31,36 +32,41 @@ export class ActionButtons {
   /**
    * Create button instances
    * REUSED: Universal Button component for all button types
+   * CRITICAL: Uses centralized SOCIAL_LINKS configuration
    */
   createButtons() {
     return {
-      // UPDATED COMMENTS: Icon-only buttons (square, 40x40px)
+      // UPDATED COMMENTS: Icon-only buttons (square, 40x40px) with centralized URLs
       telegram: new Button({
         type: 'icon',
         icon: this.iconProvider.getTelegramSVG(),
         action: 'telegram',
-        ariaLabel: 'Contact via Telegram'
+        ariaLabel: 'Contact via Telegram',
+        url: this.socialLinks.telegram.url
       }),
       
       linkedin: new Button({
         type: 'icon',
         icon: this.iconProvider.getLinkedInSVG(),
         action: 'linkedin',
-        ariaLabel: 'View LinkedIn profile'
+        ariaLabel: 'View LinkedIn profile',
+        url: this.socialLinks.linkedin.url
       }),
       
       email: new Button({
         type: 'icon',
         icon: this.iconProvider.getEmailSVG(),
         action: 'email',
-        ariaLabel: 'Send email'
+        ariaLabel: 'Send email',
+        url: this.socialLinks.email.url
       }),
       
       github: new Button({
         type: 'icon',
         icon: this.iconProvider.getGitHubSVG(),
         action: 'github',
-        ariaLabel: 'View GitHub profile'
+        ariaLabel: 'View GitHub profile',
+        url: this.socialLinks.github.url
       }),
       
       // UPDATED COMMENTS: Icon+text buttons (rectangular, custom widths)
@@ -70,7 +76,8 @@ export class ActionButtons {
         text: 'GET CV',
         action: 'download-cv',
         ariaLabel: 'Download CV',
-        className: 'nav-button--cv'
+        className: 'nav-button--cv',
+        url: this.options.cvUrl
       }),
       
       share: new Button({
@@ -105,9 +112,10 @@ export class ActionButtons {
   /**
    * Update social links
    * SCALED FOR: Dynamic social link management
+   * DEPRECATED: Links should be updated in social-links.js config
    */
   updateSocialLinks(newLinks) {
-    Object.assign(this.options.socialLinks, newLinks);
+    console.warn('⚠️ updateSocialLinks is deprecated. Update SOCIAL_LINKS in social-links.js instead');
   }
 
   /**
