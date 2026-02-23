@@ -1,0 +1,329 @@
+/* ANCHOR: mobile_menu_styles */
+/* FSD: shared/ui/navigation/components → Mobile burger menu styles */
+/* REUSED: Consistent design tokens from variables.css */
+/* SCALED FOR: Touch-friendly mobile interactions */
+/* UPDATED COMMENTS: Fullscreen overlay menu with smooth animations */
+
+/* ============================================
+   MOBILE MENU OVERLAY
+   ============================================ */
+
+.mobile-menu-overlay {
+  /* CRITICAL: Fullscreen backdrop */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 100001;
+  
+  /* CRITICAL: Hidden by default */
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  
+  /* REUSED: Smooth fade transition */
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.mobile-menu-overlay--open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* ============================================
+   MOBILE MENU CONTAINER
+   ============================================ */
+
+.mobile-menu {
+  /* CRITICAL: Fixed right panel */
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 280px;
+  max-width: 80vw;
+  height: 100%;
+  background: #1A1A1A;
+  z-index: 100002;
+  
+  /* CRITICAL: Slide from right animation */
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* SCALED FOR: Scrollable content */
+  overflow-y: auto;
+  overflow-x: hidden;
+  
+  /* REUSED: Custom scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.mobile-menu::-webkit-scrollbar {
+  width: 4px;
+}
+
+.mobile-menu::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.mobile-menu::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+}
+
+.mobile-menu--open {
+  transform: translateX(0);
+}
+
+/* ============================================
+   MENU CONTENT
+   ============================================ */
+
+.mobile-menu__content {
+  /* CRITICAL: Content wrapper with padding */
+  /* UPDATED COMMENTS: Reduced top padding - no close button */
+  padding: 40px 24px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* ============================================
+   MENU SECTIONS
+   ============================================ */
+
+.mobile-menu__section {
+  /* REUSED: Section container */
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mobile-menu__section-title {
+  /* UPDATED COMMENTS: Section title styling */
+  font-family: 'Geist Mono', var(--font-family-mono);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+}
+
+/* ============================================
+   NAVIGATION ITEMS
+   ============================================ */
+
+.mobile-menu__nav {
+  /* REUSED: Navigation list */
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mobile-menu__item {
+  /* CRITICAL: Touch-friendly menu item */
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 16px;
+  
+  /* REUSED: Button reset */
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  
+  /* UPDATED COMMENTS: Text styling */
+  font-family: 'SF Pro Display', var(--font-family-primary);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  text-align: left;
+  color: #FFFFFF;
+  
+  /* SCALED FOR: Flexbox for icons */
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  
+  /* REUSED: Smooth transitions */
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.mobile-menu__item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.mobile-menu__item--active {
+  background: rgba(255, 255, 255, 0.1);
+  font-weight: 500;
+}
+
+/* ============================================
+   LANGUAGE SECTION
+   ============================================ */
+
+.mobile-menu__language {
+  /* REUSED: Language list */
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mobile-menu__language .mobile-menu__item {
+  /* CRITICAL: Language item with flag */
+  gap: 12px;
+}
+
+.mobile-menu__language .mobile-menu__item span:first-child {
+  /* UPDATED COMMENTS: Flag icon */
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+/* ============================================
+   SOCIAL LINKS
+   ============================================ */
+
+.mobile-menu__social {
+  /* REUSED: Social links grid */
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.mobile-menu__social-button {
+  /* CRITICAL: Touch-friendly social button */
+  min-height: 56px;
+  padding: 12px;
+  
+  /* REUSED: Button reset */
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  cursor: pointer;
+  
+  /* SCALED FOR: Flexbox layout */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  
+  /* UPDATED COMMENTS: Text styling */
+  font-family: 'SF Pro Display', var(--font-family-primary);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: #FFFFFF;
+  
+  /* REUSED: Smooth transitions */
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.mobile-menu__social-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.mobile-menu__social-button svg {
+  width: 24px;
+  height: 24px;
+  color: #FFFFFF;
+  fill: #FFFFFF;
+}
+
+/* ============================================
+   ACTION BUTTONS
+   ============================================ */
+
+.mobile-menu__section--actions {
+  /* CRITICAL: Actions section with larger gap */
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.mobile-menu__action-button {
+  /* CRITICAL: Touch-friendly action button */
+  width: 100%;
+  min-height: 56px;
+  padding: 16px 24px;
+  
+  /* REUSED: Button styling */
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  cursor: pointer;
+  
+  /* SCALED FOR: Flexbox layout */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  
+  /* UPDATED COMMENTS: Text styling */
+  font-family: 'SF Pro Display', var(--font-family-primary);
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #FFFFFF;
+  
+  /* REUSED: Smooth transitions */
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+}
+
+.mobile-menu__action-button:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.mobile-menu__action-button:active {
+  transform: scale(0.98);
+}
+
+.mobile-menu__action-button--primary {
+  /* CRITICAL: Primary action button */
+  background: #C248A3;
+  border-color: #C248A3;
+}
+
+.mobile-menu__action-button--primary:hover {
+  background: #A83D8A;
+  border-color: #A83D8A;
+}
+
+.mobile-menu__action-button svg {
+  width: 20px;
+  height: 20px;
+  color: #FFFFFF;
+  fill: #FFFFFF;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 375px) {
+  .mobile-menu {
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  .mobile-menu__content {
+    padding: 40px 20px 40px;
+  }
+}
