@@ -28,6 +28,9 @@ export class TelegramWidget extends WidgetBase {
     this.updateInterval = options.updateInterval || 300000; // 5 minutes
     this.autoUpdate = options.autoUpdate !== false;
     
+    // CRITICAL: Initialize channelUrl with fallback
+    this.channelUrl = telegramChannel.url || `https://t.me/${this.channelUsername}`;
+    
     // REUSED: Default fallback data
     this.channelData = {
       title: 'Loading...',
@@ -42,7 +45,7 @@ export class TelegramWidget extends WidgetBase {
       views: 0,
       formatted_date: 'Loading...',
       formatted_views: '0',
-      link: '#'
+      link: this.channelUrl // CRITICAL: Use initialized channelUrl
     };
     
     // SCALED FOR: Loading and error states
@@ -105,7 +108,7 @@ export class TelegramWidget extends WidgetBase {
           this.isInitialLoad = false;
           this.setLoadingState(false);
           this.createTelegramContent();
-          this.setupExternalLink();
+          // CRITICAL: setupExternalLink() is called in initializeWidget(), not here
         } else {
           // CRITICAL: Auto-update - only update text content, no recreation
           this.updateContent();
@@ -369,13 +372,30 @@ export class TelegramWidget extends WidgetBase {
   /**
    * Setup external link functionality
    * SCALED FOR: Channel opening with proper event handling
+   * CRITICAL: Must be called AFTER createTelegramContent() creates the DOM
    */
   setupExternalLink() {
     const externalLink = this.element.querySelector('.telegram-external-link');
-    if (!externalLink) return;
+    
+    // CRITICAL: Debug logging to verify element exists
+    if (!externalLink) {
+      console.error('❌ Telegram external link element not found!', {
+        element: this.element,
+        innerHTML: this.element.innerHTML.substring(0, 200)
+      });
+      return;
+    }
+    
+    console.log('✅ Telegram external link found, setting up click handler', {
+      channelUrl: this.channelUrl
+    });
     
     // UPDATED COMMENTS: Click handler for opening telegram channel
     externalLink.addEventListener('click', (event) => {
+      console.log('🔵 Telegram external link clicked!', {
+        channelUrl: this.channelUrl,
+        event
+      });
       event.stopPropagation(); // Prevent widget drag
       this.handleExternalLinkClick();
     });
@@ -393,11 +413,21 @@ export class TelegramWidget extends WidgetBase {
   /**
    * Handle external link click
    * REUSED: External link opening pattern with event bus
+   * CRITICAL: Opens channel URL in new tab
    */
   handleExternalLinkClick() {
+    console.log('🟢 handleExternalLinkClick called', {
+      channelUrl: this.channelUrl,
+      channelData: this.channelData,
+      latestPost: this.latestPost
+    });
+    
     // CRITICAL: Open telegram channel in new tab
     if (this.channelUrl && this.channelUrl !== '#') {
+      console.log('🟢 Opening URL:', this.channelUrl);
       window.open(this.channelUrl, '_blank', 'noopener,noreferrer');
+    } else {
+      console.error('❌ Invalid channelUrl:', this.channelUrl);
     }
     
     // UPDATED COMMENTS: Emit external link event
