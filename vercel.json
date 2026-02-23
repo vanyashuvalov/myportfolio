@@ -1,1 +1,5 @@
-{}
+{
+  "buildCommand": "echo 'Static site'",
+  "outputDirectory": ".",
+  "installCommand": "echo 'No frontend deps'"
+}
