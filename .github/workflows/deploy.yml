@@ -32,12 +32,18 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
-      # UPDATED COMMENTS: No build step needed - pure vanilla JS!
-      # Just upload the static files as-is
+      # UPDATED COMMENTS: Upload only frontend files, exclude backend/api
+      # CRITICAL: GitHub Pages serves static files only - no Python support
+      - name: Create deployment directory
+        run: |
+          mkdir -p _site
+          cp -r index.html js styles assets _site/
+          cp -r data _site/ 2>/dev/null || true
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: '_site'
 
   # ANCHOR: DEPLOY
   deploy:
