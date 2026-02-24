@@ -2,6 +2,9 @@
 # CRITICAL: Keep deployment size minimal and secure
 # REUSED: Standard ignore patterns for production deployment
 
+# CRITICAL: Exclude entire backend directory (using FastAPI, not needed for serverless)
+backend/
+
 # Development files
 *.log
 *.session
@@ -11,8 +14,8 @@ __pycache__/
 *$py.class
 
 # Environment files (use Vercel env vars instead)
+.env
 .env.local
-backend/.env
 
 # IDE and OS
 .vscode/
@@ -20,49 +23,18 @@ backend/.env
 .DS_Store
 Thumbs.db
 
-# Documentation markdown files (keep README.md)
-docs/archive/
-DEPLOYMENT.md
-VERCEL_SETUP.md
-VERCEL_FIX.md
-*_SUMMARY.md
-CLEANUP_SUMMARY.md
-CRITICAL_FIXES_SUMMARY.md
-PHASE2_PLAN.md
-PHASE2_SUMMARY.md
-QUICK_TEST.md
-TESTING_GUIDE.md
-RUN_TESTS.md
-RESTART_SERVERS.md
-RESUME_PDF_SUMMARY.md
-FUN_PROJECTS_SUMMARY.md
-FUN_PROJECTS_AND_RESUME_SUMMARY.md
+# Documentation
+docs/
 
-# Test files (exclude test HTML/JS files)
+# Test files
 test-*.html
 test-*.js
 
-# Development scripts (not needed in production)
+# Development scripts
 serve.py
 serve.js
 start.py
-backend/check_setup.py
-backend/test_html_parser.py
-backend/telegram_scraper.py
-backend/telegram_html_parser.py
-backend/unified_scraper.py
 
-# Docker files (not needed on Vercel)
-backend/docker-compose.yml
-backend/Dockerfile
-backend/nginx.conf.example
-
-# Backend setup docs (not needed in production)
-backend/QUICK_START.md
-backend/QUICK_START_PARSERS.md
-backend/README_PARSERS.md
-backend/setup_instructions.md
-backend/TELEGRAM_BOT_SETUP.md
-
-# CRITICAL: Keep backend/data/ - needed for API to serve projects and telegram data
-# Only exclude specific unnecessary subdirectories if needed
+# Git
+.git/
+.github/
