@@ -1,23 +1,10 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "api/**/*.py",
-      "use": "@vercel/python"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/projects/([^/]+)/([^/]+)",
-      "dest": "/api/projects/[category]/[id].py"
-    },
-    {
-      "src": "/api/channels/([^/]+)/latest",
-      "dest": "/api/channels/[username]/latest.py"
-    },
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/$1.py"
+    "buildCommand": "echo 'Static site'",
+  "outputDirectory": ".",
+  "installCommand": "echo 'No frontend deps'",
+  "rewrites": [{
+      "source": "/api/projects/:category/:id",
+      "destination": "/api/projects/[category]/[id].py"
     }
   ]
 }
