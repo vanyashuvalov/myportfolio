@@ -194,6 +194,7 @@ export class ModalManager {
    * Send contact message to backend
    * SCALED FOR: API integration with error handling
    * REUSED: Same logic as ContactModal
+   * CRITICAL: Handles both JSON and non-JSON error responses
    */
   async sendContactMessage(message, contact) {
     const apiUrl = window.location.hostname === 'localhost' 
@@ -211,7 +212,15 @@ export class ModalManager {
       })
     });
     
-    return await response.json();
+    // CRITICAL: Check if response is JSON before parsing
+    const contentType = response.headers.get('content-type');
+    if (contentType && contentType.includes('application/json')) {
+      return await response.json();
+    } else {
+      // UPDATED COMMENTS: Handle non-JSON error responses
+      const text = await response.text();
+      throw new Error(`Server error: ${text.substring(0, 100)}`);
+    }
   }
 
   /**
