@@ -23,18 +23,30 @@ __pycache__/
 .DS_Store
 Thumbs.db
 
-# Documentation
-docs/
+# Documentation (keep only essential docs)
+docs/archive/
+docs/examples/
+docs/layout mockups/
 
-# Test files
+# Test files (CRITICAL: Only exclude test files, not test-*.html in root)
+test_*.py
+*_test.py
 test-*.html
 test-*.js
+CONTACT_API_FIX.md
+test_api_validation.py
 
 # Development scripts
 serve.py
 serve.js
 start.py
 
-# Git
+# Git (CRITICAL: Don't exclude .github - needed for workflows)
 .git/
-.github/
+
+# CRITICAL: Explicitly include assets (ensure they're deployed)
+!assets/
+!js/
+!styles/
+!index.html
+!api/
