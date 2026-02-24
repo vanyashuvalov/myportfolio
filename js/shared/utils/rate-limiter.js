@@ -76,10 +76,7 @@ export class RateLimiter {
     
     this.actionHistory.set(actionType, recentActions);
     
-    console.log(`✅ Action recorded: ${actionType}`, {
-      totalActions: recentActions.length,
-      maxAttempts: this.limits.maxAttempts
-    });
+    // UPDATED COMMENTS: Action recorded successfully
   }
 
   /**
@@ -138,10 +135,10 @@ export class RateLimiter {
   reset(actionType) {
     if (actionType) {
       this.actionHistory.delete(actionType);
-      console.log(`🔄 Rate limit reset for: ${actionType}`);
+      // UPDATED COMMENTS: Rate limit reset for specific action
     } else {
       this.actionHistory.clear();
-      console.log('🔄 All rate limits reset');
+      // UPDATED COMMENTS: All rate limits cleared
     }
   }
 

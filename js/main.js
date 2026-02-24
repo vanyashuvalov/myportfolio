@@ -126,7 +126,6 @@ class Application {
         
         // CRITICAL: Listen for contact input send
         this.eventBus.on('contact-input:send', ({ message }) => {
-          console.log('🔴 main.js received contact-input:send event', { message });
           this.contactModalManager.open('contact', { message });
         });
       }

@@ -244,8 +244,6 @@ export class ModalManager {
    * @param {Object} options - Modal configuration and data
    */
   async open(type, options = {}) {
-    console.log('🚀 ModalManager.open called', { type, options });
-    
     if (this.isOpen) {
       console.log('⚠️ Modal already open, closing first');
       await this.close();
