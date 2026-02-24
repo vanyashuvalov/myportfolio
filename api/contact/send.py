@@ -23,60 +23,66 @@ class handler(BaseHTTPRequestHandler):
     Handler for contact form submissions
     CRITICAL: POST endpoint that sends messages to Telegram bot
     UPDATED COMMENTS: Validates input and forwards to Telegram API
-    SCALED FOR: Production use with proper error handling
+    SCALED FOR: Production use with proper error handling and JSON responses
     """
     
     def do_POST(self):
         """
         Handle POST request with contact message
         REUSED: Standard HTTP handler pattern
+        CRITICAL: All responses are JSON, even errors
         """
-        # CRITICAL: Parse request body
         try:
-            content_length = int(self.headers.get('Content-Length', 0))
-            body = self.rfile.read(content_length)
-            data = json.loads(body.decode('utf-8'))
+            # CRITICAL: Parse request body
+            try:
+                content_length = int(self.headers.get('Content-Length', 0))
+                body = self.rfile.read(content_length)
+                data = json.loads(body.decode('utf-8'))
+            except Exception as e:
+                self.send_json_error(400, "Invalid JSON body")
+                return
+            
+            # UPDATED COMMENTS: Extract and validate message
+            message = data.get('message', '').strip()
+            contact = data.get('contact', '').strip() or None
+            
+            # CRITICAL: Validate message length
+            if not message or len(message) < 10:
+                self.send_json_error(400, "Message must be at least 10 characters long")
+                return
+            
+            if len(message) > 2000:
+                self.send_json_error(400, "Message must be less than 2000 characters")
+                return
+            
+            # UPDATED COMMENTS: Get Telegram credentials from environment
+            bot_token = os.environ.get('TELEGRAM_BOT_TOKEN')
+            chat_id = os.environ.get('TELEGRAM_CHAT_ID')
+            
+            # CRITICAL: Check if Telegram is configured
+            if not bot_token or not chat_id:
+                # SCALED FOR: Development mode - log to console
+                self.log_message_dev(message, contact)
+                self.send_json_success({
+                    "success": True,
+                    "message": "Message logged (Telegram bot not configured)",
+                    "dev_mode": True
+                })
+                return
+            
+            # UPDATED COMMENTS: Send to Telegram
+            try:
+                self.send_to_telegram(bot_token, chat_id, message, contact)
+                self.send_json_success({
+                    "success": True,
+                    "message": "Message sent successfully"
+                })
+            except Exception as e:
+                self.send_json_error(503, f"Failed to send message: {str(e)}")
+        
         except Exception as e:
-            self.send_error_response(400, "Invalid JSON body")
-            return
-        
-        # UPDATED COMMENTS: Extract and validate message
-        message = data.get('message', '').strip()
-        contact = data.get('contact', '').strip() or None
-        
-        # CRITICAL: Validate message length
-        if not message or len(message) < 10:
-            self.send_error_response(400, "Message must be at least 10 characters long")
-            return
-        
-        if len(message) > 2000:
-            self.send_error_response(400, "Message must be less than 2000 characters")
-            return
-        
-        # UPDATED COMMENTS: Get Telegram credentials from environment
-        bot_token = os.environ.get('TELEGRAM_BOT_TOKEN')
-        chat_id = os.environ.get('TELEGRAM_CHAT_ID')
-        
-        # CRITICAL: Check if Telegram is configured
-        if not bot_token or not chat_id:
-            # SCALED FOR: Development mode - log to console
-            self.log_message_dev(message, contact)
-            self.send_json_response({
-                "success": True,
-                "message": "Message logged (Telegram bot not configured)",
-                "dev_mode": True
-            })
-            return
-        
-        # UPDATED COMMENTS: Send to Telegram
-        try:
-            self.send_to_telegram(bot_token, chat_id, message, contact)
-            self.send_json_response({
-                "success": True,
-                "message": "Message sent successfully"
-            })
-        except Exception as e:
-            self.send_error_response(503, f"Failed to send message: {str(e)}")
+            # CRITICAL: Catch-all error handler to ensure JSON response
+            self.send_json_error(500, f"A server error occurred: {str(e)}")
     
     def do_OPTIONS(self):
         """
@@ -136,10 +142,11 @@ class handler(BaseHTTPRequestHandler):
         print(f"Received: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         print("=" * 60)
     
-    def send_json_response(self, data, status=200):
+    def send_json_success(self, data, status=200):
         """
-        Send JSON response with CORS headers
+        Send successful JSON response with CORS headers
         REUSED: Standard JSON response pattern
+        CRITICAL: Always returns valid JSON
         """
         self.send_response(status)
         self.send_header('Content-Type', 'application/json')
@@ -147,15 +154,21 @@ class handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(json.dumps(data).encode('utf-8'))
     
-    def send_error_response(self, status, message):
+    def send_json_error(self, status, message):
         """
-        Send error response
+        Send error JSON response with CORS headers
         SCALED FOR: Consistent error format
+        CRITICAL: Always returns valid JSON, never plain text
         """
-        self.send_json_response({
+        self.send_response(status)
+        self.send_header('Content-Type', 'application/json')
+        self.send_cors_headers()
+        self.end_headers()
+        error_response = {
             "success": False,
             "error": message
-        }, status)
+        }
+        self.wfile.write(json.dumps(error_response).encode('utf-8'))
     
     def send_cors_headers(self):
         """

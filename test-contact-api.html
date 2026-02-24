@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact API Test</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <h1>Contact API Test</h1>
+    
+    <div class="test-section">
+        <h2>Test 1: Valid Message</h2>
+        <button onclick="testValidMessage()">Send Valid Message</button>
+        <div id="result1" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 2: Short Message (Should Fail)</h2>
+        <button onclick="testShortMessage()">Send Short Message</button>
+        <div id="result2" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 3: With Contact Info</h2>
+        <button onclick="testWithContact()">Send With Contact</button>
+        <div id="result3" class="result"></div>
+    </div>
+
+    <script>
+        // CRITICAL: Test contact API endpoint
+        // UPDATED COMMENTS: Validates JSON responses for all cases
+        
+        const API_URL = window.location.hostname === 'localhost' 
+            ? 'http://localhost:8000/api/contact/send'
+            : '/api/contact/send';
+
+        async function sendMessage(message, contact = null) {
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message, contact })
+                });
+                
+                // CRITICAL: Check content type before parsing
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    return await response.json();
+                } else {
+                    const text = await response.text();
+                    throw new Error(`Non-JSON response: ${text.substring(0, 100)}`);
+                }
+            } catch (error) {
+                return { success: false, error: error.message };
+            }
+        }
+
+        async function testValidMessage() {
+            const result = document.getElementById('result1');
+            result.textContent = 'Sending...';
+            result.className = 'result';
+            
+            const response = await sendMessage('This is a test message from the contact form API test page.');
+            
+            result.textContent = JSON.stringify(response, null, 2);
+            result.className = response.success ? 'result success' : 'result error';
+        }
+
+        async function testShortMessage() {
+            const result = document.getElementById('result2');
+            result.textContent = 'Sending...';
+            result.className = 'result';
+            
+            const response = await sendMessage('Short');
+            
+            result.textContent = JSON.stringify(response, null, 2);
+            result.className = response.success ? 'result success' : 'result error';
+        }
+
+        async function testWithContact() {
+            const result = document.getElementById('result3');
+            result.textContent = 'Sending...';
+            result.className = 'result';
+            
+            const response = await sendMessage(
+                'This is a test message with contact information.',
+                'test@example.com'
+            );
+            
+            result.textContent = JSON.stringify(response, null, 2);
+            result.className = response.success ? 'result success' : 'result error';
+        }
+    </script>
+</body>
+</html>
