@@ -248,9 +248,7 @@ export class ContactInput {
    * REUSED: Validation before opening modal
    */
   handleSend() {
-    console.log('🟢 handleSend called');
     const message = this.inputElement.value.trim();
-    console.log('📝 Message:', message, 'Length:', message.length);
     
     // UPDATED COMMENTS: Validate message length with toast notification
     if (message.length < this.options.minLength) {
