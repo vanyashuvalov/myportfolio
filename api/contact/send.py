@@ -34,17 +34,51 @@ class handler(BaseHTTPRequestHandler):
         """
         try:
             # CRITICAL: Parse request body
+            content_length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(content_length)
+            
+            # UPDATED COMMENTS: Validate JSON parsing
+            if not body:
+                self.send_json_error(400, "Empty request body")
+                return
+            
             try:
-                content_length = int(self.headers.get('Content-Length', 0))
-                body = self.rfile.read(content_length)
                 data = json.loads(body.decode('utf-8'))
+            except json.JSONDecodeError as e:
+                self.send_json_error(400, f"Invalid JSON: {str(e)}")
+                return
             except Exception as e:
-                self.send_json_error(400, "Invalid JSON body")
+                self.send_json_error(400, "Failed to parse request body")
+                return
+            
+            # CRITICAL: Validate data is a dictionary
+            if not isinstance(data, dict):
+                self.send_json_error(400, "Request body must be a JSON object")
                 return
             
             # UPDATED COMMENTS: Extract and validate message
-            message = data.get('message', '').strip()
-            contact = data.get('contact', '').strip() or None
+            message = data.get('message')
+            contact = data.get('contact')
+            
+            # CRITICAL: Check message exists and is string
+            if message is None:
+                self.send_json_error(400, "Missing 'message' field")
+                return
+            
+            if not isinstance(message, str):
+                self.send_json_error(400, "'message' must be a string")
+                return
+            
+            message = message.strip()
+            
+            # UPDATED COMMENTS: Handle contact field
+            if contact is not None:
+                if not isinstance(contact, str):
+                    self.send_json_error(400, "'contact' must be a string")
+                    return
+                contact = contact.strip() or None
+            else:
+                contact = None
             
             # CRITICAL: Validate message length
             if not message or len(message) < 10:
