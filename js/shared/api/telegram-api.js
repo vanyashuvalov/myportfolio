@@ -112,11 +112,23 @@ export class TelegramApiClient {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
       
+      // CRITICAL: Check if response is actually JSON before parsing
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        const text = await response.text();
+        // If HTML is returned (API not found), throw error to trigger fallback
+        if (text.trim().startsWith('<!DOCTYPE') || text.trim().startsWith('<html')) {
+          throw new Error('API returned HTML instead of JSON - endpoint not found');
+        }
+        throw new Error(`Unexpected content-type: ${contentType}`);
+      }
+      
       return await response.json();
       
     } catch (error) {
       // SCALED FOR: Retry logic with exponential backoff
-      if (attempt < this.retryAttempts && !error.name === 'AbortError') {
+      // FIXED: Correct operator precedence - don't retry on abort (timeout) errors
+      if (attempt < this.retryAttempts && error.name !== 'AbortError') {
         const delay = this.retryDelay * Math.pow(2, attempt - 1);
         await this.sleep(delay);
         return this.executeRequest(url, options, attempt + 1);
