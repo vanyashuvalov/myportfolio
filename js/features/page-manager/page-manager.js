@@ -148,12 +148,23 @@ export class PageManager {
   /**
    * Show project detail page
    * SCALED FOR: Full-page project view with markdown content
+   * UPDATED COMMENTS: Added timeout protection for mobile
    */
   async showProjectPage(projectId, category = 'work') {
+    // CRITICAL: Add overall timeout to prevent infinite loading
+    const overallTimeout = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error('Project page loading timed out')), 30000);
+    });
+    
     try {
-      // UPDATED COMMENTS: Load markdown content
-      const markdownContent = await this.loadProjectMarkdown(projectId, category);
-      const { frontmatter, html } = markdownParser.parseWithFrontmatter(markdownContent);
+      // UPDATED COMMENTS: Load markdown content with race against timeout
+      const loadPromise = (async () => {
+        const markdownContent = await this.loadProjectMarkdown(projectId, category);
+        const { frontmatter, html } = markdownParser.parseWithFrontmatter(markdownContent);
+        return { frontmatter, html };
+      })();
+      
+      const { frontmatter, html } = await Promise.race([loadPromise, overallTimeout]);
       
       // CRITICAL: Render project page
       const pageHtml = this.renderProjectPage(frontmatter, html, projectId, category);
@@ -182,6 +193,7 @@ export class PageManager {
    * Load project markdown from backend
    * UPDATED COMMENTS: Fetch .md file via API from backend server
    * CRITICAL: Use relative URL for production deployment
+   * UPDATED COMMENTS: Added timeout and better error handling for mobile
    */
   async loadProjectMarkdown(projectId, category) {
     // UPDATED COMMENTS: Use relative URL for production compatibility
@@ -189,13 +201,33 @@ export class PageManager {
       ? `http://localhost:8000/api/projects/${category}/${projectId}`
       : `/api/projects/${category}/${projectId}`;
     
-    const response = await fetch(apiUrl);
+    // CRITICAL: Add timeout for mobile networks
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15s timeout
     
-    if (!response.ok) {
-      throw new Error(`Failed to load project: ${response.statusText}`);
+    try {
+      const response = await fetch(apiUrl, {
+        signal: controller.signal
+      });
+      
+      clearTimeout(timeoutId);
+      
+      if (!response.ok) {
+        throw new Error(`Failed to load project: ${response.statusText}`);
+      }
+      
+      return await response.text();
+      
+    } catch (error) {
+      clearTimeout(timeoutId);
+      
+      // CRITICAL: Handle timeout specifically
+      if (error.name === 'AbortError') {
+        throw new Error('Project loading timed out - please check your connection');
+      }
+      
+      throw error;
     }
-    
-    return await response.text();
   }
 
   /**
