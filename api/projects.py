@@ -64,7 +64,8 @@ class handler(BaseHTTPRequestHandler):
                                 "tags": metadata.get('tags', []),
                                 "year": metadata.get('year'),
                                 "client": metadata.get('client'),
-                                "role": metadata.get('role')
+                                "role": metadata.get('role'),
+                                "order": metadata.get('order')
                             })
                 except Exception:
                     continue
@@ -74,6 +75,18 @@ class handler(BaseHTTPRequestHandler):
         self.send_header('Content-Type', 'application/json')
         self.send_header('Access-Control-Allow-Origin', '*')
         self.end_headers()
+        
+        # UPDATED COMMENTS: Sort projects by order field, then by year
+        def sort_key(p):
+            order = p.get('order')
+            if order is not None:
+                try:
+                    return (0, int(order))
+                except (ValueError, TypeError):
+                    pass
+            return (1, -int(p.get('year', 0)))
+        
+        projects.sort(key=sort_key)
         
         response = {
             "projects": projects,

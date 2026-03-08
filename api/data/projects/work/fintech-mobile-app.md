@@ -25,7 +25,7 @@ project_type: B2C Mobile App
 
 featured: true
 show_in_portfolio: true
-order: 3
+order: 4
 color_theme: "#C248A3"
 ---
 
