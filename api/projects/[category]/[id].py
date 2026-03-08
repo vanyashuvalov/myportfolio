@@ -40,9 +40,10 @@ class handler(BaseHTTPRequestHandler):
             self.send_error(400, f"Invalid category: {category}")
             return
         
-        # UPDATED COMMENTS: Construct file path
-        base_dir = Path(__file__).parent.parent.parent
-        md_file = base_dir / 'data' / 'projects' / category / f'{project_id}.md'
+        # CRITICAL: Construct file path to backend/data/projects/{category}/{id}.md
+        # UPDATED COMMENTS: Markdown files are in backend/data/projects/, not api/data/projects/
+        base_dir = Path(__file__).parent.parent.parent.parent
+        md_file = base_dir / 'backend' / 'data' / 'projects' / category / f'{project_id}.md'
         
         # CRITICAL: Check if file exists
         if not md_file.exists():
