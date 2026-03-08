@@ -865,7 +865,7 @@
   width: 720px !important;
   max-width: 100% !important;
   margin: 0 auto !important;
-  padding: 30vh 40px !important; /* Increased top padding from 16vh to 20vh */
+  padding: 30vh 40px !important;
   /* UPDATED COMMENTS: White text on dark background */
   color: #FFFFFF !important;
   /* CRITICAL: Add gradient overlay under header */
@@ -873,6 +873,13 @@
   /* UPDATED COMMENTS: Prevent content overflow */
   overflow-x: hidden;
   box-sizing: border-box;
+}
+
+/* CRITICAL: Smaller project page on mobile */
+@media (max-width: 768px) {
+  .project-page {
+    padding: 20vh 16px !important;
+  }
 }
 
 /* CRITICAL: Gradient overlay under navigation header for project detail page */
@@ -902,49 +909,68 @@
 
 @media (max-width: 768px) {
   .modal-content--fullscreen .modal-body {
-    padding: 20px;
+    padding: 16px;
   }
   
   .projects-list {
-    padding: 40px 0;
-    gap: 32px;
+    padding: 24px 0;
+    gap: 24px;
   }
   
   .projects-grid {
-    gap: 32px;
+    gap: 24px;
   }
   
   .projects-list .modal-project-card {
     width: 100%;
-    gap: 16px;
+    gap: 12px;
   }
   
   .projects-list .modal-project-card-image {
     height: auto;
-    aspect-ratio: 16 / 9; /* UPDATED COMMENTS: 16:9 aspect ratio for responsive */
+    aspect-ratio: 16 / 9;
+    border-radius: 10px;
   }
   
   .projects-list .modal-project-card-title {
-    font-size: 18px;
-    line-height: 22px;
+    font-size: 16px;
+    line-height: 20px;
   }
   
   .projects-list .modal-project-card-description {
-    font-size: 14px;
+    font-size: 13px;
   }
   
+  /* CRITICAL: Smaller close button on mobile */
   .modal-close {
-    right: 20px;
-    width: 40px;
-    height: 40px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
   }
   
   .modal-close svg {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
+  }
+  
+  /* CRITICAL: Hide back button on mobile project page */
+  .page-back {
+    display: none !important;
+  }
+  
+  /* CRITICAL: Smaller close button on mobile project page */
+  .page-close {
+    right: 16px;
+    width: 32px;
+    height: 32px;
+  }
+  
+  .page-close svg {
+    width: 18px;
+    height: 18px;
   }
   
   .page-header {
-    padding: 16px 20px;
+    padding: 12px 16px;
   }
 }
