@@ -271,8 +271,9 @@ export class NavigationHeader {
         console.warn(`Unknown action: ${action}`);
     }
     
-    // REUSED: EventBus for component communication
-    this.eventBus.emit('navigation:action', { action, button });
+    // NOTE: No eventBus.emit here - action is already handled above
+    // The setupMobileMenuActions() listener handles mobile menu button clicks
+    // which don't go through handleAction() directly
   }
 
   /**
