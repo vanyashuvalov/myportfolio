@@ -1,6 +1,6 @@
 ---
 title: Biny Driver App - Logistics UX Case Study
-slug: clinical-dashboard
+slug: biny-driver-app
 category: work
 status: published
 
@@ -11,12 +11,12 @@ role: Product Designer
 team: [Product Designer, Product Manager, Project Manager, Android Developer, Backend Developer]
 
 description: Designing a driver app for Central Asia's leading freight-tech platform, helping 50+ year old drivers transition from paper-based workflows to digital logistics
-hero_image: /assets/images/bg-mountains.jpg
-thumbnail: /assets/images/bg-mountains.jpg
+hero_image: /assets/projects/biny-driver-app/images/image.png
+thumbnail: /assets/projects/biny-driver-app/images/image.png
 
 meta_title: Biny Driver App UX Case Study - Logistics Mobile App
 meta_description: How we redesigned a logistics driver app for 50+ year old users, reducing support load by 80%
-og_image: /assets/images/bg-mountains.jpg
+og_image: /assets/projects/biny-driver-app/images/image.png
 
 tags: [Logistics, Mobile App, UX Design, Driver App, B2B]
 skills: [User Research, Prototyping, Figma, Usability Testing, Mobile Design]
@@ -39,6 +39,8 @@ The driver app is one of four products in the ecosystem:
 - Mobile app for drivers
 - AI-powered pricing algorithm
 
+![App Overview](/assets/projects/biny-driver-app/images/image.png)
+
 ::: callout info
 💡 **Impact**: 200+ screens designed, 50+ research sessions, 20+ updates over a year
 :::
@@ -57,11 +59,13 @@ Drivers in Central Asia typically work using simple, traditional methods: phone 
 
 Based on our audit of the existing MVP:
 
-- Complex multi-step registration流程容易迷路
+- Complex multi-step registration that was easy to get lost in
 - Missing basic features: order history, support, advanced filters and sorting
 - Text errors and unclear copy
 - No interface feedback (no animations, status updates, or event notifications)
 - Web-based app unavailable offline in slow network areas
+
+![Original App Screenshots](/assets/projects/biny-driver-app/images/Image0002.png)
 
 ## Research & Discovery
 
@@ -123,6 +127,8 @@ Created driver-friendly interface featuring:
 - Real-time validation feedback
 - Moderation status notifications
 
+![Registration Screens](/assets/projects/biny-driver-app/images/Untitled%203.png)
+
 #### 2. In-App Training
 
 - Interactive onboarding for new features
@@ -138,6 +144,8 @@ Created driver-friendly interface featuring:
 - Push notifications for status changes
 - Offline order caching
 
+![Orders Screen](/assets/projects/biny-driver-app/images/Untitled%204.png)
+
 #### 4. Payment & Transactions
 
 - Clear payment status visibility
@@ -145,6 +153,8 @@ Created driver-friendly interface featuring:
 - Transaction history with filters
 - Bank transfer instructions
 - Support chat for payment issues
+
+![Order Execution](/assets/projects/biny-driver-app/images/Untitled%205.png)
 
 ## Implementation
 
@@ -217,7 +227,7 @@ Before, I would call support 5 times a day. Now I rarely need to. The app tells 
 
 ### Future Improvements
 
-- AI-powered order recommendations
+- AI-powered scheduling recommendations
 - Voice commands for hands-free operation
 - Integration with truck telemetry
 - Multi-language support (Russian, Uzbek, Kyrgyz)
@@ -249,6 +259,8 @@ Before, I would call support 5 times a day. Now I rarely need to. The app tells 
 The Biny Driver App project demonstrates how thoughtful UX design can bridge the gap between traditional workflows and digital transformation. By deeply understanding the target audience — experienced drivers with limited digital experience — we created a solution that earned their trust and significantly reduced support burden.
 
 The key insight: **simplicity wins**. By reducing interface complexity and providing clear guidance, even users skeptical of technology can successfully adopt digital tools.
+
+![Order Completion](/assets/projects/biny-driver-app/images/Untitled%206.png)
 
 ---
 
