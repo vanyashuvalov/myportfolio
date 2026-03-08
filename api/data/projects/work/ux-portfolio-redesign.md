@@ -25,7 +25,7 @@ project_type: Personal
 
 featured: true
 show_in_portfolio: true
-order: 1
+order: 2
 color_theme: "#C248A3"
 ---
 

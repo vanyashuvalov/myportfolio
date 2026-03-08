@@ -25,7 +25,7 @@ project_type: B2B SaaS
 
 featured: true
 show_in_portfolio: true
-order: 2
+order: 3
 color_theme: "#3B82F6"
 ---
 
