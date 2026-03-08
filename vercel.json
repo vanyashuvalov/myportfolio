@@ -2,11 +2,12 @@
   "buildCommand": "echo 'Python serverless - no build needed'",
   "outputDirectory": ".",
   "installCommand": "pip install -r requirements.txt 2>/dev/null || echo 'No Python deps'",
+  "functions": {
+    "api/**/*.py": {
+      "runtime": "python3.9"
+    }
+  },
   "rewrites": [
-    {
-      "source": "/api/:path*",
-      "destination": "/api/:path*"
-    },
     {
       "source": "/(.*)",
       "destination": "/index.html"
