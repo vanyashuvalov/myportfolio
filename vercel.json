@@ -1,11 +1,10 @@
 {
-  "buildCommand": "echo 'Static site - no build needed'",
+  "buildCommand": "echo 'Python serverless - no build needed'",
   "outputDirectory": ".",
   "installCommand": "pip install -r requirements.txt 2>/dev/null || echo 'No Python deps'",
-  "rewrites": [
-    {
-      "source": "/api/projects/:category/:id",
-      "destination": "/api/projects/[category]/[id].py"
+  "functions": {
+    "api/**/*.py": {
+      "runtime": "python3.9"
     }
-  ]
+  }
 }
