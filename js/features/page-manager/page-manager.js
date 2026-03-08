@@ -172,6 +172,8 @@ export class PageManager {
       
     } catch (error) {
       console.error('Failed to show project page:', error);
+      // CRITICAL: Hide transition overlay on error to prevent infinite loading
+      await this.hideTransitionOverlay();
       this.showErrorPage(error.message);
     }
   }
