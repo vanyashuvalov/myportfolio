@@ -13,7 +13,7 @@ SCALED FOR: Stateless serverless architecture with path parameters
 
 from http.server import BaseHTTPRequestHandler
 from pathlib import Path
-from urllib.parse import unquote
+from urllib.parse import unquote, urlparse
 
 class handler(BaseHTTPRequestHandler):
     """
@@ -25,7 +25,10 @@ class handler(BaseHTTPRequestHandler):
     def do_GET(self):
         # CRITICAL: Extract category and id from path
         # Path format: /api/projects/{category}/{id}
-        path_parts = self.path.strip('/').split('/')
+        # UPDATED COMMENTS: Strip query string first using urlparse
+        parsed_url = urlparse(self.path)
+        path_only = parsed_url.path
+        path_parts = path_only.strip('/').split('/')
         
         # UPDATED COMMENTS: Validate path structure
         if len(path_parts) < 4 or path_parts[0] != 'api' or path_parts[1] != 'projects':
