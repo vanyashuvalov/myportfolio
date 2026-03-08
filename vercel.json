@@ -4,7 +4,7 @@
   "installCommand": "pip install -r requirements.txt 2>/dev/null || echo 'No Python deps'",
   "functions": {
     "api/**/*.py": {
-      "runtime": "python3.9"
+      "runtime": "python3.12@1.0.0"
     }
   }
 }
