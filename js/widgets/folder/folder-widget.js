@@ -166,7 +166,7 @@ export class FolderWidget extends WidgetBase {
         widget: this,
         category: category,
         title: this.title,
-        url: '/projects'
+        url: category === 'fun' ? '/fun' : '/projects'
       });
     } else {
       console.error('❌ No eventBus available!');

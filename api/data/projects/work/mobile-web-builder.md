@@ -33,9 +33,19 @@ color_theme: "#8B5CF6"
 
 This project explored the opportunity for a mobile-first website builder — a product category that doesn't exist in the market despite clear demand signals. The goal was to validate the hypothesis, understand the market size, and design a minimal viable prototype.
 
+![Project Overview](/assets/projects/mobile-web-builder/images/Frame_11025444.jpg)
+
 ::: callout info
-💡 **Key Insight**: No website editors exist for mobile devices, despite 90% of people using phones more than computers
+**Key Insight**: No website editors exist for mobile devices, despite 90% of people using phones more than computers
 :::
+
+### Brief Summary
+
+- Packaged mobile website builder prototype
+- Analyzed market size, conducted quantitative research, validated hypothesis
+- Defined product growth strategy
+
+![Brief Summary](/assets/projects/mobile-web-builder/images/image.png)
 
 ## The Hypothesis
 
@@ -133,9 +143,11 @@ Defined scope and MVP priorities, broken into 3 categories:
 - **User Website (Publishing)**: Publication and hosting capabilities
 - **Service (Extras)**: Additional features around the editor
 
+![Product Scope](/assets/projects/mobile-web-builder/images/image%201.png)
+
 ### Hypothesis Validation Approach
 
-![Validation Framework](/assets/projects/mobile-web-builder/images/Frame_11025444.jpg)
+![Validation Framework](/assets/projects/mobile-web-builder/images/image%202.png)
 
 ## Design Solution
 
@@ -147,7 +159,9 @@ Analyzed 5 top website builders for deep scenarios, plus 5 related mobile apps (
 
 Minimalist MVP design based on current design system principles:
 
-![MVP Design](/assets/projects/mobile-web-builder/images/Frame_11025444.jpg)
+![MVP Design](/assets/projects/mobile-web-builder/images/image%203.png)
+
+![Design System](/assets/projects/mobile-web-builder/images/image%204.png)
 
 ## Results & Impact
 
@@ -183,6 +197,8 @@ Minimalist MVP design based on current design system principles:
 1. Develop customer journey maps through content marketing
 2. Build landing page to test conversion
 3. Validate hypothesis through Gen-Z channels (vertical video content)
+
+![Creative Concepts](/assets/projects/mobile-web-builder/images/image%205.png)
 
 ## Timeline
 
