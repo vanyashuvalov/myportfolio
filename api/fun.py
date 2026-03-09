@@ -22,9 +22,9 @@ class handler(BaseHTTPRequestHandler):
         parsed_url = urlparse(self.path)
         query_params = parse_qs(parsed_url.query)
         
-        # UPDATED COMMENTS: Load fun items from assets/images/fun
+        # UPDATED COMMENTS: Load fun items from api/data/fun
         base_dir = Path(__file__).parent
-        fun_dir = base_dir.parent.parent / 'assets' / 'images' / 'fun'
+        fun_dir = base_dir / 'data' / 'fun'
         
         if not fun_dir.exists():
             response = {
