@@ -88,6 +88,40 @@ export class PageManager {
     this.projectHandler = new ProjectPageHandler(handlerOptions);
     this.projectsListHandler = new ProjectsListPageHandler(handlerOptions);
     this.funGalleryHandler = new FunGalleryPageHandler(handlerOptions);
+
+    // UPDATED COMMENTS: Listen to handler events
+    this.bindHandlerEvents();
+  }
+
+  /**
+   * Bind event listeners from handlers
+   * UPDATED COMMENTS: Handlers emit events, page-manager handles them
+   * CRITICAL: EventBus-based communication between handlers and manager
+   */
+  bindHandlerEvents() {
+    if (!this.eventBus) {
+      console.error('❌ EventBus is null in bindHandlerEvents!');
+      return;
+    }
+
+    // CRITICAL: Close page and return to desktop
+    this.eventBus.on('page:close', () => {
+      this.router.navigate('/');
+    });
+
+    // CRITICAL: Back to projects list from project detail
+    this.eventBus.on('page:backToProjects', (data) => {
+      this.transitionBackToProjects(data?.category || 'work');
+    });
+
+    // CRITICAL: Navigate to project from list
+    this.eventBus.on('page:navigateToProject', (data) => {
+      if (data?.projectId) {
+        this.navigateToProjectWithTransition(data.projectId, data.category || 'work', {
+          fromList: data.fromList
+        });
+      }
+    });
   }
 
   /**
