@@ -509,7 +509,7 @@ export class DesktopCanvas {
     } catch (error) {
       console.error('Error fetching fun item data:', error);
       // SCALED FOR: Graceful fallback on API failure
-      return { count: 12, projects: [] };
+      return { count: 9, items: [] };
     }
   }
 
