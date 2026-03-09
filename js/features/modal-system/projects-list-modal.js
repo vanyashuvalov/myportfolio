@@ -93,6 +93,7 @@ export class ProjectsListModal {
 
   /**
    * Render single project card
+   * REUSED: Universal gallery-item classes from gallery-shared.css
    * SCALED FOR: Hover effects and click navigation
    */
   renderProjectCard(project, category) {
@@ -106,9 +107,9 @@ export class ProjectsListModal {
     } = project;
     
     return `
-      <article class="modal-project-card" data-project-id="${this.escapeHtml(id)}" data-category="${category}">
+      <article class="modal-project-card gallery-item" data-project-id="${this.escapeHtml(id)}" data-category="${category}">
         <!-- CRITICAL: Project thumbnail -->
-        <div class="modal-project-card-image">
+        <div class="modal-project-card-image gallery-item-image">
           <img src="${this.escapeHtml(thumbnail)}" 
                alt="${this.escapeHtml(title)}" 
                loading="lazy" />
@@ -118,19 +119,19 @@ export class ProjectsListModal {
         </div>
         
         <!-- UPDATED COMMENTS: Project metadata -->
-        <div class="modal-project-card-content">
-          <div class="modal-project-card-header">
-            <h3 class="modal-project-card-title">${this.escapeHtml(title)}</h3>
+        <div class="modal-project-card-content gallery-item-content">
+          <div class="modal-project-card-header gallery-item-header">
+            <h3 class="modal-project-card-title gallery-item-title">${this.escapeHtml(title)}</h3>
             ${year ? `<span class="modal-project-card-year">${year}</span>` : ''}
           </div>
           
           ${description ? `
-            <p class="modal-project-card-description">${this.escapeHtml(description)}</p>
+            <p class="modal-project-card-description gallery-item-description">${this.escapeHtml(description)}</p>
           ` : ''}
           
           <!-- REUSED: Chip component for project tags -->
           ${tags.length > 0 ? `
-            <div class="modal-project-card-tags" data-tags='${JSON.stringify(tags)}'>
+            <div class="modal-project-card-tags gallery-item-tags" data-tags='${JSON.stringify(tags)}'>
               <!-- Chips will be rendered here by JS -->
             </div>
           ` : ''}

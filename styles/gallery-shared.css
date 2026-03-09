@@ -1,0 +1,127 @@
+/* ANCHOR: gallery_shared_styles */
+/* FSD: shared/ui → Universal gallery styles for Projects and Fun */
+/* REUSED: Consistent typography and hover effects across all galleries */
+/* SCALED FOR: Unified design system */
+/* UPDATED COMMENTS: Single source of truth for gallery item styling */
+
+/* ============================================
+   UNIVERSAL GALLERY ITEM STYLES
+   ============================================ */
+
+/* CRITICAL: Universal gallery item container */
+.gallery-item {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  padding: 0 !important;
+  gap: 24px !important;
+  width: 100% !important;
+  background: transparent !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: opacity 0.2s ease-out !important;
+}
+
+/* CRITICAL: Hover effect - subtle darkening without scale */
+.gallery-item:hover,
+.gallery-item--hovered {
+  opacity: 0.85 !important;
+}
+
+/* CRITICAL: Gallery item image container */
+.gallery-item-image {
+  position: relative !important;
+  width: 100% !important;
+  aspect-ratio: 16 / 9 !important;
+  overflow: hidden !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-radius: 14px !important;
+  flex-shrink: 0 !important;
+}
+
+.gallery-item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  /* CRITICAL: No transform on hover - only opacity change on parent */
+}
+
+/* CRITICAL: Gallery item content section */
+.gallery-item-content {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  padding: 0 !important;
+  gap: 12px !important;
+  width: 100% !important;
+  flex-shrink: 0 !important;
+}
+
+/* CRITICAL: Gallery item header */
+.gallery-item-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+/* CRITICAL: Universal title styling - same font as Projects list */
+.gallery-item-title {
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-style: normal;
+  font-weight: 590;
+  font-size: 20px;
+  line-height: 24px;
+  text-align: center;
+  letter-spacing: -0.02em;
+  color: rgba(255, 255, 255, 1);
+  margin: 0;
+  width: 100%;
+}
+
+/* CRITICAL: Universal description styling - same font as Projects list */
+.gallery-item-description {
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 130%;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  width: 100%;
+}
+
+/* CRITICAL: Gallery item tags container */
+.gallery-item-tags {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  align-content: center;
+  padding: 0;
+  gap: 6px;
+  width: 100%;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+  .gallery-item {
+    gap: 16px !important;
+  }
+  
+  .gallery-item-title {
+    font-size: 18px;
+    line-height: 22px;
+  }
+  
+  .gallery-item-description {
+    font-size: 14px;
+  }
+}
