@@ -71,9 +71,9 @@ export class PageManager {
       this.showProjectsListPage('work');
     });
     
-    // CRITICAL: Fun projects list route
+    // CRITICAL: Fun gallery route - shows image gallery instead of projects list
     this.router.register('/fun', () => {
-      this.showProjectsListPage('fun');
+      this.showFunGalleryPage();
     });
     
     this.router.register('/fun/:id', (context) => {
@@ -950,5 +950,168 @@ export class PageManager {
       this.readingProgress.destroy();
       this.readingProgress = null;
     }
+  }
+
+  // ============================================================
+  // FUN GALLERY SECTION - Image gallery with fullscreen viewer
+  // ============================================================
+
+  /**
+   * Show fun gallery page
+   * CRITICAL: Renders image gallery instead of projects list
+   * UPDATED COMMENTS: Click on image opens ImageViewer fullscreen
+   * 
+   * @returns {Promise} Resolves when gallery is rendered
+   */
+  async showFunGalleryPage() {
+    try {
+      // CRITICAL: Show transition overlay before loading
+      await this.showTransitionOverlay();
+      
+      // UPDATED COMMENTS: Load fun items from backend
+      const items = await this.loadFunItems();
+      
+      // CRITICAL: Render fun gallery page HTML
+      const pageHtml = this.renderFunGalleryPage(items);
+      
+      // SCALED FOR: Smooth transition to page mode
+      await this.transitionToPage(pageHtml);
+      
+      // CRITICAL: Setup click handlers for image viewer BEFORE hiding overlay
+      await this.setupFunGalleryEventListeners();
+      
+      // CRITICAL: Hide transition overlay after page is ready
+      await this.hideTransitionOverlay();
+      
+      // REUSED: Emit page shown event
+      if (this.eventBus) {
+        this.eventBus.emit('page:shown', { 
+          type: 'fun-gallery' 
+        });
+      }
+      
+    } catch (error) {
+      console.error('Failed to show fun gallery page:', error);
+      await this.hideTransitionOverlay();
+      this.showErrorPage(error.message);
+    }
+  }
+
+  /**
+   * Load fun items from backend API
+   * UPDATED COMMENTS: Uses /api/fun endpoint for gallery items
+   * 
+   * @returns {Promise<Array>} Fun items array
+   */
+  async loadFunItems() {
+    // UPDATED COMMENTS: Use relative URL for production compatibility
+    const apiUrl = window.location.hostname === 'localhost' 
+      ? 'http://localhost:8000/api/fun'
+      : '/api/fun';
+    
+    const response = await fetch(apiUrl);
+    
+    if (!response.ok) {
+      throw new Error(`Failed to load fun items: ${response.statusText}`);
+    }
+    
+    const data = await response.json();
+    return data.items || [];
+  }
+
+  /**
+   * Render fun gallery page HTML
+   * UPDATED COMMENTS: Grid of images with descriptions
+   * 
+   * @param {Array} items - Fun items with image and description
+   * @returns {string} HTML content
+   */
+  renderFunGalleryPage(items) {
+    return `
+      <div class="page-wrapper" data-page="fun-gallery">
+        <!-- CRITICAL: Back button to return to desktop -->
+        <button class="page-back" data-action="back-to-desktop" aria-label="Back to desktop">
+          <img src="/assets/icons/iconamoon_arrow-down-2.svg" alt="Back" style="transform: rotate(90deg);" />
+        </button>
+        
+        <!-- CRITICAL: Close button to return to desktop -->
+        <button class="page-close" data-action="back-to-desktop" aria-label="Close page">
+          <img src="/assets/icons/iconamoon_close.svg" alt="Close" />
+        </button>
+        
+        <!-- Fun gallery grid -->
+        <div class="fun-gallery">
+          ${items.map(item => this.renderFunGalleryItem(item)).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  /**
+   * Render single fun gallery item
+   * UPDATED COMMENTS: Image with description below
+   * 
+   * @param {Object} item - Fun item with image and description
+   * @returns {string} HTML content
+   */
+  renderFunGalleryItem(item) {
+    const {
+      id,
+      image,
+      description,
+      title
+    } = item;
+    
+    return `
+      <article class="fun-gallery-item" data-id="${this.escapeHtml(id)}" data-image="${this.escapeHtml(image)}">
+        <div class="fun-gallery-item-image">
+          <img src="${this.escapeHtml(image)}" 
+               alt="${this.escapeHtml(title || description || 'Fun item')}" 
+               loading="lazy" />
+        </div>
+        ${description ? `
+          <p class="fun-gallery-item-description">${this.escapeHtml(description)}</p>
+        ` : ''}
+      </article>
+    `;
+  }
+
+  /**
+   * Setup event listeners for fun gallery page
+   * CRITICAL: Click on image opens ImageViewer fullscreen
+   * UPDATED COMMENTS: Made async for dynamic import
+   */
+  async setupFunGalleryEventListeners() {
+    // CRITICAL: Import ImageViewer component
+    const { ImageViewer } = await import('../../shared/ui/image-viewer/image-viewer.js');
+    
+    // CRITICAL: Create ImageViewer instance if not exists
+    if (!this.funImageViewer) {
+      this.funImageViewer = new ImageViewer({ eventBus: this.eventBus });
+    }
+    
+    // CRITICAL: Click on gallery item opens fullscreen image
+    const galleryItems = this.pageContainer.querySelectorAll('.fun-gallery-item');
+    
+    galleryItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const image = item.dataset.image;
+        const description = item.querySelector('.fun-gallery-item-description')?.textContent || '';
+        
+        if (image) {
+          // REUSED: ImageViewer for fullscreen viewing
+          this.funImageViewer.open(image, description);
+        }
+      });
+      
+      // REUSED: Hover effects
+      item.addEventListener('mouseenter', () => {
+        item.classList.add('fun-gallery-item--hovered');
+      });
+      
+      item.addEventListener('mouseleave', () => {
+        item.classList.remove('fun-gallery-item--hovered');
+      });
+    });
   }
 }
