@@ -336,7 +336,7 @@ export class DesktopCanvas {
     };
     
     // REUSED: Widget creation logic for Fun folder (центр-право)
-    // UPDATED COMMENTS: Now uses real fun project count from API
+    // UPDATED COMMENTS: Now uses real fun item count from API
     const funData = await this.getFunProjectData();
     const funFolderWidget = {
       type: 'folder',
@@ -345,7 +345,7 @@ export class DesktopCanvas {
         title: 'Fun',
         itemCount: funData.count, // CRITICAL: Real count from API
         theme: 'pink', // CRITICAL: Pink theme uses pink SVGs
-        projects: funData.projects
+        projects: funData.items // CRITICAL: Use items for gallery preview
       }
     };
     
@@ -480,34 +480,34 @@ export class DesktopCanvas {
    */
   async getFunProjectData() {
     try {
-      // CRITICAL: Fetch real fun project count from backend API
+      // CRITICAL: Fetch fun gallery items from new API endpoint
       // UPDATED COMMENTS: Use relative URL for production compatibility
       const apiUrl = window.location.hostname === 'localhost' 
-        ? 'http://localhost:8000/api/projects?category=fun'
-        : '/api/projects?category=fun';
+        ? 'http://localhost:8000/api/fun'
+        : '/api/fun';
       
       const response = await fetch(apiUrl);
       
       if (!response.ok) {
-        console.warn('Failed to fetch fun projects, using fallback count');
-        return { count: 12, projects: [] }; // Fallback to hardcoded value
+        console.warn('Failed to fetch fun items, using fallback count');
+        return { count: 9, items: [] }; // Fallback to hardcoded value
       }
       
       const data = await response.json();
-      const projects = data.projects || []; // CRITICAL: Extract projects array from response object
+      const items = data.items || []; // CRITICAL: Extract items array from response object
       
-      // UPDATED COMMENTS: Return real fun project count from API
+      // UPDATED COMMENTS: Return fun gallery item count from API
       return {
-        count: projects.length,
-        projects: projects.slice(0, 3).map((project, index) => ({
-          id: project.slug || project.id,
-          title: project.title,
-          image: project.thumbnail || '/assets/images/projects/placeholder.jpg',
+        count: items.length,
+        items: items.slice(0, 3).map((item, index) => ({
+          id: item.id,
+          title: item.title,
+          image: item.image,
           rotation: [-2.5, 4.2, 8.8][index] || 0
         }))
       };
     } catch (error) {
-      console.error('Error fetching fun project data:', error);
+      console.error('Error fetching fun item data:', error);
       // SCALED FOR: Graceful fallback on API failure
       return { count: 12, projects: [] };
     }
