@@ -1,0 +1,190 @@
+/* ============================================
+   PAGE: Project Detail
+   ============================================ */
+/* FSD: pages/project-detail → Individual project page layout */
+/* PURPOSE: Layout for project detail page with header, hero, and content */
+/* DEPENDENCIES: variables.css, markdown-content.css for article styling */
+/* SCALED FOR: Readable content width, responsive typography */
+
+/* ANCHOR: PROJECT_DETAIL_PAGE */
+
+/* ============================================
+   PROJECT PAGE CONTAINER
+   ============================================ */
+
+/* CRITICAL: Project detail page layout
+ * LAYOUT: Centered column, max 720px width, 30vh top padding
+ * WHY: Large top padding creates dramatic entrance, focuses on content
+ * TYPOGRAPHY: White text for dark background
+ * OVERFLOW: Hidden horizontal to prevent layout breaks
+ */
+.project-page {
+  width: 720px !important;
+  max-width: 100% !important;
+  margin: 0 auto !important;
+  padding: 30vh 40px !important; /* Large top padding for dramatic effect */
+  color: var(--color-text-light, #FFFFFF) !important;
+  position: relative;
+  overflow-x: hidden; /* Prevents horizontal scroll */
+  box-sizing: border-box;
+}
+
+/* CRITICAL: Top gradient overlay
+ * PURPOSE: Fades content under navigation header
+ * WHY: Creates depth, prevents content from touching top edge
+ * POSITION: Fixed at top, 200px height gradient
+ */
+.project-page::before {
+  content: '';
+  position: fixed;
+  inset: 0 0 auto 0; /* Top edge only */
+  height: 200px;
+  background: linear-gradient(180deg, var(--color-bg-dark, #101010) 0%, rgba(16, 16, 16, 0) 100%);
+  z-index: 5; /* Above content, below navigation */
+  pointer-events: none; /* Allows clicks through gradient */
+}
+
+/* CRITICAL: Project content wrapper
+ * PURPOSE: Contains all project content (header + article)
+ */
+.project-page-content {
+  width: 100%;
+}
+
+/* ============================================
+   PROJECT HEADER
+   ============================================ */
+
+/* CRITICAL: Project header section
+ * PURPOSE: Contains title, meta info, tags, hero image
+ * SPACING: 40px bottom margin for separation from content
+ */
+.project-header {
+  margin-bottom: 40px;
+}
+
+/* CRITICAL: Project title
+ * TYPOGRAPHY: Large, bold, tight line-height for impact
+ * FONT: SF Pro Display 590 weight (semi-bold), 42px size
+ * WHY: Negative letter-spacing (-0.02em) for tighter, modern look
+ */
+.project-title {
+  font-family: var(--font-family, 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif);
+  font-style: normal;
+  font-weight: 590;
+  font-size: 42px;
+  line-height: 1.1; /* Tight line-height for multi-line titles */
+  letter-spacing: -0.02em;
+  color: var(--color-text-light, #FFFFFF);
+  margin: 0 0 16px 0;
+}
+
+/* ============================================
+   PROJECT META
+   ============================================ */
+
+/* CRITICAL: Meta row (date, views, tags)
+ * LAYOUT: Horizontal flex with wrap, 16px gap
+ * WHY: Allows meta items to flow naturally on small screens
+ */
+.project-meta-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* CRITICAL: Tags container
+ * LAYOUT: Horizontal wrap with 6px gap
+ * REUSED: Works with chip.js component
+ */
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* CRITICAL: Meta item (date, views, etc.)
+ * LAYOUT: Icon + text horizontal layout
+ * TYPOGRAPHY: Small (14px), muted color
+ */
+.project-meta-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-family, 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: 14px;
+  color: var(--color-text-muted, rgba(255, 255, 255, 0.7));
+}
+
+/* CRITICAL: Meta icon styling
+ * SIZE: 16px × 16px
+ * OPACITY: 0.7 for subtle appearance
+ */
+.project-meta-icon {
+  width: 16px;
+  height: 16px;
+  opacity: 0.7;
+}
+
+/* CRITICAL: Icon theme variants
+ * WHY: Allows icons to work on light/dark backgrounds
+ */
+.project-meta-icon--light {
+  filter: brightness(1);
+}
+
+.project-meta-icon--dark {
+  filter: brightness(0.8);
+}
+
+/* ============================================
+   PROJECT HERO IMAGE
+   ============================================ */
+
+/* CRITICAL: Hero image container
+ * LAYOUT: Full width, rounded corners, 24px top margin
+ * WHY: Rounded corners match design system (14px radius)
+ */
+.project-hero {
+  width: 100%;
+  border-radius: 14px;
+  overflow: hidden; /* Clips image to rounded corners */
+  margin-top: 24px;
+}
+
+.project-hero img {
+  width: 100%;
+  height: auto;
+  display: block; /* Removes inline spacing */
+}
+
+/* ============================================
+   PROJECT CONTENT
+   ============================================ */
+
+/* CRITICAL: Project article content
+ * PURPOSE: Contains markdown-rendered content
+ * DEPENDENCIES: markdown-content.css for typography
+ * NOTE: Actual content styling in markdown-content.css
+ */
+.project-content {
+  width: 100%;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+/* MOBILE: Smaller padding and typography */
+@media (max-width: 768px) {
+  .project-page {
+    padding: 20vh 16px !important; /* Reduced top padding, smaller horizontal */
+  }
+  
+  .project-title {
+    font-size: 28px; /* Reduced from 42px */
+  }
+}

@@ -1,0 +1,133 @@
+/* ============================================
+   SHARED UI COMPONENT: Floating Button
+   ============================================ */
+/* FSD: shared/ui → Universal floating action button */
+/* PURPOSE: Reusable floating button for close/back actions */
+/* DEPENDENCIES: CSS variables from variables.css */
+/* SCALED FOR: Consistent button styling across modals and pages */
+
+/* ANCHOR: FLOATING_BUTTON_COMPONENT */
+
+/* ============================================
+   FLOATING BUTTON BASE
+   ============================================ */
+
+/* CRITICAL: Floating action button
+ * POSITION: Fixed, centered vertically (top: 50%, transform: translateY(-50%))
+ * STYLE: Glassmorphism effect with backdrop-filter blur
+ * INTERACTION: Fade in/out with opacity transition
+ * USAGE: Close modal, back navigation
+ */
+.floating-button {
+  position: fixed;
+  top: 50%;
+  width: var(--button-size, 64px);
+  height: var(--button-size, 64px);
+  background: var(--color-button-bg, rgba(0, 0, 0, 0.5));
+  backdrop-filter: var(--button-blur, blur(2px));
+  -webkit-backdrop-filter: var(--button-blur, blur(2px)); /* Safari support */
+  border: none;
+  border-radius: var(--radius-full, 999px);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  z-index: 10;
+  opacity: 0; /* Hidden by default */
+  transform: translateY(-50%);
+  transition: opacity var(--transition-normal, 0.3s ease-out), 
+              background var(--transition-fast, 0.2s ease);
+}
+
+/* CRITICAL: Visible state
+ * WHY: Controlled by JavaScript, fades in when needed
+ */
+.floating-button--visible {
+  opacity: 1;
+}
+
+/* CRITICAL: Hover effect
+ * WHY: Darker background for better visual feedback
+ */
+.floating-button:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+/* CRITICAL: Focus state
+ * WHY: Remove default outline, use custom for accessibility
+ */
+.floating-button:focus {
+  outline: none;
+}
+
+/* CRITICAL: Focus-visible for keyboard navigation
+ * ACCESSIBILITY: Shows outline only for keyboard users
+ */
+.floating-button:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+}
+
+/* ============================================
+   BUTTON ICON
+   ============================================ */
+
+/* CRITICAL: Icon styling (SVG or IMG)
+ * SIZE: 32px × 32px (50% of button size)
+ * COLOR: White for visibility on dark background
+ */
+.floating-button svg,
+.floating-button img {
+  width: 32px;
+  height: 32px;
+  color: var(--color-text-light, #FFFFFF);
+  fill: var(--color-text-light, #FFFFFF);
+  flex: none; /* Prevent icon from shrinking */
+}
+
+/* ============================================
+   BUTTON POSITIONS
+   ============================================ */
+
+/* CRITICAL: Close button position (right side)
+ * USAGE: Modal close, page close
+ */
+.modal-close {
+  right: 40px;
+}
+
+/* CRITICAL: Back button position (left side)
+ * USAGE: Page navigation back
+ */
+.page-back {
+  left: 40px;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+/* MOBILE: Smaller button size and adjusted positions */
+@media (max-width: 768px) {
+  .floating-button {
+    width: 32px; /* Reduced from 64px */
+    height: 32px;
+  }
+  
+  .floating-button svg,
+  .floating-button img {
+    width: 18px; /* Reduced from 32px */
+    height: 18px;
+  }
+  
+  /* MOBILE: Closer to edges */
+  .modal-close {
+    right: 16px; /* Reduced from 40px */
+  }
+  
+  .page-back {
+    left: 16px; /* Reduced from 40px */
+    display: none !important; /* Hidden on mobile - use native back */
+  }
+}

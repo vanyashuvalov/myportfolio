@@ -107,31 +107,27 @@ export class ProjectsListModal {
     } = project;
     
     return `
-      <article class="modal-project-card gallery-item" data-project-id="${this.escapeHtml(id)}" data-category="${category}">
+      <article class="gallery-item" data-project-id="${this.escapeHtml(id)}" data-category="${category}">
         <!-- CRITICAL: Project thumbnail -->
-        <div class="modal-project-card-image gallery-item-image">
+        <div class="gallery-item-image">
           <img src="${this.escapeHtml(thumbnail)}" 
                alt="${this.escapeHtml(title)}" 
                loading="lazy" />
-          <div class="modal-project-card-overlay">
-            <span class="modal-project-card-view">View Project</span>
-          </div>
         </div>
         
         <!-- UPDATED COMMENTS: Project metadata -->
-        <div class="modal-project-card-content gallery-item-content">
-          <div class="modal-project-card-header gallery-item-header">
-            <h3 class="modal-project-card-title gallery-item-title">${this.escapeHtml(title)}</h3>
-            ${year ? `<span class="modal-project-card-year">${year}</span>` : ''}
+        <div class="gallery-item-content">
+          <div class="gallery-item-header">
+            <h3 class="gallery-item-title">${this.escapeHtml(title)}</h3>
           </div>
           
           ${description ? `
-            <p class="modal-project-card-description gallery-item-description">${this.escapeHtml(description)}</p>
+            <p class="gallery-item-description">${this.escapeHtml(description)}</p>
           ` : ''}
           
           <!-- REUSED: Chip component for project tags -->
           ${tags.length > 0 ? `
-            <div class="modal-project-card-tags gallery-item-tags" data-tags='${JSON.stringify(tags)}'>
+            <div class="gallery-item-tags" data-tags='${JSON.stringify(tags)}'>
               <!-- Chips will be rendered here by JS -->
             </div>
           ` : ''}
@@ -147,7 +143,7 @@ export class ProjectsListModal {
    */
   setupEventListeners(modalContainer) {
     // UPDATED COMMENTS: Render chips for all project cards
-    const tagsContainers = modalContainer.querySelectorAll('.modal-project-card-tags');
+    const tagsContainers = modalContainer.querySelectorAll('.gallery-item-tags');
     tagsContainers.forEach(container => {
       const tags = JSON.parse(container.dataset.tags || '[]');
       container.innerHTML = ''; // Clear placeholder
@@ -165,7 +161,7 @@ export class ProjectsListModal {
     });
     
     // UPDATED COMMENTS: Click on project card navigates to detail page
-    const projectCards = modalContainer.querySelectorAll('.modal-project-card');
+    const projectCards = modalContainer.querySelectorAll('.gallery-item');
     
     projectCards.forEach(card => {
       card.addEventListener('click', async () => {
@@ -179,13 +175,13 @@ export class ProjectsListModal {
         }
       });
       
-      // REUSED: Hover effects
+      // REUSED: Hover effects from gallery-item.css
       card.addEventListener('mouseenter', () => {
-        card.classList.add('modal-project-card--hovered');
+        card.classList.add('gallery-item--hovered');
       });
       
       card.addEventListener('mouseleave', () => {
-        card.classList.remove('modal-project-card--hovered');
+        card.classList.remove('gallery-item--hovered');
       });
     });
   }

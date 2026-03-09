@@ -1,18 +1,28 @@
-/* ANCHOR: fun_gallery_styles */
-/* FSD: features/fun-gallery → Fun gallery page styling */
-/* SCALED FOR: Clean vertical layout with images and descriptions */
-/* UPDATED COMMENTS: Uses universal gallery-shared.css styles */
-/* REUSED: gallery-item, gallery-item-image, gallery-item-description from gallery-shared.css */
+/* ============================================
+   PAGE: Fun Gallery
+   ============================================ */
+/* FSD: pages/fun-gallery → Fun gallery page layout */
+/* PURPOSE: Layout for fun/personal projects gallery */
+/* DEPENDENCIES: shared/gallery-item.css for card component */
+/* REUSED: .gallery-item component from shared/gallery-item.css */
+/* SCALED FOR: Vertical scroll gallery with consistent spacing */
+
+/* ANCHOR: FUN_GALLERY_PAGE */
 
 /* ============================================
-   FUN GALLERY PAGE
+   FUN GALLERY CONTAINER
    ============================================ */
 
-/* CRITICAL: Fun gallery layout - vertical stack */
+/* CRITICAL: Fun gallery layout
+ * LAYOUT: Centered column, max 720px width, 16vh top padding
+ * WHY: Same layout as projects-gallery for consistency
+ * SPACING: 100px gap between items for visual separation
+ * REUSED: Uses .gallery-item component from shared/gallery-item.css
+ */
 .fun-gallery {
   display: flex;
   flex-direction: column;
-  gap: 100px;
+  gap: 100px; /* Large gap for visual separation */
   padding: 16vh 40px;
   width: 100%;
   max-width: 720px;
@@ -20,26 +30,15 @@
   box-sizing: border-box;
 }
 
-/* REUSED: Fun gallery item inherits from universal .gallery-item */
-.fun-gallery-item {
-  /* Inherits from .gallery-item in gallery-shared.css */
-}
+/* ============================================
+   RESPONSIVE
+   ============================================ */
 
-/* REUSED: Image container inherits from universal .gallery-item-image */
-.fun-gallery-item-image {
-  /* Inherits from .gallery-item-image in gallery-shared.css */
-}
-
-/* REUSED: Description inherits from universal .gallery-item-description */
-.fun-gallery-item-description {
-  /* Inherits from .gallery-item-description in gallery-shared.css */
-}
-
-/* CRITICAL: Smaller fun gallery on mobile */
+/* MOBILE: Smaller padding and gap */
 @media (max-width: 768px) {
   .fun-gallery {
-    gap: 60px;
-    padding: 20vh 16px;
+    gap: 60px; /* Reduced from 100px */
+    padding: 20vh 16px; /* Increased top padding, reduced horizontal */
     max-width: 100%;
   }
 }

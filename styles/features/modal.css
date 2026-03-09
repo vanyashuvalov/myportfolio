@@ -1,0 +1,318 @@
+/* ============================================
+   FEATURE: Modal System
+   ============================================ */
+/* FSD: features/modal → Modal overlay and content system */
+/* PURPOSE: Reusable modal system for dialogs, forms, and fullscreen views */
+/* DEPENDENCIES: variables.css for CSS custom properties */
+/* SCALED FOR: Smooth animations, accessibility, responsive layouts */
+
+/* ANCHOR: MODAL_SYSTEM */
+
+/* ============================================
+   MODAL CONTAINER
+   ============================================ */
+
+/* CRITICAL: Modal container overlay
+ * POSITION: Fixed fullscreen overlay
+ * STATE: Hidden by default (opacity: 0, pointer-events: none)
+ * WHY: Prevents interaction with background content when modal is closed
+ * ANIMATION: Fade in/out with opacity transition
+ */
+.modal-container {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: var(--z-modal, 1000) !important;
+  display: flex !important;
+  opacity: 0;
+  transition: opacity var(--transition-normal, 0.3s ease-out);
+  align-items: center;
+  justify-content: center;
+  pointer-events: none !important; /* Prevents clicks when closed */
+  visibility: hidden; /* Removes from accessibility tree when closed */
+}
+
+/* CRITICAL: Z-index hierarchy for different modal types
+ * WHY: Regular modals (10000) above fullscreen modals (9998)
+ * REASON: Allows contact modal to appear over projects list
+ */
+#modal-container {
+  z-index: var(--z-regular-modal, 10000) !important;
+}
+
+#projects-modal-container {
+  z-index: var(--z-fullscreen-modal, 9998) !important;
+}
+
+/* CRITICAL: Open state
+ * WHY: Makes modal visible and interactive
+ * ACCESSIBILITY: visibility: visible adds to accessibility tree
+ */
+.modal-container--open {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  visibility: visible !important;
+}
+
+/* CRITICAL: Closing state
+ * WHY: Smooth fade out animation before removal
+ */
+.modal-container--closing {
+  opacity: 0;
+}
+
+/* ============================================
+   MODAL BACKDROP
+   ============================================ */
+
+/* CRITICAL: Semi-transparent backdrop
+ * PURPOSE: Darkens background, provides click-to-close area
+ * WHY: z-index: 1 places behind modal content (z-index: 2)
+ */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: var(--color-overlay, rgba(0, 0, 0, 0.2));
+  z-index: 1;
+  pointer-events: auto; /* Allows click-to-close */
+}
+
+/* ============================================
+   MODAL CONTENT
+   ============================================ */
+
+/* CRITICAL: Modal content container (regular modal)
+ * LAYOUT: Centered, max 90% width, max 90vh height
+ * STYLE: White background, rounded corners, shadow
+ * WHY: Flexible size for different content types (forms, dialogs)
+ */
+.modal-content {
+  position: relative;
+  width: 90%;
+  max-width: 1200px;
+  max-height: 90vh;
+  background: var(--color-bg-light, #FFFFFF);
+  border-radius: var(--radius-lg, 16px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  z-index: 2; /* Above backdrop (z-index: 1) */
+  pointer-events: auto;
+}
+
+/* CRITICAL: Fullscreen modal variant
+ * PURPOSE: Used for projects list, fun gallery (page-like modals)
+ * WHY: 100% size, dark background, no border radius
+ * PERFORMANCE: opacity: 0 prevents flash during mount
+ */
+.modal-content--fullscreen {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  max-height: 100% !important;
+  background: var(--color-bg-dark, #101010) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  overflow-y: auto !important; /* Scrollable content */
+  overflow-x: visible !important; /* Prevents horizontal scroll */
+  opacity: 0; /* Hidden until open */
+}
+
+/* CRITICAL: Hide scrollbar for fullscreen modal
+ * WHY: Cleaner appearance, custom scrollbar not needed
+ * BROWSER SUPPORT: -webkit- for Chrome/Safari, scrollbar-width for Firefox
+ */
+.modal-content--fullscreen::-webkit-scrollbar,
+.modal-content--fullscreen {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.modal-content--fullscreen::-webkit-scrollbar {
+  width: 0;
+  display: none;
+}
+
+/* CRITICAL: Fullscreen modal open animation
+ * WHY: Fade in after container is visible
+ */
+.modal-container--open .modal-content--fullscreen {
+  opacity: 1;
+  transition: opacity var(--transition-normal, 0.3s ease-out);
+}
+
+/* ANIMATION: Modal enter (scale + fade)
+ * NOTE: Currently unused, kept for future enhancement
+ */
+@keyframes modalEnter {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ============================================
+   MODAL BODY
+   ============================================ */
+
+/* CRITICAL: Scrollable content area inside modal
+ * PURPOSE: Contains modal content with scroll if needed
+ * WHY: flex: 1 takes remaining space after header/footer
+ */
+.modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0;
+  scrollbar-width: none; /* Hide scrollbar */
+  -ms-overflow-style: none;
+}
+
+.modal-body::-webkit-scrollbar {
+  width: 0;
+  display: none;
+}
+
+/* CRITICAL: Fullscreen modal body adjustments
+ * WHY: No padding, full width for page-like content
+ */
+.modal-content--fullscreen .modal-body {
+  padding: 0 !important;
+  width: 100% !important;
+}
+
+/* ============================================
+   CONTACT MODAL SPECIFIC STYLES
+   ============================================ */
+
+/* CRITICAL: Contact modal layout
+ * PURPOSE: Form layout for contact modal
+ * LAYOUT: Vertical stack with 24px gap
+ */
+.modal-contact {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl, 24px);
+  width: 100%;
+}
+
+/* CRITICAL: Modal description section
+ * PURPOSE: Icon + title section at top of modal
+ */
+.modal-description {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-lg, 16px);
+  text-align: center;
+}
+
+/* CRITICAL: Modal icon container */
+.modal-icon {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* CRITICAL: Modal title */
+.modal-title {
+  font-family: var(--font-family, 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--color-text-dark, #0E1621);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ============================================
+   MODAL FORM ELEMENTS
+   ============================================ */
+
+/* CRITICAL: Modal input field
+ * STYLE: Light background, subtle border, accent focus
+ * ACCESSIBILITY: Clear focus state with accent color
+ */
+.modal-input {
+  width: 100%;
+  padding: var(--spacing-lg, 16px) 20px;
+  font-family: var(--font-family, 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: 16px;
+  color: var(--color-text-dark, #0E1621);
+  background: var(--color-bg-light, #FFFFFF);
+  border: 1px solid var(--color-border, rgba(14, 22, 33, 0.2));
+  border-radius: var(--radius-sm, 12px);
+  outline: none;
+  transition: border-color var(--transition-fast, 0.2s ease);
+}
+
+.modal-input:focus {
+  border-color: var(--color-accent, #C248A3);
+}
+
+.modal-input::placeholder {
+  color: var(--color-text-muted-dark, rgba(14, 22, 33, 0.4));
+}
+
+/* ============================================
+   MODAL BUTTONS
+   ============================================ */
+
+/* CRITICAL: Modal button base
+ * STYLE: Full width, uppercase text, rounded corners
+ */
+.modal-button {
+  width: 100%;
+  padding: var(--spacing-lg, 16px) 24px;
+  font-family: var(--font-family, 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: none;
+  border-radius: var(--radius-sm, 12px);
+  cursor: pointer;
+  transition: all var(--transition-fast, 0.2s ease);
+}
+
+/* CRITICAL: Primary button variant
+ * STYLE: Accent color background, white text
+ * INTERACTION: Hover lift effect, disabled state
+ */
+.modal-button--primary {
+  background: var(--color-accent, #C248A3);
+  color: var(--color-text-light, #FFFFFF);
+}
+
+.modal-button--primary:hover {
+  background: var(--color-accent-hover, #A83D8A);
+  transform: translateY(-2px); /* Subtle lift effect */
+}
+
+.modal-button--primary:active {
+  transform: translateY(0); /* Press down effect */
+}
+
+.modal-button--primary:disabled {
+  background: rgba(194, 72, 163, 0.5);
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+  /* MOBILE: Smaller button padding */
+  .modal-button {
+    padding: var(--spacing-lg, 16px) 16px;
+  }
+}

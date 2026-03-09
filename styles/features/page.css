@@ -1,0 +1,160 @@
+/* ============================================
+   FEATURE: Page System
+   ============================================ */
+/* FSD: features/page → Fullscreen page navigation system */
+/* PURPOSE: Page container, transitions, and error states for SPA navigation */
+/* DEPENDENCIES: variables.css for CSS custom properties */
+/* SCALED FOR: Smooth page transitions, accessibility, performance */
+
+/* ANCHOR: PAGE_SYSTEM */
+
+/* ============================================
+   PAGE CONTAINER
+   ============================================ */
+
+/* CRITICAL: Fullscreen page container
+ * POSITION: Fixed fullscreen overlay (like modal but for pages)
+ * PURPOSE: Used for project detail pages, fun gallery pages
+ * WHY: z-index: 9999 places above fullscreen modals (9998)
+ * PERFORMANCE: Scrollbar hidden for cleaner appearance
+ */
+.page-container {
+  position: fixed;
+  inset: 0;
+  background: var(--color-bg-dark, #101010) !important;
+  z-index: var(--z-page, 9999);
+  overflow-y: auto; /* Scrollable content */
+  transition: opacity var(--transition-normal, 0.3s ease-out);
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+/* CRITICAL: Hide scrollbar for page container
+ * WHY: Cleaner appearance, custom scrollbar not needed
+ */
+.page-container::-webkit-scrollbar {
+  width: 0;
+  display: none;
+}
+
+/* CRITICAL: Page wrapper
+ * PURPOSE: Flex container for page content
+ * LAYOUT: Vertical stack (for future header/footer if needed)
+ */
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+/* CRITICAL: Hide legacy page elements
+ * WHY: Old page header/back button replaced by floating-button.css
+ * TODO: Remove from HTML after migration
+ */
+.page-header,
+.page-back-button {
+  display: none !important;
+}
+
+/* ============================================
+   PAGE TRANSITION OVERLAY
+   ============================================ */
+
+/* CRITICAL: Page transition overlay
+ * PURPOSE: Smooth fade transition between pages
+ * WHY: z-index: 100001 places above everything during transition
+ * ANIMATION: Fade in (opacity: 0 → 1), then fade out after page load
+ */
+.page-transition-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--color-bg-dark, #101010);
+  z-index: var(--z-page-overlay, 100001);
+  opacity: 0;
+  pointer-events: none; /* Prevents interaction during transition */
+  transition: opacity var(--transition-normal, 0.3s ease-out);
+}
+
+/* CRITICAL: Active transition state
+ * WHY: Shows overlay during page navigation
+ */
+.page-transition-overlay--active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ============================================
+   PAGE ERROR STATE
+   ============================================ */
+
+/* CRITICAL: Error page layout
+ * PURPOSE: 404, 500, or other error states
+ * LAYOUT: Centered vertically and horizontally
+ */
+.page-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  text-align: center;
+  padding: 40px;
+}
+
+/* CRITICAL: Error icon
+ * PURPOSE: Large emoji or SVG icon (e.g., "😿" or error icon)
+ */
+.page-error-icon {
+  font-size: 64px;
+  margin-bottom: 24px;
+}
+
+/* CRITICAL: Error title
+ * TYPOGRAPHY: Large, bold, white text
+ */
+.page-error-title {
+  font-family: var(--font-family, 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--color-text-light, #FFFFFF);
+  margin: 0 0 16px 0;
+}
+
+/* CRITICAL: Error message
+ * TYPOGRAPHY: Smaller, muted text for details
+ */
+.page-error-message {
+  font-family: var(--font-family, 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: 16px;
+  color: var(--color-text-muted, rgba(255, 255, 255, 0.7));
+  margin: 0 0 32px 0;
+  max-width: 400px;
+}
+
+/* CRITICAL: Error action button
+ * STYLE: Ghost button (transparent with border)
+ * INTERACTION: Hover fills background
+ */
+.page-error-button {
+  padding: 12px 24px;
+  font-family: var(--font-family, 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--color-text-light, #FFFFFF);
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-sm, 12px);
+  cursor: pointer;
+  transition: all var(--transition-fast, 0.2s ease);
+}
+
+.page-error-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+/* NOTE: No mobile-specific styles needed for page system
+ * Page container and transitions work the same on all devices */
