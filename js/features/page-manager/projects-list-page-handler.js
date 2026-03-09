@@ -67,22 +67,22 @@ export class ProjectsListPageHandler {
     const { id, title, thumbnail, description, tags = [] } = project;
 
     return `
-      <article class="modal-project-card" data-project-id="${this.escapeHtml(id)}" data-category="${category}">
-        <div class="modal-project-card-image">
+      <article class="gallery-item" data-project-id="${this.escapeHtml(id)}" data-category="${category}">
+        <div class="gallery-item-image">
           <img src="${this.escapeHtml(thumbnail)}" alt="${this.escapeHtml(title)}" loading="lazy" />
         </div>
         
-        <div class="modal-project-card-content">
-          <div class="modal-project-card-header">
-            <h3 class="modal-project-card-title">${this.escapeHtml(title)}</h3>
+        <div class="gallery-item-content">
+          <div class="gallery-item-header">
+            <h3 class="gallery-item-title">${this.escapeHtml(title)}</h3>
           </div>
           
           ${description ? `
-            <p class="modal-project-card-description">${this.escapeHtml(description)}</p>
+            <p class="gallery-item-description">${this.escapeHtml(description)}</p>
           ` : ''}
           
           ${tags.length > 0 ? `
-            <div class="modal-project-card-tags" data-tags='${JSON.stringify(tags)}'></div>
+            <div class="gallery-item-tags" data-tags='${JSON.stringify(tags)}'></div>
           ` : ''}
         </div>
       </article>
@@ -100,7 +100,7 @@ export class ProjectsListPageHandler {
     await this.renderChips();
 
     // CRITICAL: Project card clicks navigate to detail page
-    const cards = this.pageContainer.querySelectorAll('.modal-project-card');
+    const cards = this.pageContainer.querySelectorAll('.gallery-item');
     
     cards.forEach(card => {
       card.addEventListener('click', () => {
@@ -117,9 +117,9 @@ export class ProjectsListPageHandler {
         }
       });
 
-      // REUSED: Hover effects
-      card.addEventListener('mouseenter', () => card.classList.add('modal-project-card--hovered'));
-      card.addEventListener('mouseleave', () => card.classList.remove('modal-project-card--hovered'));
+      // REUSED: Hover effects from gallery-item.css
+      card.addEventListener('mouseenter', () => card.classList.add('gallery-item--hovered'));
+      card.addEventListener('mouseleave', () => card.classList.remove('gallery-item--hovered'));
     });
 
     // CRITICAL: Close button (X) - closes to desktop
@@ -134,7 +134,7 @@ export class ProjectsListPageHandler {
    * Render chips for all project cards
    */
   async renderChips() {
-    const containers = this.pageContainer.querySelectorAll('.modal-project-card-tags');
+    const containers = this.pageContainer.querySelectorAll('.gallery-item-tags');
     
     containers.forEach(container => {
       const tags = JSON.parse(container.dataset.tags || '[]');

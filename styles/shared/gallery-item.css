@@ -1,0 +1,172 @@
+/* ============================================
+   SHARED UI COMPONENT: Gallery Item
+   ============================================ */
+/* FSD: shared/ui → Universal gallery item component */
+/* PURPOSE: Reusable card component for all galleries (Projects, Fun, etc.) */
+/* DEPENDENCIES: None - standalone component */
+/* SCALED FOR: Consistent design system across all gallery views */
+
+/* ANCHOR: GALLERY_ITEM_COMPONENT */
+
+/* ============================================
+   GALLERY ITEM CONTAINER
+   ============================================ */
+
+/* CRITICAL: Universal gallery item container
+ * Used by: Projects list, Fun gallery, any future galleries
+ * Layout: Vertical flex with image + content sections
+ * Interaction: Hover opacity effect, cursor pointer
+ */
+.gallery-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+  gap: 24px;
+  max-width: 720px;
+  width: 100%;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s ease-out;
+}
+
+/* CRITICAL: Hover effect - subtle darkening without scale
+ * WHY: Provides visual feedback without aggressive animations
+ * ACCESSIBILITY: Maintains readability, no motion sickness triggers
+ */
+.gallery-item:hover,
+.gallery-item--hovered {
+  opacity: 0.85;
+}
+
+/* ============================================
+   GALLERY ITEM IMAGE
+   ============================================ */
+
+/* CRITICAL: Gallery item image container
+ * WHY: 16:9 aspect ratio for consistent card heights
+ * PERFORMANCE: aspect-ratio prevents layout shift during image load
+ */
+.gallery-item-image {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: transparent;
+  border-radius: 14px;
+  flex-shrink: 0;
+}
+
+.gallery-item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  /* CRITICAL: No animations on image itself - parent handles hover */
+}
+
+/* ============================================
+   GALLERY ITEM CONTENT
+   ============================================ */
+
+/* CRITICAL: Content section below image
+ * Layout: Vertical stack of header (title + description) + tags
+ */
+.gallery-item-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+  gap: 12px;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+/* CRITICAL: Header section (title + description) */
+.gallery-item-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+
+/* CRITICAL: Universal title styling
+ * FONT: SF Pro Display 590 weight (semi-bold)
+ * WHY: Same font as Projects list for consistency
+ * ACCESSIBILITY: High contrast white text, center aligned
+ */
+.gallery-item-title {
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-style: normal;
+  font-weight: 590;
+  font-size: 20px;
+  line-height: 24px;
+  text-align: center;
+  letter-spacing: -0.02em;
+  color: rgba(255, 255, 255, 1);
+  margin: 0;
+  width: 100%;
+}
+
+/* CRITICAL: Universal description styling
+ * FONT: SF Pro Display 400 weight (regular)
+ * WHY: Lower opacity (0.7) for visual hierarchy
+ * ACCESSIBILITY: Still readable at 70% opacity
+ */
+.gallery-item-description {
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 130%;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  width: 100%;
+}
+
+/* ============================================
+   TAGS
+   ============================================ */
+
+/* CRITICAL: Tags container
+ * Layout: Horizontal wrap with center alignment
+ * WHY: Allows multiple tags to flow naturally
+ */
+.gallery-item-tags {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  align-content: center;
+  padding: 0;
+  gap: 6px;
+  width: 100%;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+/* MOBILE: Smaller spacing and typography */
+@media (max-width: 768px) {
+  .gallery-item {
+    gap: 16px; /* Reduced from 24px */
+  }
+  
+  .gallery-item-title {
+    font-size: 18px; /* Reduced from 20px */
+    line-height: 22px; /* Reduced from 24px */
+  }
+  
+  .gallery-item-description {
+    font-size: 14px; /* Reduced from 16px */
+  }
+}

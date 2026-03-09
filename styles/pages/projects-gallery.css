@@ -1,0 +1,121 @@
+/* ============================================
+   PAGE: Projects Gallery
+   ============================================ */
+/* FSD: pages/projects-gallery → Projects list page layout */
+/* PURPOSE: Layout for projects list (modal and standalone page) */
+/* DEPENDENCIES: shared/gallery-item.css for card component */
+/* REUSED: .gallery-item component from shared/gallery-item.css */
+/* SCALED FOR: Vertical scroll gallery with consistent spacing */
+
+/* ANCHOR: PROJECTS_GALLERY_PAGE */
+
+/* ============================================
+   PROJECTS LIST CONTAINER
+   ============================================ */
+
+/* CRITICAL: Projects list layout (modal and page)
+ * LAYOUT: Centered column, max 720px width, 16vh top padding
+ * WHY: Same layout for modal and standalone page for consistency
+ * ANIMATION: Slide up + fade in on open (translateY: 100px → 0)
+ * USAGE: .projects-list (in modal), .projects-list-page (standalone)
+ */
+.projects-list,
+.projects-list-page {
+  width: 720px !important;
+  max-width: 100% !important;
+  margin: 0 auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  padding: 16vh 40px !important;
+  gap: 0 !important; /* No gap - projects-grid handles spacing */
+  opacity: 0; /* Hidden by default */
+  transform: translateY(100px); /* Start below viewport */
+  transition: opacity var(--transition-slow, 0.5s ease-out 0.3s), 
+              transform var(--transition-slow, 0.5s ease-out 0.3s);
+}
+
+/* CRITICAL: Open animation for modal
+ * WHY: Triggered by .modal-container--open parent class
+ * ANIMATION: Slide up + fade in (delayed 0.3s for smooth entrance)
+ */
+.modal-container--open .projects-list {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* CRITICAL: Standalone page variant
+ * WHY: White text for dark background
+ */
+.projects-list-page {
+  color: var(--color-text-light, #FFFFFF) !important;
+}
+
+/* CRITICAL: Top gradient overlay for page
+ * PURPOSE: Fades content under navigation header
+ * WHY: Creates depth, prevents content from touching top edge
+ * POSITION: Fixed at top, 200px height gradient
+ */
+.projects-list-page::before {
+  content: '';
+  position: fixed;
+  inset: 0 0 auto 0; /* Top edge only */
+  height: 200px;
+  background: linear-gradient(180deg, var(--color-bg-dark, #101010) 0%, rgba(16, 16, 16, 0) 100%);
+  z-index: 5; /* Above content, below navigation */
+  pointer-events: none; /* Allows clicks through gradient */
+}
+
+/* ============================================
+   PROJECTS GRID
+   ============================================ */
+
+/* CRITICAL: Projects grid layout
+ * LAYOUT: Vertical stack with 100px gap between cards
+ * WHY: Large gap creates breathing room, focuses attention on each project
+ * REUSED: Uses .gallery-item component from shared/gallery-item.css
+ */
+.projects-grid {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 100px !important; /* Large gap for visual separation */
+  width: 100% !important;
+  padding: 0 !important;
+}
+
+/* ============================================
+   PROJECT CARD OVERRIDES
+   ============================================ */
+
+/* CRITICAL: Hide old project card elements
+ * WHY: Legacy elements from old design, replaced by .gallery-item
+ * TODO: Remove these elements from HTML after migration
+ */
+.projects-list .modal-project-card-overlay,
+.projects-list .modal-project-card-view,
+.projects-list .modal-project-card-year,
+.projects-list .modal-project-card-tag,
+.projects-list .modal-project-card-tag-more,
+.projects-list-header,
+.projects-list-title,
+.projects-list-description,
+.projects-list-count {
+  display: none;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+/* MOBILE: Smaller padding and gap */
+@media (max-width: 768px) {
+  .projects-list,
+  .projects-list-page {
+    padding: 20vh 16px !important; /* Increased top padding, reduced horizontal */
+  }
+  
+  .projects-grid {
+    gap: 60px !important; /* Reduced from 100px */
+  }
+}
