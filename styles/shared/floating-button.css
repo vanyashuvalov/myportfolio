@@ -92,16 +92,161 @@
 
 /* CRITICAL: Close button position (right side)
  * USAGE: Modal close, page close
+ * EXTENDS: .floating-button base styles
  */
 .modal-close {
+  position: fixed;
+  top: 50%;
+  width: var(--button-size, 64px);
+  height: var(--button-size, 64px);
+  background: var(--color-button-bg, rgba(0, 0, 0, 0.5));
+  backdrop-filter: var(--button-blur, blur(2px));
+  -webkit-backdrop-filter: var(--button-blur, blur(2px));
+  border: none;
+  border-radius: var(--radius-full, 999px);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  z-index: 10;
+  opacity: 0;
+  transform: translateY(-50%);
+  transition: opacity var(--transition-normal, 0.3s ease-out), 
+              background var(--transition-fast, 0.2s ease);
   right: 40px;
+}
+
+.modal-close--visible {
+  opacity: 1;
+}
+
+.modal-close:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.modal-close:focus {
+  outline: none;
+}
+
+.modal-close:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+}
+
+.modal-close svg,
+.modal-close img {
+  width: 32px;
+  height: 32px;
+  color: var(--color-text-light, #FFFFFF);
+  fill: var(--color-text-light, #FFFFFF);
+  flex: none;
 }
 
 /* CRITICAL: Back button position (left side)
  * USAGE: Page navigation back
+ * EXTENDS: .floating-button base styles
  */
 .page-back {
+  position: fixed;
+  top: 50%;
+  width: var(--button-size, 64px);
+  height: var(--button-size, 64px);
+  background: var(--color-button-bg, rgba(0, 0, 0, 0.5));
+  backdrop-filter: var(--button-blur, blur(2px));
+  -webkit-backdrop-filter: var(--button-blur, blur(2px));
+  border: none;
+  border-radius: var(--radius-full, 999px);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  z-index: 10;
+  opacity: 0;
+  transform: translateY(-50%);
+  transition: opacity var(--transition-normal, 0.3s ease-out), 
+              background var(--transition-fast, 0.2s ease);
   left: 40px;
+}
+
+.page-back--visible {
+  opacity: 1;
+}
+
+.page-back:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.page-back:focus {
+  outline: none;
+}
+
+.page-back:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+}
+
+.page-back svg,
+.page-back img {
+  width: 32px;
+  height: 32px;
+  color: var(--color-text-light, #FFFFFF);
+  fill: var(--color-text-light, #FFFFFF);
+  flex: none;
+}
+
+/* CRITICAL: Close button for pages (right side)
+ * USAGE: Page close to desktop
+ * EXTENDS: Same as .modal-close but for pages
+ */
+.page-close {
+  position: fixed;
+  top: 50%;
+  width: var(--button-size, 64px);
+  height: var(--button-size, 64px);
+  background: var(--color-button-bg, rgba(0, 0, 0, 0.5));
+  backdrop-filter: var(--button-blur, blur(2px));
+  -webkit-backdrop-filter: var(--button-blur, blur(2px));
+  border: none;
+  border-radius: var(--radius-full, 999px);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  z-index: 10;
+  opacity: 0;
+  transform: translateY(-50%);
+  transition: opacity var(--transition-normal, 0.3s ease-out), 
+              background var(--transition-fast, 0.2s ease);
+  right: 40px;
+}
+
+.page-close--visible {
+  opacity: 1;
+}
+
+.page-close:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.page-close:focus {
+  outline: none;
+}
+
+.page-close:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+}
+
+.page-close svg,
+.page-close img {
+  width: 32px;
+  height: 32px;
+  color: var(--color-text-light, #FFFFFF);
+  fill: var(--color-text-light, #FFFFFF);
+  flex: none;
 }
 
 /* ============================================
@@ -110,24 +255,33 @@
 
 /* MOBILE: Smaller button size and adjusted positions */
 @media (max-width: 768px) {
-  .floating-button {
-    width: 32px; /* Reduced from 64px */
+  .floating-button,
+  .modal-close,
+  .page-back,
+  .page-close {
+    width: 32px;
     height: 32px;
   }
   
   .floating-button svg,
-  .floating-button img {
-    width: 18px; /* Reduced from 32px */
+  .floating-button img,
+  .modal-close svg,
+  .modal-close img,
+  .page-back svg,
+  .page-back img,
+  .page-close svg,
+  .page-close img {
+    width: 18px;
     height: 18px;
   }
   
-  /* MOBILE: Closer to edges */
-  .modal-close {
-    right: 16px; /* Reduced from 40px */
+  .modal-close,
+  .page-close {
+    right: 16px;
   }
   
   .page-back {
-    left: 16px; /* Reduced from 40px */
-    display: none !important; /* Hidden on mobile - use native back */
+    left: 16px;
+    display: none !important;
   }
 }

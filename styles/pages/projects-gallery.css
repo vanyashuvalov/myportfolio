@@ -46,9 +46,12 @@
 
 /* CRITICAL: Standalone page variant
  * WHY: White text for dark background
+ * ANIMATION: Should be visible immediately (no modal container)
  */
 .projects-list-page {
   color: var(--color-text-light, #FFFFFF) !important;
+  opacity: 1 !important; /* Visible immediately for standalone page */
+  transform: translateY(0) !important; /* No slide animation for page */
 }
 
 /* CRITICAL: Top gradient overlay for page
