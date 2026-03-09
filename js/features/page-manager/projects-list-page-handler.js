@@ -35,6 +35,7 @@ export class ProjectsListPageHandler {
 
   /**
    * Render projects list page HTML
+   * UPDATED COMMENTS: Only close button (X), no back button in list
    * @param {Object} data - Page data
    * @returns {string} HTML content
    */
@@ -43,10 +44,6 @@ export class ProjectsListPageHandler {
 
     return `
       <div class="page-wrapper" data-category="${category}">
-        <button class="page-back" data-action="back-to-desktop" aria-label="Back to desktop">
-          <img src="/assets/icons/iconamoon_arrow-down-2.svg" alt="Back" style="transform: rotate(90deg);" />
-        </button>
-        
         <button class="page-close" data-action="back-to-desktop" aria-label="Close page">
           <img src="/assets/icons/iconamoon_close.svg" alt="Close" />
         </button>
@@ -94,37 +91,42 @@ export class ProjectsListPageHandler {
 
   /**
    * Setup event listeners
+   * UPDATED COMMENTS: Only close button, no back button in projects list
+   * CRITICAL: Project card clicks emit events to page-manager
    * @param {Object} data - Page data
    */
   async setupEvents(data) {
-    // Render chips
+    // REUSED: Render chips for all project cards
     await this.renderChips();
 
-    // Project card clicks
+    // CRITICAL: Project card clicks navigate to detail page
     const cards = this.pageContainer.querySelectorAll('.modal-project-card');
+    
     cards.forEach(card => {
       card.addEventListener('click', () => {
         const projectId = card.dataset.projectId;
         const cardCategory = card.dataset.category;
-        this.eventBus?.emit('page:navigateToProject', { projectId, category: cardCategory });
+        
+        // CRITICAL: Emit event to page-manager for navigation
+        if (this.eventBus && projectId) {
+          this.eventBus.emit('page:navigateToProject', { 
+            projectId, 
+            category: cardCategory,
+            fromList: true 
+          });
+        }
       });
 
+      // REUSED: Hover effects
       card.addEventListener('mouseenter', () => card.classList.add('modal-project-card--hovered'));
       card.addEventListener('mouseleave', () => card.classList.remove('modal-project-card--hovered'));
     });
 
-    // Close button
+    // CRITICAL: Close button (X) - closes to desktop
     const closeButton = this.pageContainer.querySelector('.page-close');
     if (closeButton) {
       closeButton.addEventListener('click', () => this.eventBus?.emit('page:close'));
       closeButton.classList.add('page-close--visible');
-    }
-
-    // Back button
-    const backButton = this.pageContainer.querySelector('.page-back');
-    if (backButton) {
-      backButton.addEventListener('click', () => this.eventBus?.emit('page:close'));
-      backButton.classList.add('page-back--visible');
     }
   }
 
@@ -143,22 +145,6 @@ export class ProjectsListPageHandler {
         container.appendChild(chip.createElement());
       });
     });
-  }
-
-  /**
-   * Transition from list to project detail
-   * @param {string} projectId - Project ID
-   * @param {string} category - Project category
-   */
-  async transitionToProject(projectId, category) {
-    const list = this.pageContainer.querySelector('.projects-list-page');
-    if (list) {
-      list.style.transition = 'opacity 0.3s ease-out';
-      list.style.opacity = '0';
-      await new Promise(r => setTimeout(r, 300));
-    }
-    
-    this.eventBus?.emit('page:navigateToProject', { projectId, category, fromList: true });
   }
 
   /**

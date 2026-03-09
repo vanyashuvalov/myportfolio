@@ -128,10 +128,12 @@ export class ProjectPageHandler {
 
   /**
    * Setup event listeners and render components
+   * CRITICAL: Back button, close button, and content interactions
+   * UPDATED COMMENTS: Emits events to page-manager for navigation
    * @param {Object} data - Project data
    */
   setupEvents(data) {
-    // Back button
+    // CRITICAL: Back button returns to projects list
     const backButton = this.pageContainer.querySelector('[data-action="back-to-projects"]');
     if (backButton) {
       backButton.addEventListener('click', () => {
@@ -141,29 +143,29 @@ export class ProjectPageHandler {
       backButton.classList.add('page-back--visible');
     }
 
-    // Close button
+    // CRITICAL: Close button returns to desktop
     const closeButton = this.pageContainer.querySelector('.page-close');
     if (closeButton) {
       closeButton.addEventListener('click', () => this.eventBus?.emit('page:close'));
       closeButton.classList.add('page-close--visible');
     }
 
-    // Desktop back button
+    // CRITICAL: Desktop back button (header) returns to desktop
     const desktopButton = this.pageContainer.querySelector('[data-action="back-to-desktop"]');
     if (desktopButton) {
       desktopButton.addEventListener('click', () => this.eventBus?.emit('page:close'));
     }
 
-    // Render chips
+    // REUSED: Render chips for project tags
     this.renderChips(data?.frontmatter?.tags || []);
 
-    // Calculate read time
+    // SCALED FOR: Calculate read time from content
     this.calculateReadTime();
 
-    // Setup image viewers
+    // CRITICAL: Setup image viewers for fullscreen
     this.setupImageViewers();
 
-    // Initialize reading progress
+    // REUSED: Initialize reading progress indicator
     this.initializeReadingProgress();
   }
 
@@ -200,18 +202,28 @@ export class ProjectPageHandler {
 
   /**
    * Setup image click handlers for fullscreen viewing
+   * REUSED: ImageViewer component from shared/ui
+   * CRITICAL: Attach click handlers to all images in project content
    */
   async setupImageViewers() {
     const { ImageViewer } = await import('../../shared/ui/image-viewer/image-viewer.js');
     
+    // CRITICAL: Create ImageViewer instance if not exists
     if (!this.imageViewer) {
       this.imageViewer = new ImageViewer({ eventBus: this.eventBus });
     }
 
+    // CRITICAL: Find all images in project content and hero
     const images = this.pageContainer.querySelectorAll('.project-content img, .project-hero img');
+    
     images.forEach(img => {
+      // UPDATED COMMENTS: Make images clickable
       img.style.cursor = 'pointer';
-      img.addEventListener('click', () => this.imageViewer.open(img.src, img.alt));
+      
+      // REUSED: ImageViewer for fullscreen viewing
+      img.addEventListener('click', () => {
+        this.imageViewer.open(img.src, img.alt);
+      });
     });
   }
 
