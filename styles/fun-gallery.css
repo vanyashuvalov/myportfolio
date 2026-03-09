@@ -1,0 +1,84 @@
+/* ANCHOR: fun_gallery_styles */
+/* FSD: features/fun-gallery → Fun gallery page styling */
+/* SCALED FOR: Clean vertical layout with images and descriptions */
+/* UPDATED COMMENTS: Same layout as projects list but without card backgrounds */
+
+/* ============================================
+   FUN GALLERY PAGE
+   ============================================ */
+
+/* CRITICAL: Fun gallery layout - same as projects list but vertical */
+.fun-gallery {
+  /* CRITICAL: Vertical stack layout like projects list */
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: 100px 40px 40px;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* CRITICAL: Fun gallery item - clean layout without card background */
+.fun-gallery-item {
+  /* REUSED: Clean layout from projects list but without card background */
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  cursor: pointer;
+  transition: opacity 0.2s ease-out;
+}
+
+.fun-gallery-item:hover,
+.fun-gallery-item--hovered {
+  /* CRITICAL: Subtle opacity change on hover */
+  opacity: 0.8;
+}
+
+/* CRITICAL: Gallery item image - full width */
+.fun-gallery-item-image {
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.fun-gallery-item-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.3s ease-out;
+}
+
+.fun-gallery-item:hover .fun-gallery-item-image img,
+.fun-gallery-item--hovered .fun-gallery-item-image img {
+  /* CRITICAL: Subtle zoom on hover */
+  transform: scale(1.02);
+}
+
+/* CRITICAL: Gallery item description - clean text without background */
+.fun-gallery-item-description {
+  /* REUSED: Description styling from project cards but without background */
+  font-family: 'SF Pro Display', 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 130%;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  padding: 0;
+}
+
+/* CRITICAL: Smaller fun gallery on mobile */
+@media (max-width: 768px) {
+  .fun-gallery {
+    flex-direction: column;
+    gap: 24px;
+    padding: 80px 16px 24px;
+    max-width: 100%;
+  }
+  
+  .fun-gallery-item-description {
+    font-size: 14px;
+  }
+}
