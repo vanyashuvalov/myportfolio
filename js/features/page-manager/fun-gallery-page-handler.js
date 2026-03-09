@@ -58,6 +58,7 @@ export class FunGalleryPageHandler {
 
   /**
    * Render single gallery item
+   * REUSED: Universal gallery-item classes from gallery-shared.css
    * @param {Object} item - Fun item
    * @returns {string} HTML content
    */
@@ -65,12 +66,14 @@ export class FunGalleryPageHandler {
     const { id, image, description, title } = item;
 
     return `
-      <article class="fun-gallery-item" data-id="${this.escapeHtml(id)}" data-image="${this.escapeHtml(image)}">
-        <div class="fun-gallery-item-image">
+      <article class="fun-gallery-item gallery-item" data-id="${this.escapeHtml(id)}" data-image="${this.escapeHtml(image)}">
+        <div class="fun-gallery-item-image gallery-item-image">
           <img src="${this.escapeHtml(image)}" alt="${this.escapeHtml(title || description || 'Fun item')}" loading="lazy" />
         </div>
         ${description ? `
-          <p class="fun-gallery-item-description">${this.escapeHtml(description)}</p>
+          <div class="gallery-item-content">
+            <p class="fun-gallery-item-description gallery-item-description">${this.escapeHtml(description)}</p>
+          </div>
         ` : ''}
       </article>
     `;
