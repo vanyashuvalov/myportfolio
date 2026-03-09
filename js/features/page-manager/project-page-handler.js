@@ -1,0 +1,259 @@
+/**
+ * ProjectPageHandler - Handles project detail page rendering
+ * FSD: features/page-manager → project detail page logic
+ * REUSED: Chip, ImageViewer, ReadingProgress, markdownParser
+ * 
+ * @class ProjectPageHandler
+ */
+import { Chip } from '../../shared/ui/chip/chip.js';
+import { ReadingProgress } from '../../shared/ui/reading-progress/reading-progress.js';
+import { markdownParser } from '../modal-system/markdown-parser.js';
+
+export class ProjectPageHandler {
+  constructor(options = {}) {
+    this.eventBus = options.eventBus;
+    this.pageContainer = options.pageContainer;
+    this.readingProgress = null;
+    this.imageViewer = null;
+  }
+
+  /**
+   * Load project markdown from backend
+   * @param {string} projectId - Project ID
+   * @param {string} category - Project category
+   * @returns {Promise<Object>} Frontmatter and HTML
+   */
+  async load(projectId, category = 'work') {
+    const apiUrl = window.location.hostname === 'localhost' 
+      ? `http://localhost:8000/api/projects/${category}/${projectId}`
+      : `/api/projects/${category}/${projectId}`;
+    
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000);
+    
+    try {
+      const response = await fetch(apiUrl, { signal: controller.signal });
+      clearTimeout(timeoutId);
+      
+      if (!response.ok) {
+        throw new Error(`Failed to load project: ${response.statusText}`);
+      }
+      
+      const markdownContent = await response.text();
+      const { frontmatter, html } = markdownParser.parseWithFrontmatter(markdownContent);
+      
+      return { frontmatter, html, projectId, category };
+      
+    } catch (error) {
+      clearTimeout(timeoutId);
+      if (error.name === 'AbortError') {
+        throw new Error('Project loading timed out - please check your connection');
+      }
+      throw error;
+    }
+  }
+
+  /**
+   * Render project page HTML
+   * @param {Object} data - Project data
+   * @returns {string} HTML content
+   */
+  render(data) {
+    const { frontmatter, html, projectId, category } = data;
+    const {
+      title = 'Untitled Project',
+      hero_image,
+      tags = [],
+      year,
+      client,
+      role,
+      description
+    } = frontmatter;
+
+    return `
+      <div class="page-wrapper" data-category="${category}">
+        <button class="page-back" data-action="back-to-projects" aria-label="Back to projects">
+          <img src="/assets/icons/iconamoon_arrow-down-2.svg" alt="Back" style="transform: rotate(90deg);" />
+        </button>
+        
+        <button class="page-close" data-action="back-to-desktop" aria-label="Close page">
+          <img src="/assets/icons/iconamoon_close.svg" alt="Close" />
+        </button>
+        
+        <header class="page-header">
+          <button class="page-back-button" data-action="back-to-desktop">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <span>Back to Desktop</span>
+          </button>
+        </header>
+        
+        <article class="project-page">
+          <div class="project-page-content">
+            <header class="project-header">
+              <h1 class="project-title">${this.escapeHtml(title)}</h1>
+              
+              <div class="project-meta-row">
+                ${tags.length > 0 ? `
+                  <div class="project-tags" data-tags='${JSON.stringify(tags)}'></div>
+                ` : ''}
+                
+                ${year ? `
+                  <div class="project-meta-item">
+                    <img src="/assets/icons/iconamoon_calendar-1.svg" alt="" class="project-meta-icon project-meta-icon--light" />
+                    <span>${year}</span>
+                  </div>
+                ` : ''}
+                
+                <div class="project-meta-item" data-read-time>
+                  <img src="/assets/icons/iconamoon_clock.svg" alt="" class="project-meta-icon project-meta-icon--dark" />
+                  <span></span>
+                </div>
+              </div>
+              
+              ${hero_image ? `
+                <div class="project-hero">
+                  <img src="${this.escapeHtml(hero_image)}" alt="${this.escapeHtml(title)}" loading="eager" />
+                </div>
+              ` : ''}
+            </header>
+            
+            <div class="project-content markdown-content">${html}</div>
+          </div>
+        </article>
+      </div>
+    `;
+  }
+
+  /**
+   * Setup event listeners and render components
+   * @param {Object} data - Project data
+   */
+  setupEvents(data) {
+    // Back button
+    const backButton = this.pageContainer.querySelector('[data-action="back-to-projects"]');
+    if (backButton) {
+      backButton.addEventListener('click', () => {
+        const category = this.pageContainer.querySelector('.page-wrapper')?.dataset.category || 'work';
+        this.eventBus?.emit('page:backToProjects', { category });
+      });
+      backButton.classList.add('page-back--visible');
+    }
+
+    // Close button
+    const closeButton = this.pageContainer.querySelector('.page-close');
+    if (closeButton) {
+      closeButton.addEventListener('click', () => this.eventBus?.emit('page:close'));
+      closeButton.classList.add('page-close--visible');
+    }
+
+    // Desktop back button
+    const desktopButton = this.pageContainer.querySelector('[data-action="back-to-desktop"]');
+    if (desktopButton) {
+      desktopButton.addEventListener('click', () => this.eventBus?.emit('page:close'));
+    }
+
+    // Render chips
+    this.renderChips(data?.frontmatter?.tags || []);
+
+    // Calculate read time
+    this.calculateReadTime();
+
+    // Setup image viewers
+    this.setupImageViewers();
+
+    // Initialize reading progress
+    this.initializeReadingProgress();
+  }
+
+  /**
+   * Render chip components for tags
+   * @param {Array<string>} tags - Tags array
+   */
+  renderChips(tags) {
+    const container = this.pageContainer.querySelector('.project-tags');
+    if (!container) return;
+
+    container.innerHTML = '';
+    tags.forEach(tag => {
+      const chip = new Chip({ label: tag, variant: 'dark' });
+      container.appendChild(chip.createElement());
+    });
+  }
+
+  /**
+   * Calculate and display read time
+   */
+  calculateReadTime() {
+    const element = this.pageContainer.querySelector('[data-read-time] span');
+    const content = this.pageContainer.querySelector('.markdown-content');
+    if (!element || !content) return;
+
+    const text = content.textContent || '';
+    const wordCount = text.trim().split(/\s+/).length;
+    const imageCount = content.querySelectorAll('img').length;
+    
+    const minutes = Math.max(1, Math.ceil((wordCount / 200) + (imageCount * 0.2)));
+    element.textContent = `${minutes} min read`;
+  }
+
+  /**
+   * Setup image click handlers for fullscreen viewing
+   */
+  async setupImageViewers() {
+    const { ImageViewer } = await import('../../shared/ui/image-viewer/image-viewer.js');
+    
+    if (!this.imageViewer) {
+      this.imageViewer = new ImageViewer({ eventBus: this.eventBus });
+    }
+
+    const images = this.pageContainer.querySelectorAll('.project-content img, .project-hero img');
+    images.forEach(img => {
+      img.style.cursor = 'pointer';
+      img.addEventListener('click', () => this.imageViewer.open(img.src, img.alt));
+    });
+  }
+
+  /**
+   * Initialize reading progress indicator
+   */
+  initializeReadingProgress() {
+    this.destroyReadingProgress();
+    
+    this.readingProgress = new ReadingProgress({
+      container: this.pageContainer,
+      color: 'rgba(255, 255, 255, 0.3)',
+      height: 2,
+      zIndex: 100003
+    });
+  }
+
+  /**
+   * Destroy reading progress indicator
+   */
+  destroyReadingProgress() {
+    if (this.readingProgress) {
+      this.readingProgress.destroy();
+      this.readingProgress = null;
+    }
+  }
+
+  /**
+   * Escape HTML
+   * @param {string} text - Text to escape
+   * @returns {string} Escaped text
+   */
+  escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  /**
+   * Cleanup on page close
+   */
+  destroy() {
+    this.destroyReadingProgress();
+  }
+}
