@@ -513,14 +513,14 @@
   margin: 48px 0;
 }
 
-.gallery-item {
+.markdown-gallery-item {
   position: relative;
   overflow: hidden;
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.03);
 }
 
-.gallery-item img {
+.markdown-gallery-item img {
   /* CRITICAL: Fit within gallery item while preserving aspect ratio */
   width: 100%;
   height: auto;
