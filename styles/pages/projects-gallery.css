@@ -20,7 +20,7 @@
  * USAGE: .projects-list (in modal), .projects-list-page (standalone)
  * UPDATED COMMENTS: HUG content - NO min-height, let content determine height
  * SCALED FOR: Single scroll context to prevent iOS Safari issues
- * UPDATED COMMENTS: Safe-area padding for iOS notch/home indicator
+ * UPDATED COMMENTS: NO safe-area in padding - viewport-fit=cover handles it
  */
 .projects-list,
 .projects-list-page {
@@ -32,9 +32,9 @@
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
-  /* CRITICAL: Flexible padding - NO vh units that clip content */
-  /* UPDATED COMMENTS: Fixed pixel padding, safe-area added for iOS */
-  padding: calc(120px + var(--safe-top)) 40px calc(80px + var(--safe-bottom)) 40px !important;
+  /* CRITICAL: Fixed padding - NO safe-area variables */
+  /* UPDATED COMMENTS: viewport-fit=cover extends content under safe-areas automatically */
+  padding: 120px 40px 80px 40px !important;
   gap: 0 !important; /* No gap - projects-grid handles spacing */
   opacity: 0; /* Hidden by default */
   transform: translateY(100px); /* Start below viewport */
@@ -126,9 +126,9 @@
 @media (max-width: 768px) {
   .projects-list,
   .projects-list-page {
-    /* CRITICAL: Safe-area padding for iOS notch/home indicator on mobile */
-    /* UPDATED COMMENTS: Fixed pixel padding instead of vh to prevent clipping */
-    padding: calc(100px + var(--safe-top)) 16px calc(60px + var(--safe-bottom)) 16px !important;
+    /* CRITICAL: Fixed padding - NO safe-area variables */
+    /* UPDATED COMMENTS: viewport-fit=cover extends content under safe-areas automatically */
+    padding: 100px 16px 60px 16px !important;
   }
   
   .projects-grid {
