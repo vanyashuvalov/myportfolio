@@ -18,11 +18,14 @@
  * WHY: Same layout for modal and standalone page for consistency
  * ANIMATION: Slide up + fade in on open (translateY: 100px → 0)
  * USAGE: .projects-list (in modal), .projects-list-page (standalone)
+ * UPDATED COMMENTS: Full height to fill page-container on iOS Safari
  */
 .projects-list,
 .projects-list-page {
   width: 720px !important;
   max-width: 100% !important;
+  /* CRITICAL: Full height to fill page-container */
+  min-height: 100%;
   margin: 0 auto !important;
   display: flex !important;
   flex-direction: column !important;

@@ -18,6 +18,7 @@
  * WHY: Same layout as projects-gallery for consistency
  * SPACING: 100px gap between items for visual separation
  * REUSED: Uses .gallery-item component from shared/gallery-item.css
+ * UPDATED COMMENTS: Full height to fill page-container on iOS Safari
  */
 .fun-gallery {
   display: flex;
@@ -26,6 +27,8 @@
   padding: 16vh 40px;
   width: 100%;
   max-width: 720px;
+  /* CRITICAL: Full height to fill page-container */
+  min-height: 100%;
   margin: 0 auto;
   box-sizing: border-box;
 }

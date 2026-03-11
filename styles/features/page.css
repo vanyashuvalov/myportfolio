@@ -17,11 +17,16 @@
  * PURPOSE: Used for project detail pages, fun gallery pages
  * WHY: z-index: 9999 places above fullscreen modals (9998)
  * PERFORMANCE: Scrollbar hidden for cleaner appearance
- * UPDATED COMMENTS: min-height for iOS Safari full viewport coverage
+ * UPDATED COMMENTS: Full viewport height for iOS Safari with --app-height
  */
 .page-container {
   position: fixed;
   inset: 0;
+  /* CRITICAL: iOS Safari full viewport height with JS fallback */
+  height: var(--app-height, 100dvh);
+  height: 100dvh;
+  height: 100vh;
+  min-height: var(--app-height, 100dvh);
   min-height: 100dvh;
   min-height: 100vh;
   background: var(--color-bg-dark, #101010) !important;
@@ -43,10 +48,13 @@
 /* CRITICAL: Page wrapper
  * PURPOSE: Flex container for page content
  * LAYOUT: Vertical stack (for future header/footer if needed)
+ * UPDATED COMMENTS: Full height to fill page-container
  */
 .page-wrapper {
   display: flex;
   flex-direction: column;
+  /* CRITICAL: Fill parent page-container height */
+  min-height: 100%;
 }
 
 /* CRITICAL: Hide legacy page elements
