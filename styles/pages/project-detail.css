@@ -17,13 +17,15 @@
  * WHY: Large top padding creates dramatic entrance, focuses on content
  * TYPOGRAPHY: White text for dark background
  * OVERFLOW: Hidden horizontal to prevent layout breaks
- * UPDATED COMMENTS: Full height to fill page-container on iOS Safari
+ * UPDATED COMMENTS: Full viewport height for iOS Safari
  */
 .project-page {
   width: 720px !important;
   max-width: 100% !important;
-  /* CRITICAL: Full height to fill page-container */
-  min-height: 100%;
+  /* CRITICAL: Full viewport height with --app-height fallback */
+  min-height: var(--app-height, 100dvh);
+  min-height: 100dvh;
+  min-height: 100vh;
   margin: 0 auto !important;
   padding: 30vh 40px !important; /* Large top padding for dramatic effect */
   color: var(--color-text-light, #FFFFFF) !important;

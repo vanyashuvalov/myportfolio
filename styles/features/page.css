@@ -48,13 +48,15 @@
 /* CRITICAL: Page wrapper
  * PURPOSE: Flex container for page content
  * LAYOUT: Vertical stack (for future header/footer if needed)
- * UPDATED COMMENTS: Full height to fill page-container
+ * UPDATED COMMENTS: Full viewport height for iOS Safari
  */
 .page-wrapper {
   display: flex;
   flex-direction: column;
-  /* CRITICAL: Fill parent page-container height */
-  min-height: 100%;
+  /* CRITICAL: Full viewport height with --app-height fallback */
+  min-height: var(--app-height, 100dvh);
+  min-height: 100dvh;
+  min-height: 100vh;
 }
 
 /* CRITICAL: Hide legacy page elements
