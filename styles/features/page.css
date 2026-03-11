@@ -16,46 +16,39 @@
  * POSITION: Fixed fullscreen overlay (like modal but for pages)
  * PURPOSE: Used for project detail pages, fun gallery pages
  * WHY: z-index: 9999 places above fullscreen modals (9998)
- * PERFORMANCE: Scrollbar hidden for cleaner appearance
- * UPDATED COMMENTS: MUST use width/height instead of inset for iOS Safari!
+ * UPDATED COMMENTS: HUG content - no scroll, let body handle scrolling
+ * SCALED FOR: Single scroll context to prevent nested scroll issues
  */
 .page-container {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  /* CRITICAL: iOS Safari full viewport height with JS fallback */
-  height: var(--app-height, 100dvh);
-  height: 100dvh;
-  height: 100vh;
+  /* CRITICAL: HUG content - auto height, no fixed height */
+  /* UPDATED COMMENTS: Let content determine height, body scrolls */
+  height: auto;
+  min-height: 100%;
   background: var(--color-bg-dark, #101010) !important;
   z-index: var(--z-page, 9999);
-  overflow-y: auto; /* Scrollable content */
+  /* CRITICAL: No overflow - body handles scrolling */
+  overflow: visible;
   transition: opacity var(--transition-normal, 0.3s ease-out);
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE/Edge */
-}
-
-/* CRITICAL: Hide scrollbar for page container
- * WHY: Cleaner appearance, custom scrollbar not needed
- */
-.page-container::-webkit-scrollbar {
-  width: 0;
-  display: none;
+  /* REUSED: Pointer events for proper interaction */
+  pointer-events: auto;
 }
 
 /* CRITICAL: Page wrapper
  * PURPOSE: Flex container for page content
  * LAYOUT: Vertical stack (for future header/footer if needed)
- * UPDATED COMMENTS: Full viewport height for iOS Safari
+ * UPDATED COMMENTS: HUG content - let content determine height
+ * SCALED FOR: Single scroll context on body level
  */
 .page-wrapper {
   display: flex;
   flex-direction: column;
-  /* CRITICAL: Full viewport height with --app-height fallback */
-  min-height: var(--app-height, 100dvh);
-  min-height: 100dvh;
-  min-height: 100vh;
+  /* CRITICAL: HUG content - no min-height, let content flow */
+  width: 100%;
+  position: relative;
 }
 
 /* CRITICAL: Hide legacy page elements

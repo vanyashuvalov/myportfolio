@@ -18,19 +18,18 @@
  * WHY: Same layout as projects-gallery for consistency
  * SPACING: 100px gap between items for visual separation
  * REUSED: Uses .gallery-item component from shared/gallery-item.css
- * UPDATED COMMENTS: Full viewport height for iOS Safari
+ * UPDATED COMMENTS: HUG content - body scrolls, no double scroll
+ * SCALED FOR: Single scroll context to prevent iOS Safari issues
  */
 .fun-gallery {
   display: flex;
   flex-direction: column;
   gap: 100px; /* Large gap for visual separation */
-  padding: 16vh 40px;
+  padding: 16vh 40px 10vh 40px; /* Top padding, bottom padding for spacing */
   width: 100%;
   max-width: 720px;
-  /* CRITICAL: Full viewport height with --app-height fallback */
-  min-height: var(--app-height, 100dvh);
-  min-height: 100dvh;
-  min-height: 100vh;
+  /* CRITICAL: HUG content - let content determine height */
+  /* UPDATED COMMENTS: Removed min-height to prevent double scroll */
   margin: 0 auto;
   box-sizing: border-box;
 }
@@ -43,7 +42,7 @@
 @media (max-width: 768px) {
   .fun-gallery {
     gap: 60px; /* Reduced from 100px */
-    padding: 20vh 16px; /* Increased top padding, reduced horizontal */
+    padding: 20vh 16px 10vh 16px; /* Increased top padding, reduced horizontal, bottom spacing */
     max-width: 100%;
   }
 }

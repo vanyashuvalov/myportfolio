@@ -17,17 +17,16 @@
  * WHY: Large top padding creates dramatic entrance, focuses on content
  * TYPOGRAPHY: White text for dark background
  * OVERFLOW: Hidden horizontal to prevent layout breaks
- * UPDATED COMMENTS: Full viewport height for iOS Safari
+ * UPDATED COMMENTS: Content determines height - body scrolls
+ * SCALED FOR: Single scroll context to prevent iOS Safari issues
  */
 .project-page {
   width: 720px !important;
   max-width: 100% !important;
-  /* CRITICAL: Full viewport height with --app-height fallback */
-  min-height: var(--app-height, 100dvh);
-  min-height: 100dvh;
-  min-height: 100vh;
+  /* CRITICAL: HUG content - let content determine height */
+  /* UPDATED COMMENTS: Removed min-height to prevent double scroll */
   margin: 0 auto !important;
-  padding: 30vh 40px !important; /* Large top padding for dramatic effect */
+  padding: 30vh 40px 10vh 40px !important; /* Large top padding, bottom padding for spacing */
   color: var(--color-text-light, #FFFFFF) !important;
   position: relative;
   overflow-x: hidden; /* Prevents horizontal scroll */
@@ -189,7 +188,7 @@
 /* MOBILE: Smaller padding and typography */
 @media (max-width: 768px) {
   .project-page {
-    padding: 20vh 16px !important; /* Reduced top padding, smaller horizontal */
+    padding: 20vh 16px 10vh 16px !important; /* Reduced top padding, smaller horizontal, bottom spacing */
   }
   
   .project-title {

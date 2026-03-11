@@ -18,21 +18,20 @@
  * WHY: Same layout for modal and standalone page for consistency
  * ANIMATION: Slide up + fade in on open (translateY: 100px → 0)
  * USAGE: .projects-list (in modal), .projects-list-page (standalone)
- * UPDATED COMMENTS: Full viewport height for iOS Safari
+ * UPDATED COMMENTS: HUG content - body scrolls, no double scroll
+ * SCALED FOR: Single scroll context to prevent iOS Safari issues
  */
 .projects-list,
 .projects-list-page {
   width: 720px !important;
   max-width: 100% !important;
-  /* CRITICAL: Full viewport height with --app-height fallback */
-  min-height: var(--app-height, 100dvh);
-  min-height: 100dvh;
-  min-height: 100vh;
+  /* CRITICAL: HUG content - let content determine height */
+  /* UPDATED COMMENTS: Removed min-height to prevent double scroll */
   margin: 0 auto !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
-  padding: 16vh 40px !important;
+  padding: 16vh 40px 10vh 40px !important; /* Top padding, bottom padding for spacing */
   gap: 0 !important; /* No gap - projects-grid handles spacing */
   opacity: 0; /* Hidden by default */
   transform: translateY(100px); /* Start below viewport */
@@ -123,7 +122,7 @@
 @media (max-width: 768px) {
   .projects-list,
   .projects-list-page {
-    padding: 20vh 16px !important; /* Increased top padding, reduced horizontal */
+    padding: 20vh 16px 10vh 16px !important; /* Increased top padding, reduced horizontal, bottom spacing */
   }
   
   .projects-grid {
