@@ -183,6 +183,62 @@
   }
 }
 
+/* ANCHOR: ios_safe_area_mobile */
+/* CRITICAL: iOS Safari safe area handling for mobile devices */
+/* UPDATED COMMENTS: Proper padding for notch and home indicator areas */
+/* SCALED FOR: Edge-to-edge display with viewport-fit=cover */
+@media (max-width: 768px) {
+  /* CRITICAL: Ensure html/body extend to full viewport height */
+  html,
+  body {
+    min-height: 100vh;
+    min-height: 100dvh; /* Dynamic viewport height for iOS */
+  }
+  
+  /* CRITICAL: Fixed elements need safe area insets */
+  #navigation-container {
+    padding-top: env(safe-area-inset-top);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+  
+  /* CRITICAL: Bottom fixed elements need safe area inset */
+  #contact-input-container {
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+  
+  /* CRITICAL: Modal containers need safe area handling */
+  .modal-container {
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) 
+             env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+  
+  /* CRITICAL: Desktop canvas scrolls within safe area */
+  .desktop-canvas {
+    /* CRITICAL: Enable scrolling for oversized canvas */
+    overflow: auto;
+    /* REUSED: Smooth momentum scrolling on iOS */
+    -webkit-overflow-scrolling: touch;
+    /* CRITICAL: Full edge-to-edge - NO padding, background extends under notch */
+    padding-top: 0;
+    padding-bottom: 0;
+    /* SCALED FOR: Hardware-accelerated scrolling */
+    will-change: scroll-position;
+  }
+  
+  /* CRITICAL: Workspace container takes full viewport */
+  .workspace-container {
+    /* CRITICAL: No padding - full edge-to-edge layout */
+    padding: 0;
+    box-sizing: border-box;
+    /* CRITICAL: Ensure content doesn't get cut off by safe areas */
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+}
+
 /* ANCHOR: high_contrast */
 @media (prefers-contrast: high) {
   :root {

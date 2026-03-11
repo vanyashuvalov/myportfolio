@@ -260,31 +260,49 @@ body.loaded .workspace-container::before {
 /* CRITICAL FIX: Removed conflicting background that caused flash */
 
 /* ANCHOR: ios_safari_toolbar_tint */
-/* CRITICAL: iOS 26+ Liquid Glass fix - hidden element for Safari toolbar tinting */
+/* CRITICAL: iOS Safari Liquid Glass fix - fixed element for toolbar tinting */
 /* UPDATED COMMENTS: Safari samples background color from fixed elements near viewport edges */
 /* If no suitable element found, floating bars appear black */
 /* REF: https://jahir.dev/blog/safari-toolbar */
 #safari-toolbar-tint {
   position: fixed;
-  bottom: -8px;
+  bottom: 0;
   left: 0;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  min-height: 12px;
+  right: 0;
+  height: env(safe-area-inset-bottom, 20px);
   z-index: -1;
   background-color: #101010;
-  /* Hide by default - only visible to Safari iOS 26+ */
-  display: none;
+  /* CRITICAL: Use visibility instead of display to keep element in layout */
+  visibility: hidden;
+  pointer-events: none;
 }
 
-/* CRITICAL: Safari 26+ detection - combined selectors for iOS Safari only */
-@supports (-webkit-text-size-adjust: none) and (font: -apple-system-body) and (-webkit-touch-callout: none) {
-  @media (width < 768px) {
-    #safari-toolbar-tint {
-      /* Show on Safari 26+ AND small viewport width devices */
-      display: block;
-    }
+/* CRITICAL: Show tint element for iOS Safari with viewport-fit=cover */
+/* UPDATED COMMENTS: Simple detection - if viewport-fit=cover is set, show tint */
+@supports (padding: env(safe-area-inset-bottom, 0px)) {
+  #safari-toolbar-tint {
+    visibility: visible;
+  }
+}
+
+/* ANCHOR: ios_safe_area_overlay */
+/* CRITICAL: Top safe area overlay for notch handling */
+/* UPDATED COMMENTS: Hidden element to help Safari detect background at top edge */
+#safari-top-tint {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: env(safe-area-inset-top, 1px);
+  z-index: -1;
+  background-color: #101010;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+@supports (padding: env(safe-area-inset-top, 0px)) {
+  #safari-top-tint {
+    visibility: visible;
   }
 }
 
