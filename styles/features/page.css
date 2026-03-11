@@ -23,8 +23,10 @@
   position: relative;
   width: 100%;
   /* CRITICAL: HUG content - auto height, no fixed height */
-  /* UPDATED COMMENTS: Let content determine height, body scrolls */
-  min-height: 100dvh;
+  /* UPDATED COMMENTS: Let content determine height with multiple fallbacks */
+  min-height: 100svh; /* Small viewport - accounts for iOS UI bars */
+  min-height: 100dvh; /* Dynamic viewport - adjusts when UI shows/hides */
+  min-height: -webkit-fill-available; /* Safari fallback */
   background: var(--color-bg-dark, #101010) !important;
   z-index: 1; /* CRITICAL: Above canvas background */
   /* CRITICAL: No overflow - body handles scrolling */

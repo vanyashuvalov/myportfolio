@@ -17,18 +17,17 @@
  * STATE: Hidden by default (opacity: 0, pointer-events: none)
  * WHY: Prevents interaction with background content when modal is closed
  * ANIMATION: Fade in/out with opacity transition
- * UPDATED COMMENTS: Uses 100dvh for iOS Safari compatibility
- * REF: https://www.bram.us/2020/05/06/100vh-in-safari-on-ios/
+ * UPDATED COMMENTS: Multiple fallbacks for iOS Safari edge-to-edge
  */
 .modal-container {
   position: fixed !important;
   top: 0 !important;
   left: 0 !important;
   width: 100% !important;
-  /* CRITICAL: iOS Safari dynamic viewport height */
-  /* UPDATED COMMENTS: 100dvh instead of 100% for proper iOS Safari rendering */
-  height: 100dvh !important;
-  height: 100vh !important;
+  /* CRITICAL: iOS Safari dynamic viewport height with multiple fallbacks */
+  height: 100svh !important; /* Small viewport - accounts for iOS UI bars */
+  height: 100dvh !important; /* Dynamic viewport - adjusts when UI shows/hides */
+  height: -webkit-fill-available !important; /* Safari fallback */
   z-index: var(--z-modal, 1000) !important;
   display: flex !important;
   opacity: 0;
@@ -75,16 +74,17 @@
 /* CRITICAL: Semi-transparent backdrop
  * PURPOSE: Darkens background, provides click-to-close area
  * WHY: z-index: 1 places behind modal content (z-index: 2)
- * UPDATED COMMENTS: Uses 100dvh for iOS Safari compatibility
+ * UPDATED COMMENTS: Multiple fallbacks for iOS Safari edge-to-edge
  */
 .modal-backdrop {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  /* CRITICAL: iOS Safari dynamic viewport height */
-  height: 100dvh;
-  height: 100vh;
+  /* CRITICAL: iOS Safari dynamic viewport height with multiple fallbacks */
+  height: 100svh; /* Small viewport - accounts for iOS UI bars */
+  height: 100dvh; /* Dynamic viewport - adjusts when UI shows/hides */
+  height: -webkit-fill-available; /* Safari fallback */
   background: var(--color-overlay, rgba(0, 0, 0, 0.2));
   z-index: 1;
   pointer-events: auto; /* Allows click-to-close */
@@ -124,9 +124,10 @@
   width: 100% !important;
   max-width: 100% !important;
   /* CRITICAL: HUG content - NO fixed height, let content flow */
-  /* UPDATED COMMENTS: min-height ensures full viewport, but content can grow */
-  min-height: 100dvh !important;
-  min-height: 100vh !important;
+  /* UPDATED COMMENTS: min-height ensures full viewport with multiple fallbacks */
+  min-height: 100svh !important; /* Small viewport - accounts for iOS UI bars */
+  min-height: 100dvh !important; /* Dynamic viewport - adjusts when UI shows/hides */
+  min-height: -webkit-fill-available !important; /* Safari fallback */
   background: var(--color-bg-dark, #101010) !important;
   border-radius: 0 !important;
   box-shadow: none !important;

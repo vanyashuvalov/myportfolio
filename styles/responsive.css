@@ -119,11 +119,7 @@
     height: 140px;
   }
   
-  /* UPDATED COMMENTS: Hover effects only on devices that support hover */
-  /* CRITICAL: Completely disable CSS hover transforms - JS handles everything */
-  .widget:hover {
-    /* No transforms - JavaScript SimpleDragHover system handles all transforms */
-  }
+  /* UPDATED COMMENTS: Hover effects disabled - JS SimpleDragHover handles all transforms */
 }
 
 /* ANCHOR: large_desktop */
@@ -162,10 +158,7 @@
     min-height: 48px;
   }
   
-  /* CRITICAL: Completely disable CSS hover transforms on touch devices */
-  .widget:hover {
-    /* No transforms - JavaScript handles everything */
-  }
+  /* UPDATED COMMENTS: Hover transforms disabled - JavaScript handles everything */
   
   .widget:active {
     transform: scale(0.95);
@@ -186,16 +179,21 @@
 /* ANCHOR: ios_safe_area_mobile */
 /* CRITICAL: iOS Safari safe area handling for mobile devices */
 /* UPDATED COMMENTS: Apply safe-area padding to FIXED elements, not body */
-/* SCALED FOR: Edge-to-edge display with viewport-fit=cover */
-/* iOS 26 Safari Liquid Glass requires edge-to-edge content for proper toolbar tinting */
+/* SCALED FOR: Edge-to-edge display without viewport-fit=cover */
+/* iOS Safari manages safe-area automatically, we just ensure proper heights */
 @media (max-width: 768px) {
   /* CRITICAL: Ensure html/body extend to full viewport height */
-  /* UPDATED COMMENTS: Uses --app-height from viewport-height-fix.js for accurate iOS Safari height */
-  html,
+  /* UPDATED COMMENTS: Multiple fallbacks for iOS Safari edge-to-edge */
+  html {
+    height: -webkit-fill-available;
+    height: 100%;
+  }
+  
   body {
-    min-height: var(--app-height, 100dvh);
-    min-height: 100dvh;
-    min-height: 100vh; /* Dynamic viewport height for iOS */
+    min-height: 100svh; /* Small viewport - accounts for iOS UI bars */
+    min-height: 100dvh; /* Dynamic viewport - adjusts when UI shows/hides */
+    min-height: -webkit-fill-available; /* Safari fallback */
+    min-height: var(--app-height, 100vh); /* JS-calculated fallback */
   }
   
   /* CRITICAL: Fixed elements need safe area insets */
@@ -237,15 +235,16 @@
   
   /* CRITICAL: Workspace container takes full viewport */
   /* UPDATED COMMENTS: NO padding - widgets handle their own safe positioning */
-  /* iOS Safari: Uses --app-height for accurate viewport height */
+  /* iOS Safari: Multiple fallbacks for accurate viewport height */
   .workspace-container {
     /* CRITICAL: No padding - full edge-to-edge layout */
     padding: 0;
     box-sizing: border-box;
-    /* CRITICAL: Ensure content doesn't get cut off by safe areas */
-    min-height: var(--app-height, 100dvh);
-    min-height: 100dvh;
-    min-height: 100vh;
+    /* CRITICAL: Ensure content doesn't get cut off */
+    min-height: 100svh; /* Small viewport - accounts for iOS UI bars */
+    min-height: 100dvh; /* Dynamic viewport - adjusts when UI shows/hides */
+    min-height: -webkit-fill-available; /* Safari fallback */
+    min-height: var(--app-height, 100vh); /* JS-calculated fallback */
   }
 }
 
