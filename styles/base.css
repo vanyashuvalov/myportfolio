@@ -25,26 +25,29 @@ html {
   overflow-x: hidden;
   overflow-y: visible;
   position: relative;
-  /* CRITICAL: Solid background-color for consistent appearance */
-  /* UPDATED COMMENTS: Dark background matches overall design */
+  /* CRITICAL: Solid background-color required for viewport-fit=cover */
+  /* UPDATED COMMENTS: Dark background extends under safe-areas (notch/home indicator) */
+  /* REF: https://stackoverflow.com/questions/76475354/viewport-fit-cover-does-not-work-on-the-ios-safari */
   background-color: #101010;
 }
 
 body {
   font-family: var(--font-family-primary);
-  /* UPDATED COMMENTS: Solid background-color for consistent appearance */
-  /* CRITICAL: Dark background matches overall design */
+  /* UPDATED COMMENTS: Solid background-color required for viewport-fit=cover */
+  /* CRITICAL: Background-color (not background-image) for iOS Safari safe-area coverage */
+  /* REF: https://stackoverflow.com/questions/76475354/viewport-fit-cover-does-not-work-on-the-ios-safari */
   background-color: #101010;
   
   width: 100%;
   /* CRITICAL: iOS Safari edge-to-edge height with multiple fallbacks */
   /* UPDATED COMMENTS: svh = small viewport (accounts for UI bars), dvh = dynamic */
+  /* With viewport-fit=cover, content extends under safe-areas */
   min-height: 100svh; /* Small viewport - accounts for iOS UI bars */
   min-height: 100dvh; /* Dynamic viewport - adjusts when UI shows/hides */
   min-height: -webkit-fill-available; /* Safari fallback */
   margin: 0;
-  /* CRITICAL: NO padding - Safari handles safe-area automatically */
-  /* UPDATED COMMENTS: Without viewport-fit=cover, browser manages safe-area */
+  /* CRITICAL: NO padding on body - safe-area handled by fixed elements */
+  /* UPDATED COMMENTS: With viewport-fit=cover, body extends under notch/home indicator */
   padding: 0;
   /* CRITICAL: Only prevent horizontal scroll, allow vertical */
   /* UPDATED COMMENTS: overflow-x hidden prevents horizontal scroll issues */
@@ -74,17 +77,19 @@ body::before {
 /* CRITICAL: Hide mountains and gradient when in page mode */
 /* UPDATED COMMENTS: Show only solid #101010 background for project pages */
 body.page-mode {
-  /* CRITICAL: Solid background-color for consistent appearance */
+  /* CRITICAL: Solid background-color required for viewport-fit=cover */
+  /* REF: https://stackoverflow.com/questions/76475354/viewport-fit-cover-does-not-work-on-the-ios-safari */
   background-color: #101010 !important;
   /* CRITICAL: Body becomes scroll container in page mode */
   /* UPDATED COMMENTS: overflow-y auto for vertical scrolling, hidden-x to prevent horizontal */
   overflow-y: auto !important;
   overflow-x: hidden !important;
-  /* CRITICAL: Ensure body fills viewport for proper scrolling */
-  /* UPDATED COMMENTS: Multiple fallbacks for iOS Safari edge-to-edge */
+  /* CRITICAL: Ensure body fills viewport + safe areas for proper scrolling */
+  /* UPDATED COMMENTS: Multiple fallbacks for iOS Safari edge-to-edge with viewport-fit=cover */
   min-height: 100svh; /* Small viewport - accounts for iOS UI bars */
   min-height: 100dvh; /* Dynamic viewport - adjusts when UI shows/hides */
   min-height: -webkit-fill-available; /* Safari fallback */
+  /* CRITICAL: Safe-area padding for iOS notch/home indicator */
   padding-top: var(--safe-top);
   padding-bottom: var(--safe-bottom);
 }
@@ -97,8 +102,8 @@ body.page-mode::before {
 /* UPDATED COMMENTS: Fullscreen canvas container with perfect flexbox centering */
 /* CRITICAL: Fixed background layer behind all content */
 /* SCALED FOR: Background scrolls with canvas on mobile */
-/* iOS Safari: Full viewport with automatic safe-area handling */
-/* UPDATED COMMENTS: Browser manages safe-area without viewport-fit=cover */
+/* iOS Safari: Full viewport including safe-areas (notch/home indicator) with viewport-fit=cover */
+/* UPDATED COMMENTS: Solid background-color required for viewport-fit=cover compatibility */
 .desktop-canvas {
   position: fixed;
   top: 0;
@@ -121,8 +126,8 @@ body.page-mode::before {
   justify-content: center;
   /* UPDATED COMMENTS: Ensure flexbox works properly */
   flex-direction: column;
-  /* CRITICAL: Solid dark background */
-  /* UPDATED COMMENTS: Gradient moved to workspace-container */
+  /* CRITICAL: Solid dark background - viewport-fit=cover requires background-color, not background-image */
+  /* UPDATED COMMENTS: Gradient moved to workspace-container for iOS Safari compatibility */
   background-color: #101010;
 }
 
@@ -319,16 +324,53 @@ body.loaded .workspace-container::before {
 /* CRITICAL FIX: Removed conflicting background that caused flash */
 
 /* ANCHOR: ios_safari_26_liquid_glass_fix */
-/* CRITICAL: iOS 26 Safari Liquid Glass - NOT NEEDED without viewport-fit=cover */
-/* UPDATED COMMENTS: When viewport-fit=cover is NOT used, Safari handles safe-area automatically */
-/* Tint elements only needed with viewport-fit=cover for edge-to-edge content */
+/* CRITICAL: iOS 26 Safari Liquid Glass - proper toolbar tinting with viewport-fit=cover */
+/* UPDATED COMMENTS: Safari 26 no longer reads theme-color meta tag */
+/* Instead, it scans for position:fixed elements near viewport edges and reads their background-color */
 /* REF: https://jahir.dev/blog/safari-toolbar */
+/* REF: https://www.1ar.io/updates/safari-26-liquid-glass-web */
 
-/* CRITICAL: All tint elements disabled - not needed without viewport-fit=cover */
-#safari-bottom-tint,
+/* CRITICAL: Bottom toolbar tint element for iOS 26 Safari */
+/* UPDATED COMMENTS: Must be visible in render tree (not visibility:hidden or opacity:0) */
+/* Safari samples background-color even from elements positioned outside viewport */
+#safari-bottom-tint {
+  position: fixed;
+  /* CRITICAL: Position below viewport but Safari still samples it */
+  /* Must be within ~3px of bottom edge for Safari to detect */
+  bottom: -8px;
+  left: 0;
+  width: 100%;
+  /* CRITICAL: Must be >2px height and >88% width for iOS Safari sampling */
+  min-height: 12px;
+  background-color: #101010;
+  z-index: 1;
+  pointer-events: none;
+  /* CRITICAL: Hidden by default - only show on iOS Safari 26+ */
+  display: none;
+}
+
+/* CRITICAL: Show ONLY on iOS Safari 26+ using feature detection */
+/* UPDATED COMMENTS: Combines Safari-specific features to target iOS Safari 26+ */
+/* -webkit-text-size-adjust: Safari 9+ */
+/* font: -apple-system-body: Safari-specific */
+/* -webkit-touch-callout: Safari 26+ */
+@supports (-webkit-text-size-adjust: none) and 
+          (font: -apple-system-body) and 
+          (-webkit-touch-callout: none) {
+  /* CRITICAL: Only on mobile viewport (not iPad) */
+  @media (max-width: 768px) {
+    #safari-bottom-tint {
+      display: block;
+    }
+  }
+}
+
+/* ANCHOR: deprecated_tint_elements */
+/* UPDATED COMMENTS: Old tint elements deprecated - kept for backwards compatibility */
+/* These don't work with iOS 26 Liquid Glass - visibility:hidden elements are ignored */
 #safari-toolbar-tint,
 #safari-top-tint {
-  display: none !important;
+  display: none;
 }
 
 /* ANCHOR: utility_classes */

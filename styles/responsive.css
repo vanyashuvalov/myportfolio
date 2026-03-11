@@ -179,8 +179,8 @@
 /* ANCHOR: ios_safe_area_mobile */
 /* CRITICAL: iOS Safari safe area handling for mobile devices */
 /* UPDATED COMMENTS: Apply safe-area padding to FIXED elements, not body */
-/* SCALED FOR: Edge-to-edge display without viewport-fit=cover */
-/* iOS Safari manages safe-area automatically, we just ensure proper heights */
+/* SCALED FOR: Edge-to-edge display with viewport-fit=cover */
+/* iOS 26 Safari Liquid Glass requires edge-to-edge content for proper toolbar tinting */
 @media (max-width: 768px) {
   /* CRITICAL: Ensure html/body extend to full viewport height */
   /* UPDATED COMMENTS: Multiple fallbacks for iOS Safari edge-to-edge */
