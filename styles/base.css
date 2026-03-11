@@ -15,9 +15,9 @@ html {
   min-height: 100vh;
   margin: 0;
   padding: 0;
-  /* CRITICAL: overflow visible for page content to reach body */
-  /* UPDATED COMMENTS: Changed from hidden to visible to fix iOS Safari black bars */
-  overflow: visible;
+  /* CRITICAL: No overflow on html - body handles scrolling */
+  /* UPDATED COMMENTS: Changed to hidden to prevent html-level scroll */
+  overflow: hidden;
   position: relative;
   /* CRITICAL: iOS 26 Safari Liquid Glass - fallback background for toolbar tinting */
   /* UPDATED COMMENTS: Safari samples this color when no fixed element found near edges */
@@ -40,9 +40,9 @@ body {
   /* CRITICAL: NO padding - iOS 26 Safari needs edge-to-edge content for proper toolbar tinting */
   /* UPDATED COMMENTS: Removed safe-area padding to fix black bars on iOS 26 */
   padding: 0;
-  /* CRITICAL: overflow visible for page content to reach body */
-  /* UPDATED COMMENTS: Changed from hidden to visible to fix iOS Safari black bars */
-  overflow: visible;
+  /* CRITICAL: overflow hidden for desktop mode, scroll for page mode */
+  /* UPDATED COMMENTS: Body is the scroll container in page mode */
+  overflow: hidden;
   user-select: none;
   color: var(--color-primary);
   position: relative;
@@ -65,8 +65,14 @@ body::before {
 /* UPDATED COMMENTS: Show only solid #101010 background for project pages */
 body.page-mode {
   background: #101010 !important;
-  /* CRITICAL: Allow page content to scroll and fill viewport */
-  overflow: visible !important;
+  /* CRITICAL: Body becomes scroll container in page mode */
+  /* UPDATED COMMENTS: overflow-y scroll for vertical scrolling, hidden-x to prevent horizontal */
+  overflow-y: scroll !important;
+  overflow-x: hidden !important;
+  /* CRITICAL: Ensure body fills viewport for proper scrolling */
+  min-height: var(--app-height, 100dvh);
+  min-height: 100dvh;
+  min-height: 100vh;
 }
 
 body.page-mode::before {
@@ -83,12 +89,14 @@ body.page-mode::before {
   top: 0;
   left: 0;
   width: 100%;
+  min-width: 1000px; /* CRITICAL: Minimum width for desktop layout */
   /* CRITICAL: iOS Safari dynamic viewport height with JS fallback */
-  min-height: var(--app-height, 100dvh);
-  min-height: 100dvh;
-  min-height: 100vh;
-  /* CRITICAL: overflow hidden for desktop mode, visible for page mode */
-  /* UPDATED COMMENTS: Desktop mode needs hidden, page mode needs visible */
+  height: var(--app-height, 100dvh);
+  height: 100dvh;
+  height: 100vh;
+  min-height: 720px; /* CRITICAL: Minimum height for desktop layout */
+  /* CRITICAL: overflow hidden for desktop mode */
+  /* UPDATED COMMENTS: Desktop canvas doesn't scroll, workspace inside scrolls on mobile */
   overflow: hidden;
   z-index: 2;
   /* CRITICAL: Perfect flexbox centering */

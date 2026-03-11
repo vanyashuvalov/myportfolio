@@ -16,7 +16,7 @@
  * POSITION: Fixed fullscreen overlay (like modal but for pages)
  * PURPOSE: Used for project detail pages, fun gallery pages
  * WHY: z-index: 9999 places above fullscreen modals (9998)
- * UPDATED COMMENTS: HUG content - no scroll, let body handle scrolling
+ * UPDATED COMMENTS: HUG content - no scroll, body handles scrolling
  * SCALED FOR: Single scroll context to prevent nested scroll issues
  */
 .page-container {
@@ -31,7 +31,7 @@
   background: var(--color-bg-dark, #101010) !important;
   z-index: var(--z-page, 9999);
   /* CRITICAL: No overflow - body handles scrolling */
-  overflow: visible;
+  overflow: hidden;
   transition: opacity var(--transition-normal, 0.3s ease-out);
   /* REUSED: Pointer events for proper interaction */
   pointer-events: auto;
