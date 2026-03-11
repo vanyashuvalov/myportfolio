@@ -14,11 +14,11 @@
    ============================================ */
 
 /* CRITICAL: Projects list layout (modal and page)
- * LAYOUT: Centered column, max 720px width, 16vh top padding
+ * LAYOUT: Centered column, max 720px width, flexible padding
  * WHY: Same layout for modal and standalone page for consistency
  * ANIMATION: Slide up + fade in on open (translateY: 100px → 0)
  * USAGE: .projects-list (in modal), .projects-list-page (standalone)
- * UPDATED COMMENTS: HUG content - body scrolls, no double scroll
+ * UPDATED COMMENTS: HUG content - NO min-height, let content determine height
  * SCALED FOR: Single scroll context to prevent iOS Safari issues
  * UPDATED COMMENTS: Safe-area padding for iOS notch/home indicator
  */
@@ -26,15 +26,15 @@
 .projects-list-page {
   width: 720px !important;
   max-width: 100% !important;
-  /* CRITICAL: HUG content - let content determine height */
-  /* UPDATED COMMENTS: Removed min-height to prevent double scroll */
+  /* CRITICAL: HUG content - NO min-height, let content flow naturally */
+  /* UPDATED COMMENTS: Content determines height, body/modal scrolls */
   margin: 0 auto !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
-  /* CRITICAL: Safe-area padding for iOS notch/home indicator */
-  /* UPDATED COMMENTS: Top padding includes safe-top, bottom includes safe-bottom */
-  padding: calc(16vh + var(--safe-top)) 40px calc(10vh + var(--safe-bottom)) 40px !important;
+  /* CRITICAL: Flexible padding - NO vh units that clip content */
+  /* UPDATED COMMENTS: Fixed pixel padding, safe-area added for iOS */
+  padding: calc(120px + var(--safe-top)) 40px calc(80px + var(--safe-bottom)) 40px !important;
   gap: 0 !important; /* No gap - projects-grid handles spacing */
   opacity: 0; /* Hidden by default */
   transform: translateY(100px); /* Start below viewport */
@@ -127,7 +127,8 @@
   .projects-list,
   .projects-list-page {
     /* CRITICAL: Safe-area padding for iOS notch/home indicator on mobile */
-    padding: calc(20vh + var(--safe-top)) 16px calc(10vh + var(--safe-bottom)) 16px !important;
+    /* UPDATED COMMENTS: Fixed pixel padding instead of vh to prevent clipping */
+    padding: calc(100px + var(--safe-top)) 16px calc(60px + var(--safe-bottom)) 16px !important;
   }
   
   .projects-grid {

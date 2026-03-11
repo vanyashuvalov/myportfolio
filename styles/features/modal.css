@@ -116,27 +116,23 @@
 
 /* CRITICAL: Fullscreen modal variant
  * PURPOSE: Used for projects list, fun gallery (page-like modals)
- * WHY: 100% size, dark background, no border radius
+ * WHY: 100% width, HUG content height, dark background, no border radius
  * PERFORMANCE: opacity: 0 prevents flash during mount
- * UPDATED COMMENTS: Uses 100dvh for iOS Safari, safe-area padding
+ * UPDATED COMMENTS: NO fixed height - let content determine height, body scrolls
  */
 .modal-content--fullscreen {
   width: 100% !important;
   max-width: 100% !important;
-  /* CRITICAL: iOS Safari dynamic viewport height */
-  height: 100dvh !important;
-  height: 100vh !important;
-  max-height: 100dvh !important;
-  max-height: 100vh !important;
+  /* CRITICAL: HUG content - NO fixed height, let content flow */
+  /* UPDATED COMMENTS: min-height ensures full viewport, but content can grow */
+  min-height: 100dvh !important;
+  min-height: 100vh !important;
   background: var(--color-bg-dark, #101010) !important;
   border-radius: 0 !important;
   box-shadow: none !important;
-  /* CRITICAL: Safe-area padding for iOS notch/home indicator */
-  /* UPDATED COMMENTS: Adds padding for safe-areas */
-  padding-top: var(--safe-top) !important;
-  padding-bottom: var(--safe-bottom) !important;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
+  /* CRITICAL: NO padding - content handles its own spacing */
+  /* UPDATED COMMENTS: Safe-area handled by content inside */
+  padding: 0 !important;
   overflow-y: auto !important; /* Scrollable content */
   overflow-x: visible !important; /* Prevents horizontal scroll */
   opacity: 0; /* Hidden until open */

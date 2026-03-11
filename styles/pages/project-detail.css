@@ -13,23 +13,23 @@
    ============================================ */
 
 /* CRITICAL: Project detail page layout
- * LAYOUT: Centered column, max 720px width, 30vh top padding
+ * LAYOUT: Centered column, max 720px width, flexible padding
  * WHY: Large top padding creates dramatic entrance, focuses on content
  * TYPOGRAPHY: White text for dark background
  * OVERFLOW: Hidden horizontal to prevent layout breaks
- * UPDATED COMMENTS: Content determines height - body scrolls
+ * UPDATED COMMENTS: HUG content - NO min-height, let content determine height
  * SCALED FOR: Single scroll context to prevent iOS Safari issues
  * UPDATED COMMENTS: Safe-area padding for iOS notch/home indicator
  */
 .project-page {
   width: 720px !important;
   max-width: 100% !important;
-  /* CRITICAL: HUG content - let content determine height */
-  /* UPDATED COMMENTS: Removed min-height to prevent double scroll */
+  /* CRITICAL: HUG content - NO min-height, let content flow naturally */
+  /* UPDATED COMMENTS: Content determines height, body scrolls */
   margin: 0 auto !important;
-  /* CRITICAL: Safe-area padding for iOS notch/home indicator */
-  /* UPDATED COMMENTS: Top padding includes safe-top, bottom includes safe-bottom */
-  padding: calc(30vh + var(--safe-top)) 40px calc(10vh + var(--safe-bottom)) 40px !important;
+  /* CRITICAL: Flexible padding - NO vh units that clip content */
+  /* UPDATED COMMENTS: Fixed pixel padding, safe-area added for iOS */
+  padding: calc(180px + var(--safe-top)) 40px calc(80px + var(--safe-bottom)) 40px !important;
   color: var(--color-text-light, #FFFFFF) !important;
   position: relative;
   overflow-x: hidden; /* Prevents horizontal scroll */
@@ -192,7 +192,8 @@
 @media (max-width: 768px) {
   .project-page {
     /* CRITICAL: Safe-area padding for iOS notch/home indicator on mobile */
-    padding: calc(20vh + var(--safe-top)) 16px calc(10vh + var(--safe-bottom)) 16px !important;
+    /* UPDATED COMMENTS: Fixed pixel padding instead of vh to prevent clipping */
+    padding: calc(120px + var(--safe-top)) 16px calc(60px + var(--safe-bottom)) 16px !important;
   }
   
   .project-title {
