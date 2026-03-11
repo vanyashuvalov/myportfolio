@@ -15,7 +15,9 @@ html {
   min-height: 100vh;
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  /* CRITICAL: overflow visible for page content to reach body */
+  /* UPDATED COMMENTS: Changed from hidden to visible to fix iOS Safari black bars */
+  overflow: visible;
   position: relative;
   /* CRITICAL: iOS 26 Safari Liquid Glass - fallback background for toolbar tinting */
   /* UPDATED COMMENTS: Safari samples this color when no fixed element found near edges */
@@ -38,7 +40,9 @@ body {
   /* CRITICAL: NO padding - iOS 26 Safari needs edge-to-edge content for proper toolbar tinting */
   /* UPDATED COMMENTS: Removed safe-area padding to fix black bars on iOS 26 */
   padding: 0;
-  overflow: hidden;
+  /* CRITICAL: overflow visible for page content to reach body */
+  /* UPDATED COMMENTS: Changed from hidden to visible to fix iOS Safari black bars */
+  overflow: visible;
   user-select: none;
   color: var(--color-primary);
   position: relative;
@@ -61,6 +65,8 @@ body::before {
 /* UPDATED COMMENTS: Show only solid #101010 background for project pages */
 body.page-mode {
   background: #101010 !important;
+  /* CRITICAL: Allow page content to scroll and fill viewport */
+  overflow: visible !important;
 }
 
 body.page-mode::before {
@@ -81,6 +87,8 @@ body.page-mode::before {
   min-height: var(--app-height, 100dvh);
   min-height: 100dvh;
   min-height: 100vh;
+  /* CRITICAL: overflow hidden for desktop mode, visible for page mode */
+  /* UPDATED COMMENTS: Desktop mode needs hidden, page mode needs visible */
   overflow: hidden;
   z-index: 2;
   /* CRITICAL: Perfect flexbox centering */
@@ -187,6 +195,11 @@ body.loaded .workspace-container::before {
     /* SCALED FOR: Hardware-accelerated scrolling */
     will-change: scroll-position;
     /* CRITICAL: Full edge-to-edge - NO padding, background extends under notch */
+  }
+  
+  /* CRITICAL: In page mode, hide desktop-canvas overflow */
+  body.page-mode .desktop-canvas {
+    overflow: hidden !important;
   }
   
   .workspace-container {
