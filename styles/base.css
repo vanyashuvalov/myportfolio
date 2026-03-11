@@ -166,10 +166,7 @@ body.loaded .workspace-container::before {
     justify-content: flex-start;
     /* SCALED FOR: Hardware-accelerated scrolling */
     will-change: scroll-position;
-    /* CRITICAL: Full edge-to-edge with safe-area handling */
-    padding-top: env(safe-area-inset-top);
-    padding-left: env(safe-area-inset-left);
-    padding-right: env(safe-area-inset-right);
+    /* CRITICAL: Full edge-to-edge - NO padding, background extends under notch */
   }
   
   .workspace-container {
@@ -261,6 +258,35 @@ body.loaded .workspace-container::before {
 /* ANCHOR: modal_system */
 /* UPDATED COMMENTS: Modal styles moved to contact-modal.css for specificity */
 /* CRITICAL FIX: Removed conflicting background that caused flash */
+
+/* ANCHOR: ios_safari_toolbar_tint */
+/* CRITICAL: iOS 26+ Liquid Glass fix - hidden element for Safari toolbar tinting */
+/* UPDATED COMMENTS: Safari samples background color from fixed elements near viewport edges */
+/* If no suitable element found, floating bars appear black */
+/* REF: https://jahir.dev/blog/safari-toolbar */
+#safari-toolbar-tint {
+  position: fixed;
+  bottom: -8px;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 12px;
+  z-index: -1;
+  background-color: #101010;
+  /* Hide by default - only visible to Safari iOS 26+ */
+  display: none;
+}
+
+/* CRITICAL: Safari 26+ detection - combined selectors for iOS Safari only */
+@supports (-webkit-text-size-adjust: none) and (font: -apple-system-body) and (-webkit-touch-callout: none) {
+  @media (width < 768px) {
+    #safari-toolbar-tint {
+      /* Show on Safari 26+ AND small viewport width devices */
+      display: block;
+    }
+  }
+}
 
 /* ANCHOR: utility_classes */
 /* REUSED: Common utility classes for rapid development */
