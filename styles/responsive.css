@@ -269,9 +269,9 @@
 
 /* ANCHOR: ios_safari_liquid_glass_complete_fix */
 /* CRITICAL: Complete iOS Safari 26+ Liquid Glass fix for viewport-fit=cover */
-/* UPDATED COMMENTS: March 2026 - Updated tint element positioning for Safari 26+ */
+/* UPDATED COMMENTS: March 2026 - GitHub-style implementation with theme-color meta tag */
 /* REF: https://jahir.dev/blog/safari-toolbar */
-/* REF: https://www.1ar.io/updates/safari-26-liquid-glass-web */
+/* REF: https://github.com (working example) */
 @supports (-webkit-touch-callout: none) {
   :root {
     --safe-top: env(safe-area-inset-top);
@@ -293,7 +293,7 @@
     min-height: 100dvh !important;
     padding-top: var(--safe-top) !important;
     padding-bottom: var(--safe-bottom) !important;
-    background: #101010 !important;
+    background: #101010 !important; /* CRITICAL: Match theme-color meta tag */
   }
   
   /* CRITICAL: Desktop canvas must NOT have padding - content extends edge-to-edge */
@@ -330,51 +330,46 @@
 }
 
 /* ANCHOR: ios_safari_26_tint_elements */
-/* CRITICAL: iOS 26+ Liquid Glass tint elements - UPDATED positioning */
-/* UPDATED COMMENTS: Safari 26+ requires specific positioning: -8px offset + 12px height */
+/* CRITICAL: iOS 26+ Liquid Glass tint elements - GitHub-style implementation */
+/* UPDATED COMMENTS: Safari 26+ samples background-color from fixed elements at viewport edges */
 /* REF: https://jahir.dev/blog/safari-toolbar */
+/* REF: https://github.com (working example) */
+
+/* CRITICAL: Show tint elements ONLY on iOS Safari */
+/* UPDATED COMMENTS: Feature detection for iOS Safari with -webkit-touch-callout */
+@supports (-webkit-touch-callout: none) {
+  #safari-top-tint,
+  #safari-bottom-tint {
+    display: block !important;
+  }
+}
 
 /* CRITICAL: Top toolbar tint element */
-/* UPDATED COMMENTS: Positioned ABOVE viewport (-8px) for Safari to sample */
+/* UPDATED COMMENTS: Positioned AT viewport edge (not -8px) for Safari to sample */
 #safari-top-tint {
   position: fixed !important;
-  top: -8px !important;
+  top: 0 !important;
   left: 0 !important;
   right: 0 !important;
-  width: 100% !important;
-  min-height: 12px !important;
-  background-color: #101010 !important;
+  height: 2px !important; /* Safari requires minimum 2px at edge */
+  background: #101010 !important; /* CRITICAL: Match body background-color */
   z-index: -9999 !important;
   pointer-events: none !important;
-  display: none; /* Hidden by default */
+  display: none; /* Hidden by default, shown only on iOS via @supports */
 }
 
 /* CRITICAL: Bottom toolbar tint element */
-/* UPDATED COMMENTS: Positioned BELOW viewport (-8px) for Safari to sample */
+/* UPDATED COMMENTS: Positioned AT viewport edge (not -8px) for Safari to sample */
 #safari-bottom-tint {
   position: fixed !important;
-  bottom: -8px !important;
+  bottom: 0 !important;
   left: 0 !important;
   right: 0 !important;
-  width: 100% !important;
-  min-height: 12px !important;
-  background-color: #101010 !important;
+  height: 2px !important; /* Safari requires minimum 2px at edge */
+  background: #101010 !important; /* CRITICAL: Match body background-color */
   z-index: -9999 !important;
   pointer-events: none !important;
-  display: none; /* Hidden by default */
-}
-
-/* CRITICAL: Show tint elements ONLY on iOS Safari 26+ */
-/* UPDATED COMMENTS: Feature detection for iOS Safari 26+ */
-@supports (-webkit-text-size-adjust: none) and 
-          (font: -apple-system-body) and 
-          (-webkit-touch-callout: none) {
-  @media (max-width: 768px) {
-    #safari-top-tint,
-    #safari-bottom-tint {
-      display: block !important;
-    }
-  }
+  display: none; /* Hidden by default, shown only on iOS via @supports */
 }
 
 /* ANCHOR: print_styles */

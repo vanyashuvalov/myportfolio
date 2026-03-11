@@ -41,6 +41,18 @@ export class ViewportHeightFix {
       // CRITICAL: Remove any existing inline styles that might have been set
       document.documentElement.style.removeProperty('--app-height');
       document.documentElement.style.removeProperty('--app-width');
+      
+      // CRITICAL: Set interval to continuously remove inline styles on iOS
+      // UPDATED COMMENTS: Aggressive cleanup every 100ms to prevent any JS from setting them
+      this.iosCleanupInterval = setInterval(() => {
+        const htmlStyle = document.documentElement.style;
+        if (htmlStyle.getPropertyValue('--app-height') || htmlStyle.getPropertyValue('--app-width')) {
+          console.warn('⚠️ Removing inline viewport styles on iOS (cleanup interval)');
+          htmlStyle.removeProperty('--app-height');
+          htmlStyle.removeProperty('--app-width');
+        }
+      }, 100);
+      
       return;
     }
     
@@ -131,6 +143,12 @@ export class ViewportHeightFix {
     if (this.rafId) {
       cancelAnimationFrame(this.rafId);
       this.rafId = null;
+    }
+    
+    // CRITICAL: Clear iOS cleanup interval if exists
+    if (this.iosCleanupInterval) {
+      clearInterval(this.iosCleanupInterval);
+      this.iosCleanupInterval = null;
     }
 
     // Remove CSS custom properties

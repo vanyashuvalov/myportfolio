@@ -59,7 +59,7 @@ class Application {
             if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
               const htmlStyle = document.documentElement.style;
               if (htmlStyle.getPropertyValue('--app-height') || htmlStyle.getPropertyValue('--app-width')) {
-                console.log('⚠️ Removing inline viewport styles on iOS');
+                console.log('⚠️ Removing inline viewport styles on iOS (MutationObserver)');
                 htmlStyle.removeProperty('--app-height');
                 htmlStyle.removeProperty('--app-width');
               }
@@ -71,6 +71,17 @@ class Application {
           attributes: true,
           attributeFilter: ['style']
         });
+        
+        // CRITICAL: Additional aggressive cleanup interval
+        // UPDATED COMMENTS: Runs every 50ms to catch any inline styles
+        setInterval(() => {
+          const htmlStyle = document.documentElement.style;
+          if (htmlStyle.getPropertyValue('--app-height') || htmlStyle.getPropertyValue('--app-width')) {
+            console.warn('⚠️ Removing inline viewport styles on iOS (cleanup interval)');
+            htmlStyle.removeProperty('--app-height');
+            htmlStyle.removeProperty('--app-width');
+          }
+        }, 50);
         
         console.log('✓ iOS Safari: viewport-fit=cover mode active, inline styles blocked');
       }
