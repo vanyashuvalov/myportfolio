@@ -41,8 +41,12 @@ class Application {
     try {
       // CRITICAL: Initialize viewport height fix for iOS Safari FIRST
       // UPDATED COMMENTS: Sets --app-height CSS variable for accurate viewport height
-      // Must run before any layout calculations
-      initViewportHeightFix();
+      // DISABLED on iOS: viewport-fit=cover + safe-area-inset handle it better
+      // REF: https://webkit.org/blog/7929/designing-websites-for-iphone-x/
+      const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
+      if (!isIOS) {
+        initViewportHeightFix();
+      }
       
       // Initialize core utilities
       this.eventBus = new EventBus();
