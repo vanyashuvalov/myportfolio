@@ -20,12 +20,15 @@
  * REUSED: Uses .gallery-item component from shared/gallery-item.css
  * UPDATED COMMENTS: HUG content - body scrolls, no double scroll
  * SCALED FOR: Single scroll context to prevent iOS Safari issues
+ * UPDATED COMMENTS: Safe-area padding for iOS notch/home indicator
  */
 .fun-gallery {
   display: flex;
   flex-direction: column;
   gap: 100px; /* Large gap for visual separation */
-  padding: 16vh 40px 10vh 40px; /* Top padding, bottom padding for spacing */
+  /* CRITICAL: Safe-area padding for iOS notch/home indicator */
+  /* UPDATED COMMENTS: Top padding includes safe-top, bottom includes safe-bottom */
+  padding: calc(16vh + var(--safe-top)) 40px calc(10vh + var(--safe-bottom)) 40px;
   width: 100%;
   max-width: 720px;
   /* CRITICAL: HUG content - let content determine height */
@@ -42,7 +45,8 @@
 @media (max-width: 768px) {
   .fun-gallery {
     gap: 60px; /* Reduced from 100px */
-    padding: 20vh 16px 10vh 16px; /* Increased top padding, reduced horizontal, bottom spacing */
+    /* CRITICAL: Safe-area padding for iOS notch/home indicator on mobile */
+    padding: calc(20vh + var(--safe-top)) 16px calc(10vh + var(--safe-bottom)) 16px;
     max-width: 100%;
   }
 }

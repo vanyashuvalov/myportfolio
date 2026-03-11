@@ -19,6 +19,7 @@
  * OVERFLOW: Hidden horizontal to prevent layout breaks
  * UPDATED COMMENTS: Content determines height - body scrolls
  * SCALED FOR: Single scroll context to prevent iOS Safari issues
+ * UPDATED COMMENTS: Safe-area padding for iOS notch/home indicator
  */
 .project-page {
   width: 720px !important;
@@ -26,7 +27,9 @@
   /* CRITICAL: HUG content - let content determine height */
   /* UPDATED COMMENTS: Removed min-height to prevent double scroll */
   margin: 0 auto !important;
-  padding: 30vh 40px 10vh 40px !important; /* Large top padding, bottom padding for spacing */
+  /* CRITICAL: Safe-area padding for iOS notch/home indicator */
+  /* UPDATED COMMENTS: Top padding includes safe-top, bottom includes safe-bottom */
+  padding: calc(30vh + var(--safe-top)) 40px calc(10vh + var(--safe-bottom)) 40px !important;
   color: var(--color-text-light, #FFFFFF) !important;
   position: relative;
   overflow-x: hidden; /* Prevents horizontal scroll */
@@ -188,7 +191,8 @@
 /* MOBILE: Smaller padding and typography */
 @media (max-width: 768px) {
   .project-page {
-    padding: 20vh 16px 10vh 16px !important; /* Reduced top padding, smaller horizontal, bottom spacing */
+    /* CRITICAL: Safe-area padding for iOS notch/home indicator on mobile */
+    padding: calc(20vh + var(--safe-top)) 16px calc(10vh + var(--safe-bottom)) 16px !important;
   }
   
   .project-title {

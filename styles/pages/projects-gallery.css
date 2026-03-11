@@ -20,6 +20,7 @@
  * USAGE: .projects-list (in modal), .projects-list-page (standalone)
  * UPDATED COMMENTS: HUG content - body scrolls, no double scroll
  * SCALED FOR: Single scroll context to prevent iOS Safari issues
+ * UPDATED COMMENTS: Safe-area padding for iOS notch/home indicator
  */
 .projects-list,
 .projects-list-page {
@@ -31,12 +32,15 @@
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
-  padding: 16vh 40px 10vh 40px !important; /* Top padding, bottom padding for spacing */
+  /* CRITICAL: Safe-area padding for iOS notch/home indicator */
+  /* UPDATED COMMENTS: Top padding includes safe-top, bottom includes safe-bottom */
+  padding: calc(16vh + var(--safe-top)) 40px calc(10vh + var(--safe-bottom)) 40px !important;
   gap: 0 !important; /* No gap - projects-grid handles spacing */
   opacity: 0; /* Hidden by default */
   transform: translateY(100px); /* Start below viewport */
   transition: opacity var(--transition-slow, 0.5s ease-out 0.3s), 
               transform var(--transition-slow, 0.5s ease-out 0.3s);
+  box-sizing: border-box;
 }
 
 /* CRITICAL: Open animation for modal
@@ -122,7 +126,8 @@
 @media (max-width: 768px) {
   .projects-list,
   .projects-list-page {
-    padding: 20vh 16px 10vh 16px !important; /* Increased top padding, reduced horizontal, bottom spacing */
+    /* CRITICAL: Safe-area padding for iOS notch/home indicator on mobile */
+    padding: calc(20vh + var(--safe-top)) 16px calc(10vh + var(--safe-bottom)) 16px !important;
   }
   
   .projects-grid {
