@@ -26,16 +26,18 @@ html {
   overflow-x: hidden;
   overflow-y: visible;
   position: relative;
-  /* CRITICAL: iOS 26 Safari Liquid Glass - fallback background for toolbar tinting */
-  /* UPDATED COMMENTS: Safari samples this color when no fixed element found near edges */
+  /* CRITICAL: iOS 26 Safari Liquid Glass + viewport-fit=cover compatibility */
+  /* UPDATED COMMENTS: Solid background-color required for viewport-fit=cover to work */
+  /* REF: https://stackoverflow.com/questions/76475354/viewport-fit-cover-does-not-work-on-the-ios-safari */
   background-color: #101010;
 }
 
 body {
   font-family: var(--font-family-primary);
-  /* UPDATED COMMENTS: Solid dark background only */
-  /* CRITICAL: Background moved to workspace-container for scroll behavior */
-  background: #101010;
+  /* UPDATED COMMENTS: Solid background-color only - required for viewport-fit=cover */
+  /* CRITICAL: Background-color (not background-image) for iOS Safari safe-area coverage */
+  /* REF: https://stackoverflow.com/questions/76475354/viewport-fit-cover-does-not-work-on-the-ios-safari */
+  background-color: #101010;
   
   width: 100%;
   height: 100%;
@@ -68,7 +70,9 @@ body::before {
 /* CRITICAL: Hide mountains and gradient when in page mode */
 /* UPDATED COMMENTS: Show only solid #101010 background for project pages */
 body.page-mode {
-  background: #101010 !important;
+  /* CRITICAL: Solid background-color required for viewport-fit=cover */
+  /* REF: https://stackoverflow.com/questions/76475354/viewport-fit-cover-does-not-work-on-the-ios-safari */
+  background-color: #101010 !important;
   /* CRITICAL: Body becomes scroll container in page mode */
   /* UPDATED COMMENTS: overflow-y auto for vertical scrolling, hidden-x to prevent horizontal */
   overflow-y: auto !important;
@@ -89,6 +93,7 @@ body.page-mode::before {
 /* CRITICAL: Fixed background layer behind all content */
 /* SCALED FOR: Background scrolls with canvas on mobile */
 /* iOS Safari: Full viewport including safe-areas (notch/home indicator) */
+/* UPDATED COMMENTS: Uses solid background-color for viewport-fit=cover compatibility */
 .desktop-canvas {
   position: fixed;
   top: 0;
@@ -109,8 +114,9 @@ body.page-mode::before {
   justify-content: center;
   /* UPDATED COMMENTS: Ensure flexbox works properly */
   flex-direction: column;
-  /* CRITICAL: Solid dark background - gradient on workspace-container */
-  background: #101010;
+  /* CRITICAL: Solid dark background - viewport-fit=cover requires background-color, not background-image */
+  /* UPDATED COMMENTS: Gradient moved to workspace-container for iOS Safari compatibility */
+  background-color: #101010;
 }
 
 /* CRITICAL: In page mode, canvas becomes background layer */
