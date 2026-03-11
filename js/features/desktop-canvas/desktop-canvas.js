@@ -140,11 +140,12 @@ export class DesktopCanvas {
     this.workspaceContainer.dataset.workspaceId = this.generateId();
     
     // UPDATED COMMENTS: Clean workspace without visual debugging elements
-    // CRITICAL: Full viewport dimensions without any margins
-    // SCALED FOR: Mobile scrolling with min-height instead of fixed height
-    this.workspaceContainer.style.width = '100vw';
-    this.workspaceContainer.style.height = '100vh';
-    this.workspaceContainer.style.height = '100dvh'; // CRITICAL: iOS Safari dynamic viewport height
+    // CRITICAL: iOS 26 Safari fix - use percentage-based sizing instead of viewport units
+    // UPDATED COMMENTS: Let CSS control dimensions for better safe-area handling
+    // Percentage-based sizing relative to parent (#desktop-canvas)
+    this.workspaceContainer.style.width = '100%';
+    this.workspaceContainer.style.height = '100%';
+    this.workspaceContainer.style.minHeight = '100dvh'; // CRITICAL: iOS Safari dynamic viewport height fallback
     this.workspaceContainer.style.maxWidth = 'none';
     this.workspaceContainer.style.maxHeight = 'none';
     this.workspaceContainer.style.border = 'none';

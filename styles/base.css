@@ -14,6 +14,9 @@ html {
   padding: 0;
   overflow: hidden;
   position: relative;
+  /* CRITICAL: iOS 26 Safari Liquid Glass - fallback background for toolbar tinting */
+  /* UPDATED COMMENTS: Safari samples this color when no fixed element found near edges */
+  background-color: #101010;
 }
 
 body {
@@ -26,8 +29,9 @@ body {
   min-height: 100dvh;
   min-height: 100vh;
   margin: 0;
-  padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) 
-           env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+  /* CRITICAL: NO padding - iOS 26 Safari needs edge-to-edge content for proper toolbar tinting */
+  /* UPDATED COMMENTS: Removed safe-area padding to fix black bars on iOS 26 */
+  padding: 0;
   overflow: hidden;
   user-select: none;
   color: var(--color-primary);
@@ -266,51 +270,54 @@ body.loaded .workspace-container::before {
 /* UPDATED COMMENTS: Modal styles moved to contact-modal.css for specificity */
 /* CRITICAL FIX: Removed conflicting background that caused flash */
 
-/* ANCHOR: ios_safari_toolbar_tint */
-/* CRITICAL: iOS Safari Liquid Glass fix - fixed element for toolbar tinting */
-/* UPDATED COMMENTS: Safari samples background color from fixed elements near viewport edges */
-/* If no suitable element found, floating bars appear black */
+/* ANCHOR: ios_safari_26_liquid_glass_fix */
+/* CRITICAL: iOS 26 Safari Liquid Glass - proper toolbar tinting */
+/* UPDATED COMMENTS: Safari 26 no longer reads theme-color meta tag */
+/* Instead, it scans for position:fixed elements near viewport edges and reads their background-color */
 /* REF: https://jahir.dev/blog/safari-toolbar */
-#safari-toolbar-tint {
+/* REF: https://www.1ar.io/updates/safari-26-liquid-glass-web */
+
+/* CRITICAL: Bottom toolbar tint element for iOS 26 Safari */
+/* UPDATED COMMENTS: Must be visible in render tree (not visibility:hidden or opacity:0) */
+/* Safari samples background-color even from elements positioned outside viewport */
+#safari-bottom-tint {
   position: fixed;
-  bottom: 0;
+  /* CRITICAL: Position below viewport but Safari still samples it */
+  /* Must be within ~3px of bottom edge for Safari to detect */
+  bottom: -8px;
   left: 0;
-  right: 0;
-  height: env(safe-area-inset-bottom, 20px);
-  z-index: -1;
+  width: 100%;
+  /* CRITICAL: Must be >2px height and >88% width for iOS Safari sampling */
+  min-height: 12px;
   background-color: #101010;
-  /* CRITICAL: Use visibility instead of display to keep element in layout */
-  visibility: hidden;
+  z-index: 1;
   pointer-events: none;
+  /* CRITICAL: Hidden by default - only show on iOS Safari 26+ */
+  display: none;
 }
 
-/* CRITICAL: Show tint element for iOS Safari with viewport-fit=cover */
-/* UPDATED COMMENTS: Simple detection - if viewport-fit=cover is set, show tint */
-@supports (padding: env(safe-area-inset-bottom, 0px)) {
-  #safari-toolbar-tint {
-    visibility: visible;
+/* CRITICAL: Show ONLY on iOS Safari 26+ using feature detection */
+/* UPDATED COMMENTS: Combines Safari-specific features to target iOS Safari 26+ */
+/* -webkit-text-size-adjust: Safari 9+ */
+/* font: -apple-system-body: Safari-specific */
+/* -webkit-touch-callout: Safari 26+ */
+@supports (-webkit-text-size-adjust: none) and 
+          (font: -apple-system-body) and 
+          (-webkit-touch-callout: none) {
+  /* CRITICAL: Only on mobile viewport (not iPad) */
+  @media (max-width: 768px) {
+    #safari-bottom-tint {
+      display: block;
+    }
   }
 }
 
-/* ANCHOR: ios_safe_area_overlay */
-/* CRITICAL: Top safe area overlay for notch handling */
-/* UPDATED COMMENTS: Hidden element to help Safari detect background at top edge */
+/* ANCHOR: deprecated_tint_elements */
+/* UPDATED COMMENTS: Old tint elements deprecated - kept for backwards compatibility */
+/* These don't work with iOS 26 Liquid Glass - visibility:hidden elements are ignored */
+#safari-toolbar-tint,
 #safari-top-tint {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: env(safe-area-inset-top, 1px);
-  z-index: -1;
-  background-color: #101010;
-  visibility: hidden;
-  pointer-events: none;
-}
-
-@supports (padding: env(safe-area-inset-top, 0px)) {
-  #safari-top-tint {
-    visibility: visible;
-  }
+  display: none;
 }
 
 /* ANCHOR: utility_classes */

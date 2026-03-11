@@ -142,11 +142,11 @@
   <a href="#desktop-canvas" class="skip-link">Skip to main content</a>
   
   <!-- ANCHOR: ios_safari_toolbar_tint -->
-  <!-- CRITICAL: iOS Safari Liquid Glass fix - fixed elements for toolbar tinting -->
-  <!-- UPDATED COMMENTS: Safari samples background color from fixed elements near viewport edges -->
-  <!-- If no suitable element found, floating bars appear black -->
-  <div id="safari-top-tint"></div>
-  <div id="safari-toolbar-tint"></div>
+  <!-- CRITICAL: iOS Safari 26 Liquid Glass fix - fixed element for toolbar tinting -->
+  <!-- UPDATED COMMENTS: Safari 26 samples background-color from fixed elements near viewport edges -->
+  <!-- Must be in render tree (display:block) and positioned near bottom edge -->
+  <!-- REF: https://jahir.dev/blog/safari-toolbar -->
+  <div id="safari-bottom-tint"></div>
   
   <!-- ANCHOR: javascript_entry -->
   <script type="module" src="js/main.js"></script>

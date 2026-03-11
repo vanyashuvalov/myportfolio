@@ -185,8 +185,9 @@
 
 /* ANCHOR: ios_safe_area_mobile */
 /* CRITICAL: iOS Safari safe area handling for mobile devices */
-/* UPDATED COMMENTS: Proper padding for notch and home indicator areas */
+/* UPDATED COMMENTS: Apply safe-area padding to FIXED elements, not body */
 /* SCALED FOR: Edge-to-edge display with viewport-fit=cover */
+/* iOS 26 Safari Liquid Glass requires edge-to-edge content for proper toolbar tinting */
 @media (max-width: 768px) {
   /* CRITICAL: Ensure html/body extend to full viewport height */
   html,
@@ -196,6 +197,7 @@
   }
   
   /* CRITICAL: Fixed elements need safe area insets */
+  /* UPDATED COMMENTS: Navigation header gets top safe-area padding */
   #navigation-container {
     padding-top: env(safe-area-inset-top);
     padding-left: env(safe-area-inset-left);
@@ -203,6 +205,7 @@
   }
   
   /* CRITICAL: Bottom fixed elements need safe area inset */
+  /* UPDATED COMMENTS: Contact input gets bottom safe-area padding */
   #contact-input-container {
     padding-bottom: env(safe-area-inset-bottom);
     padding-left: env(safe-area-inset-left);
@@ -210,12 +213,14 @@
   }
   
   /* CRITICAL: Modal containers need safe area handling */
+  /* UPDATED COMMENTS: Modals get full safe-area padding */
   .modal-container {
     padding: env(safe-area-inset-top) env(safe-area-inset-right) 
              env(safe-area-inset-bottom) env(safe-area-inset-left);
   }
   
-  /* CRITICAL: Desktop canvas scrolls within safe area */
+  /* CRITICAL: Desktop canvas scrolls edge-to-edge */
+  /* UPDATED COMMENTS: NO padding on canvas - content extends under notch/home indicator */
   .desktop-canvas {
     /* CRITICAL: Enable scrolling for oversized canvas */
     overflow: auto;
@@ -229,6 +234,7 @@
   }
   
   /* CRITICAL: Workspace container takes full viewport */
+  /* UPDATED COMMENTS: NO padding - widgets handle their own safe positioning */
   .workspace-container {
     /* CRITICAL: No padding - full edge-to-edge layout */
     padding: 0;
