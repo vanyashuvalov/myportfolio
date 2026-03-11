@@ -6,18 +6,25 @@
 /* REUSED: Foundation styles for all components */
 /* SCALED FOR: Performance optimization with contain property */
 
+/* ANCHOR: css_variables */
+/* CRITICAL: iOS Safari safe-area insets for notch/home indicator */
+/* UPDATED COMMENTS: CSS custom properties for safe-area handling */
+:root {
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+
 html {
   width: 100%;
-  /* CRITICAL: iOS Safari dynamic viewport height with JS fallback */
-  /* UPDATED COMMENTS: --app-height set by viewport-height-fix.js for accurate iOS Safari height */
-  min-height: var(--app-height, 100dvh);
-  min-height: 100dvh;
-  min-height: 100vh;
+  height: 100%;
   margin: 0;
   padding: 0;
-  /* CRITICAL: No overflow on html - body handles scrolling */
-  /* UPDATED COMMENTS: Changed to hidden to prevent html-level scroll */
-  overflow: hidden;
+  /* CRITICAL: Only prevent horizontal scroll, allow vertical */
+  /* UPDATED COMMENTS: overflow-x hidden prevents horizontal scroll issues */
+  overflow-x: hidden;
+  overflow-y: visible;
   position: relative;
   /* CRITICAL: iOS 26 Safari Liquid Glass - fallback background for toolbar tinting */
   /* UPDATED COMMENTS: Safari samples this color when no fixed element found near edges */
@@ -31,18 +38,15 @@ body {
   background: #101010;
   
   width: 100%;
-  /* CRITICAL: iOS Safari dynamic viewport height with JS fallback */
-  /* UPDATED COMMENTS: --app-height set by viewport-height-fix.js for accurate iOS Safari height */
-  min-height: var(--app-height, 100dvh);
-  min-height: 100dvh;
-  min-height: 100vh;
+  height: 100%;
   margin: 0;
   /* CRITICAL: NO padding - iOS 26 Safari needs edge-to-edge content for proper toolbar tinting */
   /* UPDATED COMMENTS: Removed safe-area padding to fix black bars on iOS 26 */
   padding: 0;
-  /* CRITICAL: overflow hidden for desktop mode, scroll for page mode */
-  /* UPDATED COMMENTS: Body is the scroll container in page mode */
-  overflow: hidden;
+  /* CRITICAL: Only prevent horizontal scroll, allow vertical */
+  /* UPDATED COMMENTS: overflow-x hidden prevents horizontal scroll issues */
+  overflow-x: hidden;
+  overflow-y: visible;
   user-select: none;
   color: var(--color-primary);
   position: relative;
@@ -66,13 +70,14 @@ body::before {
 body.page-mode {
   background: #101010 !important;
   /* CRITICAL: Body becomes scroll container in page mode */
-  /* UPDATED COMMENTS: overflow-y scroll for vertical scrolling, hidden-x to prevent horizontal */
-  overflow-y: scroll !important;
+  /* UPDATED COMMENTS: overflow-y auto for vertical scrolling, hidden-x to prevent horizontal */
+  overflow-y: auto !important;
   overflow-x: hidden !important;
-  /* CRITICAL: Ensure body fills viewport for proper scrolling */
-  min-height: var(--app-height, 100dvh);
+  /* CRITICAL: Ensure body fills viewport + safe areas for proper scrolling */
+  /* UPDATED COMMENTS: Safe-area padding for iOS notch/home indicator */
   min-height: 100dvh;
-  min-height: 100vh;
+  padding-top: var(--safe-top);
+  padding-bottom: var(--safe-bottom);
 }
 
 body.page-mode::before {
@@ -81,24 +86,23 @@ body.page-mode::before {
 
 /* ANCHOR: desktop_canvas */
 /* UPDATED COMMENTS: Fullscreen canvas container with perfect flexbox centering */
-/* CRITICAL: Always visible, but content inside fades in after loading */
+/* CRITICAL: Fixed background layer behind all content */
 /* SCALED FOR: Background scrolls with canvas on mobile */
-/* iOS Safari: Uses --app-height for accurate viewport height */
+/* iOS Safari: Full viewport including safe-areas (notch/home indicator) */
 .desktop-canvas {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   min-width: 1000px; /* CRITICAL: Minimum width for desktop layout */
-  /* CRITICAL: iOS Safari dynamic viewport height with JS fallback */
-  height: var(--app-height, 100dvh);
+  /* CRITICAL: iOS Safari full viewport height including safe-areas */
   height: 100dvh;
-  height: 100vh;
+  min-height: 100dvh;
   min-height: 720px; /* CRITICAL: Minimum height for desktop layout */
   /* CRITICAL: overflow hidden for desktop mode */
   /* UPDATED COMMENTS: Desktop canvas doesn't scroll, workspace inside scrolls on mobile */
   overflow: hidden;
-  z-index: 2;
+  z-index: 2; /* CRITICAL: Above background, below page content in page mode */
   /* CRITICAL: Perfect flexbox centering */
   display: flex;
   align-items: center;
@@ -107,6 +111,12 @@ body.page-mode::before {
   flex-direction: column;
   /* CRITICAL: Solid dark background - gradient on workspace-container */
   background: #101010;
+}
+
+/* CRITICAL: In page mode, canvas becomes background layer */
+/* UPDATED COMMENTS: z-index -1 places canvas behind page content */
+body.page-mode .desktop-canvas {
+  z-index: -1;
 }
 
 /* ANCHOR: canvas_mountain_overlay */

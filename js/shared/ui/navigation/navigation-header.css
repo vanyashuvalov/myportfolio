@@ -12,12 +12,15 @@
 /* CRITICAL: Hidden during loading, shown after content is ready */
 /* SCALED FOR: Always above fullscreen modals with z-navigation */
 .navigation-wrapper {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
+  /* CRITICAL: Safe-area padding for iOS notch */
+  /* UPDATED COMMENTS: Adds padding-top for notch area */
   padding: 20px;
-  z-index: var(--z-navigation);
+  padding-top: calc(20px + var(--safe-top));
+  z-index: var(--z-navigation, 1000);
   display: flex;
   justify-content: center;
   /* REUSED: Hidden during loading state */

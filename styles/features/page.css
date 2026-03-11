@@ -13,25 +13,22 @@
    ============================================ */
 
 /* CRITICAL: Fullscreen page container
- * POSITION: Fixed fullscreen overlay (like modal but for pages)
+ * POSITION: Relative positioning for proper stacking above canvas
  * PURPOSE: Used for project detail pages, fun gallery pages
- * WHY: z-index: 9999 places above fullscreen modals (9998)
- * UPDATED COMMENTS: HUG content - no scroll, body handles scrolling
+ * WHY: z-index: 1 places above canvas background (-1)
+ * UPDATED COMMENTS: Relative positioning, body handles scrolling
  * SCALED FOR: Single scroll context to prevent nested scroll issues
  */
 .page-container {
-  position: fixed;
-  top: 0;
-  left: 0;
+  position: relative;
   width: 100%;
   /* CRITICAL: HUG content - auto height, no fixed height */
   /* UPDATED COMMENTS: Let content determine height, body scrolls */
-  height: auto;
-  min-height: 100%;
+  min-height: 100dvh;
   background: var(--color-bg-dark, #101010) !important;
-  z-index: var(--z-page, 9999);
+  z-index: 1; /* CRITICAL: Above canvas background */
   /* CRITICAL: No overflow - body handles scrolling */
-  overflow: hidden;
+  overflow: visible;
   transition: opacity var(--transition-normal, 0.3s ease-out);
   /* REUSED: Pointer events for proper interaction */
   pointer-events: auto;

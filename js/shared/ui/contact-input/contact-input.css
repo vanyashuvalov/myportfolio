@@ -10,9 +10,11 @@
   /* UPDATED COMMENTS: Fixed position, always visible above widgets and fullscreen modals */
   position: fixed;
   left: 50%;
-  bottom: 24px;
+  /* CRITICAL: Safe-area padding for iOS home indicator */
+  /* UPDATED COMMENTS: Adds padding-bottom for home indicator area */
+  bottom: calc(24px + var(--safe-bottom));
   transform: translateX(-50%) translateY(100px);
-  z-index: var(--z-contact-input);
+  z-index: var(--z-contact-input, 1000);
   
   /* SCALED FOR: Hidden by default, shown via JS class */
   opacity: 0;
