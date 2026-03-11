@@ -190,10 +190,12 @@
 /* iOS 26 Safari Liquid Glass requires edge-to-edge content for proper toolbar tinting */
 @media (max-width: 768px) {
   /* CRITICAL: Ensure html/body extend to full viewport height */
+  /* UPDATED COMMENTS: Uses --app-height from viewport-height-fix.js for accurate iOS Safari height */
   html,
   body {
-    min-height: 100vh;
-    min-height: 100dvh; /* Dynamic viewport height for iOS */
+    min-height: var(--app-height, 100dvh);
+    min-height: 100dvh;
+    min-height: 100vh; /* Dynamic viewport height for iOS */
   }
   
   /* CRITICAL: Fixed elements need safe area insets */
@@ -235,13 +237,15 @@
   
   /* CRITICAL: Workspace container takes full viewport */
   /* UPDATED COMMENTS: NO padding - widgets handle their own safe positioning */
+  /* iOS Safari: Uses --app-height for accurate viewport height */
   .workspace-container {
     /* CRITICAL: No padding - full edge-to-edge layout */
     padding: 0;
     box-sizing: border-box;
     /* CRITICAL: Ensure content doesn't get cut off by safe areas */
-    min-height: 100vh;
+    min-height: var(--app-height, 100dvh);
     min-height: 100dvh;
+    min-height: 100vh;
   }
 }
 

@@ -94,6 +94,29 @@ this.workspaceContainer.style.minHeight = '100dvh';
 }
 ```
 
+### 6. Added JavaScript viewport height fix (ENHANCED)
+```javascript
+// js/shared/utils/viewport-height-fix.js
+// Calculates accurate viewport height for iOS Safari
+// Sets --app-height CSS variable that updates on resize/orientation change
+
+import { initViewportHeightFix } from './shared/utils/viewport-height-fix.js';
+
+// Initialize in main.js BEFORE any layout calculations
+initViewportHeightFix();
+```
+
+```css
+/* Use in CSS with fallback */
+html {
+  min-height: var(--app-height, 100dvh); /* JS-calculated height */
+  min-height: 100dvh; /* Fallback 1 */
+  min-height: 100vh;  /* Fallback 2 */
+}
+```
+
+This solves the iOS Safari address bar show/hide issue by using `window.innerHeight` instead of CSS viewport units.
+
 ## Why This Solution is Safe
 
 ### Widget Positioning Preserved
@@ -162,9 +185,11 @@ After applying this fix, verify:
 ## Files Modified
 
 1. `index.html` - Added `#safari-bottom-tint` element
-2. `styles/base.css` - Removed body padding, added html background, updated tint element styles
-3. `styles/responsive.css` - Updated safe-area comments
+2. `styles/base.css` - Removed body padding, added html background, updated tint element styles, added --app-height usage
+3. `styles/responsive.css` - Updated safe-area comments, added --app-height usage
 4. `js/features/desktop-canvas/desktop-canvas.js` - Changed workspace sizing from viewport units to percentage
+5. `js/shared/utils/viewport-height-fix.js` - NEW: JavaScript viewport height calculator for iOS Safari
+6. `js/main.js` - Added viewport height fix initialization
 
 ## Rollback Instructions
 

@@ -11,6 +11,7 @@ import { NavigationHeader } from './shared/ui/navigation/navigation-header.js';
 import { ContactInput } from './shared/ui/contact-input/contact-input.js';
 import { ModalManager } from './features/modal-system/modal-manager.js';
 import { PageManager } from './features/page-manager/page-manager.js';
+import { initViewportHeightFix } from './shared/utils/viewport-height-fix.js';
 
 /**
  * Application class - Main application controller
@@ -38,6 +39,11 @@ class Application {
    */
   async init() {
     try {
+      // CRITICAL: Initialize viewport height fix for iOS Safari FIRST
+      // UPDATED COMMENTS: Sets --app-height CSS variable for accurate viewport height
+      // Must run before any layout calculations
+      initViewportHeightFix();
+      
       // Initialize core utilities
       this.eventBus = new EventBus();
       this.performanceMonitor = new PerformanceMonitor();
