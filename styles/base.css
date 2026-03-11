@@ -19,10 +19,9 @@ html {
   height: -webkit-fill-available;
   height: 100%;
   margin: 0;
-  /* CRITICAL: Safe-area padding for iOS Safari with viewport-fit=cover */
-  /* UPDATED COMMENTS: Prevents content from being hidden under notch/home indicator */
-  padding-top: var(--safe-top);
-  padding-bottom: var(--safe-bottom);
+  /* CRITICAL: NO padding by default - iOS Safari fix in responsive.css handles it */
+  /* UPDATED COMMENTS: Padding moved to @supports rule for iOS Safari only */
+  padding: 0;
   /* CRITICAL: Only prevent horizontal scroll, allow vertical */
   /* UPDATED COMMENTS: overflow-x hidden prevents horizontal scroll issues */
   overflow-x: hidden;

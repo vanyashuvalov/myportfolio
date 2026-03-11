@@ -29,8 +29,21 @@ export class ViewportHeightFix {
   /**
    * Initialize viewport height fix
    * UPDATED COMMENTS: Sets up resize listener and initial height
+   * CRITICAL: Completely disabled on iOS - viewport-fit=cover handles it better
    */
   init() {
+    // CRITICAL: Skip initialization entirely on iOS devices
+    // UPDATED COMMENTS: iOS Safari with viewport-fit=cover doesn't need JS height calculation
+    // REF: https://webkit.org/blog/7929/designing-websites-for-iphone-x/
+    const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
+    if (isIOS) {
+      console.log('✓ ViewportHeightFix: Skipped on iOS (viewport-fit=cover handles viewport)');
+      // CRITICAL: Remove any existing inline styles that might have been set
+      document.documentElement.style.removeProperty('--app-height');
+      document.documentElement.style.removeProperty('--app-width');
+      return;
+    }
+    
     if (this.isInitialized) {
       console.warn('ViewportHeightFix already initialized');
       return;
@@ -51,8 +64,18 @@ export class ViewportHeightFix {
   /**
    * Handle resize event with RAF debouncing
    * SCALED FOR: Performance optimization with requestAnimationFrame
+   * CRITICAL: Skip on iOS devices
    */
   handleResize() {
+    // CRITICAL: Double-check iOS on every resize (safety check)
+    const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
+    if (isIOS) {
+      // CRITICAL: Remove any inline styles if they somehow got set
+      document.documentElement.style.removeProperty('--app-height');
+      document.documentElement.style.removeProperty('--app-width');
+      return;
+    }
+    
     // CRITICAL: Cancel previous RAF if exists
     if (this.rafId) {
       cancelAnimationFrame(this.rafId);

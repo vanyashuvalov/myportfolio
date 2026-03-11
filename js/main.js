@@ -46,6 +46,33 @@ class Application {
       const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
       if (!isIOS) {
         initViewportHeightFix();
+      } else {
+        // CRITICAL: On iOS, ensure no inline styles are set on html element
+        // UPDATED COMMENTS: Remove any existing --app-height/--app-width inline styles
+        document.documentElement.style.removeProperty('--app-height');
+        document.documentElement.style.removeProperty('--app-width');
+        
+        // CRITICAL: Set up mutation observer to prevent inline styles on iOS
+        // UPDATED COMMENTS: Safari 26 Liquid Glass requires CSS-only viewport handling
+        const observer = new MutationObserver((mutations) => {
+          mutations.forEach((mutation) => {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+              const htmlStyle = document.documentElement.style;
+              if (htmlStyle.getPropertyValue('--app-height') || htmlStyle.getPropertyValue('--app-width')) {
+                console.log('⚠️ Removing inline viewport styles on iOS');
+                htmlStyle.removeProperty('--app-height');
+                htmlStyle.removeProperty('--app-width');
+              }
+            }
+          });
+        });
+        
+        observer.observe(document.documentElement, {
+          attributes: true,
+          attributeFilter: ['style']
+        });
+        
+        console.log('✓ iOS Safari: viewport-fit=cover mode active, inline styles blocked');
       }
       
       // Initialize core utilities
