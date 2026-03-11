@@ -143,8 +143,8 @@ export class DesktopCanvas {
     // CRITICAL: Full viewport dimensions without any margins
     // SCALED FOR: Mobile scrolling with min-height instead of fixed height
     this.workspaceContainer.style.width = '100vw';
-    this.workspaceContainer.style.minWidth = '1000px';
-    this.workspaceContainer.style.minHeight = 'calc(100dvh + 100px)'; // CRITICAL: Allow scroll beyond viewport
+    this.workspaceContainer.style.height = '100vh';
+    this.workspaceContainer.style.height = '100dvh'; // CRITICAL: iOS Safari dynamic viewport height
     this.workspaceContainer.style.maxWidth = 'none';
     this.workspaceContainer.style.maxHeight = 'none';
     this.workspaceContainer.style.border = 'none';

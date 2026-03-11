@@ -26,11 +26,13 @@ body {
   min-height: 100dvh;
   min-height: 100vh;
   margin: 0;
-  padding: 0;
+  padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) 
+           env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
   overflow: hidden;
   user-select: none;
   color: var(--color-primary);
   position: relative;
+  box-sizing: border-box;
 }
 
 /* UPDATED COMMENTS: Background removed from body - now on workspace-container */
@@ -160,6 +162,8 @@ body.loaded .workspace-container::before {
 /* SCALED FOR: Touch navigation on mobile devices */
 @media (max-width: 768px) {
   .desktop-canvas {
+    /* CRITICAL: Change to relative so container expands with content */
+    position: relative;
     /* CRITICAL: Enable scrolling for oversized canvas */
     overflow: auto;
     /* REUSED: Smooth momentum scrolling on iOS */

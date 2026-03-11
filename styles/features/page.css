@@ -17,10 +17,13 @@
  * PURPOSE: Used for project detail pages, fun gallery pages
  * WHY: z-index: 9999 places above fullscreen modals (9998)
  * PERFORMANCE: Scrollbar hidden for cleaner appearance
+ * UPDATED COMMENTS: min-height for iOS Safari full viewport coverage
  */
 .page-container {
   position: fixed;
   inset: 0;
+  min-height: 100dvh;
+  min-height: 100vh;
   background: var(--color-bg-dark, #101010) !important;
   z-index: var(--z-page, 9999);
   overflow-y: auto; /* Scrollable content */
