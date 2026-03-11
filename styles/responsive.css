@@ -178,7 +178,7 @@
 
 /* ANCHOR: ios_safe_area_mobile */
 /* CRITICAL: iOS Safari safe area handling for mobile devices */
-/* UPDATED COMMENTS: Apply safe-area padding to FIXED elements, not body */
+/* UPDATED COMMENTS: Apply safe-area padding to CONTENT elements, not containers */
 /* SCALED FOR: Edge-to-edge display with viewport-fit=cover */
 /* iOS 26 Safari Liquid Glass requires edge-to-edge content for proper toolbar tinting */
 @media (max-width: 768px) {
@@ -212,11 +212,11 @@
     padding-right: env(safe-area-inset-right);
   }
   
-  /* CRITICAL: Modal containers need safe area handling */
-  /* UPDATED COMMENTS: Modals get full safe-area padding */
+  /* CRITICAL: Modal containers NO padding - content inside handles safe-area */
+  /* UPDATED COMMENTS: Removed padding to prevent double safe-area spacing */
+  /* Content elements (.projects-list, .project-page) handle their own safe-area padding */
   .modal-container {
-    padding: env(safe-area-inset-top) env(safe-area-inset-right) 
-             env(safe-area-inset-bottom) env(safe-area-inset-left);
+    padding: 0;
   }
   
   /* CRITICAL: Desktop canvas scrolls edge-to-edge */

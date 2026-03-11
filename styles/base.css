@@ -89,9 +89,9 @@ body.page-mode {
   min-height: 100svh; /* Small viewport - accounts for iOS UI bars */
   min-height: 100dvh; /* Dynamic viewport - adjusts when UI shows/hides */
   min-height: -webkit-fill-available; /* Safari fallback */
-  /* CRITICAL: Safe-area padding for iOS notch/home indicator */
-  padding-top: var(--safe-top);
-  padding-bottom: var(--safe-bottom);
+  /* CRITICAL: NO padding - content inside (.project-page, .fun-gallery) handles safe-area */
+  /* UPDATED COMMENTS: Removed padding to prevent double safe-area spacing */
+  padding: 0;
 }
 
 body.page-mode::before {
