@@ -65,8 +65,20 @@ export class ViewportHeightFix {
   /**
    * Update CSS custom property with current viewport height
    * CRITICAL: Uses window.innerHeight for accurate iOS Safari height
+   * UPDATED COMMENTS: Disabled on iOS - viewport-fit=cover + safe-area-inset handle it better
    */
   updateHeight() {
+    // CRITICAL: Skip on iOS devices - viewport-fit=cover handles viewport properly
+    // UPDATED COMMENTS: iOS Safari with viewport-fit=cover doesn't need JS height calculation
+    // REF: https://webkit.org/blog/7929/designing-websites-for-iphone-x/
+    const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
+    if (isIOS) {
+      // CRITICAL: On iOS, remove any existing --app-height to let CSS handle it
+      document.documentElement.style.removeProperty('--app-height');
+      document.documentElement.style.removeProperty('--app-width');
+      return;
+    }
+    
     // CRITICAL: Get actual viewport height (accounts for iOS Safari bars)
     const vh = window.innerHeight;
     

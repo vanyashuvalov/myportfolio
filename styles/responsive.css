@@ -267,6 +267,75 @@
   }
 }
 
+/* ANCHOR: ios_safari_liquid_glass_complete_fix */
+/* CRITICAL: Complete iOS Safari Liquid Glass fix for viewport-fit=cover */
+/* UPDATED COMMENTS: Overrides JS-set --app-height and ensures proper safe-area handling */
+/* REF: https://jahir.dev/blog/safari-toolbar */
+@supports (-webkit-touch-callout: none) {
+  :root {
+    --safe-top: env(safe-area-inset-top);
+    --safe-bottom: env(safe-area-inset-bottom);
+  }
+  
+  /* CRITICAL: Override JS-set --app-height with proper viewport units */
+  /* UPDATED COMMENTS: Forces 100dvh instead of fixed pixel value from JS */
+  html {
+    --app-height: 100dvh !important;
+    height: 100dvh !important;
+    min-height: 100dvh !important;
+  }
+  
+  /* CRITICAL: Ensure html and body fill viewport with safe-area padding */
+  html,
+  body {
+    min-height: 100dvh;
+    background: #101010;
+  }
+  
+  /* CRITICAL: Page containers need safe-area padding */
+  #page-container,
+  .page-wrapper,
+  .projects-list-page,
+  .projects-grid {
+    padding-top: var(--safe-top);
+    padding-bottom: var(--safe-bottom);
+    min-height: calc(100dvh - var(--safe-top) - var(--safe-bottom));
+    box-sizing: border-box;
+  }
+  
+  /* CRITICAL: Fixed elements need safe-area padding */
+  #navigation-container {
+    padding-top: var(--safe-top);
+  }
+  
+  #contact-input-container {
+    padding-bottom: var(--safe-bottom);
+  }
+  
+  /* CRITICAL: Tint elements at exact edges for Safari sampling */
+  #safari-top-tint {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #101010;
+    z-index: 9999;
+    pointer-events: none;
+  }
+  
+  #safari-bottom-tint {
+    position: fixed !important;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #101010;
+    z-index: 9999;
+    pointer-events: none;
+  }
+}
+
 /* ANCHOR: print_styles */
 @media print {
   .desktop-canvas {
