@@ -38,11 +38,14 @@
  * PURPOSE: Fades content under navigation header
  * WHY: Creates depth, prevents content from touching top edge
  * POSITION: Fixed at top, 200px height gradient
+ * UPDATED COMMENTS: MUST use top/left/right instead of inset for iOS Safari!
  */
 .project-page::before {
   content: '';
   position: fixed;
-  inset: 0 0 auto 0; /* Top edge only */
+  top: 0;
+  left: 0;
+  right: 0;
   height: 200px;
   background: linear-gradient(180deg, var(--color-bg-dark, #101010) 0%, rgba(16, 16, 16, 0) 100%);
   z-index: 5; /* Above content, below navigation */

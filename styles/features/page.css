@@ -17,18 +17,17 @@
  * PURPOSE: Used for project detail pages, fun gallery pages
  * WHY: z-index: 9999 places above fullscreen modals (9998)
  * PERFORMANCE: Scrollbar hidden for cleaner appearance
- * UPDATED COMMENTS: Full viewport height for iOS Safari with --app-height
+ * UPDATED COMMENTS: MUST use width/height instead of inset for iOS Safari!
  */
 .page-container {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
   /* CRITICAL: iOS Safari full viewport height with JS fallback */
   height: var(--app-height, 100dvh);
   height: 100dvh;
   height: 100vh;
-  min-height: var(--app-height, 100dvh);
-  min-height: 100dvh;
-  min-height: 100vh;
   background: var(--color-bg-dark, #101010) !important;
   z-index: var(--z-page, 9999);
   overflow-y: auto; /* Scrollable content */
@@ -76,10 +75,14 @@
  * PURPOSE: Smooth fade transition between pages
  * WHY: z-index: 100001 places above everything during transition
  * ANIMATION: Fade in (opacity: 0 → 1), then fade out after page load
+ * UPDATED COMMENTS: MUST use width/height instead of inset for iOS Safari!
  */
 .page-transition-overlay {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background: var(--color-bg-dark, #101010);
   z-index: var(--z-page-overlay, 100001);
   opacity: 0;
