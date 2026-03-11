@@ -166,6 +166,10 @@ body.loaded .workspace-container::before {
     justify-content: flex-start;
     /* SCALED FOR: Hardware-accelerated scrolling */
     will-change: scroll-position;
+    /* CRITICAL: Full edge-to-edge with safe-area handling */
+    padding-top: env(safe-area-inset-top);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
   }
   
   .workspace-container {
