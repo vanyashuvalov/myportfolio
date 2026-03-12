@@ -34,6 +34,16 @@ html {
   box-sizing: border-box;
 }
 
+/* CRITICAL: Hide scrollbar globally (custom scroll hidden on html root) */
+html {
+  scrollbar-width: none; /* Firefox */
+}
+
+html::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
 body {
   font-family: var(--font-family-primary);
   /* UPDATED COMMENTS: Solid background-color required for viewport-fit=cover */
@@ -112,7 +122,7 @@ body.page-mode::before {
   top: 0;
   left: 0;
   width: 100%;
-  min-width: 1000px; /* CRITICAL: Minimum width for desktop layout */
+  min-width: 1100px; /* CRITICAL: Minimum width for desktop layout */
   /* CRITICAL: iOS Safari full viewport height with multiple fallbacks */
   /* UPDATED COMMENTS: Each fallback on separate line for browser compatibility */
   height: 100svh; /* Small viewport - accounts for iOS UI bars */
@@ -132,6 +142,20 @@ body.page-mode::before {
   /* CRITICAL: Solid dark background - viewport-fit=cover requires background-color, not background-image */
   /* UPDATED COMMENTS: Gradient moved to workspace-container for iOS Safari compatibility */
   background-color: #101010;
+}
+
+/* CRITICAL: Allow horizontal scroll on small screens for desktop canvas */
+@media (max-width: 1100px) {
+  html,
+  body {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .desktop-canvas {
+    position: relative;
+    overflow: visible;
+  }
 }
 
 /* CRITICAL: In page mode, canvas becomes background layer */

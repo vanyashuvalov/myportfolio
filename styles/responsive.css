@@ -222,9 +222,9 @@
   /* CRITICAL: Desktop canvas scrolls edge-to-edge */
   /* UPDATED COMMENTS: NO padding on canvas - content extends under notch/home indicator */
   .desktop-canvas {
-    /* CRITICAL: Enable scrolling for oversized canvas */
-    overflow: auto;
-    /* REUSED: Smooth momentum scrolling on iOS */
+    /* CRITICAL: Allow body to handle scrolling on iOS */
+    overflow: visible;
+    /* REUSED: Smooth momentum scrolling on iOS (body) */
     -webkit-overflow-scrolling: touch;
     /* CRITICAL: Full edge-to-edge - NO padding, background extends under notch */
     padding-top: 0;
