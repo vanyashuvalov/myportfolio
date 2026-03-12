@@ -409,6 +409,17 @@ export class PageManager {
       if (reloadBtn) {
         reloadBtn.addEventListener('click', () => window.location.reload());
       }
+
+      const bleedBtn = this.pageContainer.querySelector('[data-action="toggle-bleed"]');
+      if (bleedBtn) {
+        bleedBtn.addEventListener('click', () => {
+          document.body.classList.toggle('viewport-test--bleed');
+          bleedBtn.textContent = document.body.classList.contains('viewport-test--bleed')
+            ? 'Bleed: ON'
+            : 'Bleed: OFF';
+          updateMetrics();
+        });
+      }
       
       const updateMetrics = () => {
         const vv = window.visualViewport;
@@ -424,6 +435,12 @@ export class PageManager {
         const desktopCanvas = document.getElementById('desktop-canvas');
         const workspace = document.querySelector('.workspace-container');
 
+        document.body.style.setProperty('--vv-top', `${vvTop}px`);
+        document.body.style.setProperty('--vv-bottom', `${safeBottomCalc}px`);
+        document.body.style.setProperty('--vv-left', `${vvLeft}px`);
+        document.body.style.setProperty('--vv-right', `${safeRightCalc}px`);
+        document.body.style.setProperty('--vv-scale', vv ? String(vv.scale || 1) : '1');
+
         const metrics = {
           inner: `${window.innerWidth}×${window.innerHeight}`,
           doc: `${document.documentElement.clientWidth}×${document.documentElement.clientHeight}`,
@@ -436,8 +453,10 @@ export class PageManager {
           vvBottom: vv ? `${safeBottomCalc}px` : 'n/a',
           vvLeft: vv ? `${vvLeft}px` : 'n/a',
           vvRight: vv ? `${safeRightCalc}px` : 'n/a',
+          vvScale: vv ? String(vv.scale || 1) : 'n/a',
           safeTop: getComputedStyle(document.body).getPropertyValue('--safe-top').trim() || '0px',
-          safeBottom: getComputedStyle(document.body).getPropertyValue('--safe-bottom').trim() || '0px'
+          safeBottom: getComputedStyle(document.body).getPropertyValue('--safe-bottom').trim() || '0px',
+          bleed: document.body.classList.contains('viewport-test--bleed') ? 'ON' : 'OFF'
         };
         
         Object.entries(metrics).forEach(([key, value]) => {
@@ -454,12 +473,14 @@ export class PageManager {
           `documentElement: ${docEl.clientWidth}x${docEl.clientHeight}`,
           `body: ${body.clientWidth}x${body.clientHeight}`,
           `visualViewport: ${vv ? `${vvWidth}x${vvHeight}` : 'n/a'}`,
+          `visualViewport.scale: ${vv ? vv.scale : 'n/a'}`,
           `visualViewport.offsetTop: ${vv ? vvTop : 'n/a'}`,
           `visualViewport.offsetBottom: ${vv ? safeBottomCalc : 'n/a'}`,
           `visualViewport.offsetLeft: ${vv ? vvLeft : 'n/a'}`,
           `visualViewport.offsetRight: ${vv ? safeRightCalc : 'n/a'}`,
           `safe-area top: ${metrics.safeTop}`,
           `safe-area bottom: ${metrics.safeBottom}`,
+          `bleed: ${metrics.bleed}`,
           `scrollY: ${window.scrollY}`,
           `body.scrollHeight: ${body.scrollHeight}`,
           `body.clientHeight: ${body.clientHeight}`,
@@ -526,13 +547,16 @@ export class PageManager {
             <div class="viewport-test__metric"><span>vv.offsetBottom</span><span data-metric="vvBottom">-</span></div>
             <div class="viewport-test__metric"><span>vv.offsetLeft</span><span data-metric="vvLeft">-</span></div>
             <div class="viewport-test__metric"><span>vv.offsetRight</span><span data-metric="vvRight">-</span></div>
+            <div class="viewport-test__metric"><span>vv.scale</span><span data-metric="vvScale">-</span></div>
             <div class="viewport-test__metric"><span>safe-top</span><span data-metric="safeTop">-</span></div>
             <div class="viewport-test__metric"><span>safe-bottom</span><span data-metric="safeBottom">-</span></div>
+            <div class="viewport-test__metric"><span>bleed</span><span data-metric="bleed">-</span></div>
           </div>
           
           <div class="viewport-test__actions">
             <button class="viewport-test__button" data-action="back-to-desktop">Back</button>
             <button class="viewport-test__button" data-action="reload">Reload</button>
+            <button class="viewport-test__button" data-action="toggle-bleed">Bleed: OFF</button>
           </div>
 
           <div class="viewport-test__log-label">Copyable log</div>

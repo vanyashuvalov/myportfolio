@@ -10,6 +10,11 @@ body.viewport-test .burger-button {
 body.viewport-test {
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --vv-top: 0px;
+  --vv-bottom: 0px;
+  --vv-left: 0px;
+  --vv-right: 0px;
+  --vv-scale: 1;
   background: var(--app-bg) !important;
   background-size: var(--app-bg-size) !important;
   background-position: var(--app-bg-position) !important;
@@ -38,6 +43,11 @@ body.viewport-test .page-container {
   min-height: 100lvh;
   color: #ffffff;
   font-family: var(--font-family-primary, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif);
+}
+
+body.viewport-test--bleed .viewport-test {
+  margin-top: calc(var(--vv-top) * -1);
+  margin-bottom: calc(var(--vv-bottom) * -1);
 }
 
 .viewport-test__content {
