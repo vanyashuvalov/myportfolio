@@ -115,8 +115,16 @@ export class Router {
   /**
    * Handle route change
    * CRITICAL: Match URL to registered routes
+   * UPDATED COMMENTS: Skip static files (.html, .css, .js, etc.)
    */
   async handleRoute(url, state = {}) {
+    // CRITICAL: Skip static files - let browser handle them directly
+    // UPDATED COMMENTS: Prevents SPA router from intercepting static file requests
+    const staticFilePattern = /\.(html|css|js|json|ico|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)$/i;
+    if (staticFilePattern.test(url)) {
+      return; // Let browser handle static files
+    }
+    
     // UPDATED COMMENTS: Find matching route
     for (const [pattern, route] of this.routes) {
       const match = url.match(route.pattern);
