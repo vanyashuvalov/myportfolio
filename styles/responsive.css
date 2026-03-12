@@ -290,7 +290,8 @@
   /* CRITICAL: Ensure html and body fill viewport with safe-area padding */
   html,
   body {
-    min-height: 100dvh !important;
+    height: 100% !important;
+    min-height: 100% !important;
     padding-top: 0 !important;
     padding-bottom: 0 !important;
     background: #101010 !important; /* CRITICAL: Match theme-color meta tag */
@@ -301,12 +302,14 @@
   #desktop-canvas {
     padding-top: 0 !important;
     padding-bottom: 0 !important;
-    min-height: 100dvh !important;
+    height: 100vh !important;
+    min-height: 100vh !important;
   }
   
   /* CRITICAL: Workspace container fills entire viewport */
   .workspace-container {
-    min-height: 100dvh !important;
+    height: 100% !important;
+    min-height: 100% !important;
     padding-top: 0 !important;
     padding-bottom: 0 !important;
   }
