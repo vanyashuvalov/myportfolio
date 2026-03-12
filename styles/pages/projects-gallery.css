@@ -59,7 +59,7 @@
 .projects-list-page {
   color: var(--color-text-light, #FFFFFF) !important;
   opacity: 1 !important; /* Visible immediately for standalone page */
-  transform: translateY(0) !important; /* No slide animation for page */
+  transform: none !important; /* No slide animation for page (avoid fixed positioning issues) */
 }
 
 /* CRITICAL: Top gradient overlay for page
