@@ -79,12 +79,12 @@ export class Router {
    * @param {string} url - Target URL
    * @param {Object} state - History state object
    */
-  navigate(url, state = {}) {
+  async navigate(url, state = {}) {
     // CRITICAL: Update browser history
     window.history.pushState(state, '', url);
     
     // UPDATED COMMENTS: Handle route change
-    this.handleRoute(url, state);
+    await this.handleRoute(url, state);
     
     // SCALED FOR: Scroll to top on navigation
     if (this.config.scrollToTop) {
