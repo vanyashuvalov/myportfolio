@@ -423,6 +423,8 @@ class Application {
     } else if (url.startsWith('/fun/')) {
       // UPDATED COMMENTS: Will be updated with project title when loaded
       this.navigation.updateCurrentPage('Fun');
+    } else if (url === '/viewport-test') {
+      this.navigation.updateCurrentPage('Viewport Test');
     } else {
       // SCALED FOR: Default fallback
       this.navigation.updateCurrentPage('Home');

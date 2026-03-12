@@ -26,6 +26,7 @@ export class PageManager {
     this.lastModalScrollPosition = 0;
     this.lastModalCategory = 'work';
     this.isReturningToModal = false;
+    this.viewportTestCleanup = null;
     
     // Handlers
     this.projectHandler = null;
@@ -147,6 +148,9 @@ export class PageManager {
       this.showProjectPage(context.params.id, 'fun');
     });
 
+    // Viewport test route
+    this.router.register('/viewport-test', () => this.showViewportTestPage());
+
     // Home route
     this.router.register('/', () => this.showDesktopCanvas());
   }
@@ -172,6 +176,7 @@ export class PageManager {
    */
   async showProjectPage(projectId, category = 'work') {
     try {
+      this.cleanupViewportTest();
       const overallTimeout = new Promise((_, reject) => {
         setTimeout(() => reject(new Error('Project page loading timed out')), 30000);
       });
@@ -197,6 +202,7 @@ export class PageManager {
    */
   async showProjectsListPage(category = 'work') {
     try {
+      this.cleanupViewportTest();
       await this.showTransitionOverlay();
       
       const data = await this.projectsListHandler.load(category);
@@ -218,6 +224,7 @@ export class PageManager {
    */
   async showFunGalleryPage() {
     try {
+      this.cleanupViewportTest();
       await this.showTransitionOverlay();
       
       const data = await this.funGalleryHandler.load();
@@ -279,6 +286,7 @@ export class PageManager {
    */
   async showDesktopCanvas() {
     if (!this.isPageMode) return;
+    this.cleanupViewportTest();
 
     // Check if returning to modal
     if (this.isReturningToModal) {
@@ -377,6 +385,114 @@ export class PageManager {
     } finally {
       await this.hideTransitionOverlay();
     }
+  }
+
+  /**
+   * Show viewport test page
+   * PURPOSE: Minimal layer page for iOS Safari viewport debugging
+   */
+  async showViewportTestPage() {
+    try {
+      this.cleanupViewportTest();
+      document.body.classList.add('viewport-test');
+      
+      await this.transitionToPage(() => this.renderViewportTestPage());
+      
+      const backBtn = this.pageContainer.querySelector('[data-action="back-to-desktop"]');
+      if (backBtn) {
+        backBtn.addEventListener('click', () => this.router.navigate('/'));
+      }
+      
+      const reloadBtn = this.pageContainer.querySelector('[data-action="reload"]');
+      if (reloadBtn) {
+        reloadBtn.addEventListener('click', () => window.location.reload());
+      }
+      
+      const updateMetrics = () => {
+        const metrics = {
+          inner: `${window.innerWidth}×${window.innerHeight}`,
+          doc: `${document.documentElement.clientWidth}×${document.documentElement.clientHeight}`,
+          body: `${document.body.clientWidth}×${document.body.clientHeight}`,
+          screen: `${screen.width}×${screen.height}`,
+          visual: window.visualViewport
+            ? `${Math.round(window.visualViewport.width)}×${Math.round(window.visualViewport.height)}`
+            : 'n/a',
+          safeTop: getComputedStyle(document.body).getPropertyValue('--safe-top').trim() || '0px',
+          safeBottom: getComputedStyle(document.body).getPropertyValue('--safe-bottom').trim() || '0px'
+        };
+        
+        Object.entries(metrics).forEach(([key, value]) => {
+          const el = this.pageContainer.querySelector(`[data-metric="${key}"]`);
+          if (el) el.textContent = value;
+        });
+      };
+      
+      updateMetrics();
+      window.addEventListener('resize', updateMetrics);
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', updateMetrics);
+      }
+      
+      this.viewportTestCleanup = () => {
+        window.removeEventListener('resize', updateMetrics);
+        if (window.visualViewport) {
+          window.visualViewport.removeEventListener('resize', updateMetrics);
+        }
+        document.body.classList.remove('viewport-test');
+      };
+      
+      this.eventBus?.emit('page:shown', { type: 'viewport-test' });
+    } catch (error) {
+      console.error('Failed to show viewport test page:', error);
+      this.showErrorPage(error.message);
+    }
+  }
+
+  /**
+   * Render viewport test HTML
+   */
+  renderViewportTestPage() {
+    return `
+      <div class="page-wrapper viewport-test">
+        <div class="viewport-test__edge viewport-test__edge--top"></div>
+        <div class="viewport-test__edge viewport-test__edge--bottom"></div>
+        <div class="viewport-test__corner viewport-test__corner--tl"></div>
+        <div class="viewport-test__corner viewport-test__corner--tr"></div>
+        <div class="viewport-test__corner viewport-test__corner--bl"></div>
+        <div class="viewport-test__corner viewport-test__corner--br"></div>
+        
+        <div class="viewport-test__content">
+          <h1 class="viewport-test__title">Viewport Test</h1>
+          <p class="viewport-test__subtitle">Минимальный слой для проверки safe-area и реальной высоты.</p>
+          
+          <div class="viewport-test__metrics">
+            <div class="viewport-test__metric"><span>window.inner</span><span data-metric="inner">-</span></div>
+            <div class="viewport-test__metric"><span>documentElement</span><span data-metric="doc">-</span></div>
+            <div class="viewport-test__metric"><span>body</span><span data-metric="body">-</span></div>
+            <div class="viewport-test__metric"><span>screen</span><span data-metric="screen">-</span></div>
+            <div class="viewport-test__metric"><span>visualViewport</span><span data-metric="visual">-</span></div>
+            <div class="viewport-test__metric"><span>safe-top</span><span data-metric="safeTop">-</span></div>
+            <div class="viewport-test__metric"><span>safe-bottom</span><span data-metric="safeBottom">-</span></div>
+          </div>
+          
+          <div class="viewport-test__actions">
+            <button class="viewport-test__button" data-action="back-to-desktop">Back</button>
+            <button class="viewport-test__button" data-action="reload">Reload</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  /**
+   * Cleanup viewport test listeners/state
+   */
+  cleanupViewportTest() {
+    if (this.viewportTestCleanup) {
+      this.viewportTestCleanup();
+      this.viewportTestCleanup = null;
+    }
+    document.body.classList.remove('viewport-test');
   }
 
   // ============================================================

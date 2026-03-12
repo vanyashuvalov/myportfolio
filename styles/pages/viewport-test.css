@@ -1,0 +1,113 @@
+/* ANCHOR: viewport_test_page */
+/* PURPOSE: Minimal test page to inspect iOS Safari safe-area/viewport behavior */
+
+body.viewport-test #navigation-container,
+body.viewport-test #contact-input-container,
+body.viewport-test .burger-button {
+  display: none !important;
+}
+
+body.viewport-test {
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+body.viewport-test .page-container {
+  background: transparent !important;
+}
+
+.viewport-test {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  color: #ffffff;
+  font-family: var(--font-family-primary, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif);
+}
+
+.viewport-test__content {
+  position: relative;
+  z-index: 1;
+  padding: 24px 16px 40px;
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.viewport-test__title {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+}
+
+.viewport-test__subtitle {
+  font-size: 14px;
+  opacity: 0.8;
+  margin: 0 0 16px 0;
+}
+
+.viewport-test__metrics {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin: 16px 0 20px;
+  font-size: 13px;
+}
+
+.viewport-test__metric {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.viewport-test__metric span:last-child {
+  font-weight: 600;
+  text-align: right;
+}
+
+.viewport-test__actions {
+  display: flex;
+  gap: 12px;
+}
+
+.viewport-test__button {
+  appearance: none;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(0, 0, 0, 0.3);
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.viewport-test__edge {
+  position: fixed;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #00ff7f;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.viewport-test__edge--top { top: 0; }
+.viewport-test__edge--bottom { bottom: 0; }
+
+.viewport-test__corner {
+  position: fixed;
+  width: 14px;
+  height: 14px;
+  background: #00ff7f;
+  border: 2px solid #000;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.viewport-test__corner--tl { top: 0; left: 0; }
+.viewport-test__corner--tr { top: 0; right: 0; }
+.viewport-test__corner--bl { bottom: 0; left: 0; }
+.viewport-test__corner--br { bottom: 0; right: 0; }

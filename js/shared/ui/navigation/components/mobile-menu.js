@@ -103,6 +103,14 @@ export class MobileMenu {
       isActive: this.options.currentPage === 'Fun',
       dataAttrs: { url: '/fun', page: 'Fun' }
     });
+
+    const viewportTestButton = new Button({
+      type: 'text',
+      text: 'Viewport Test',
+      action: 'navigate',
+      isActive: this.options.currentPage === 'Viewport Test',
+      dataAttrs: { url: '/viewport-test', page: 'Viewport Test' }
+    });
     
     return `
       <!-- ANCHOR: menu_sections -->
@@ -111,6 +119,7 @@ export class MobileMenu {
         ${homeButton.render()}
         ${projectsButton.render()}
         ${funButton.render()}
+        ${viewportTestButton.render()}
         
         <!-- Divider -->
         <div class="mobile-menu__divider"></div>
