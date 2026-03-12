@@ -311,21 +311,22 @@
     padding-bottom: 0 !important;
   }
   
-  /* CRITICAL: Page containers need safe-area padding */
+  /* CRITICAL: Edge-to-edge content (no safe-area padding) */
   #page-container,
   .page-wrapper,
   .projects-list-page,
   .projects-grid {
-    padding-top: var(--safe-top) !important;
-    padding-bottom: var(--safe-bottom) !important;
-    min-height: calc(100dvh - var(--safe-top) - var(--safe-bottom)) !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    min-height: 100dvh !important;
     box-sizing: border-box;
   }
   
-  /* CRITICAL: Fixed elements need safe-area padding */
+  /* CRITICAL: Fixed elements without safe-area padding */
   #navigation-container,
   #contact-input-container {
-    padding-top: var(--safe-top) !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
   }
 }
 
