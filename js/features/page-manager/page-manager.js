@@ -399,6 +399,26 @@ export class PageManager {
       await this.transitionToPage(() => this.renderViewportTestPage());
       document.body.classList.remove('page-mode');
       this.currentPage = 'viewport-test';
+      const scrollToCenter = () => {
+        const docEl = document.documentElement;
+        const body = document.body;
+        const scrollHeight = Math.max(docEl.scrollHeight, body.scrollHeight);
+        const clientHeight = window.innerHeight || docEl.clientHeight || body.clientHeight;
+        const maxScroll = Math.max(0, scrollHeight - clientHeight);
+        const target = Math.round(maxScroll / 2);
+        
+        window.scrollTo(0, target);
+        docEl.scrollTop = target;
+        body.scrollTop = target;
+        
+        if (this.pageContainer && this.pageContainer.scrollHeight > this.pageContainer.clientHeight) {
+          this.pageContainer.scrollTop = target;
+        }
+      };
+
+      scrollToCenter();
+      requestAnimationFrame(scrollToCenter);
+      setTimeout(scrollToCenter, 150);
       
       const backBtn = this.pageContainer.querySelector('[data-action="back-to-desktop"]');
       if (backBtn) {
