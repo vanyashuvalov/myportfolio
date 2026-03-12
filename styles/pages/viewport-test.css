@@ -10,16 +10,32 @@ body.viewport-test .burger-button {
 body.viewport-test {
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
+  background: var(--app-bg) !important;
+  background-size: var(--app-bg-size) !important;
+  background-position: var(--app-bg-position) !important;
+  background-repeat: var(--app-bg-repeat) !important;
+  overflow: visible !important;
+}
+
+body.viewport-test.page-mode {
+  background: var(--app-bg) !important;
+  background-size: var(--app-bg-size) !important;
+  background-position: var(--app-bg-position) !important;
+  background-repeat: var(--app-bg-repeat) !important;
+  overflow: visible !important;
 }
 
 body.viewport-test .page-container {
   background: transparent !important;
+  min-height: 100vh !important;
+  min-height: 100lvh !important;
 }
 
 .viewport-test {
   position: relative;
   width: 100%;
   min-height: 100vh;
+  min-height: 100lvh;
   color: #ffffff;
   font-family: var(--font-family-primary, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif);
 }
@@ -73,6 +89,24 @@ body.viewport-test .page-container {
   gap: 12px;
 }
 
+.viewport-test__log {
+  margin-top: 16px;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  font-size: 12px;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-break: break-word;
+  user-select: text;
+}
+
+.viewport-test__log-label {
+  font-size: 12px;
+  opacity: 0.7;
+  margin-top: 10px;
+}
 .viewport-test__button {
   appearance: none;
   border: 1px solid rgba(255, 255, 255, 0.3);

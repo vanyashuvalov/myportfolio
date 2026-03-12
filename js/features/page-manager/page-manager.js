@@ -397,6 +397,8 @@ export class PageManager {
       document.body.classList.add('viewport-test');
       
       await this.transitionToPage(() => this.renderViewportTestPage());
+      document.body.classList.remove('page-mode');
+      this.currentPage = 'viewport-test';
       
       const backBtn = this.pageContainer.querySelector('[data-action="back-to-desktop"]');
       if (backBtn) {
@@ -409,14 +411,31 @@ export class PageManager {
       }
       
       const updateMetrics = () => {
+        const vv = window.visualViewport;
+        const vvHeight = vv ? Math.round(vv.height) : 0;
+        const vvWidth = vv ? Math.round(vv.width) : 0;
+        const vvTop = vv ? Math.round(vv.offsetTop) : 0;
+        const vvLeft = vv ? Math.round(vv.offsetLeft) : 0;
+        const safeBottomCalc = vv ? Math.max(0, Math.round(screen.height - vvHeight - vvTop)) : 0;
+        const safeRightCalc = vv ? Math.max(0, Math.round(screen.width - vvWidth - vvLeft)) : 0;
+        const docEl = document.documentElement;
+        const body = document.body;
+        const pageContainer = this.pageContainer;
+        const desktopCanvas = document.getElementById('desktop-canvas');
+        const workspace = document.querySelector('.workspace-container');
+
         const metrics = {
           inner: `${window.innerWidth}×${window.innerHeight}`,
           doc: `${document.documentElement.clientWidth}×${document.documentElement.clientHeight}`,
           body: `${document.body.clientWidth}×${document.body.clientHeight}`,
           screen: `${screen.width}×${screen.height}`,
-          visual: window.visualViewport
-            ? `${Math.round(window.visualViewport.width)}×${Math.round(window.visualViewport.height)}`
+          visual: vv
+            ? `${vvWidth}×${vvHeight}`
             : 'n/a',
+          vvTop: vv ? `${vvTop}px` : 'n/a',
+          vvBottom: vv ? `${safeBottomCalc}px` : 'n/a',
+          vvLeft: vv ? `${vvLeft}px` : 'n/a',
+          vvRight: vv ? `${safeRightCalc}px` : 'n/a',
           safeTop: getComputedStyle(document.body).getPropertyValue('--safe-top').trim() || '0px',
           safeBottom: getComputedStyle(document.body).getPropertyValue('--safe-bottom').trim() || '0px'
         };
@@ -425,9 +444,41 @@ export class PageManager {
           const el = this.pageContainer.querySelector(`[data-metric="${key}"]`);
           if (el) el.textContent = value;
         });
+
+        const logLines = [
+          `time: ${new Date().toISOString()}`,
+          `ua: ${navigator.userAgent}`,
+          `devicePixelRatio: ${window.devicePixelRatio}`,
+          `screen: ${screen.width}x${screen.height}`,
+          `inner: ${window.innerWidth}x${window.innerHeight}`,
+          `documentElement: ${docEl.clientWidth}x${docEl.clientHeight}`,
+          `body: ${body.clientWidth}x${body.clientHeight}`,
+          `visualViewport: ${vv ? `${vvWidth}x${vvHeight}` : 'n/a'}`,
+          `visualViewport.offsetTop: ${vv ? vvTop : 'n/a'}`,
+          `visualViewport.offsetBottom: ${vv ? safeBottomCalc : 'n/a'}`,
+          `visualViewport.offsetLeft: ${vv ? vvLeft : 'n/a'}`,
+          `visualViewport.offsetRight: ${vv ? safeRightCalc : 'n/a'}`,
+          `safe-area top: ${metrics.safeTop}`,
+          `safe-area bottom: ${metrics.safeBottom}`,
+          `scrollY: ${window.scrollY}`,
+          `body.scrollHeight: ${body.scrollHeight}`,
+          `body.clientHeight: ${body.clientHeight}`,
+          `doc.scrollHeight: ${docEl.scrollHeight}`,
+          `doc.clientHeight: ${docEl.clientHeight}`,
+          `page-container: ${pageContainer ? pageContainer.clientWidth + 'x' + pageContainer.clientHeight : 'n/a'}`,
+          `desktop-canvas: ${desktopCanvas ? desktopCanvas.clientWidth + 'x' + desktopCanvas.clientHeight : 'n/a'}`,
+          `workspace: ${workspace ? workspace.clientWidth + 'x' + workspace.clientHeight : 'n/a'}`
+        ];
+        
+        const logEl = this.pageContainer.querySelector('[data-metric="log"]');
+        if (logEl) {
+          logEl.textContent = logLines.join('\n');
+        }
       };
       
       updateMetrics();
+      setTimeout(updateMetrics, 100);
+      setTimeout(updateMetrics, 400);
       window.addEventListener('resize', updateMetrics);
       if (window.visualViewport) {
         window.visualViewport.addEventListener('resize', updateMetrics);
@@ -471,6 +522,10 @@ export class PageManager {
             <div class="viewport-test__metric"><span>body</span><span data-metric="body">-</span></div>
             <div class="viewport-test__metric"><span>screen</span><span data-metric="screen">-</span></div>
             <div class="viewport-test__metric"><span>visualViewport</span><span data-metric="visual">-</span></div>
+            <div class="viewport-test__metric"><span>vv.offsetTop</span><span data-metric="vvTop">-</span></div>
+            <div class="viewport-test__metric"><span>vv.offsetBottom</span><span data-metric="vvBottom">-</span></div>
+            <div class="viewport-test__metric"><span>vv.offsetLeft</span><span data-metric="vvLeft">-</span></div>
+            <div class="viewport-test__metric"><span>vv.offsetRight</span><span data-metric="vvRight">-</span></div>
             <div class="viewport-test__metric"><span>safe-top</span><span data-metric="safeTop">-</span></div>
             <div class="viewport-test__metric"><span>safe-bottom</span><span data-metric="safeBottom">-</span></div>
           </div>
@@ -479,6 +534,9 @@ export class PageManager {
             <button class="viewport-test__button" data-action="back-to-desktop">Back</button>
             <button class="viewport-test__button" data-action="reload">Reload</button>
           </div>
+
+          <div class="viewport-test__log-label">Copyable log</div>
+          <pre class="viewport-test__log" data-metric="log">-</pre>
         </div>
       </div>
     `;
