@@ -291,8 +291,8 @@
   html,
   body {
     min-height: 100dvh !important;
-    padding-top: var(--safe-top) !important;
-    padding-bottom: var(--safe-bottom) !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
     background: #101010 !important; /* CRITICAL: Match theme-color meta tag */
   }
   
