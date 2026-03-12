@@ -12,7 +12,7 @@
   left: 50%;
   /* CRITICAL: Safe-area padding for iOS home indicator */
   /* UPDATED COMMENTS: Adds padding-bottom for home indicator area */
-  bottom: calc(24px + var(--safe-bottom));
+  bottom: 0;
   transform: translateX(-50%) translateY(100px);
   z-index: var(--z-contact-input, 1000);
   
@@ -205,7 +205,7 @@
     /* CRITICAL: Override desktop centering with left/right positioning */
     left: 20px;
     right: 20px;
-    bottom: 20px;
+    bottom: 0;
     transform: translateY(100px);
   }
   

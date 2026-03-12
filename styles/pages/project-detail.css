@@ -191,9 +191,7 @@
 /* MOBILE: Smaller padding and typography */
 @media (max-width: 768px) {
   .project-page {
-    /* CRITICAL: Safe-area padding REQUIRED with viewport-fit=cover */
-    /* UPDATED COMMENTS: iOS Safari needs env() to properly extend content under safe-areas */
-    padding: calc(120px + env(safe-area-inset-top)) 16px calc(60px + env(safe-area-inset-bottom)) 16px !important;
+    padding: 120px 16px 60px 16px !important;
   }
   
   .project-title {

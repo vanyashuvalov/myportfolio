@@ -16,10 +16,7 @@
   top: 0;
   left: 0;
   right: 0;
-  /* CRITICAL: Safe-area padding for iOS notch */
-  /* UPDATED COMMENTS: Adds padding-top for notch area */
-  padding: 20px;
-  padding-top: calc(20px + var(--safe-top));
+  padding: 0 20px 20px;
   z-index: var(--z-navigation, 1000);
   display: flex;
   justify-content: center;
@@ -454,11 +451,7 @@ body.loaded .navigation-wrapper {
 /* ANCHOR: mobile_breakpoint */
 @media (max-width: 768px) {
   .navigation-wrapper {
-    padding: 16px;
-    /* CRITICAL: Account for iOS notch/ Dynamic Island */
-    padding-top: calc(16px + env(safe-area-inset-top));
-    padding-left: calc(16px + env(safe-area-inset-left));
-    padding-right: calc(16px + env(safe-area-inset-right));
+    padding: 0 16px 16px;
   }
   
   .navigation-header {
@@ -489,9 +482,8 @@ body.loaded .navigation-wrapper {
     display: flex;
     /* CRITICAL: Fixed position to stay above menu */
     position: fixed !important;
-    /* CRITICAL: Account for iOS notch/ Dynamic Island */
-    top: calc(16px + env(safe-area-inset-top)) !important;
-    right: calc(16px + env(safe-area-inset-right)) !important;
+    top: 16px !important;
+    right: 16px !important;
     z-index: 100003 !important;
   }
   
