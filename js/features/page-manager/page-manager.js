@@ -369,9 +369,14 @@ export class PageManager {
     const url = category === 'work' ? `/projects/${projectId}` : `/fun/${projectId}`;
     window.history.pushState({}, '', url);
 
-    // Show project page
-    await this.showProjectPage(projectId, category);
-    this.eventBus?.emit('router:navigate', { url, state: {} });
+    // Show project page with transition overlay
+    await this.showTransitionOverlay();
+    try {
+      await this.showProjectPage(projectId, category);
+      this.eventBus?.emit('router:navigate', { url, state: {} });
+    } finally {
+      await this.hideTransitionOverlay();
+    }
   }
 
   // ============================================================
