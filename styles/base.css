@@ -3,15 +3,6 @@
 /* SCALED FOR: Performance optimization with contain property */
 
 /* ANCHOR: css_variables */
-/* CRITICAL: iOS Safari safe-area insets for notch/home indicator */
-/* UPDATED COMMENTS: CSS custom properties for safe-area handling with viewport-fit=cover */
-:root {
-  --safe-top: env(safe-area-inset-top, 0px);
-  --safe-bottom: env(safe-area-inset-bottom, 0px);
-  --safe-left: env(safe-area-inset-left, 0px);
-  --safe-right: env(safe-area-inset-right, 0px);
-}
-
 html {
   width: 100%;
   /* CRITICAL: iOS Safari edge-to-edge height */
@@ -52,12 +43,6 @@ body {
   background-color: #101010;
   
   width: 100%;
-  /* CRITICAL: iOS Safari edge-to-edge height with multiple fallbacks */
-  /* UPDATED COMMENTS: svh = small viewport (accounts for UI bars), dvh = dynamic */
-  /* With viewport-fit=cover, content extends under safe-areas */
-  min-height: 100svh; /* Small viewport - accounts for iOS UI bars */
-  min-height: 100dvh; /* Dynamic viewport - adjusts when UI shows/hides */
-  min-height: -webkit-fill-available; /* Safari fallback */
   margin: 0;
   /* CRITICAL: NO padding - html handles safe-area padding */
   /* UPDATED COMMENTS: Prevents double padding with html element */
@@ -97,11 +82,6 @@ body.page-mode {
   /* UPDATED COMMENTS: overflow-y auto for vertical scrolling, hidden-x to prevent horizontal */
   overflow-y: auto !important;
   overflow-x: hidden !important;
-  /* CRITICAL: Ensure body fills viewport + safe areas for proper scrolling */
-  /* UPDATED COMMENTS: Multiple fallbacks for iOS Safari edge-to-edge with viewport-fit=cover */
-  min-height: 100svh; /* Small viewport - accounts for iOS UI bars */
-  min-height: 100dvh; /* Dynamic viewport - adjusts when UI shows/hides */
-  min-height: -webkit-fill-available; /* Safari fallback */
   /* CRITICAL: NO padding - content inside (.project-page, .fun-gallery) handles safe-area */
   /* UPDATED COMMENTS: Removed padding to prevent double safe-area spacing */
   padding: 0;
@@ -123,11 +103,7 @@ body.page-mode::before {
   left: 0;
   width: 100%;
   min-width: 1100px; /* CRITICAL: Minimum width for desktop layout */
-  /* CRITICAL: iOS Safari full viewport height with multiple fallbacks */
-  /* UPDATED COMMENTS: Each fallback on separate line for browser compatibility */
-  height: 100svh; /* Small viewport - accounts for iOS UI bars */
-  height: 100dvh; /* Dynamic viewport - adjusts when UI shows/hides */
-  height: -webkit-fill-available; /* Safari fallback */
+  height: 100%;
   min-height: 720px; /* CRITICAL: Minimum height for desktop layout */
   /* CRITICAL: overflow hidden for desktop mode */
   /* UPDATED COMMENTS: Desktop canvas doesn't scroll, workspace inside scrolls on mobile */

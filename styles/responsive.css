@@ -176,26 +176,7 @@
   }
 }
 
-/* ANCHOR: ios_safe_area_mobile */
-/* CRITICAL: iOS Safari safe area handling for mobile devices */
-/* UPDATED COMMENTS: Apply safe-area padding to CONTENT elements, not containers */
-/* SCALED FOR: Edge-to-edge display with viewport-fit=cover */
-/* iOS 26 Safari Liquid Glass requires edge-to-edge content for proper toolbar tinting */
 @media (max-width: 768px) {
-  /* CRITICAL: Ensure html/body extend to full viewport height */
-  /* UPDATED COMMENTS: Multiple fallbacks for iOS Safari edge-to-edge */
-  html {
-    height: -webkit-fill-available;
-    height: 100%;
-  }
-  
-  body {
-    min-height: 100svh; /* Small viewport - accounts for iOS UI bars */
-    min-height: 100dvh; /* Dynamic viewport - adjusts when UI shows/hides */
-    min-height: -webkit-fill-available; /* Safari fallback */
-    min-height: var(--app-height, 100vh); /* JS-calculated fallback */
-  }
-  
   /* CRITICAL: Fixed elements need safe area insets */
   /* UPDATED COMMENTS: Navigation header gets top safe-area padding */
   #navigation-container {
@@ -235,16 +216,10 @@
   
   /* CRITICAL: Workspace container takes full viewport */
   /* UPDATED COMMENTS: NO padding - widgets handle their own safe positioning */
-  /* iOS Safari: Multiple fallbacks for accurate viewport height */
   .workspace-container {
     /* CRITICAL: No padding - full edge-to-edge layout */
     padding: 0;
     box-sizing: border-box;
-    /* CRITICAL: Ensure content doesn't get cut off */
-    min-height: 100svh; /* Small viewport - accounts for iOS UI bars */
-    min-height: 100dvh; /* Dynamic viewport - adjusts when UI shows/hides */
-    min-height: -webkit-fill-available; /* Safari fallback */
-    min-height: var(--app-height, 100vh); /* JS-calculated fallback */
   }
 }
 
@@ -267,86 +242,8 @@
   }
 }
 
-/* ANCHOR: ios_safari_liquid_glass_complete_fix */
-/* CRITICAL: Complete iOS Safari 26+ Liquid Glass fix for viewport-fit=cover */
-/* UPDATED COMMENTS: March 2026 - GitHub-style implementation with theme-color meta tag */
-/* REF: https://jahir.dev/blog/safari-toolbar */
-/* REF: https://github.com (working example) */
-@supports (-webkit-touch-callout: none) {
-  :root {
-    --safe-top: env(safe-area-inset-top);
-    --safe-bottom: env(safe-area-inset-bottom);
-  }
-  
-  /* CRITICAL: Override JS-set --app-height with proper viewport units */
-  /* UPDATED COMMENTS: Forces 100dvh instead of fixed pixel value from JS */
-  html {
-    --app-height: 100dvh !important;
-    --app-width: 100vw !important;
-    height: 100dvh !important;
-    min-height: 100dvh !important;
-  }
-  
-  /* CRITICAL: Ensure html and body fill viewport with safe-area padding */
-  html,
-  body {
-    height: 100% !important;
-    min-height: 100% !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-    background: #101010 !important; /* CRITICAL: Match theme-color meta tag */
-  }
-  
-  /* CRITICAL: Desktop canvas must NOT have padding - content extends edge-to-edge */
-  /* UPDATED COMMENTS: Background extends under notch and home indicator */
-  #desktop-canvas {
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-    height: 100vh !important;
-    min-height: 100vh !important;
-  }
-  
-  /* CRITICAL: Workspace container fills entire viewport */
-  .workspace-container {
-    height: 100% !important;
-    min-height: 100% !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-  }
-  
-  /* CRITICAL: Edge-to-edge content (no safe-area padding) */
-  #page-container,
-  .page-wrapper,
-  .projects-list-page,
-  .projects-grid {
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-    min-height: 100dvh !important;
-    box-sizing: border-box;
-  }
-  
-  /* CRITICAL: Fixed elements without safe-area padding */
-  #navigation-container,
-  #contact-input-container {
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-  }
-}
-
 /* ANCHOR: ios_safari_26_tint_elements */
-/* CRITICAL: iOS 26+ Liquid Glass tint elements - GitHub-style implementation */
-/* UPDATED COMMENTS: Safari 26+ samples background-color from fixed elements at viewport edges */
-/* REF: https://jahir.dev/blog/safari-toolbar */
-/* REF: https://github.com (working example) */
-
-/* CRITICAL: Show tint elements ONLY on iOS Safari */
-/* UPDATED COMMENTS: Feature detection for iOS Safari with -webkit-touch-callout */
-@supports (-webkit-touch-callout: none) {
-  #safari-top-tint,
-  #safari-bottom-tint {
-    display: block !important;
-  }
-}
+/* CRITICAL: iOS 26+ Liquid Glass tint elements - disabled for now */
 
 /* CRITICAL: Top toolbar tint element */
 /* UPDATED COMMENTS: Positioned AT viewport edge (not -8px) for Safari to sample */
