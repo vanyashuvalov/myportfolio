@@ -3,6 +3,16 @@
 /* SCALED FOR: Performance optimization with contain property */
 
 /* ANCHOR: css_variables */
+/* UPDATED: Shared background to cover safe areas (iOS edge-to-edge) */
+:root {
+  --app-bg: 
+    radial-gradient(circle at center, rgba(0, 0, 0, 0.07) 1.5px, transparent 1.5px),
+    linear-gradient(180deg, #8A547D 0%, #A76697 100%);
+  --app-bg-size: 16px 16px, 100% 100%;
+  --app-bg-position: 0 0, center center;
+  --app-bg-repeat: repeat, no-repeat;
+}
+
 html {
   width: 100%;
   /* CRITICAL: iOS Safari edge-to-edge height */
@@ -18,10 +28,10 @@ html {
   overflow-x: hidden;
   overflow-y: visible;
   position: relative;
-  /* CRITICAL: Solid background-color required for viewport-fit=cover */
-  /* UPDATED COMMENTS: Dark background extends under safe-areas (notch/home indicator) */
-  /* REF: https://stackoverflow.com/questions/76475354/viewport-fit-cover-does-not-work-on-the-ios-safari */
-  background-color: #101010;
+  background: var(--app-bg);
+  background-size: var(--app-bg-size);
+  background-position: var(--app-bg-position);
+  background-repeat: var(--app-bg-repeat);
   box-sizing: border-box;
 }
 
@@ -37,10 +47,10 @@ html::-webkit-scrollbar {
 
 body {
   font-family: var(--font-family-primary);
-  /* UPDATED COMMENTS: Solid background-color required for viewport-fit=cover */
-  /* CRITICAL: Background-color (not background-image) for iOS Safari safe-area coverage */
-  /* REF: https://stackoverflow.com/questions/76475354/viewport-fit-cover-does-not-work-on-the-ios-safari */
-  background-color: #101010;
+  background: var(--app-bg);
+  background-size: var(--app-bg-size);
+  background-position: var(--app-bg-position);
+  background-repeat: var(--app-bg-repeat);
   
   width: 100%;
   margin: 0;
@@ -62,7 +72,10 @@ body {
 
 /* UPDATED COMMENTS: Background removed from body - now on workspace-container */
 body.loaded {
-  background: #101010;
+  background: var(--app-bg);
+  background-size: var(--app-bg-size);
+  background-position: var(--app-bg-position);
+  background-repeat: var(--app-bg-repeat);
   transition: background 0.5s ease-in;
 }
 
@@ -115,9 +128,10 @@ body.page-mode::before {
   justify-content: center;
   /* UPDATED COMMENTS: Ensure flexbox works properly */
   flex-direction: column;
-  /* CRITICAL: Solid dark background - viewport-fit=cover requires background-color, not background-image */
-  /* UPDATED COMMENTS: Gradient moved to workspace-container for iOS Safari compatibility */
-  background-color: #101010;
+  background: var(--app-bg);
+  background-size: var(--app-bg-size);
+  background-position: var(--app-bg-position);
+  background-repeat: var(--app-bg-repeat);
 }
 
 /* CRITICAL: Allow horizontal scroll on small screens for desktop canvas */
