@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#FF0000">
+  <title>iOS Viewport Test</title>
+  <style>
+    /* CRITICAL: Reset everything */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* CRITICAL: Full viewport coverage */
+    html {
+      width: 100%;
+      height: 100dvh;
+      min-height: 100dvh;
+      overflow: hidden;
+      background: #FF0000; /* Bright red - should fill entire screen */
+    }
+
+    body {
+      width: 100%;
+      height: 100dvh;
+      min-height: 100dvh;
+      overflow: hidden;
+      background: #FF0000; /* Bright red */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      position: relative;
+    }
+
+    /* CRITICAL: Test container */
+    .test-container {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, #FF0000 0%, #0000FF 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px;
+    }
+
+    /* CRITICAL: Corner markers to see edges */
+    .corner {
+      position: fixed;
+      width: 50px;
+      height: 50px;
+      background: #00FF00;
+      border: 3px solid white;
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      z-index: 9999;
+    }
+
+    .corner.top-left { top: 0; left: 0; }
+    .corner.top-right { top: 0; right: 0; }
+    .corner.bottom-left { bottom: 0; left: 0; }
+    .corner.bottom-right { bottom: 0; right: 0; }
+
+    /* CRITICAL: Info display */
+    .info {
+      background: rgba(0, 0, 0, 0.8);
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      max-width: 90%;
+    }
+
+    .info h1 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .info p {
+      font-size: 14px;
+      margin: 5px 0;
+    }
+
+    .metric {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+    }
+
+    /* CRITICAL: iOS Safari tint elements */
+    #safari-top-tint {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: #FF0000;
+      z-index: -9999;
+      pointer-events: none;
+      display: none;
+    }
+
+    #safari-bottom-tint {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: #0000FF;
+      z-index: -9999;
+      pointer-events: none;
+      display: none;
+    }
+
+    /* CRITICAL: Show tints only on iOS */
+    @supports (-webkit-touch-callout: none) {
+      #safari-top-tint,
+      #safari-bottom-tint {
+        display: block !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- iOS Safari tint elements -->
+  <div id="safari-top-tint"></div>
+  
+  <!-- Corner markers -->
+  <div class="corner top-left">TL</div>
+  <div class="corner top-right">TR</div>
+  <div class="corner bottom-left">BL</div>
+  <div class="corner bottom-right">BR</div>
+
+  <!-- Test container -->
+  <div class="test-container">
+    <div class="info">
+      <h1>iOS Viewport Test</h1>
+      <p>Если видишь БЕЛЫЕ/ЧЁРНЫЕ рамки вокруг красного/синего - проблема есть</p>
+      <p>Зелёные квадраты должны быть В УГЛАХ экрана</p>
+    </div>
+
+    <div class="info">
+      <div class="metric">
+        <strong>Window:</strong> <span id="window-size">-</span>
+      </div>
+      <div class="metric">
+        <strong>Screen:</strong> <span id="screen-size">-</span>
+      </div>
+      <div class="metric">
+        <strong>HTML:</strong> <span id="html-size">-</span>
+      </div>
+      <div class="metric">
+        <strong>Body:</strong> <span id="body-size">-</span>
+      </div>
+      <div class="metric">
+        <strong>Safe Area Top:</strong> <span id="safe-top">-</span>
+      </div>
+      <div class="metric">
+        <strong>Safe Area Bottom:</strong> <span id="safe-bottom">-</span>
+      </div>
+      <div class="metric">
+        <strong>User Agent:</strong> <span id="user-agent">-</span>
+      </div>
+    </div>
+
+    <div class="info">
+      <p style="font-size: 12px; opacity: 0.7;">
+        Обнови страницу после поворота экрана
+      </p>
+    </div>
+  </div>
+
+  <div id="safari-bottom-tint"></div>
+
+  <script>
+    // CRITICAL: Update metrics
+    function updateMetrics() {
+      document.getElementById('window-size').textContent = 
+        `${window.innerWidth}×${window.innerHeight}px`;
+      
+      document.getElementById('screen-size').textContent = 
+        `${screen.width}×${screen.height}px`;
+      
+      document.getElementById('html-size').textContent = 
+        `${document.documentElement.clientWidth}×${document.documentElement.clientHeight}px`;
+      
+      document.getElementById('body-size').textContent = 
+        `${document.body.clientWidth}×${document.body.clientHeight}px`;
+      
+      // Get safe area insets
+      const style = getComputedStyle(document.documentElement);
+      const safeTop = style.getPropertyValue('--safe-top') || 
+                      getComputedStyle(document.body).getPropertyValue('padding-top') || '0px';
+      const safeBottom = style.getPropertyValue('--safe-bottom') || 
+                         getComputedStyle(document.body).getPropertyValue('padding-bottom') || '0px';
+      
+      document.getElementById('safe-top').textContent = safeTop;
+      document.getElementById('safe-bottom').textContent = safeBottom;
+      
+      document.getElementById('user-agent').textContent = 
+        navigator.userAgent.includes('iPhone') ? 'iPhone' :
+        navigator.userAgent.includes('iPad') ? 'iPad' :
+        navigator.userAgent.includes('Android') ? 'Android' : 'Desktop';
+    }
+
+    // Update on load and resize
+    updateMetrics();
+    window.addEventListener('resize', updateMetrics);
+    window.addEventListener('orientationchange', () => {
+      setTimeout(updateMetrics, 100);
+    });
+
+    // CRITICAL: Remove any inline styles on iOS
+    const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
+    if (isIOS) {
+      setInterval(() => {
+        const htmlStyle = document.documentElement.style;
+        if (htmlStyle.getPropertyValue('--app-height') || htmlStyle.getPropertyValue('--app-width')) {
+          console.warn('Removing inline viewport styles');
+          htmlStyle.removeProperty('--app-height');
+          htmlStyle.removeProperty('--app-width');
+        }
+      }, 50);
+    }
+  </script>
+</body>
+</html>
