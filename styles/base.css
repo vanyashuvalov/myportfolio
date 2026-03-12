@@ -162,11 +162,13 @@ body.loaded .desktop-canvas .workspace-container {
 /* ANCHOR: workspace_container */
 /* REUSED: Centralized workspace wrapper for all widgets */
 /* SCALED FOR: Gradient background on workspace for proper sizing */
-/* UPDATED COMMENTS: Dimensions controlled by JS in desktop-canvas.js */
+/* UPDATED COMMENTS: Dimensions controlled by CSS only (no inline JS sizing) */
 .workspace-container {
   /* CRITICAL: Flex item properties for proper centering */
   flex-shrink: 0;
   position: relative;
+  width: 100%;
+  height: 100%;
   /* CRITICAL: Gradient background on workspace-container */
   background: 
     radial-gradient(circle at center, rgba(0, 0, 0, 0.07) 1.5px, transparent 1.5px),

@@ -11,7 +11,6 @@ import { NavigationHeader } from './shared/ui/navigation/navigation-header.js';
 import { ContactInput } from './shared/ui/contact-input/contact-input.js';
 import { ModalManager } from './features/modal-system/modal-manager.js';
 import { PageManager } from './features/page-manager/page-manager.js';
-import { initViewportHeightFix } from './shared/utils/viewport-height-fix.js';
 
 /**
  * Application class - Main application controller
@@ -39,51 +38,9 @@ class Application {
    */
   async init() {
     try {
-      // CRITICAL: Initialize viewport height fix for iOS Safari FIRST
-      // UPDATED COMMENTS: Sets --app-height CSS variable for accurate viewport height
-      // DISABLED on iOS: viewport-fit=cover + safe-area-inset handle it better
-      // REF: https://webkit.org/blog/7929/designing-websites-for-iphone-x/
-      const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
-      if (!isIOS) {
-        initViewportHeightFix();
-      } else {
-        // CRITICAL: On iOS, ensure no inline styles are set on html element
-        // UPDATED COMMENTS: Remove any existing --app-height/--app-width inline styles
-        document.documentElement.style.removeProperty('--app-height');
-        document.documentElement.style.removeProperty('--app-width');
-        
-        // CRITICAL: Set up mutation observer to prevent inline styles on iOS
-        // UPDATED COMMENTS: Safari 26 Liquid Glass requires CSS-only viewport handling
-        const observer = new MutationObserver((mutations) => {
-          mutations.forEach((mutation) => {
-            if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
-              const htmlStyle = document.documentElement.style;
-              if (htmlStyle.getPropertyValue('--app-height') || htmlStyle.getPropertyValue('--app-width')) {
-                console.log('⚠️ Removing inline viewport styles on iOS (MutationObserver)');
-                htmlStyle.removeProperty('--app-height');
-                htmlStyle.removeProperty('--app-width');
-              }
-            }
-          });
-        });
-        
-        observer.observe(document.documentElement, {
-          attributes: true,
-          attributeFilter: ['style']
-        });
-        
-        // CRITICAL: Additional aggressive cleanup interval
-        // UPDATED COMMENTS: Runs every 50ms to catch any inline styles
-        setInterval(() => {
-          const htmlStyle = document.documentElement.style;
-          if (htmlStyle.getPropertyValue('--app-height') || htmlStyle.getPropertyValue('--app-width')) {
-            console.warn('⚠️ Removing inline viewport styles on iOS (cleanup interval)');
-            htmlStyle.removeProperty('--app-height');
-            htmlStyle.removeProperty('--app-width');
-          }
-        }, 50);
-        
-        console.log('✓ iOS Safari: viewport-fit=cover mode active, inline styles blocked');
+      // CRITICAL: No JS viewport sizing. Keep html/body natural for edge-to-edge like the example.
+      if (document.documentElement.hasAttribute('style')) {
+        document.documentElement.removeAttribute('style');
       }
       
       // Initialize core utilities

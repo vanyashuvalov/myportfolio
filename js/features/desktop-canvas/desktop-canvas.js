@@ -139,25 +139,7 @@ export class DesktopCanvas {
     this.workspaceContainer.className = 'workspace-container';
     this.workspaceContainer.dataset.workspaceId = this.generateId();
     
-    // UPDATED COMMENTS: Clean workspace without visual debugging elements
-    // CRITICAL: iOS 26 Safari fix - use percentage-based sizing instead of viewport units
-    // UPDATED COMMENTS: Let CSS control dimensions for better safe-area handling
-    // Percentage-based sizing relative to parent (#desktop-canvas)
-    this.workspaceContainer.style.width = '100%';
-    this.workspaceContainer.style.height = '100%';
-    this.workspaceContainer.style.minHeight = '100dvh'; // CRITICAL: iOS Safari dynamic viewport height fallback
-    this.workspaceContainer.style.maxWidth = 'none';
-    this.workspaceContainer.style.maxHeight = 'none';
-    this.workspaceContainer.style.border = 'none';
-    // CRITICAL: Don't set background - CSS handles gradient
-    this.workspaceContainer.style.backdropFilter = 'none';
-    this.workspaceContainer.style.position = 'relative';
-    this.workspaceContainer.style.boxSizing = 'border-box';
-    this.workspaceContainer.style.borderRadius = '0';
-    this.workspaceContainer.style.padding = '0';
-    this.workspaceContainer.style.margin = '0';
-    // CRITICAL: Don't set top/left/transform - let flexbox handle centering
-    this.workspaceContainer.style.flexShrink = '0';
+    // UPDATED COMMENTS: Let CSS fully control workspace sizing/styling (no inline viewport units)
     
     // UPDATED COMMENTS: Workspace container becomes the widget parent
     this.container.appendChild(this.workspaceContainer);
