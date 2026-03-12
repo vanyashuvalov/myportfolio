@@ -4,15 +4,7 @@
   "installCommand": "pip install -r requirements.txt 2>/dev/null || echo 'No Python deps'",
   "rewrites": [
     {
-      "source": "/:file(html|css|js|json|ico|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)",
-      "destination": "/:file"
-    },
-    {
-      "source": "/:path*.html",
-      "destination": "/:path*.html"
-    },
-    {
-      "source": "/((?!api/).*)",
+      "source": "/((?!api/).*)","destination": "/:file",
       "destination": "/index.html"
     }
   ]
