@@ -350,13 +350,13 @@ class Application {
    * CRITICAL: Shows mountains and all content after loading is complete
    */
   hideLoadingIndicator() {
-    const indicator = document.getElementById('loading-indicator');
-    if (indicator) {
-      // CRITICAL: Add 'loaded' class to body to trigger CSS transitions
+      // Always mark app as loaded even if loader is disabled
       document.body.classList.add('loaded');
-      
-      // REUSED: Hide loading indicator with fade-out animation
-      indicator.classList.add('hidden');
+
+      const indicator = document.getElementById('loading-indicator');
+      if (indicator) {
+        // REUSED: Hide loading indicator with fade-out animation
+        indicator.classList.add('hidden');
       
       // SCALED FOR: Remove loading indicator from DOM after animation completes
       setTimeout(() => {
