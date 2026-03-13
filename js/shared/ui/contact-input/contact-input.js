@@ -41,16 +41,6 @@ export class ContactInput {
       this.cacheElements();
       this.bindEvents();
       
-      // CRITICAL: Trigger appearance animation after render
-      // Wait for next frame to ensure CSS is applied
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          if (this.container.querySelector('.contact-input-wrapper')) {
-            this.container.querySelector('.contact-input-wrapper').classList.add('contact-input-wrapper--visible');
-          }
-        });
-      });
-      
       this.isInitialized = true;
       
       // REUSED: EventBus notification
@@ -70,7 +60,7 @@ export class ContactInput {
     const sendIcon = await this.getSendIconSVG();
     
     this.container.innerHTML = `
-      <div class="contact-input-wrapper">
+      <div class="contact-input-wrapper contact-input-wrapper--visible">
         <div class="contact-input" role="search">
           <!-- ANCHOR: comment_icon -->
           <div class="contact-input__icon" aria-hidden="true">

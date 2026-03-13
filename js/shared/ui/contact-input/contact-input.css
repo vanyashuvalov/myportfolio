@@ -26,7 +26,7 @@
   opacity: 1;
   visibility: visible;
   transform: translateX(-50%) translateY(0);
-  transition: opacity 0.6s ease-out 2s, transform 0.6s ease-out 2s, visibility 0.6s ease-out 2s;
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out, visibility 0s;
 }
 
 /* ANCHOR: contact_input_field */
