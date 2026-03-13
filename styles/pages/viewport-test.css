@@ -7,6 +7,7 @@ body.viewport-test .burger-button {
   display: none !important;
 }
 
+html.viewport-test,
 body.viewport-test {
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
@@ -22,6 +23,7 @@ body.viewport-test {
   overflow: visible !important;
 }
 
+html.viewport-test,
 body.viewport-test.page-mode {
   background: var(--app-bg) !important;
   background-size: var(--app-bg-size) !important;

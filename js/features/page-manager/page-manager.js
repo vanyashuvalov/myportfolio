@@ -395,6 +395,7 @@ export class PageManager {
     try {
       this.cleanupViewportTest();
       document.body.classList.add('viewport-test');
+      document.documentElement.classList.add('viewport-test');
       
       await this.transitionToPage(() => this.renderViewportTestPage());
       document.body.classList.remove('page-mode');
@@ -595,6 +596,7 @@ export class PageManager {
       this.viewportTestCleanup = null;
     }
     document.body.classList.remove('viewport-test');
+    document.documentElement.classList.remove('viewport-test');
   }
 
   // ============================================================
