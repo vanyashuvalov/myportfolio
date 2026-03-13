@@ -16,20 +16,17 @@ body.viewport-test {
   --vv-left: 0px;
   --vv-right: 0px;
   --vv-scale: 1;
-  background-color: #8A547D !important;
   background: #8A547D !important;
   overflow: visible !important;
 }
 
 html.viewport-test,
 body.viewport-test.page-mode {
-  background-color: #8A547D !important;
   background: #8A547D !important;
   overflow: visible !important;
 }
 
 body.viewport-test .page-container {
-  background-color: #8A547D !important;
   background: #8A547D !important;
   min-height: 100vh !important;
   min-height: 100lvh !important;
