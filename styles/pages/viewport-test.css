@@ -17,29 +17,20 @@ body.viewport-test {
   --vv-right: 0px;
   --vv-scale: 1;
   background-color: #8A547D !important;
-  background-image: var(--app-bg) !important;
-  background-size: var(--app-bg-size) !important;
-  background-position: var(--app-bg-position) !important;
-  background-repeat: var(--app-bg-repeat) !important;
+  background: #8A547D !important;
   overflow: visible !important;
 }
 
 html.viewport-test,
 body.viewport-test.page-mode {
   background-color: #8A547D !important;
-  background-image: var(--app-bg) !important;
-  background-size: var(--app-bg-size) !important;
-  background-position: var(--app-bg-position) !important;
-  background-repeat: var(--app-bg-repeat) !important;
+  background: #8A547D !important;
   overflow: visible !important;
 }
 
 body.viewport-test .page-container {
   background-color: #8A547D !important;
-  background-image: var(--app-bg) !important;
-  background-size: var(--app-bg-size) !important;
-  background-position: var(--app-bg-position) !important;
-  background-repeat: var(--app-bg-repeat) !important;
+  background: #8A547D !important;
   min-height: 100vh !important;
   min-height: 100lvh !important;
 }

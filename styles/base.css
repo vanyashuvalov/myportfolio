@@ -3,13 +3,7 @@
 /* SCALED FOR: Performance optimization with contain property */
 
 /* ANCHOR: css_variables */
-/* UPDATED: Shared background to cover safe areas (iOS edge-to-edge) */
-:root {
-  --app-bg: linear-gradient(180deg, #8A547D 0%, #835478 100%);
-  --app-bg-size: 100% 100%;
-  --app-bg-position: center center;
-  --app-bg-repeat: no-repeat;
-}
+/* UPDATED: Solid pink background only */
 
 html {
   width: 100%;
@@ -29,10 +23,7 @@ html {
   position: relative;
   /* CRITICAL: Solid base color so iOS Safari tint/safe-area isn't white */
   background-color: #8A547D;
-  background: var(--app-bg);
-  background-size: var(--app-bg-size);
-  background-position: var(--app-bg-position);
-  background-repeat: var(--app-bg-repeat);
+  background: #8A547D;
   box-sizing: border-box;
 }
 
@@ -50,10 +41,7 @@ body {
   font-family: var(--font-family-primary);
   /* CRITICAL: Solid base color so iOS Safari tint/safe-area isn't white */
   background-color: #8A547D;
-  background: var(--app-bg);
-  background-size: var(--app-bg-size);
-  background-position: var(--app-bg-position);
-  background-repeat: var(--app-bg-repeat);
+  background: #8A547D;
   
   width: 100%;
   /* Match viewport-test: full viewport height */
@@ -76,10 +64,7 @@ body {
 
 /* UPDATED COMMENTS: Background removed from body - now on workspace-container */
 body.loaded {
-  background: var(--app-bg);
-  background-size: var(--app-bg-size);
-  background-position: var(--app-bg-position);
-  background-repeat: var(--app-bg-repeat);
+  background: #8A547D;
   transition: background 0.5s ease-in;
 }
 
@@ -94,7 +79,7 @@ body::before {
 body.page-mode {
   /* CRITICAL: Solid background-color required for viewport-fit=cover */
   /* REF: https://stackoverflow.com/questions/76475354/viewport-fit-cover-does-not-work-on-the-ios-safari */
-  background-color: #101010 !important;
+  background-color: #8A547D !important;
   /* CRITICAL: Body becomes scroll container in page mode */
   /* UPDATED COMMENTS: overflow-y auto for vertical scrolling, hidden-x to prevent horizontal */
   overflow-y: auto !important;
@@ -130,10 +115,8 @@ body.page-mode::before {
   justify-content: center;
   /* UPDATED COMMENTS: Ensure flexbox works properly */
   flex-direction: column;
-  background: var(--app-bg);
-  background-size: var(--app-bg-size);
-  background-position: var(--app-bg-position);
-  background-repeat: var(--app-bg-repeat);
+  background-color: #8A547D;
+  background: #8A547D;
 }
 
 /* CRITICAL: Minimum sizes only on desktop */
@@ -201,19 +184,9 @@ body.loaded .desktop-canvas .workspace-container {
   position: relative;
   width: 100%;
   height: 100%;
-  /* CRITICAL: Gradient background on workspace-container */
-  background: 
-    radial-gradient(circle at center, rgba(0, 0, 0, 0.07) 1.5px, transparent 1.5px),
-    linear-gradient(180deg, #8A547D 0%, #A76697 100%);
-  background-size: 
-    16px 16px,
-    100% 100%;
-  background-position: 
-    0 0,
-    center center;
-  background-repeat: 
-    repeat,
-    no-repeat;
+  /* CRITICAL: Solid pink background only */
+  background-color: #8A547D;
+  background: #8A547D;
   /* CRITICAL: Internal coordinate system for widgets */
   overflow: visible;
   /* CRITICAL: Force dimensions and remove any padding/margin */
@@ -224,32 +197,7 @@ body.loaded .desktop-canvas .workspace-container {
 }
 
 /* ANCHOR: workspace_mountain_overlay */
-/* CRITICAL: Mountains at bottom of workspace-container, full workspace width */
-/* UPDATED COMMENTS: Background positioned relative to workspace, not viewport */
-/* CRITICAL: No z-index - positioned behind widgets by DOM order */
-.workspace-container::before {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url('../assets/images/bg-mountains.jpg');
-  background-position: bottom center;
-  background-size: 100% auto;
-  background-repeat: no-repeat;
-  opacity: 0;
-  pointer-events: none;
-  mix-blend-mode: darken;
-  transition: opacity 0.5s ease-in;
-}
-
-/* CRITICAL: Show mountains after loading */
-body.loaded .workspace-container::before {
-  opacity: 0.3;
-}
-
-
+/* UPDATED: Mountains removed */
 
 /* ANCHOR: mobile_canvas_adaptation */
 /* UPDATED COMMENTS: Mobile canvas with touch pan/scroll */
