@@ -36,6 +36,11 @@ body.viewport-test .page-container {
   min-height: 100lvh !important;
 }
 
+body.viewport-test,
+body.viewport-test * {
+  scroll-behavior: auto !important;
+}
+
 .viewport-test {
   position: relative;
   width: 100%;

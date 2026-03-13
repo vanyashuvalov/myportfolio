@@ -395,7 +395,8 @@ export class PageManager {
     try {
       this.cleanupViewportTest();
       document.body.classList.add('viewport-test');
-      
+      await this.showTransitionOverlay();
+
       await this.transitionToPage(() => this.renderViewportTestPage());
       document.body.classList.remove('page-mode');
       this.currentPage = 'viewport-test';
@@ -419,6 +420,9 @@ export class PageManager {
       scrollToCenter();
       requestAnimationFrame(scrollToCenter);
       setTimeout(scrollToCenter, 150);
+      setTimeout(() => {
+        this.hideTransitionOverlay();
+      }, 200);
       
       const backBtn = this.pageContainer.querySelector('[data-action="back-to-desktop"]');
       if (backBtn) {
