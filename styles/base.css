@@ -253,10 +253,10 @@ body.loaded .workspace-container::before {
 /* UPDATED COMMENTS: Mobile canvas with touch pan/scroll */
 /* SCALED FOR: Touch navigation on mobile devices */
 @media (max-width: 768px) {
-  /* TEMP: Hide header and bottom input while debugging iOS layout */
+  /* TEMP: Hide header and bottom input while debugging iOS layout 
   #contact-input-container {
     display: none !important;
-  }
+  }*/
 
   .desktop-canvas {
     /* CRITICAL: Change to relative so container expands with content */

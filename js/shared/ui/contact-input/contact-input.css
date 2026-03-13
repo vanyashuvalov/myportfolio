@@ -205,7 +205,7 @@
     /* CRITICAL: Override desktop centering with left/right positioning */
     left: 20px;
     right: 20px;
-    bottom: 0;
+    bottom: 16;
     transform: translateY(100px);
   }
   
