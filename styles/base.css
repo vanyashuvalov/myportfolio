@@ -145,6 +145,8 @@ body.page-mode::before {
   .desktop-canvas {
     position: relative;
     overflow: visible;
+    min-width: 100%;
+    min-height: 100%;
   }
 }
 
@@ -250,6 +252,11 @@ body.loaded .workspace-container::before {
     /* SCALED FOR: Hardware-accelerated scrolling */
     will-change: scroll-position;
     /* CRITICAL: Full edge-to-edge - NO padding, background extends under notch */
+    width: 100%;
+    height: 100%;
+    /* Keep canvas at viewport size; oversized workspace enables 2-axis scroll */
+    min-width: 100%;
+    min-height: 100%;
   }
   
   /* CRITICAL: In page mode, hide desktop-canvas overflow */
@@ -261,6 +268,10 @@ body.loaded .workspace-container::before {
     /* CRITICAL: No padding - full edge-to-edge layout */
     padding: 0;
     box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    min-width: 1100px;
+    min-height: 900px;
   }
 }
 
