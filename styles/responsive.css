@@ -180,7 +180,7 @@
   /* CRITICAL: Fixed elements need safe area insets */
   /* UPDATED COMMENTS: Navigation header gets top safe-area padding */
   #navigation-container {
-    padding-top: env(safe-area-inset-top, 0px);
+    padding-top: 16;
     padding-left: 0;
     padding-right: 0;
   }
@@ -188,7 +188,7 @@
   /* CRITICAL: Bottom fixed elements need safe area inset */
   /* UPDATED COMMENTS: Contact input gets bottom safe-area padding */
   #contact-input-container {
-    padding-bottom: env(safe-area-inset-bottom, 0px);
+    padding-bottom: 16;
     padding-left: 0;
     padding-right: 0;
   }
