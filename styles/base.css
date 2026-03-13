@@ -117,9 +117,7 @@ body.page-mode::before {
   top: 0;
   left: 0;
   width: 100%;
-  min-width: 1100px; /* CRITICAL: Minimum width for desktop layout */
   height: 100%;
-  min-height: 720px; /* CRITICAL: Minimum height for desktop layout */
   /* CRITICAL: overflow hidden for desktop mode */
   /* UPDATED COMMENTS: Desktop canvas doesn't scroll, workspace inside scrolls on mobile */
   overflow: hidden;
@@ -136,6 +134,14 @@ body.page-mode::before {
   background-repeat: var(--app-bg-repeat);
 }
 
+/* CRITICAL: Minimum sizes only on desktop */
+@media (min-width: 1101px) {
+  .desktop-canvas {
+    min-width: 1100px;
+    min-height: 720px;
+  }
+}
+
 /* CRITICAL: Allow horizontal scroll on small screens for desktop canvas */
 @media (max-width: 1100px) {
   html,
@@ -146,9 +152,11 @@ body.page-mode::before {
 
   .desktop-canvas {
     position: relative;
-    overflow: visible;
-    min-width: 100%;
-    min-height: 100%;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    /* Ensure top-left alignment on small screens */
+    align-items: flex-start;
+    justify-content: flex-start;
   }
 }
 
@@ -257,8 +265,6 @@ body.loaded .workspace-container::before {
     width: 100%;
     height: 100%;
     /* Keep canvas at viewport size; oversized workspace enables 2-axis scroll */
-    min-width: 100%;
-    min-height: 100%;
   }
   
   /* CRITICAL: In page mode, hide desktop-canvas overflow */

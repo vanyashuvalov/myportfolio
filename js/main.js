@@ -58,6 +58,13 @@ class Application {
       // TEMP: Ensure workspace is visible even when loader is disabled
       document.body.classList.add('loaded');
 
+      // Prevent header flash on viewport-test initial load
+      if (window.location.pathname === '/viewport-test') {
+        document.body.classList.add('viewport-test');
+        document.documentElement.classList.add('viewport-test');
+        document.body.classList.remove('page-mode');
+      }
+
       // Initialize desktop canvas
       const canvasElement = document.getElementById('desktop-canvas');
       if (!canvasElement) {
