@@ -19,14 +19,15 @@ html {
   /* UPDATED COMMENTS: -webkit-fill-available for Safari, 100% fallback */
   height: -webkit-fill-available;
   height: 100%;
+  /* Match viewport-test: ensure document can extend to full visual viewport */
+  min-height: 100vh;
+  min-height: 100lvh;
   margin: 0;
   /* CRITICAL: NO padding by default - iOS Safari fix in responsive.css handles it */
   /* UPDATED COMMENTS: Padding moved to @supports rule for iOS Safari only */
   padding: 0;
-  /* CRITICAL: Only prevent horizontal scroll, allow vertical */
-  /* UPDATED COMMENTS: overflow-x hidden prevents horizontal scroll issues */
-  overflow-x: hidden;
-  overflow-y: visible;
+  /* Match viewport-test: allow full visual overflow */
+  overflow: visible;
   position: relative;
   background: var(--app-bg);
   background-size: var(--app-bg-size);
@@ -53,14 +54,15 @@ body {
   background-repeat: var(--app-bg-repeat);
   
   width: 100%;
+  /* Match viewport-test: full viewport height */
+  min-height: 100vh;
+  min-height: 100lvh;
   margin: 0;
   /* CRITICAL: NO padding - html handles safe-area padding */
   /* UPDATED COMMENTS: Prevents double padding with html element */
   padding: 0;
-  /* CRITICAL: Only prevent horizontal scroll, allow vertical */
-  /* UPDATED COMMENTS: overflow-x hidden prevents horizontal scroll issues */
-  overflow-x: hidden;
-  overflow-y: visible;
+  /* Match viewport-test: allow full visual overflow */
+  overflow: visible;
   user-select: none;
   color: var(--color-primary);
   position: relative;
