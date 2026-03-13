@@ -9,16 +9,17 @@
 .contact-input-wrapper {
   /* UPDATED COMMENTS: Fixed position, always visible above widgets and fullscreen modals */
   position: fixed;
-  /* left: 0;
-  right: 0; */
+  left: 0;
+  right: 0;
   /* CRITICAL: Safe-area padding for iOS home indicator */
   /* UPDATED COMMENTS: Adds padding-bottom for home indicator area */
-  bottom: 16;
+  bottom: 0;
   padding: 0 20px 20px;
   z-index: var(--z-contact-input, 1000);
   display: flex;
   justify-content: center;
   width: 100%;
+  box-sizing: border-box;
   
   /* SCALED FOR: Hidden by default, shown after body.loaded */
   opacity: 0;

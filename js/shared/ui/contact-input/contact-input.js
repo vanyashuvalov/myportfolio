@@ -70,6 +70,8 @@ export class ContactInput {
           <!-- ANCHOR: text_input -->
           <textarea 
             class="contact-input__field" 
+            id="contact-message"
+            name="message"
             placeholder="${this.options.placeholder}"
             maxlength="${this.options.maxLength}"
             aria-label="Message input field"
