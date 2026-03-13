@@ -147,12 +147,6 @@ export class DesktopCanvas {
     // Set data attributes for identification
     this.container.dataset.canvasId = this.generateId();
     
-    // DEBUG: Log workspace dimensions after DOM insertion
-    setTimeout(() => {
-      const rect = this.workspaceContainer.getBoundingClientRect();
-      const computedStyle = window.getComputedStyle(this.workspaceContainer);
-    }, 100);
-    
     // Force immediate layout recalculation for workspace
     this.workspaceContainer.offsetHeight; // Trigger reflow
   }
