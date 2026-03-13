@@ -9,24 +9,27 @@
 .contact-input-wrapper {
   /* UPDATED COMMENTS: Fixed position, always visible above widgets and fullscreen modals */
   position: fixed;
-  left: 50%;
+  /* left: 0;
+  right: 0; */
   /* CRITICAL: Safe-area padding for iOS home indicator */
   /* UPDATED COMMENTS: Adds padding-bottom for home indicator area */
-  bottom: 0;
-  transform: translateX(-50%) translateY(100px);
+  bottom: 16;
+  padding: 0 20px 20px;
   z-index: var(--z-contact-input, 1000);
+  display: flex;
+  justify-content: center;
+  width: 100%;
   
-  /* SCALED FOR: Hidden by default, shown via JS class */
+  /* SCALED FOR: Hidden by default, shown after body.loaded */
   opacity: 0;
   visibility: hidden;
+  transition: opacity 0.5s ease-in, visibility 0.5s ease-in;
 }
 
-/* UPDATED COMMENTS: Visible state with slide up animation and 2s delay */
-.contact-input-wrapper--visible {
+/* SCALED FOR: Show contact input after loading is complete */
+body.loaded .contact-input-wrapper {
   opacity: 1;
   visibility: visible;
-  transform: translateX(-50%) translateY(0);
-  transition: opacity 0.3s ease-out, transform 0.3s ease-out, visibility 0s;
 }
 
 /* ANCHOR: contact_input_field */
@@ -40,7 +43,7 @@
   gap: 10px;
   
   width: 467px;
-  max-width: 95vw;
+  max-width: 100%;
   min-height: 64px;
   
   /* UPDATED COMMENTS: Semi-transparent background with blur - EXACT FIGMA SPECS */
@@ -202,15 +205,8 @@
 /* SCALED FOR: Mobile and tablet breakpoints */
 @media (max-width: 768px) {
   .contact-input-wrapper {
-    /* CRITICAL: Override desktop centering with left/right positioning */
-    left: 20px;
-    right: 20px;
-    bottom: 16;
-    transform: translateY(100px);
-  }
-  
-  .contact-input-wrapper--visible {
-    transform: translateY(0);
+    /* Bottom safe-area is non-zero on iPhone; offset must include it */
+    padding: 0 16px 16px;
   }
   
   .contact-input {
