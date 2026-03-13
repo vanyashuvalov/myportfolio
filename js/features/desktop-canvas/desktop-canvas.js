@@ -94,10 +94,11 @@ export class DesktopCanvas {
    */
   async waitForDOMReady() {
     return new Promise((resolve) => {
-      if (document.readyState === 'complete') {
+      // Use DOMContentLoaded to avoid blocking on slow assets
+      if (document.readyState === 'interactive' || document.readyState === 'complete') {
         resolve();
       } else {
-        window.addEventListener('load', resolve, { once: true });
+        document.addEventListener('DOMContentLoaded', resolve, { once: true });
       }
     });
   }
