@@ -452,6 +452,8 @@ body.loaded .navigation-wrapper {
 @media (max-width: 768px) {
   .navigation-wrapper {
     padding: 0 16px 16px;
+    /* Add top offset here (fixed element ignores parent padding) */
+    top: 16px;
     /* Ensure header is visible on iOS even if body.loaded is missing */
     opacity: 1;
     visibility: visible;
@@ -507,5 +509,4 @@ body.loaded .navigation-wrapper {
   
   /* CRITICAL: Keep original text size - don't change on mobile */
   /* .user-name font-size and line-height remain 22px/29px from desktop */
-}
 }

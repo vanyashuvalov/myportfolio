@@ -177,18 +177,10 @@
 }
 
 @media (max-width: 768px) {
-  /* CRITICAL: Fixed elements need safe area insets */
-  /* UPDATED COMMENTS: Navigation header gets top safe-area padding */
-  #navigation-container {
-    padding-top: 16;
-    padding-left: 0;
-    padding-right: 0;
-  }
-  
   /* CRITICAL: Bottom fixed elements need safe area inset */
   /* UPDATED COMMENTS: Contact input gets bottom safe-area padding */
   #contact-input-container {
-    padding-bottom: 16;
+    padding-bottom: 16px;
     padding-left: 0;
     padding-right: 0;
   }
