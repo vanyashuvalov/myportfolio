@@ -254,7 +254,6 @@ body.loaded .workspace-container::before {
 /* SCALED FOR: Touch navigation on mobile devices */
 @media (max-width: 768px) {
   /* TEMP: Hide header and bottom input while debugging iOS layout */
-  #navigation-container,
   #contact-input-container {
     display: none !important;
   }
