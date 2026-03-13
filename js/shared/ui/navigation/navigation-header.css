@@ -452,6 +452,9 @@ body.loaded .navigation-wrapper {
 @media (max-width: 768px) {
   .navigation-wrapper {
     padding: 0 16px 16px;
+    /* Ensure header is visible on iOS even if body.loaded is missing */
+    opacity: 1;
+    visibility: visible;
   }
   
   .navigation-header {
