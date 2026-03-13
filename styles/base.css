@@ -146,14 +146,18 @@ body.page-mode::before {
 @media (max-width: 1100px) {
   html,
   body {
-    overflow: auto;
-    -webkit-overflow-scrolling: touch;
+    /* Match viewport-test: allow body to handle scrolling */
+    overflow: visible;
+    height: auto;
   }
 
   .desktop-canvas {
     position: relative;
-    overflow: auto;
-    -webkit-overflow-scrolling: touch;
+    overflow: visible;
+    /* Let content define height like viewport-test */
+    height: auto;
+    min-height: 100vh;
+    min-height: 100lvh;
     /* Ensure top-left alignment on small screens */
     align-items: flex-start;
     justify-content: flex-start;
@@ -252,10 +256,8 @@ body.loaded .workspace-container::before {
   .desktop-canvas {
     /* CRITICAL: Change to relative so container expands with content */
     position: relative;
-    /* CRITICAL: Enable scrolling for oversized canvas */
-    overflow: auto;
-    /* REUSED: Smooth momentum scrolling on iOS */
-    -webkit-overflow-scrolling: touch;
+    /* Match viewport-test: allow body scroll, no nested scroll container */
+    overflow: visible;
     /* CRITICAL: Align content to top-left for natural scroll start */
     align-items: flex-start;
     justify-content: flex-start;
@@ -263,8 +265,9 @@ body.loaded .workspace-container::before {
     will-change: scroll-position;
     /* CRITICAL: Full edge-to-edge - NO padding, background extends under notch */
     width: 100%;
-    height: 100%;
-    /* Keep canvas at viewport size; oversized workspace enables 2-axis scroll */
+    height: auto;
+    min-height: 100vh;
+    min-height: 100lvh;
   }
   
   /* CRITICAL: In page mode, hide desktop-canvas overflow */
