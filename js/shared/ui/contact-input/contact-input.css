@@ -27,7 +27,8 @@
 }
 
 /* SCALED FOR: Show contact input after loading is complete */
-body.loaded .contact-input-wrapper {
+body.loaded .contact-input-wrapper,
+.contact-input-wrapper--visible {
   opacity: 1;
   visibility: visible;
 }
