@@ -84,6 +84,30 @@ body.viewport-test--bleed .viewport-test {
   margin: 0 0 16px 0;
 }
 
+.viewport-test__summary {
+  margin: 12px 0 18px;
+  padding: 12px 14px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.viewport-test__summary-title {
+  font-weight: 600;
+  margin: 0 0 8px 0;
+}
+
+.viewport-test__summary-list {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.viewport-test__summary-list li {
+  margin: 4px 0;
+}
+
 .viewport-test__metrics {
   display: grid;
   grid-template-columns: 1fr;

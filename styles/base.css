@@ -28,7 +28,10 @@ html {
   overflow-x: hidden;
   overflow-y: visible;
   position: relative;
-  background-color: #101010;
+  background: var(--app-bg);
+  background-size: var(--app-bg-size);
+  background-position: var(--app-bg-position);
+  background-repeat: var(--app-bg-repeat);
   box-sizing: border-box;
 }
 
@@ -44,7 +47,10 @@ html::-webkit-scrollbar {
 
 body {
   font-family: var(--font-family-primary);
-  background-color: #101010;
+  background: var(--app-bg);
+  background-size: var(--app-bg-size);
+  background-position: var(--app-bg-position);
+  background-repeat: var(--app-bg-repeat);
   
   width: 100%;
   margin: 0;
@@ -66,7 +72,10 @@ body {
 
 /* UPDATED COMMENTS: Background removed from body - now on workspace-container */
 body.loaded {
-  background-color: #101010;
+  background: var(--app-bg);
+  background-size: var(--app-bg-size);
+  background-position: var(--app-bg-position);
+  background-repeat: var(--app-bg-repeat);
   transition: background 0.5s ease-in;
 }
 
@@ -350,7 +359,7 @@ body.loaded .workspace-container::before {
   width: 100%;
   /* CRITICAL: Must be >2px height for iOS Safari sampling */
   min-height: 2px;
-  background-color: #101010;
+  background-color: #8A547D;
   z-index: 9999;
   pointer-events: none;
   /* CRITICAL: Hidden by default - only show on iOS Safari 26+ */
@@ -369,7 +378,7 @@ body.loaded .workspace-container::before {
   width: 100%;
   /* CRITICAL: Must be >2px height and >88% width for iOS Safari sampling */
   min-height: 12px;
-  background-color: #101010;
+  background-color: #A76697;
   z-index: 1;
   pointer-events: none;
   /* CRITICAL: Hidden by default - only show on iOS Safari 26+ */
