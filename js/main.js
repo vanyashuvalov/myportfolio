@@ -54,6 +54,9 @@ class Application {
           document.addEventListener('DOMContentLoaded', resolve);
         });
       }
+      
+      // TEMP: Ensure workspace is visible even when loader is disabled
+      document.body.classList.add('loaded');
 
       // Initialize desktop canvas
       const canvasElement = document.getElementById('desktop-canvas');

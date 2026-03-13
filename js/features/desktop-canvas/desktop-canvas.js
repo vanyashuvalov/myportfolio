@@ -416,13 +416,17 @@ export class DesktopCanvas {
    */
   async getProjectData() {
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 4000);
+
       // CRITICAL: Fetch real project count from backend API
       // UPDATED COMMENTS: Use relative URL for production compatibility
       const apiUrl = window.location.hostname === 'localhost' 
         ? 'http://localhost:8000/api/projects?category=work'
         : '/api/projects?category=work';
       
-      const response = await fetch(apiUrl);
+      const response = await fetch(apiUrl, { signal: controller.signal });
+      clearTimeout(timeoutId);
       
       if (!response.ok) {
         console.warn('Failed to fetch projects, using fallback count');
@@ -457,13 +461,17 @@ export class DesktopCanvas {
    */
   async getFunProjectData() {
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 4000);
+
       // CRITICAL: Fetch fun gallery items from new API endpoint
       // UPDATED COMMENTS: Use relative URL for production compatibility
       const apiUrl = window.location.hostname === 'localhost' 
         ? 'http://localhost:8000/api/fun'
         : '/api/fun';
       
-      const response = await fetch(apiUrl);
+      const response = await fetch(apiUrl, { signal: controller.signal });
+      clearTimeout(timeoutId);
       
       if (!response.ok) {
         console.warn('Failed to fetch fun items, using fallback count');
