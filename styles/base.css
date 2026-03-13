@@ -27,6 +27,8 @@ html {
   /* Match viewport-test: allow full visual overflow */
   overflow: visible;
   position: relative;
+  /* CRITICAL: Solid base color so iOS Safari tint/safe-area isn't white */
+  background-color: #8A547D;
   background: var(--app-bg);
   background-size: var(--app-bg-size);
   background-position: var(--app-bg-position);
@@ -46,6 +48,8 @@ html::-webkit-scrollbar {
 
 body {
   font-family: var(--font-family-primary);
+  /* CRITICAL: Solid base color so iOS Safari tint/safe-area isn't white */
+  background-color: #8A547D;
   background: var(--app-bg);
   background-size: var(--app-bg-size);
   background-position: var(--app-bg-position);
