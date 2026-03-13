@@ -228,37 +228,6 @@
   }
 }
 
-/* ANCHOR: ios_safari_26_tint_elements */
-/* CRITICAL: iOS 26+ Liquid Glass tint elements - disabled for now */
-
-/* CRITICAL: Top toolbar tint element */
-/* UPDATED COMMENTS: Positioned AT viewport edge (not -8px) for Safari to sample */
-#safari-top-tint {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  height: 2px !important; /* Safari requires minimum 2px at edge */
-  background: #101010 !important; /* CRITICAL: Match body background-color */
-  z-index: -9999 !important;
-  pointer-events: none !important;
-  display: none; /* Hidden by default, shown only on iOS via @supports */
-}
-
-/* CRITICAL: Bottom toolbar tint element */
-/* UPDATED COMMENTS: Positioned AT viewport edge (not -8px) for Safari to sample */
-#safari-bottom-tint {
-  position: fixed !important;
-  bottom: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  height: 2px !important; /* Safari requires minimum 2px at edge */
-  background: #101010 !important; /* CRITICAL: Match body background-color */
-  z-index: -9999 !important;
-  pointer-events: none !important;
-  display: none; /* Hidden by default, shown only on iOS via @supports */
-}
-
 /* ANCHOR: print_styles */
 @media print {
   .desktop-canvas {
