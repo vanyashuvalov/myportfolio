@@ -325,42 +325,6 @@ body.loaded .desktop-canvas .workspace-container {
 /* REF: https://jahir.dev/blog/safari-toolbar */
 /* REF: https://www.1ar.io/updates/safari-26-liquid-glass-web */
 
-/* CRITICAL: Top toolbar tint element for iOS 26 Safari */
-/* UPDATED COMMENTS: Must be visible in render tree for Safari to sample background-color */
-#safari-top-tint {
-  position: fixed;
-  /* CRITICAL: Position at top edge for Safari to detect */
-  top: 0;
-  left: 0;
-  width: 100%;
-  /* CRITICAL: Must be >2px height for iOS Safari sampling */
-  min-height: 2px;
-  background-color: #8A547D;
-  z-index: 9999;
-  pointer-events: none;
-  /* CRITICAL: Hidden by default - only show on iOS Safari 26+ */
-  display: none;
-}
-
-/* CRITICAL: Bottom toolbar tint element for iOS 26 Safari */
-/* UPDATED COMMENTS: Must be visible in render tree (not visibility:hidden or opacity:0) */
-/* Safari samples background-color even from elements positioned outside viewport */
-#safari-bottom-tint {
-  position: fixed;
-  /* CRITICAL: Position below viewport but Safari still samples it */
-  /* Must be within ~3px of bottom edge for Safari to detect */
-  bottom: -8px;
-  left: 0;
-  width: 100%;
-  /* CRITICAL: Must be >2px height and >88% width for iOS Safari sampling */
-  min-height: 12px;
-  background-color: #A76697;
-  z-index: 1;
-  pointer-events: none;
-  /* CRITICAL: Hidden by default - only show on iOS Safari 26+ */
-  display: none;
-}
-
 /* CRITICAL: Show ONLY on iOS Safari 26+ using feature detection */
 /* UPDATED COMMENTS: Combines Safari-specific features to target iOS Safari 26+ */
 /* -webkit-text-size-adjust: Safari 9+ */
