@@ -318,37 +318,6 @@ body.loaded .desktop-canvas .workspace-container {
 /* UPDATED COMMENTS: Modal styles moved to contact-modal.css for specificity */
 /* CRITICAL FIX: Removed conflicting background that caused flash */
 
-/* ANCHOR: ios_safari_26_liquid_glass_fix */
-/* CRITICAL: iOS 26 Safari Liquid Glass - proper toolbar tinting with viewport-fit=cover */
-/* UPDATED COMMENTS: Safari 26 no longer reads theme-color meta tag */
-/* Instead, it scans for position:fixed elements near viewport edges and reads their background-color */
-/* REF: https://jahir.dev/blog/safari-toolbar */
-/* REF: https://www.1ar.io/updates/safari-26-liquid-glass-web */
-
-/* CRITICAL: Show ONLY on iOS Safari 26+ using feature detection */
-/* UPDATED COMMENTS: Combines Safari-specific features to target iOS Safari 26+ */
-/* -webkit-text-size-adjust: Safari 9+ */
-/* font: -apple-system-body: Safari-specific */
-/* -webkit-touch-callout: Safari 26+ */
-@supports (-webkit-text-size-adjust: none) and 
-          (font: -apple-system-body) and 
-          (-webkit-touch-callout: none) {
-  /* CRITICAL: Only on mobile viewport (not iPad) */
-  @media (max-width: 768px) {
-    #safari-top-tint,
-    #safari-bottom-tint {
-      display: block;
-    }
-  }
-}
-
-/* ANCHOR: deprecated_tint_elements */
-/* UPDATED COMMENTS: Old tint elements deprecated - kept for backwards compatibility */
-/* These don't work with iOS 26 Liquid Glass - visibility:hidden elements are ignored */
-#safari-toolbar-tint {
-  display: none;
-}
-
 /* ANCHOR: utility_classes */
 /* REUSED: Common utility classes for rapid development */
 .sr-only {

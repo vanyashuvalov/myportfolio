@@ -95,44 +95,9 @@
       border-radius: 5px;
     }
 
-    /* CRITICAL: iOS Safari tint elements */
-    #safari-top-tint {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: #FF0000;
-      z-index: -9999;
-      pointer-events: none;
-      display: none;
-    }
-
-    #safari-bottom-tint {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: #0000FF;
-      z-index: -9999;
-      pointer-events: none;
-      display: none;
-    }
-
-    /* CRITICAL: Show tints only on iOS */
-    @supports (-webkit-touch-callout: none) {
-      #safari-top-tint,
-      #safari-bottom-tint {
-        display: block !important;
-      }
-    }
   </style>
 </head>
 <body>
-  <!-- iOS Safari tint elements -->
-  <div id="safari-top-tint"></div>
-  
   <!-- Corner markers -->
   <div class="corner top-left">TL</div>
   <div class="corner top-right">TR</div>
@@ -177,8 +142,6 @@
       </p>
     </div>
   </div>
-
-  <div id="safari-bottom-tint"></div>
 
   <script>
     // CRITICAL: Update metrics

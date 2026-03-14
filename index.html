@@ -109,13 +109,6 @@
   <link rel="stylesheet" href="js/shared/ui/pdf-viewer/pdf-viewer.css">
 </head>
 <body>
-  <!-- ANCHOR: ios_safari_toolbar_tint -->
-  <!-- CRITICAL: iOS Safari 26 Liquid Glass fix - fixed elements for toolbar tinting -->
-  <!-- UPDATED COMMENTS: Safari 26 samples background-color from fixed elements near viewport edges -->
-  <!-- Must be in render tree (display:block) and positioned near top/bottom edges -->
-  <!-- REF: https://jahir.dev/blog/safari-toolbar -->
-  <div id="safari-top-tint"></div>
-  
   <!-- ANCHOR: loading_screen -->
   <!-- CRITICAL: Loading indicator OUTSIDE desktop-canvas so it's always visible -->
   <!-- TEMP: Loader disabled for debugging viewport edges -->
@@ -152,13 +145,6 @@
   
   <!-- ANCHOR: accessibility -->
   <a href="#desktop-canvas" class="skip-link">Skip to main content</a>
-  
-  <!-- ANCHOR: ios_safari_toolbar_tint -->
-  <!-- CRITICAL: iOS Safari 26 Liquid Glass fix - fixed element for toolbar tinting -->
-  <!-- UPDATED COMMENTS: Safari 26 samples background-color from fixed elements near viewport edges -->
-  <!-- Must be in render tree (display:block) and positioned near bottom edge -->
-  <!-- REF: https://jahir.dev/blog/safari-toolbar -->
-  <div id="safari-bottom-tint"></div>
   
   <!-- ANCHOR: javascript_entry -->
   <script type="module" src="js/main.js"></script>
