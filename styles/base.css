@@ -26,6 +26,7 @@ html {
   padding: 0;
   /* Match viewport-test: allow full visual overflow */
   overflow: visible;
+  overscroll-behavior: none;
   position: relative;
   /* CRITICAL: Solid base color for safe areas */
   background: #8A547D;
@@ -54,6 +55,7 @@ body {
   padding: 0;
   /* Match viewport-test: allow full visual overflow */
   overflow: visible;
+  overscroll-behavior: none;
   user-select: none;
   color: var(--color-primary);
   position: relative;
@@ -109,6 +111,7 @@ body.page-mode::before {
   /* CRITICAL: overflow hidden for desktop mode */
   /* UPDATED COMMENTS: Desktop canvas doesn't scroll, workspace inside scrolls on mobile */
   overflow: hidden;
+  overscroll-behavior: none;
   z-index: 2; /* CRITICAL: Above background, below page content in page mode */
   /* CRITICAL: Perfect flexbox centering */
   display: flex;
@@ -188,9 +191,21 @@ body.loaded .desktop-canvas .workspace-container {
   width: 100%;
   height: 100%;
   /* CRITICAL: Solid background only */
-  background: #8A547D;
+    background: 
+    radial-gradient(circle at center, rgba(0, 0, 0, 0.07) 1.5px, transparent 1.5px),
+     #8A547D;
+  background-size: 
+    16px 16px,
+    100% 100%;
+  background-position: 
+    0 0,
+    center center;
+  background-repeat: 
+    repeat,
+    no-repeat;
   /* CRITICAL: Internal coordinate system for widgets */
   overflow: visible;
+  overscroll-behavior: none;
   /* CRITICAL: Force dimensions and remove any padding/margin */
   box-sizing: border-box;
   padding: 0;
