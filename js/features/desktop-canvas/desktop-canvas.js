@@ -175,9 +175,8 @@ export class DesktopCanvas {
       if (document.body.classList.contains('page-mode') || document.body.classList.contains('viewport-test')) {
         return true;
       }
-      // Ignore interactions on widgets or UI controls
+      // Ignore interactions on UI controls
       return !!target.closest(
-        '.widget-wrapper, .widget-inner, .widget, ' +
         '#navigation-container, #contact-input-container, ' +
         '.modal-container, .mobile-menu, .mobile-menu-overlay, ' +
         '.burger-button, button, a, input, textarea, select, [contenteditable="true"]'
@@ -185,14 +184,7 @@ export class DesktopCanvas {
     };
 
     const getScrollElement = () => {
-      const el = this.container;
-      if (el) {
-        const style = getComputedStyle(el);
-        const canScrollX = (style.overflowX === 'auto' || style.overflowX === 'scroll') && el.scrollWidth > el.clientWidth;
-        const canScrollY = (style.overflowY === 'auto' || style.overflowY === 'scroll') && el.scrollHeight > el.clientHeight;
-        if (canScrollX || canScrollY) return el;
-      }
-      return document.scrollingElement || document.documentElement;
+      return this.container;
     };
 
     const onPointerDown = (event) => {

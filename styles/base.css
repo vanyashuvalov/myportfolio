@@ -108,9 +108,9 @@ body.page-mode::before {
   left: 0;
   width: 100%;
   height: 100%;
-  /* CRITICAL: overflow hidden for desktop mode */
-  /* UPDATED COMMENTS: Desktop canvas doesn't scroll, workspace inside scrolls on mobile */
-  overflow: hidden;
+  /* CRITICAL: Allow panning via scroll container */
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
   touch-action: none;
   cursor: grab;
   overscroll-behavior: none;
@@ -150,11 +150,13 @@ body.page-mode::before {
 
   .desktop-canvas {
     position: relative;
-    overflow: visible;
-    /* Let content define height like viewport-test */
-    height: auto;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    /* Fixed viewport height so both axes scroll inside the canvas */
+    height: 100vh;
+    height: 100dvh;
     min-height: 100vh;
-    min-height: 100lvh;
+    min-height: 100dvh;
     /* Ensure top-left alignment on small screens */
     align-items: flex-start;
     justify-content: flex-start;
@@ -258,7 +260,8 @@ body.loaded .workspace-container::before {
     /* CRITICAL: Change to relative so container expands with content */
     position: relative;
     /* Match viewport-test: allow body scroll, no nested scroll container */
-    overflow: visible;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
     /* CRITICAL: Align content to top-left for natural scroll start */
     align-items: flex-start;
     justify-content: flex-start;
@@ -266,9 +269,10 @@ body.loaded .workspace-container::before {
     will-change: scroll-position;
     /* CRITICAL: Full edge-to-edge - NO padding, background extends under notch */
     width: 100%;
-    height: auto;
+    height: 100vh;
+    height: 100dvh;
     min-height: 100vh;
-    min-height: 100lvh;
+    min-height: 100dvh;
   }
   
   /* CRITICAL: In page mode, hide desktop-canvas overflow */
