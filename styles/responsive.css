@@ -187,15 +187,13 @@
   }
   
   /* CRITICAL: Desktop canvas scrolls edge-to-edge */
-  /* UPDATED COMMENTS: NO padding on canvas - content extends under notch/home indicator */
-  .desktop-canvas {
-    /* CRITICAL: Allow scrolling on iOS */
-    overflow: auto;
-    /* REUSED: Smooth momentum scrolling on iOS (body) */
-    -webkit-overflow-scrolling: touch;
-    /* CRITICAL: Full edge-to-edge - NO padding, background extends under notch */
-    padding-top: 0;
-    padding-bottom: 0;
+    /* UPDATED COMMENTS: NO padding on canvas - content extends under notch/home indicator */
+    .desktop-canvas {
+      /* CRITICAL: Overflow must be visible */
+      overflow: visible;
+      /* CRITICAL: Full edge-to-edge - NO padding, background extends under notch */
+      padding-top: 0;
+      padding-bottom: 0;
     /* SCALED FOR: Hardware-accelerated scrolling */
     will-change: scroll-position;
   }
