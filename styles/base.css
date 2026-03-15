@@ -5,7 +5,7 @@
 /* ANCHOR: css_variables */
 /* UPDATED: Shared background for desktop canvas only */
 :root {
-  --app-bg: linear-gradient(180deg, #8A547D 0%, #835478 80%, #8A547D 100%);
+  --app-bg: #8A547D;
   --app-bg-size: 100% 100%;
   --app-bg-position: center center;
   --app-bg-repeat: no-repeat;
