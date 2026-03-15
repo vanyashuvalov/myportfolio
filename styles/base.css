@@ -108,9 +108,8 @@ body.page-mode::before {
   left: 0;
   width: 100%;
   height: 100%;
-  /* CRITICAL: Allow panning via scroll container */
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
+  /* CRITICAL: Overflow must be visible */
+  overflow: visible;
   touch-action: auto;
   cursor: grab;
   overscroll-behavior: none;
@@ -132,6 +131,16 @@ body.page-mode::before {
   cursor: grabbing;
 }
 
+/* CRITICAL: Hide scrollbars on canvas while keeping scroll/pan */
+.desktop-canvas {
+  scrollbar-width: none; /* Firefox */
+}
+
+.desktop-canvas::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
 /* CRITICAL: Minimum sizes only on desktop */
 @media (min-width: 1101px) {
   .desktop-canvas {
@@ -151,8 +160,7 @@ body.page-mode::before {
 
   .desktop-canvas {
     position: relative;
-    overflow: auto;
-    -webkit-overflow-scrolling: touch;
+    overflow: visible;
     /* Fixed viewport height so both axes scroll inside the canvas */
     height: 100vh;
     height: 100dvh;
@@ -261,8 +269,7 @@ body.loaded .workspace-container::before {
     /* CRITICAL: Change to relative so container expands with content */
     position: relative;
     /* Match viewport-test: allow body scroll, no nested scroll container */
-    overflow: auto;
-    -webkit-overflow-scrolling: touch;
+    overflow: visible;
     /* CRITICAL: Align content to top-left for natural scroll start */
     align-items: flex-start;
     justify-content: flex-start;
