@@ -28,7 +28,7 @@ html {
   overflow: visible;
   position: relative;
   /* CRITICAL: App background (gradient) */
-  background: linear-gradient(180deg, #8A547D 0%, #835478 100%);
+  background: #8A547D;
   box-sizing: border-box;
 }
 
