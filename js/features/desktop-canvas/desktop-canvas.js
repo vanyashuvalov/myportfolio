@@ -161,6 +161,7 @@ export class DesktopCanvas {
     if (!this.container) return;
 
     this.panState = {
+      tracking: false,
       active: false,
       pointerId: null,
       startX: 0,
@@ -191,30 +192,37 @@ export class DesktopCanvas {
       if (event.pointerType === 'mouse' && event.button !== 0) return;
       if (shouldIgnoreTarget(event.target)) return;
 
-      this.panState.active = true;
+      this.panState.tracking = true;
+      this.panState.active = false;
       this.panState.pointerId = event.pointerId;
       this.panState.startX = event.clientX;
       this.panState.startY = event.clientY;
       this.panState.scrollEl = getScrollElement();
       this.panState.startScrollLeft = this.panState.scrollEl ? this.panState.scrollEl.scrollLeft : 0;
       this.panState.startScrollTop = this.panState.scrollEl ? this.panState.scrollEl.scrollTop : 0;
-
-      this.container.classList.add('is-panning');
-      try {
-        this.container.setPointerCapture(event.pointerId);
-      } catch (err) {
-        // Pointer capture not available
-      }
     };
 
     const onPointerMove = (event) => {
-      if (!this.panState.active || event.pointerId !== this.panState.pointerId) return;
+      if (!this.panState.tracking || event.pointerId !== this.panState.pointerId) return;
       if (!this.panState.scrollEl) return;
-
-      event.preventDefault();
 
       const dx = event.clientX - this.panState.startX;
       const dy = event.clientY - this.panState.startY;
+      const threshold = event.pointerType === 'touch' ? 12 : 4;
+
+      if (!this.panState.active) {
+        if (Math.abs(dx) < threshold && Math.abs(dy) < threshold) return;
+        this.panState.active = true;
+        this.container.classList.add('is-panning');
+        try {
+          this.container.setPointerCapture(event.pointerId);
+        } catch (err) {
+          // Pointer capture not available
+        }
+      }
+
+      event.preventDefault();
+
       const el = this.panState.scrollEl;
       const maxScrollLeft = Math.max(0, el.scrollWidth - el.clientWidth);
       const maxScrollTop = Math.max(0, el.scrollHeight - el.clientHeight);
@@ -224,9 +232,10 @@ export class DesktopCanvas {
     };
 
     const endPan = (event) => {
-      if (!this.panState.active) return;
+      if (!this.panState.tracking) return;
       if (event && event.pointerId !== this.panState.pointerId) return;
 
+      this.panState.tracking = false;
       this.panState.active = false;
       this.panState.pointerId = null;
       this.panState.scrollEl = null;

@@ -7,7 +7,7 @@
 :root {
   --app-bg: #8A547D;
   --app-bg-size: 100% 100%;
-  --app-bg-position: center center;
+  --app-bg-position: center bottom;
   --app-bg-repeat: no-repeat;
 }
 
@@ -111,7 +111,7 @@ body.page-mode::before {
   /* CRITICAL: Allow panning via scroll container */
   overflow: auto;
   -webkit-overflow-scrolling: touch;
-  touch-action: none;
+  touch-action: auto;
   cursor: grab;
   overscroll-behavior: none;
   z-index: 2; /* CRITICAL: Above background, below page content in page mode */
@@ -128,6 +128,7 @@ body.page-mode::before {
 }
 
 .desktop-canvas.is-panning {
+  touch-action: none;
   cursor: grabbing;
 }
 
