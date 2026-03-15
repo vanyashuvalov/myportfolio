@@ -210,21 +210,10 @@ body.loaded .desktop-canvas .workspace-container {
   /* CRITICAL: Solid background only */
   background-color: #8A547D;
   background-image:
-    linear-gradient(to bottom, #8A547D 0%, rgba(138, 84, 125, 0) 28%),
-    linear-gradient(to top, #8A547D 0%, rgba(138, 84, 125, 0) 28%),
     radial-gradient(circle at center, rgba(0, 0, 0, 0.07) 1.5px, transparent 1.5px);
-  background-size:
-    100% 20vh,
-    100% 20vh,
-    16px 16px;
-  background-position:
-    top center,
-    bottom center,
-    0 0;
-  background-repeat:
-    no-repeat,
-    no-repeat,
-    repeat;
+  background-size: 16px 16px;
+  background-position: 0 0;
+  background-repeat: repeat;
   /* CRITICAL: Internal coordinate system for widgets */
   overflow: visible;
   overscroll-behavior: none;
@@ -246,19 +235,45 @@ body.loaded .desktop-canvas .workspace-container {
   left: 0;
   width: 100%;
   height: 100%;
+  z-index: 0;
   background-image: url('../assets/images/bg-mountains.svg');
   background-position: bottom center;
   background-size: 100% auto;
   background-repeat: no-repeat;
   opacity: 0;
   pointer-events: none;
-  mix-blend-mode: darken;
   transition: opacity 0.5s ease-in;
+}
+
+/* CRITICAL: Top/bottom fade overlay above mountains, below widgets */
+.workspace-container::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-image:
+    linear-gradient(to bottom, #8A547D 0%, rgba(138, 84, 125, 0) 28%),
+    linear-gradient(to top, #8A547D 0%, rgba(138, 84, 125, 0) 28%);
+  background-size:
+    100% 20vh,
+    100% 20vh;
+  background-position:
+    top center,
+    bottom center;
+  background-repeat:
+    no-repeat,
+    no-repeat;
+  pointer-events: none;
 }
 
 /* CRITICAL: Show mountains after loading */
 body.loaded .workspace-container::before {
   opacity: 0.3;
+}
+
+/* Ensure widgets stay above background overlays */
+.workspace-container .widget-wrapper {
+  z-index: 2;
 }
 
 /* ANCHOR: mobile_canvas_adaptation */
