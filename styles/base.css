@@ -5,7 +5,7 @@
 /* ANCHOR: css_variables */
 /* UPDATED: Shared background to cover safe areas (iOS edge-to-edge) */
 :root {
-  --app-bg: linear-gradient(180deg, #8A547D 0%, #835478 100%);
+  --app-bg: linear-gradient(180deg, #8A547D 0%, #835478 80%, #8A547D 100%);
   --app-bg-size: 100% 100%;
   --app-bg-position: center center;
   --app-bg-repeat: no-repeat;
@@ -44,12 +44,6 @@ html::-webkit-scrollbar {
 
 body {
   font-family: var(--font-family-primary);
-  /* CRITICAL: App background (gradient) */
-  background: var(--app-bg);
-  background-size: var(--app-bg-size);
-  background-position: var(--app-bg-position);
-  background-repeat: var(--app-bg-repeat);
-  
   width: 100%;
   /* Match viewport-test: full viewport height */
   min-height: 100vh;
