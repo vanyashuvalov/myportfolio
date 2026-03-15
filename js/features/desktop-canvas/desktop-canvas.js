@@ -58,6 +58,7 @@ export class DesktopCanvas {
       
       this.registerWidgetTypes();
       this.setupCanvas();
+      this.setupPanControls();
       this.setupEventListeners();
       this.setupResizeObserver();
       
@@ -150,6 +151,116 @@ export class DesktopCanvas {
     
     // Force immediate layout recalculation for workspace
     this.workspaceContainer.offsetHeight; // Trigger reflow
+  }
+
+  /**
+   * Setup drag-to-pan controls for desktop canvas
+   * PURPOSE: Natural 2-axis panning on touch/mouse (desktop canvas only)
+   */
+  setupPanControls() {
+    if (!this.container) return;
+
+    this.panState = {
+      active: false,
+      pointerId: null,
+      startX: 0,
+      startY: 0,
+      startScrollLeft: 0,
+      startScrollTop: 0,
+      scrollEl: null
+    };
+
+    const shouldIgnoreTarget = (target) => {
+      if (!target) return true;
+      if (document.body.classList.contains('page-mode') || document.body.classList.contains('viewport-test')) {
+        return true;
+      }
+      // Ignore interactions on widgets or UI controls
+      return !!target.closest(
+        '.widget-wrapper, .widget-inner, .widget, ' +
+        '#navigation-container, #contact-input-container, ' +
+        '.modal-container, .mobile-menu, .mobile-menu-overlay, ' +
+        '.burger-button, button, a, input, textarea, select, [contenteditable="true"]'
+      );
+    };
+
+    const getScrollElement = () => {
+      const el = this.container;
+      if (el) {
+        const style = getComputedStyle(el);
+        const canScrollX = (style.overflowX === 'auto' || style.overflowX === 'scroll') && el.scrollWidth > el.clientWidth;
+        const canScrollY = (style.overflowY === 'auto' || style.overflowY === 'scroll') && el.scrollHeight > el.clientHeight;
+        if (canScrollX || canScrollY) return el;
+      }
+      return document.scrollingElement || document.documentElement;
+    };
+
+    const onPointerDown = (event) => {
+      if (event.pointerType === 'mouse' && event.button !== 0) return;
+      if (shouldIgnoreTarget(event.target)) return;
+
+      this.panState.active = true;
+      this.panState.pointerId = event.pointerId;
+      this.panState.startX = event.clientX;
+      this.panState.startY = event.clientY;
+      this.panState.scrollEl = getScrollElement();
+      this.panState.startScrollLeft = this.panState.scrollEl ? this.panState.scrollEl.scrollLeft : 0;
+      this.panState.startScrollTop = this.panState.scrollEl ? this.panState.scrollEl.scrollTop : 0;
+
+      this.container.classList.add('is-panning');
+      try {
+        this.container.setPointerCapture(event.pointerId);
+      } catch (err) {
+        // Pointer capture not available
+      }
+    };
+
+    const onPointerMove = (event) => {
+      if (!this.panState.active || event.pointerId !== this.panState.pointerId) return;
+      if (!this.panState.scrollEl) return;
+
+      event.preventDefault();
+
+      const dx = event.clientX - this.panState.startX;
+      const dy = event.clientY - this.panState.startY;
+      const el = this.panState.scrollEl;
+      const maxScrollLeft = Math.max(0, el.scrollWidth - el.clientWidth);
+      const maxScrollTop = Math.max(0, el.scrollHeight - el.clientHeight);
+
+      el.scrollLeft = Math.min(maxScrollLeft, Math.max(0, this.panState.startScrollLeft - dx));
+      el.scrollTop = Math.min(maxScrollTop, Math.max(0, this.panState.startScrollTop - dy));
+    };
+
+    const endPan = (event) => {
+      if (!this.panState.active) return;
+      if (event && event.pointerId !== this.panState.pointerId) return;
+
+      this.panState.active = false;
+      this.panState.pointerId = null;
+      this.panState.scrollEl = null;
+      this.container.classList.remove('is-panning');
+
+      try {
+        if (event && event.pointerId != null) {
+          this.container.releasePointerCapture(event.pointerId);
+        }
+      } catch (err) {
+        // Pointer capture not available
+      }
+    };
+
+    this.panHandlers = {
+      onPointerDown,
+      onPointerMove,
+      onPointerUp: endPan,
+      onPointerCancel: endPan
+    };
+
+    this.container.addEventListener('pointerdown', onPointerDown, { passive: false });
+    this.container.addEventListener('pointermove', onPointerMove, { passive: false });
+    this.container.addEventListener('pointerup', endPan);
+    this.container.addEventListener('pointercancel', endPan);
+    this.container.addEventListener('lostpointercapture', endPan);
   }
 
   /**
@@ -821,6 +932,14 @@ export class DesktopCanvas {
     // Disconnect resize observer
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
+    }
+
+    if (this.container && this.panHandlers) {
+      this.container.removeEventListener('pointerdown', this.panHandlers.onPointerDown);
+      this.container.removeEventListener('pointermove', this.panHandlers.onPointerMove);
+      this.container.removeEventListener('pointerup', this.panHandlers.onPointerUp);
+      this.container.removeEventListener('pointercancel', this.panHandlers.onPointerCancel);
+      this.container.removeEventListener('lostpointercapture', this.panHandlers.onPointerUp);
     }
     
     // Clear workspace and container

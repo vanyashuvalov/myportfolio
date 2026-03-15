@@ -111,6 +111,8 @@ body.page-mode::before {
   /* CRITICAL: overflow hidden for desktop mode */
   /* UPDATED COMMENTS: Desktop canvas doesn't scroll, workspace inside scrolls on mobile */
   overflow: hidden;
+  touch-action: none;
+  cursor: grab;
   overscroll-behavior: none;
   z-index: 2; /* CRITICAL: Above background, below page content in page mode */
   /* CRITICAL: Perfect flexbox centering */
@@ -123,6 +125,10 @@ body.page-mode::before {
   background-size: var(--app-bg-size);
   background-position: var(--app-bg-position);
   background-repeat: var(--app-bg-repeat);
+}
+
+.desktop-canvas.is-panning {
+  cursor: grabbing;
 }
 
 /* CRITICAL: Minimum sizes only on desktop */
