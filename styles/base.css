@@ -3,7 +3,7 @@
 /* SCALED FOR: Performance optimization with contain property */
 
 /* ANCHOR: css_variables */
-/* UPDATED: Shared background to cover safe areas (iOS edge-to-edge) */
+/* UPDATED: Shared background for desktop canvas only */
 :root {
   --app-bg: linear-gradient(180deg, #8A547D 0%, #835478 80%, #8A547D 100%);
   --app-bg-size: 100% 100%;
@@ -27,7 +27,7 @@ html {
   /* Match viewport-test: allow full visual overflow */
   overflow: visible;
   position: relative;
-  /* CRITICAL: App background (gradient) */
+  /* CRITICAL: Solid base color for safe areas */
   background: #8A547D;
   box-sizing: border-box;
 }
@@ -65,10 +65,7 @@ body {
 
 /* UPDATED COMMENTS: Background removed from body - now on workspace-container */
 body.loaded {
-  background: var(--app-bg);
-  background-size: var(--app-bg-size);
-  background-position: var(--app-bg-position);
-  background-repeat: var(--app-bg-repeat);
+  background: #8A547D;
   transition: background 0.5s ease-in;
 }
 
@@ -83,10 +80,7 @@ body::before {
 body.page-mode {
   /* CRITICAL: Solid background-color required for viewport-fit=cover */
   /* REF: https://stackoverflow.com/questions/76475354/viewport-fit-cover-does-not-work-on-the-ios-safari */
-  background: var(--app-bg) !important;
-  background-size: var(--app-bg-size) !important;
-  background-position: var(--app-bg-position) !important;
-  background-repeat: var(--app-bg-repeat) !important;
+  background: #8A547D !important;
   /* CRITICAL: Body becomes scroll container in page mode */
   /* UPDATED COMMENTS: overflow-y auto for vertical scrolling, hidden-x to prevent horizontal */
   overflow-y: auto !important;
