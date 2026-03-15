@@ -160,8 +160,6 @@ export class DesktopCanvas {
   setupPanControls() {
     if (!this.container) return;
 
-    const isTouchDevice = 'ontouchstart' in window || (navigator.maxTouchPoints || 0) > 0;
-
     this.panState = {
       tracking: false,
       active: false,
@@ -259,65 +257,11 @@ export class DesktopCanvas {
       onPointerCancel: endPan
     };
 
-    if (isTouchDevice) {
-      const onTouchStart = (event) => {
-        if (shouldIgnoreTarget(event.target)) return;
-        const touch = event.touches[0];
-        if (!touch) return;
-        this.panState.tracking = true;
-        this.panState.active = false;
-        this.panState.startX = touch.clientX;
-        this.panState.startY = touch.clientY;
-        this.panState.scrollEl = getScrollElement();
-        this.panState.startScrollLeft = this.panState.scrollEl ? this.panState.scrollEl.scrollLeft : 0;
-        this.panState.startScrollTop = this.panState.scrollEl ? this.panState.scrollEl.scrollTop : 0;
-      };
-
-      const onTouchMove = (event) => {
-        if (!this.panState.tracking || !this.panState.scrollEl) return;
-        const touch = event.touches[0];
-        if (!touch) return;
-
-        const dx = touch.clientX - this.panState.startX;
-        const dy = touch.clientY - this.panState.startY;
-        const threshold = 12;
-
-        if (!this.panState.active) {
-          if (Math.abs(dx) < threshold && Math.abs(dy) < threshold) return;
-          this.panState.active = true;
-          this.container.classList.add('is-panning');
-        }
-
-        event.preventDefault();
-
-        const el = this.panState.scrollEl;
-        const maxScrollLeft = Math.max(0, el.scrollWidth - el.clientWidth);
-        const maxScrollTop = Math.max(0, el.scrollHeight - el.clientHeight);
-
-        el.scrollLeft = Math.min(maxScrollLeft, Math.max(0, this.panState.startScrollLeft - dx));
-        el.scrollTop = Math.min(maxScrollTop, Math.max(0, this.panState.startScrollTop - dy));
-      };
-
-      const onTouchEnd = () => {
-        if (!this.panState.tracking) return;
-        this.panState.tracking = false;
-        this.panState.active = false;
-        this.panState.scrollEl = null;
-        this.container.classList.remove('is-panning');
-      };
-
-      this.panHandlers = { onTouchStart, onTouchMove, onTouchEnd };
-      this.container.addEventListener('touchstart', onTouchStart, { passive: true });
-      this.container.addEventListener('touchmove', onTouchMove, { passive: false });
-      this.container.addEventListener('touchend', onTouchEnd);
-      this.container.addEventListener('touchcancel', onTouchEnd);
-    } else {
-      this.container.addEventListener('pointerdown', onPointerDown, { passive: false });
-      this.container.addEventListener('pointermove', onPointerMove, { passive: false });
-      this.container.addEventListener('pointerup', endPan);
-      this.container.addEventListener('pointercancel', endPan);
-      this.container.addEventListener('lostpointercapture', endPan);
-    }
+    this.container.addEventListener('pointerdown', onPointerDown, { passive: false });
+    this.container.addEventListener('pointermove', onPointerMove, { passive: false });
+    this.container.addEventListener('pointerup', endPan);
+    this.container.addEventListener('pointercancel', endPan);
+    this.container.addEventListener('lostpointercapture', endPan);
   }
 
   /**
@@ -992,18 +936,11 @@ export class DesktopCanvas {
     }
 
     if (this.container && this.panHandlers) {
-      if (this.panHandlers.onTouchStart) {
-        this.container.removeEventListener('touchstart', this.panHandlers.onTouchStart);
-        this.container.removeEventListener('touchmove', this.panHandlers.onTouchMove);
-        this.container.removeEventListener('touchend', this.panHandlers.onTouchEnd);
-        this.container.removeEventListener('touchcancel', this.panHandlers.onTouchEnd);
-      } else {
-        this.container.removeEventListener('pointerdown', this.panHandlers.onPointerDown);
-        this.container.removeEventListener('pointermove', this.panHandlers.onPointerMove);
-        this.container.removeEventListener('pointerup', this.panHandlers.onPointerUp);
-        this.container.removeEventListener('pointercancel', this.panHandlers.onPointerCancel);
-        this.container.removeEventListener('lostpointercapture', this.panHandlers.onPointerUp);
-      }
+      this.container.removeEventListener('pointerdown', this.panHandlers.onPointerDown);
+      this.container.removeEventListener('pointermove', this.panHandlers.onPointerMove);
+      this.container.removeEventListener('pointerup', this.panHandlers.onPointerUp);
+      this.container.removeEventListener('pointercancel', this.panHandlers.onPointerCancel);
+      this.container.removeEventListener('lostpointercapture', this.panHandlers.onPointerUp);
     }
     
     // Clear workspace and container
