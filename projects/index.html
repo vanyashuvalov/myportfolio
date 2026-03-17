@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" class="page-mode">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#101010">
+  <meta name="description" content="Ivan Shuvalov - Product Designer Portfolio">
+  <title>Ivan Shuvalov</title>
+  
+  <!-- ANCHOR: favicon -->
+  <!-- UPDATED COMMENTS: Custom favicon using avatar image -->
+  <link rel="icon" type="image/jpeg" href="assets/images/avatar.jpg">
+  
+  <!-- CRITICAL: Base URL for SPA routing -->
+  <!-- UPDATED COMMENTS: Ensures all relative paths resolve from root, not current route -->
+  <base href="/">
+  
+  <!-- ANCHOR: performance_optimization -->
+  <!-- UPDATED COMMENTS: Preload critical resources with proper crossorigin for modules -->
+  <link rel="preload" href="styles/reset.css" as="style">
+  <link rel="preload" href="js/main.js" as="script" crossorigin="anonymous">
+  <link rel="preload" href="assets/images/bg-mountains.jpg" as="image">
+  <link rel="preload" href="assets/font/SFPRODISPLAYREGULAR.OTF" as="font" type="font/otf" crossorigin>
+  <link rel="preload" href="assets/font/SFPRODISPLAYBOLD.OTF" as="font" type="font/otf" crossorigin>
+  
+  <!-- REUSED: Modular CSS architecture with font loading -->
+  <link rel="stylesheet" href="styles/fonts.css">
+  <link rel="stylesheet" href="styles/reset.css">
+  <link rel="stylesheet" href="styles/variables.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/animations.css">
+  <link rel="stylesheet" href="styles/responsive.css">
+  
+  <!-- ANCHOR: widget_specific_styles -->
+  <!-- UPDATED COMMENTS: Modular widget CSS files for component isolation -->
+  <link rel="stylesheet" href="js/widgets/sticker/sticker-widget.css">
+  <link rel="stylesheet" href="js/widgets/resume/resume-widget.css">
+  <link rel="stylesheet" href="js/widgets/clock/clock-widget.css">
+  <link rel="stylesheet" href="js/widgets/folder/folder-widget.css">
+  <link rel="stylesheet" href="js/widgets/cat/cat-widget.css">
+  <link rel="stylesheet" href="js/widgets/cat-sticker/cat-sticker-widget.css">
+  <link rel="stylesheet" href="js/widgets/telegram/telegram-widget.css">
+  <link rel="stylesheet" href="js/widgets/feed-button/feed-button-widget.css">
+  
+  <!-- ANCHOR: shared_ui_styles -->
+  <!-- REUSED: Shared UI component styles -->
+  <link rel="stylesheet" href="js/shared/ui/widget-button/widget-button.css">
+  <link rel="stylesheet" href="js/shared/ui/chip/chip.css">
+  
+  <!-- ANCHOR: navigation_styles -->
+  <!-- REUSED: Navigation header component styles -->
+  <link rel="stylesheet" href="js/shared/ui/navigation/navigation-header.css">
+  <link rel="stylesheet" href="js/shared/ui/navigation/components/mobile-menu.css">
+  <link rel="stylesheet" href="js/shared/ui/button/button.css">
+  
+  <!-- ANCHOR: dropdown_styles -->
+  <!-- REUSED: Dropdown component styles -->
+  <link rel="stylesheet" href="js/shared/ui/dropdown/page-dropdown.css">
+  <link rel="stylesheet" href="js/shared/ui/dropdown/language-dropdown.css">
+  
+  <!-- ANCHOR: contact_input_styles -->
+  <!-- REUSED: Contact input component styles -->
+  <link rel="stylesheet" href="js/shared/ui/contact-input/contact-input.css">
+  
+  <!-- ANCHOR: contact_modal_styles -->
+  <!-- REUSED: Contact modal component styles -->
+  <link rel="stylesheet" href="js/shared/ui/modal/contact-modal.css?v=13">
+  
+  <!-- ANCHOR: toast_styles -->
+  <!-- REUSED: Toast notification component styles -->
+  <link rel="stylesheet" href="js/shared/ui/toast/toast.css">
+  
+  <!-- ANCHOR: error_styles -->
+  <!-- CRITICAL: Widget error state styles -->
+  <link rel="stylesheet" href="styles/widget-error.css">
+  
+  <!-- ANCHOR: shared_ui_components -->
+  <!-- REUSED: Universal UI components (FSD: shared/ui) -->
+  <link rel="stylesheet" href="styles/shared/gallery-item.css">
+  <link rel="stylesheet" href="styles/shared/floating-button.css">
+  
+  <!-- ANCHOR: feature_systems -->
+  <!-- REUSED: Feature systems (FSD: features/) -->
+  <link rel="stylesheet" href="styles/features/modal.css">
+  <link rel="stylesheet" href="styles/features/page.css">
+  
+  <!-- ANCHOR: page_layouts -->
+  <!-- REUSED: Page-specific layouts (FSD: pages/) -->
+  <link rel="stylesheet" href="styles/pages/projects-gallery.css">
+  <link rel="stylesheet" href="styles/pages/project-detail.css">
+  <link rel="stylesheet" href="styles/pages/viewport-test.css">
+  <link rel="stylesheet" href="styles/fun-gallery.css">
+  
+  <!-- ANCHOR: markdown_content_styles -->
+  <!-- CRITICAL: Rich markdown content styling with Notion-like blocks -->
+  <link rel="stylesheet" href="styles/markdown-content.css">
+  
+  <!-- ANCHOR: reading_progress_styles -->
+  <!-- REUSED: Reading progress indicator component styles -->
+  <link rel="stylesheet" href="js/shared/ui/reading-progress/reading-progress.css">
+  
+  <!-- ANCHOR: image_viewer_styles -->
+  <!-- REUSED: Fullscreen image viewer component styles -->
+  <link rel="stylesheet" href="js/shared/ui/image-viewer/image-viewer.css">
+  
+  <!-- ANCHOR: pdf_viewer_styles -->
+  <!-- REUSED: Fullscreen PDF viewer component styles -->
+  <link rel="stylesheet" href="js/shared/ui/pdf-viewer/pdf-viewer.css">
+</head>
+<body class="page-mode">
+  <!-- ANCHOR: loading_screen -->
+  <!-- CRITICAL: Loading indicator OUTSIDE desktop-canvas so it's always visible -->
+  <!-- TEMP: Loader disabled for debugging viewport edges -->
+  <!--
+  <div id="loading-indicator" class="loading-indicator">
+    <div class="loading-spinner"></div>
+    <p>Loading portfolio...</p>
+  </div>
+  -->
+  
+  <!-- ANCHOR: main_application -->
+  <main id="desktop-canvas" class="desktop-canvas" role="main" style="display: none;">
+    <!-- Desktop canvas content will be added here by JavaScript -->
+  </main>
+  
+  <!-- ANCHOR: navigation_header -->
+  <!-- REUSED: Navigation component container -->
+  <div id="navigation-container"></div>
+  
+  <!-- ANCHOR: contact_input -->
+  <!-- REUSED: Contact input component container -->
+  <div id="contact-input-container"></div>
+  
+  <!-- ANCHOR: modal_system -->
+  <div id="modal-container" class="modal-container" role="dialog" aria-hidden="true">
+    <!-- Modal content dynamically inserted -->
+  </div>
+  
+  <!-- ANCHOR: projects_modal_system -->
+  <!-- UPDATED COMMENTS: Separate container for projects/pages modals -->
+  <div id="projects-modal-container" class="modal-container" role="dialog" aria-hidden="true">
+    <!-- Projects modal content dynamically inserted -->
+  </div>
+  
+  <!-- ANCHOR: accessibility -->
+  <a href="#desktop-canvas" class="skip-link">Skip to main content</a>
+  
+  <!-- ANCHOR: javascript_entry -->
+  <script type="module" src="js/main.js"></script>
+  
+  <!-- UPDATED COMMENTS: Fallback for legacy browsers -->
+  <script nomodule>
+    console.warn('ES6 modules not supported. Please update your browser.');
+  </script>
+</body>
+</html>
+
