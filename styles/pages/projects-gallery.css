@@ -14,8 +14,7 @@
    ============================================ */
 
 /* CRITICAL: Projects list layout (modal and page) */
-.projects-list,
-.projects-list-page {
+.projects-list {
   width: 720px !important;
   max-width: 100% !important;
   margin: 0 auto !important;
@@ -45,9 +44,16 @@
  * ANIMATION: Should be visible immediately (no modal container)
  */
 .projects-list-page {
+  width: 100% !important;
+  max-width: 720px !important;
+  margin: 0 auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  padding: 120px 40px 80px 40px !important;
+  gap: 100px !important;
   color: var(--color-text-light, #FFFFFF) !important;
-  opacity: 1 !important; /* Visible immediately for standalone page */
-  transform: none !important; /* No slide animation for page (avoid fixed positioning issues) */
+  box-sizing: border-box;
 }
 
 /* ============================================
@@ -63,7 +69,7 @@
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
-  gap: 100px !important; /* Large gap for visual separation */
+  gap: 0 !important;
   width: 100% !important;
   padding: 0 !important;
 }
@@ -100,6 +106,6 @@
   }
   
   .projects-grid {
-    gap: 60px !important; /* Reduced from 100px */
+    gap: 0 !important;
   }
 }
