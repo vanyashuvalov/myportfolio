@@ -31,7 +31,6 @@
   z-index: 1; /* CRITICAL: Above canvas background */
   /* CRITICAL: No overflow - body handles scrolling */
   overflow: visible;
-  transition: opacity var(--transition-normal, 0.3s ease-out);
   /* REUSED: Pointer events for proper interaction */
   pointer-events: auto;
 }

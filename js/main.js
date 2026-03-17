@@ -232,14 +232,11 @@ class Application {
       // Setup global event listeners
       this.setupGlobalEvents();
 
-      // CRITICAL: Wait for window.load event (all resources including images loaded)
-      // REUSED: Standard pattern for hiding page loaders
+      // CRITICAL: Hide loader only after full page load
       if (document.readyState === 'complete') {
         this.hideLoadingIndicator();
       } else {
-        window.addEventListener('load', () => {
-          this.hideLoadingIndicator();
-        });
+        window.addEventListener('load', () => this.hideLoadingIndicator(), { once: true });
       }
 
       this.isInitialized = true;
@@ -362,24 +359,13 @@ class Application {
   }
 
   /**
-   * Hide loading indicator with smooth animation
-   * UPDATED COMMENTS: Smooth transition to main interface with body class toggle
-   * CRITICAL: Shows mountains and all content after loading is complete
+   * Hide loading indicator
+   * CRITICAL: Unblocks content only after everything is loaded
    */
   hideLoadingIndicator() {
-      // Always mark app as loaded even if loader is disabled
-      document.body.classList.add('loaded');
-
-      const indicator = document.getElementById('loading-indicator');
-      if (indicator) {
-        // REUSED: Hide loading indicator with fade-out animation
-        indicator.classList.add('hidden');
-      
-      // SCALED FOR: Remove loading indicator from DOM after animation completes
-      setTimeout(() => {
-        indicator.remove();
-      }, 500); // Match CSS transition duration
-    }
+    document.body.classList.add('loaded');
+    const indicator = document.getElementById('loading-indicator');
+    if (indicator) indicator.remove();
   }
 
   /**

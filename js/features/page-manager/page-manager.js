@@ -6,8 +6,6 @@ import { ProjectPageHandler } from './project-page-handler.js';
 import { ProjectsListPageHandler } from './projects-list-page-handler.js';
 import { FunGalleryPageHandler } from './fun-gallery-page-handler.js';
 
-const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-
 export class PageManager {
   constructor(options = {}) {
     this.eventBus = options.eventBus;
@@ -149,39 +147,25 @@ export class PageManager {
   async showPage({ load, render, setup, type, eventPayload = {}, withOverlay = false }) {
     try {
       this.cleanupViewportTest();
-      if (withOverlay) await this.toggleOverlay(true);
+      if (withOverlay) this.toggleOverlay(true);
 
       this.setPageMode(true);
       this.hideDesktopCanvas();
       this.pageContainer.style.display = 'block';
-      this.pageContainer.style.opacity = '1';
       this.pageContainer.innerHTML = '';
       this.pageContainer.scrollTop = 0;
 
       const data = await load();
-      await this.transitionToPage(() => render(data));
+      this.pageContainer.innerHTML = render(data);
       if (setup) await setup(data);
 
-      if (withOverlay) await this.toggleOverlay(false);
+      if (withOverlay) this.toggleOverlay(false);
       this.isPageMode = true;
       this.eventBus?.emit('page:shown', { type, ...eventPayload });
     } catch (error) {
       console.error(`Failed to show ${type} page:`, error);
-      if (withOverlay) await this.toggleOverlay(false);
+      if (withOverlay) this.toggleOverlay(false);
       this.showErrorPage(error.message);
-    }
-  }
-
-  async transitionToPage(renderFn) {
-    this.pageContainer.innerHTML = renderFn();
-    this.pageContainer.scrollTop = 0;
-
-    const content = this.pageContainer.firstElementChild;
-    if (content) {
-      content.style.opacity = '0';
-      content.style.transition = 'opacity 0.3s ease-out';
-      await delay(50);
-      content.style.opacity = '1';
     }
   }
 
@@ -189,18 +173,12 @@ export class PageManager {
     if (!this.isPageMode) return;
     this.cleanupViewportTest();
 
-    this.pageContainer.style.opacity = '0';
-    await delay(300);
     this.pageContainer.style.display = 'none';
 
     this.setPageMode(false);
 
     if (this.desktopCanvasEl) {
       this.desktopCanvasEl.style.display = 'flex';
-      this.desktopCanvasEl.style.opacity = '0';
-      requestAnimationFrame(() => {
-        if (this.desktopCanvasEl) this.desktopCanvasEl.style.opacity = '1';
-      });
     }
 
     this.isPageMode = false;
@@ -220,8 +198,7 @@ export class PageManager {
       this.setPageMode(false);
       this.hideDesktopCanvas();
       this.pageContainer.style.display = 'block';
-      this.pageContainer.style.opacity = '1';
-      await this.transitionToPage(() => this.renderViewportTestPage());
+      this.pageContainer.innerHTML = this.renderViewportTestPage();
 
       const backBtn = this.pageContainer.querySelector('[data-action="back-to-desktop"]');
       if (backBtn) {
@@ -394,10 +371,9 @@ export class PageManager {
     document.documentElement.classList.remove('viewport-test');
   }
 
-  async toggleOverlay(show) {
+  toggleOverlay(show) {
     if (!this.transitionOverlay) return;
     this.transitionOverlay.classList.toggle('page-transition-overlay--active', show);
-    await delay(300);
   }
 
   async showErrorPage(message) {
@@ -412,7 +388,7 @@ export class PageManager {
       </div>
     `;
 
-    await this.transitionToPage(() => errorHtml);
+    this.pageContainer.innerHTML = errorHtml;
 
     const btn = this.pageContainer.querySelector('[data-action="back-to-desktop"]');
     if (btn) {
