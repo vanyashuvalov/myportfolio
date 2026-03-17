@@ -9,6 +9,7 @@
   --app-bg-size: 100% 100%;
   --app-bg-position: center bottom;
   --app-bg-repeat: no-repeat;
+  --page-bg: #8A547D;
 }
 
 html {
@@ -28,7 +29,7 @@ html {
   overflow: visible;
   overscroll-behavior: none;
   position: relative;
-  background: transparent;
+  background: var(--page-bg);
   box-sizing: border-box;
 }
 
@@ -79,9 +80,7 @@ body::before {
 /* CRITICAL: Hide mountains and gradient when in page mode */
 /* UPDATED COMMENTS: Show only solid #101010 background for project pages */
 body.page-mode {
-  /* CRITICAL: Solid background-color required for viewport-fit=cover */
-  /* REF: https://stackoverflow.com/questions/76475354/viewport-fit-cover-does-not-work-on-the-ios-safari */
-  background: var(--color-bg-dark, #101010) !important;
+  --page-bg: var(--color-bg-dark, #101010);
   /* CRITICAL: Body becomes scroll container in page mode */
   /* UPDATED COMMENTS: overflow-y auto for vertical scrolling, hidden-x to prevent horizontal */
   overflow-y: auto !important;
