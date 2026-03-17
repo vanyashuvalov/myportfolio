@@ -403,10 +403,12 @@ body.loaded .navigation-wrapper {
 
 .burger-button__line {
   /* CRITICAL: Burger menu lines */
+  display: block;
   width: 24px;
   height: 2px;
   background: #FFFFFF;
   border-radius: 1px;
+  transform-origin: center;
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
 

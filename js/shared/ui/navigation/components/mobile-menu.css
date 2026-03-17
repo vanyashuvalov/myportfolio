@@ -25,8 +25,7 @@
   visibility: hidden;
   pointer-events: none;
   
-  /* REUSED: Smooth fade transition */
-  transition: opacity 0.3s ease, visibility 0.3s ease;
+  /* No animation on overlay */
 }
 
 .mobile-menu-overlay--open {
@@ -49,8 +48,9 @@
   z-index: 100002;
   
   /* CRITICAL: Slide up from bottom animation */
-  transform: translateY(100%);
+  transform: translate3d(0, 100%, 0);
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
   
   /* SCALED FOR: Scrollable content */
   overflow-y: auto;
@@ -62,7 +62,7 @@
 
 
 .mobile-menu--open {
-  transform: translateY(0);
+  transform: translate3d(0, 0, 0);
 }
 
 /* ============================================
@@ -78,29 +78,7 @@
 }
 
 /* CRITICAL: Staggered animation for menu items */
-.mobile-menu__content > * {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.4s ease, transform 0.4s ease;
-}
-
-/* CRITICAL: Stagger delays for each item */
-.mobile-menu--open .mobile-menu__content > *:nth-child(1) { transition-delay: 0.1s; }
-.mobile-menu--open .mobile-menu__content > *:nth-child(2) { transition-delay: 0.15s; }
-.mobile-menu--open .mobile-menu__content > *:nth-child(3) { transition-delay: 0.2s; }
-.mobile-menu--open .mobile-menu__content > *:nth-child(4) { transition-delay: 0.25s; }
-.mobile-menu--open .mobile-menu__content > *:nth-child(5) { transition-delay: 0.3s; }
-.mobile-menu--open .mobile-menu__content > *:nth-child(6) { transition-delay: 0.35s; }
-.mobile-menu--open .mobile-menu__content > *:nth-child(7) { transition-delay: 0.4s; }
-.mobile-menu--open .mobile-menu__content > *:nth-child(8) { transition-delay: 0.45s; }
-.mobile-menu--open .mobile-menu__content > *:nth-child(9) { transition-delay: 0.5s; }
-.mobile-menu--open .mobile-menu__content > *:nth-child(10) { transition-delay: 0.55s; }
-.mobile-menu--open .mobile-menu__content > *:nth-child(11) { transition-delay: 0.6s; }
-
-.mobile-menu--open .mobile-menu__content > * {
-  opacity: 1;
-  transform: translateY(0);
-}
+/* Menu items appear instantly with the panel */
 
 /* ============================================
    MENU DIVIDER
@@ -198,7 +176,6 @@
 .mobile-menu__item:active {
   opacity: 0.7;
   background: rgba(0, 0, 0, 0.7);
-}
 }
 
 .mobile-menu__item--active {
