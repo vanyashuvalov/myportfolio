@@ -179,7 +179,7 @@ body.page-mode::before {
 }
 
 /* CRITICAL: In page mode, hide desktop canvas entirely */
-body.page-mode .desktop-canvas {
+body.page-mode:not(.page-transitioning) .desktop-canvas {
   display: none !important;
 }
 

@@ -149,9 +149,18 @@ export class PageManager {
   async showPage({ load, render, setup, type, eventPayload = {}, withOverlay = false }) {
     try {
       this.cleanupViewportTest();
+      const wasPageMode = document.body.classList.contains('page-mode');
+      const shouldTransition = withOverlay && !wasPageMode;
+
+      if (shouldTransition) {
+        document.body.classList.add('page-transitioning');
+      }
+
       if (!this.isPageMode) {
         this.setPageMode(true);
-        this.hideDesktopCanvas();
+        if (wasPageMode) {
+          this.hideDesktopCanvas();
+        }
         this.pageContainer.style.display = 'block';
         this.pageContainer.style.opacity = '1';
         this.isPageMode = true;
@@ -163,10 +172,14 @@ export class PageManager {
       if (setup) await setup(data);
 
       if (withOverlay) await this.toggleOverlay(false);
+      if (shouldTransition) {
+        document.body.classList.remove('page-transitioning');
+      }
       this.eventBus?.emit('page:shown', { type, ...eventPayload });
     } catch (error) {
       console.error(`Failed to show ${type} page:`, error);
       if (withOverlay) await this.toggleOverlay(false);
+      document.body.classList.remove('page-transitioning');
       this.showErrorPage(error.message);
     }
   }
