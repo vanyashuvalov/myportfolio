@@ -75,10 +75,10 @@ body::before {
 }
 
 body.page-mode {
-  /* CRITICAL: Body becomes scroll container in page mode */
-  /* UPDATED COMMENTS: overflow-y auto for vertical scrolling, hidden-x to prevent horizontal */
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
+  /* CRITICAL: Let document handle scroll to avoid iOS frames */
+  overflow: visible !important;
+  /* iOS Safari: Prevent white bounce/frames in page mode */
+  background: var(--page-bg);
   /* CRITICAL: NO padding - content inside (.project-page, .fun-gallery) handles safe-area */
   /* UPDATED COMMENTS: Removed padding to prevent double safe-area spacing */
   padding: 0;
