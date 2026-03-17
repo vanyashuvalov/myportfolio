@@ -130,11 +130,21 @@ export class DesktopCanvas {
     }
     
     // REUSED: CSS-only styling approach for better maintainability
+    // Preserve initial hidden state for non-home routes
+    const shouldKeepHidden =
+      this.container.style.display === 'none' ||
+      document.documentElement.classList.contains('page-mode') ||
+      document.body.classList.contains('page-mode');
+    
     // Remove any existing inline styles that might conflict
     this.container.removeAttribute('style');
     
     // Add canvas class (CSS handles all styling)
     this.container.classList.add('desktop-canvas');
+    
+    if (shouldKeepHidden) {
+      this.container.style.display = 'none';
+    }
     
     // CRITICAL: Create centralized workspace container
     this.workspaceContainer = document.createElement('div');
