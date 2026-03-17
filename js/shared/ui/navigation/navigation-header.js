@@ -65,7 +65,7 @@ export class NavigationHeader {
       this.setupPageDropdownNavigation();
       this.setupMobileMenuListeners();
       this.setupMobileMenuActions();
-      this.mobileMenu.init(this.container);
+      this.mobileMenu.init();
       this.isInitialized = true;
       
       // REUSED: EventBus pattern for component communication
@@ -196,13 +196,21 @@ export class NavigationHeader {
       <!-- CRITICAL: Burger button OUTSIDE navigation-wrapper for proper z-index layering -->
       <!-- REUSED: BurgerButton component -->
       ${this.burgerButton.render()}
-
-      <!-- ANCHOR: mobile_menu -->
-      <div class="mobile-menu-overlay" aria-hidden="true"></div>
-      <div class="mobile-menu" role="dialog" aria-label="Mobile navigation menu" aria-hidden="true">
-        ${this.mobileMenu.renderMenuContent()}
-      </div>
     `;
+
+    if (!document.querySelector('.mobile-menu')) {
+      const overlay = document.createElement('div');
+      overlay.className = 'mobile-menu-overlay';
+      overlay.setAttribute('aria-hidden', 'true');
+      const menu = document.createElement('div');
+      menu.className = 'mobile-menu';
+      menu.setAttribute('role', 'dialog');
+      menu.setAttribute('aria-label', 'Mobile navigation menu');
+      menu.setAttribute('aria-hidden', 'true');
+      menu.innerHTML = this.mobileMenu.renderMenuContent();
+      document.body.appendChild(overlay);
+      document.body.appendChild(menu);
+    }
   }
 
   /**
