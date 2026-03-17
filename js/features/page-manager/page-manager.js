@@ -412,6 +412,7 @@ export class PageManager {
     document.documentElement.classList.toggle('page-mode', isOn);
     const pageBg = isOn ? '#101010' : '#8A547D';
     document.documentElement.style.setProperty('--page-bg', pageBg);
+    document.documentElement.style.backgroundColor = pageBg;
     this.setThemeColor(pageBg);
   }
 
