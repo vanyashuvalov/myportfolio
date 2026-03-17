@@ -75,7 +75,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: #8A547D;
+  background: var(--page-bg);
   z-index: var(--z-page-overlay, 100001);
   opacity: 0;
   pointer-events: none; /* Prevents interaction during transition */

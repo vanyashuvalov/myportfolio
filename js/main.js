@@ -38,6 +38,17 @@ class Application {
    */
   async init() {
     try {
+      const initialPath = window.location.pathname || '/';
+      const shouldStartInPageMode = initialPath !== '/' && initialPath !== '/viewport-test';
+      if (shouldStartInPageMode) {
+        document.documentElement.classList.add('page-mode');
+        document.body.classList.add('page-mode');
+        const canvasEl = document.getElementById('desktop-canvas');
+        if (canvasEl) {
+          canvasEl.style.display = 'none';
+        }
+      }
+
       // CRITICAL: No JS viewport sizing. Keep html/body natural for edge-to-edge like the example.
       if (document.documentElement.hasAttribute('style')) {
         document.documentElement.removeAttribute('style');

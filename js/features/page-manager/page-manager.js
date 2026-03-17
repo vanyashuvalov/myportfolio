@@ -149,6 +149,13 @@ export class PageManager {
   async showPage({ load, render, setup, type, eventPayload = {}, withOverlay = false }) {
     try {
       this.cleanupViewportTest();
+      if (!this.isPageMode) {
+        this.setPageMode(true);
+        this.hideDesktopCanvas();
+        this.pageContainer.style.display = 'block';
+        this.pageContainer.style.opacity = '1';
+        this.isPageMode = true;
+      }
       if (withOverlay) await this.toggleOverlay(true);
 
       const data = await load();
