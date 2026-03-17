@@ -13,27 +13,15 @@
    PROJECTS LIST CONTAINER
    ============================================ */
 
-/* CRITICAL: Projects list layout (modal and page)
- * LAYOUT: Centered column, max 720px width, flexible padding
- * WHY: Same layout for modal and standalone page for consistency
- * ANIMATION: Slide up + fade in on open (translateY: 100px → 0)
- * USAGE: .projects-list (in modal), .projects-list-page (standalone)
- * UPDATED COMMENTS: HUG content - NO min-height, let content determine height
- * SCALED FOR: Single scroll context to prevent iOS Safari issues
- * UPDATED COMMENTS: NO safe-area in padding - viewport-fit=cover handles it
- */
+/* CRITICAL: Projects list layout (modal and page) */
 .projects-list,
 .projects-list-page {
   width: 720px !important;
   max-width: 100% !important;
-  /* CRITICAL: HUG content - NO min-height, let content flow naturally */
-  /* UPDATED COMMENTS: Content determines height, body/modal scrolls */
   margin: 0 auto !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
-  /* CRITICAL: Fixed padding - NO safe-area variables */
-  /* UPDATED COMMENTS: viewport-fit=cover extends content under safe-areas automatically */
   padding: 120px 40px 80px 40px !important;
   gap: 0 !important; /* No gap - projects-grid handles spacing */
   opacity: 0; /* Hidden by default */
@@ -60,24 +48,6 @@
   color: var(--color-text-light, #FFFFFF) !important;
   opacity: 1 !important; /* Visible immediately for standalone page */
   transform: none !important; /* No slide animation for page (avoid fixed positioning issues) */
-}
-
-/* CRITICAL: Top gradient overlay for page
- * PURPOSE: Fades content under navigation header
- * WHY: Creates depth, prevents content from touching top edge
- * POSITION: Fixed at top, 200px height gradient
- * UPDATED COMMENTS: MUST use top/left/right instead of inset for iOS Safari!
- */
-.projects-list-page::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 200px;
-  background: linear-gradient(180deg, var(--color-bg-dark, #101010) 0%, rgba(16, 16, 16, 0) 100%);
-  z-index: 5; /* Above content, below navigation */
-  pointer-events: none; /* Allows clicks through gradient */
 }
 
 /* ============================================

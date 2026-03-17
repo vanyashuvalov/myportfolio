@@ -82,7 +82,7 @@ body::before {
 body.page-mode {
   /* CRITICAL: Solid background-color required for viewport-fit=cover */
   /* REF: https://stackoverflow.com/questions/76475354/viewport-fit-cover-does-not-work-on-the-ios-safari */
-  background: #8A547D !important;
+  background: var(--color-bg-dark, #101010) !important;
   /* CRITICAL: Body becomes scroll container in page mode */
   /* UPDATED COMMENTS: overflow-y auto for vertical scrolling, hidden-x to prevent horizontal */
   overflow-y: auto !important;

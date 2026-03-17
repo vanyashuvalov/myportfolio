@@ -12,46 +12,16 @@
    PROJECT PAGE CONTAINER
    ============================================ */
 
-/* CRITICAL: Project detail page layout
- * LAYOUT: Centered column, max 720px width, flexible padding
- * WHY: Large top padding creates dramatic entrance, focuses on content
- * TYPOGRAPHY: White text for dark background
- * OVERFLOW: Hidden horizontal to prevent layout breaks
- * UPDATED COMMENTS: HUG content - NO min-height, let content determine height
- * SCALED FOR: Single scroll context to prevent iOS Safari issues
- * UPDATED COMMENTS: NO safe-area in padding - viewport-fit=cover handles it
- */
+/* CRITICAL: Project detail page layout */
 .project-page {
   width: 720px !important;
   max-width: 100% !important;
-  /* CRITICAL: HUG content - NO min-height, let content flow naturally */
-  /* UPDATED COMMENTS: Content determines height, body scrolls */
   margin: 0 auto !important;
-  /* CRITICAL: Fixed padding - NO safe-area variables */
-  /* UPDATED COMMENTS: viewport-fit=cover extends content under safe-areas automatically */
   padding: 180px 40px 80px 40px !important;
   color: var(--color-text-light, #FFFFFF) !important;
   position: relative;
   overflow-x: hidden; /* Prevents horizontal scroll */
   box-sizing: border-box;
-}
-
-/* CRITICAL: Top gradient overlay
- * PURPOSE: Fades content under navigation header
- * WHY: Creates depth, prevents content from touching top edge
- * POSITION: Fixed at top, 200px height gradient
- * UPDATED COMMENTS: MUST use top/left/right instead of inset for iOS Safari!
- */
-.project-page::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 200px;
-  background: linear-gradient(180deg, var(--color-bg-dark, #101010) 0%, rgba(16, 16, 16, 0) 100%);
-  z-index: 5; /* Above content, below navigation */
-  pointer-events: none; /* Allows clicks through gradient */
 }
 
 /* CRITICAL: Project content wrapper
