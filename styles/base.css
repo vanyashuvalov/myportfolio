@@ -70,12 +70,6 @@ body:not(.loaded) > *:not(#loading-indicator):not(script) {
   display: none !important;
 }
 
-/* UPDATED COMMENTS: Background removed from body - now on workspace-container */
-body.loaded {
-  background: transparent;
-  transition: background 0.5s ease-in;
-}
-
 /* ANCHOR: mountain_overlay */
 /* UPDATED COMMENTS: Mountains removed from body - now on workspace-container */
 body::before {
