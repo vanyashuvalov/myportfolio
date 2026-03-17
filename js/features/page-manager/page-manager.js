@@ -170,15 +170,16 @@ export class PageManager {
   }
 
   async showDesktopCanvas() {
-    if (!this.isPageMode) return;
     this.cleanupViewportTest();
 
     this.pageContainer.style.display = 'none';
+    this.pageContainer.innerHTML = '';
 
     this.setPageMode(false);
 
     if (this.desktopCanvasEl) {
       this.desktopCanvasEl.style.display = 'flex';
+      this.desktopCanvasEl.style.opacity = '1';
     }
 
     this.isPageMode = false;
