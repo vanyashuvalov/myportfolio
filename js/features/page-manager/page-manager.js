@@ -147,9 +147,8 @@ export class PageManager {
   async showPage({ load, render, setup, type, eventPayload = {}, withOverlay = false }) {
     try {
       this.cleanupViewportTest();
-      if (withOverlay) this.toggleOverlay(true);
-
       this.setPageMode(true);
+      if (withOverlay) this.toggleOverlay(true);
       this.hideDesktopCanvas();
       this.pageContainer.style.display = 'block';
       this.pageContainer.innerHTML = '';
@@ -410,7 +409,9 @@ export class PageManager {
   setPageMode(isOn) {
     document.body.classList.toggle('page-mode', isOn);
     document.documentElement.classList.toggle('page-mode', isOn);
-    this.setThemeColor(isOn ? '#101010' : '#8A547D');
+    const pageBg = isOn ? '#101010' : '#8A547D';
+    document.documentElement.style.setProperty('--page-bg', pageBg);
+    this.setThemeColor(pageBg);
   }
 
   setThemeColor(color) {
