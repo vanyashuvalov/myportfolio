@@ -4,7 +4,6 @@
 /* SCALED FOR: Touch-friendly mobile navigation */
 /* UPDATED COMMENTS: Uses Button component and ActionButtons for consistency */
 
-import { IconProvider } from './icon-provider.js';
 import { SOCIAL_LINKS } from '../../../config/social-links.js';
 import { Button } from '../../button/button.js';
 import { ActionButtons } from './action-buttons.js';
@@ -27,11 +26,16 @@ export class MobileMenu {
       ...options
     };
     
-    this.iconProvider = new IconProvider();
     this.isOpen = false;
     this.menuElement = null;
     this.overlayElement = null;
     this.scrollY = 0;
+    this.pages = options.pages || [
+      { label: 'Home', url: '/', page: 'Home' },
+      { label: 'Projects', url: '/projects', page: 'Projects' },
+      { label: 'Fun', url: '/fun', page: 'Fun' },
+      { label: 'Viewport Test', url: '/viewport-test', page: 'Viewport Test' }
+    ];
     
     // REUSED: ActionButtons component from desktop navigation
     // CRITICAL: Pass isMobile flag to render text labels on social buttons
@@ -80,47 +84,22 @@ export class MobileMenu {
    * UPDATED COMMENTS: Uses Button component with text variant for all buttons
    */
   renderMenuContent() {
-    // REUSED: Create navigation buttons using Button component with text variant
-    const homeButton = new Button({
-      type: 'text',
-      text: 'Home',
-      action: 'navigate',
-      isActive: this.options.currentPage === 'Home',
-      dataAttrs: { url: '/', page: 'Home' }
-    });
-    
-    const projectsButton = new Button({
-      type: 'text',
-      text: 'Projects',
-      action: 'navigate',
-      isActive: this.options.currentPage === 'Projects',
-      dataAttrs: { url: '/projects', page: 'Projects' }
-    });
-    
-    const funButton = new Button({
-      type: 'text',
-      text: 'Fun',
-      action: 'navigate',
-      isActive: this.options.currentPage === 'Fun',
-      dataAttrs: { url: '/fun', page: 'Fun' }
-    });
-
-    const viewportTestButton = new Button({
-      type: 'text',
-      text: 'Viewport Test',
-      action: 'navigate',
-      isActive: this.options.currentPage === 'Viewport Test',
-      dataAttrs: { url: '/viewport-test', page: 'Viewport Test' }
-    });
+    const navButtons = this.pages.map(({ label, url, page }) => {
+      const button = new Button({
+        type: 'text',
+        text: label,
+        action: 'navigate',
+        isActive: this.options.currentPage === page,
+        dataAttrs: { url, page }
+      });
+      return button.render();
+    }).join('');
     
     return `
       <!-- ANCHOR: menu_sections -->
       <div class="mobile-menu__content">
         <!-- Navigation Buttons -->
-        ${homeButton.render()}
-        ${projectsButton.render()}
-        ${funButton.render()}
-        ${viewportTestButton.render()}
+        ${navButtons}
         
         <!-- Divider -->
         <div class="mobile-menu__divider"></div>
