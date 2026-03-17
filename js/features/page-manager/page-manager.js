@@ -160,6 +160,7 @@ export class PageManager {
 
       if (withOverlay) this.toggleOverlay(false);
       this.isPageMode = true;
+      this.forceViewportReflow();
       this.eventBus?.emit('page:shown', { type, ...eventPayload });
     } catch (error) {
       console.error(`Failed to show ${type} page:`, error);
@@ -412,6 +413,17 @@ export class PageManager {
     const pageBg = isOn ? '#101010' : '#8A547D';
     document.documentElement.style.setProperty('--page-bg', pageBg);
     this.setThemeColor(pageBg);
+  }
+
+  forceViewportReflow() {
+    const body = document.body;
+    const prevOverflow = body.style.overflow;
+    body.style.overflow = 'hidden';
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        body.style.overflow = prevOverflow;
+      });
+    });
   }
 
   setThemeColor(color) {
