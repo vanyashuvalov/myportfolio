@@ -173,10 +173,9 @@ body.page-mode::before {
   }
 }
 
-/* CRITICAL: In page mode, canvas becomes background layer */
-/* UPDATED COMMENTS: z-index -1 places canvas behind page content */
+/* CRITICAL: In page mode, hide desktop canvas entirely */
 body.page-mode .desktop-canvas {
-  z-index: -1;
+  display: none !important;
 }
 
 /* ANCHOR: canvas_mountain_overlay */
@@ -296,10 +295,7 @@ body.loaded .workspace-container::before {
     min-height: 100dvh;
   }
   
-  /* CRITICAL: In page mode, hide desktop-canvas overflow */
-  body.page-mode .desktop-canvas {
-    overflow: hidden !important;
-  }
+  /* CRITICAL: In page mode, desktop canvas is hidden */
   
   .workspace-container {
     /* CRITICAL: No padding - full edge-to-edge layout */
