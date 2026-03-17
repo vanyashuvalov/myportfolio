@@ -28,8 +28,7 @@ html {
   overflow: visible;
   overscroll-behavior: none;
   position: relative;
-  /* CRITICAL: Solid base color for safe areas */
-  background: #8A547D;
+  background: transparent;
   box-sizing: border-box;
 }
 
@@ -67,7 +66,7 @@ body {
 
 /* UPDATED COMMENTS: Background removed from body - now on workspace-container */
 body.loaded {
-  background: #8A547D;
+  background: transparent;
   transition: background 0.5s ease-in;
 }
 
