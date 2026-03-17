@@ -46,35 +46,13 @@ export class MobileMenu {
 
   /**
    * Initialize mobile menu
-   * CRITICAL: Create menu DOM and bind events
+   * CRITICAL: Bind events to existing DOM
    */
-  init() {
-    this.createMenuDOM();
+  init(root = document) {
+    this.overlayElement = root.querySelector('.mobile-menu-overlay');
+    this.menuElement = root.querySelector('.mobile-menu');
+    if (!this.overlayElement || !this.menuElement) return;
     this.bindEvents();
-  }
-
-  /**
-   * Create menu DOM structure
-   * UPDATED COMMENTS: Fullscreen overlay with close button and sections
-   */
-  createMenuDOM() {
-    // CRITICAL: Create overlay backdrop
-    this.overlayElement = document.createElement('div');
-    this.overlayElement.className = 'mobile-menu-overlay';
-    this.overlayElement.setAttribute('aria-hidden', 'true');
-    
-    // CRITICAL: Create menu container
-    this.menuElement = document.createElement('div');
-    this.menuElement.className = 'mobile-menu';
-    this.menuElement.setAttribute('role', 'dialog');
-    this.menuElement.setAttribute('aria-label', 'Mobile navigation menu');
-    this.menuElement.setAttribute('aria-hidden', 'true');
-    
-    this.menuElement.innerHTML = this.renderMenuContent();
-    
-    // CRITICAL: Append to body for proper z-index layering
-    document.body.appendChild(this.overlayElement);
-    document.body.appendChild(this.menuElement);
   }
 
   /**
@@ -130,12 +108,6 @@ export class MobileMenu {
       }
     });
     
-    // CRITICAL: Escape key closes menu
-    document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && this.isOpen) {
-        this.close();
-      }
-    });
   }
 
   /**
@@ -180,23 +152,12 @@ export class MobileMenu {
 
   /**
    * Open menu
-   * CRITICAL: Show overlay and menu with animation
    */
   open() {
-    if (this.isOpen) return;
-    
-    this.isOpen = true;
-    
-    // CRITICAL: Prevent body scroll
-    document.body.style.overflow = 'hidden';
-    
-    // CRITICAL: Show overlay and menu
-    this.overlayElement.classList.add('mobile-menu-overlay--open');
-    this.menuElement.classList.add('mobile-menu--open');
-    
-    // CRITICAL: Update ARIA attributes
-    this.overlayElement.setAttribute('aria-hidden', 'false');
-    this.menuElement.setAttribute('aria-hidden', 'false');
+    if (document.body.classList.contains('menu-open')) return;
+    document.body.classList.add('menu-open');
+    this.overlayElement?.setAttribute('aria-hidden', 'false');
+    this.menuElement?.setAttribute('aria-hidden', 'false');
     
     // REUSED: EventBus pattern
     this.eventBus.emit('mobile-menu:open');
@@ -208,27 +169,15 @@ export class MobileMenu {
    * UPDATED COMMENTS: Emit event to reset burger button animation + remove focus from menu items
    */
   close() {
-    if (!this.isOpen) return;
-    
-    this.isOpen = false;
-    
+    if (!document.body.classList.contains('menu-open')) return;
     // CRITICAL: Remove focus from any focused element inside menu (accessibility fix)
-    // UPDATED COMMENTS: Prevents "aria-hidden on focused element" warning
-    const focusedElement = this.menuElement.querySelector(':focus');
+    const focusedElement = this.menuElement?.querySelector(':focus');
     if (focusedElement) {
       focusedElement.blur();
     }
-    
-    // CRITICAL: Restore body scroll
-    document.body.style.overflow = '';
-    
-    // CRITICAL: Hide overlay and menu
-    this.overlayElement.classList.remove('mobile-menu-overlay--open');
-    this.menuElement.classList.remove('mobile-menu--open');
-    
-    // CRITICAL: Update ARIA attributes
-    this.overlayElement.setAttribute('aria-hidden', 'true');
-    this.menuElement.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('menu-open');
+    this.overlayElement?.setAttribute('aria-hidden', 'true');
+    this.menuElement?.setAttribute('aria-hidden', 'true');
     
     // REUSED: EventBus pattern
     this.eventBus.emit('mobile-menu:close');
@@ -242,11 +191,12 @@ export class MobileMenu {
    * REUSED: Standard toggle pattern
    */
   toggle() {
-    if (this.isOpen) {
+    if (document.body.classList.contains('menu-open')) {
       this.close();
     } else {
       this.open();
     }
+    return document.body.classList.contains('menu-open');
   }
 
   /**
@@ -257,7 +207,7 @@ export class MobileMenu {
     this.options.currentPage = pageName;
     
     // CRITICAL: Update active state in DOM
-    const items = this.menuElement.querySelectorAll('[data-action="navigate"]');
+    const items = this.menuElement?.querySelectorAll('[data-action="navigate"]') || [];
     items.forEach(item => {
       if (item.dataset.page === pageName) {
         item.classList.add('mobile-menu__item--active');
@@ -272,16 +222,7 @@ export class MobileMenu {
    * SCALED FOR: Memory management
    */
   destroy() {
-    if (this.overlayElement) {
-      this.overlayElement.remove();
-    }
-    if (this.menuElement) {
-      this.menuElement.remove();
-    }
-    
-    // CRITICAL: Restore body scroll if menu was open
-    if (this.isOpen) {
-      document.body.style.overflow = '';
-    }
+    this.overlayElement = null;
+    this.menuElement = null;
   }
 }

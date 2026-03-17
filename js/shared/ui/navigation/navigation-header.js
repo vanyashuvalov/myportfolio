@@ -65,7 +65,7 @@ export class NavigationHeader {
       this.setupPageDropdownNavigation();
       this.setupMobileMenuListeners();
       this.setupMobileMenuActions();
-      this.mobileMenu.init();
+      this.mobileMenu.init(this.container);
       this.isInitialized = true;
       
       // REUSED: EventBus pattern for component communication
@@ -196,6 +196,12 @@ export class NavigationHeader {
       <!-- CRITICAL: Burger button OUTSIDE navigation-wrapper for proper z-index layering -->
       <!-- REUSED: BurgerButton component -->
       ${this.burgerButton.render()}
+
+      <!-- ANCHOR: mobile_menu -->
+      <div class="mobile-menu-overlay" aria-hidden="true"></div>
+      <div class="mobile-menu" role="dialog" aria-label="Mobile navigation menu" aria-hidden="true">
+        ${this.mobileMenu.renderMenuContent()}
+      </div>
     `;
   }
 
@@ -284,11 +290,10 @@ export class NavigationHeader {
    * @param {HTMLElement} button - Burger button element
    */
   toggleMobileMenu(button) {
-    this.mobileMenu.toggle();
+    const isOpen = this.mobileMenu.toggle();
     
     // CRITICAL: Sync burger button animation with actual menu state
-    // UPDATED COMMENTS: Check menu.isOpen AFTER toggle to get correct state
-    if (this.mobileMenu.isOpen) {
+    if (isOpen) {
       button.classList.add('burger-button--open');
     } else {
       button.classList.remove('burger-button--open');
@@ -296,7 +301,7 @@ export class NavigationHeader {
     
     // REUSED: EventBus pattern
     this.eventBus.emit('navigation:mobile-menu-toggle', { 
-      isOpen: this.mobileMenu.isOpen 
+      isOpen 
     });
   }
 
