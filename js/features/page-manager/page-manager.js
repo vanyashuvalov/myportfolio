@@ -257,6 +257,7 @@ export class PageManager {
     
     // Show container
     document.body.classList.add('page-mode');
+    document.documentElement.classList.add('page-mode');
     this.pageContainer.style.display = 'block';
     this.pageContainer.style.opacity = '1';
     this.pageContainer.scrollTop = 0;
@@ -305,7 +306,10 @@ export class PageManager {
       desktopCanvas.style.display = 'flex';
       desktopCanvas.style.opacity = '0';
     }
-    document.body.classList.remove('page-mode');
+        document.body.classList.remove('page-mode');
+        document.documentElement.classList.remove('page-mode');
+    document.documentElement.classList.remove('page-mode');
+    document.documentElement.classList.remove('page-mode');
 
     requestAnimationFrame(() => {
       if (desktopCanvas) desktopCanvas.style.opacity = '1';

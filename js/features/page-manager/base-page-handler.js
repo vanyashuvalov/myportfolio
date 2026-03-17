@@ -49,6 +49,7 @@ export class BasePageHandler {
     
     // Add page-mode class
     document.body.classList.add('page-mode');
+    document.documentElement.classList.add('page-mode');
     
     // Show container
     this.pageContainer.style.display = 'block';

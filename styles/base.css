@@ -79,8 +79,11 @@ body::before {
 
 /* CRITICAL: Hide mountains and gradient when in page mode */
 /* UPDATED COMMENTS: Show only solid #101010 background for project pages */
-body.page-mode {
+html.page-mode {
   --page-bg: var(--color-bg-dark, #101010);
+}
+
+body.page-mode {
   /* CRITICAL: Body becomes scroll container in page mode */
   /* UPDATED COMMENTS: overflow-y auto for vertical scrolling, hidden-x to prevent horizontal */
   overflow-y: auto !important;
