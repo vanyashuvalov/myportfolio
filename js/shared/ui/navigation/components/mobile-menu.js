@@ -31,6 +31,7 @@ export class MobileMenu {
     this.isOpen = false;
     this.menuElement = null;
     this.overlayElement = null;
+    this.scrollY = 0;
     
     // REUSED: ActionButtons component from desktop navigation
     // CRITICAL: Pass isMobile flag to render text labels on social buttons
@@ -165,13 +166,6 @@ export class MobileMenu {
    * UPDATED COMMENTS: Handles navigation and delegates social/action buttons to NavigationHeader
    */
   handleAction(action, button) {
-    // CRITICAL: Debug logging to check button data attributes
-    console.log('🔵 MobileMenu action:', action, {
-      url: button.dataset.url,
-      page: button.dataset.page,
-      buttonElement: button
-    });
-    
     switch (action) {
       case 'navigate':
         const url = button.dataset.url;
@@ -215,8 +209,15 @@ export class MobileMenu {
     
     this.isOpen = true;
     
-    // CRITICAL: Prevent body scroll
-    document.body.style.overflow = 'hidden';
+    // CRITICAL: Lock body to prevent iOS address bar shifting
+    this.scrollY = window.scrollY || window.pageYOffset || 0;
+    document.documentElement.classList.add('mobile-menu-open');
+    document.body.classList.add('mobile-menu-open');
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${this.scrollY}px`;
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
     
     // CRITICAL: Show overlay and menu
     this.overlayElement.classList.add('mobile-menu-overlay--open');
@@ -248,7 +249,15 @@ export class MobileMenu {
     }
     
     // CRITICAL: Restore body scroll
-    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    document.body.style.width = '';
+    document.body.classList.remove('mobile-menu-open');
+    document.documentElement.classList.remove('mobile-menu-open');
+    window.scrollTo(0, this.scrollY);
+    this.scrollY = 0;
     
     // CRITICAL: Hide overlay and menu
     this.overlayElement.classList.remove('mobile-menu-overlay--open');
@@ -309,7 +318,15 @@ export class MobileMenu {
     
     // CRITICAL: Restore body scroll if menu was open
     if (this.isOpen) {
-      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
+      document.body.style.width = '';
+      document.body.classList.remove('mobile-menu-open');
+      document.documentElement.classList.remove('mobile-menu-open');
+      window.scrollTo(0, this.scrollY);
+      this.scrollY = 0;
     }
   }
 }
