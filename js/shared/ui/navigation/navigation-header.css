@@ -409,6 +409,8 @@ body.loaded .navigation-wrapper {
   background: #FFFFFF;
   border-radius: 1px;
   transform-origin: center;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
