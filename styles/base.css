@@ -251,18 +251,10 @@ body.loaded .desktop-canvas .workspace-container {
   position: absolute;
   inset: 0;
   z-index: 1;
-  background-image:
-    linear-gradient(to bottom, #8A547D 0%, rgba(138, 84, 125, 0) 28%),
-    linear-gradient(to top, #8A547D 0%, rgba(138, 84, 125, 0) 28%);
-  background-size:
-    100% 20vh,
-    100% 20vh;
-  background-position:
-    top center,
-    bottom center;
-  background-repeat:
-    no-repeat,
-    no-repeat;
+  background-image: none;
+  background-size: 0 0;
+  background-position: center;
+  background-repeat: no-repeat;
   pointer-events: none;
 }
 
@@ -319,6 +311,22 @@ body.loaded .workspace-container::before {
     /* Ensure widgets are visible on iOS even if body.loaded is missing */
     opacity: 1;
     visibility: visible;
+  }
+
+  /* CRITICAL: Mobile-only top/bottom gradient */
+  .workspace-container::after {
+    background-image:
+      linear-gradient(to bottom, #8A547D 0%, rgba(138, 84, 125, 0) 28%),
+      linear-gradient(to top, #8A547D 0%, rgba(138, 84, 125, 0) 28%);
+    background-size:
+      100% 20vh,
+      100% 20vh;
+    background-position:
+      top center,
+      bottom center;
+    background-repeat:
+      no-repeat,
+      no-repeat;
   }
 }
 
