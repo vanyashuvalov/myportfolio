@@ -14,10 +14,10 @@
 .mobile-menu-overlay {
   /* CRITICAL: Fullscreen backdrop */
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
   background: rgba(0, 0, 0, 0.5);
   z-index: 100001;
   
@@ -43,10 +43,10 @@
 .mobile-menu {
   /* CRITICAL: Fullscreen fixed panel */
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
   background: #1A1A1A;
   z-index: 100002;
   
@@ -58,22 +58,13 @@
   overflow-y: auto;
   overflow-x: hidden;
   
-  /* REUSED: Custom scrollbar */
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+  /* CRITICAL: Hide scrollbars (avoid tint bar on iOS) */
+  scrollbar-width: none;
 }
 
 .mobile-menu::-webkit-scrollbar {
-  width: 4px;
-}
-
-.mobile-menu::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.mobile-menu::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 2px;
+  width: 0;
+  height: 0;
 }
 
 .mobile-menu--open {
