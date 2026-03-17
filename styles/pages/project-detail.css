@@ -20,7 +20,6 @@
   padding: 180px 40px 80px 40px !important;
   color: var(--color-text-light, #FFFFFF) !important;
   position: relative;
-  overflow-x: hidden; /* Prevents horizontal scroll */
   box-sizing: border-box;
 }
 
@@ -131,8 +130,8 @@
 .project-hero {
   width: 100%;
   border-radius: 14px;
-  overflow: hidden; /* Clips image to rounded corners */
   margin-top: 24px;
+  overflow: hidden; /* Clips image to rounded corners */
 }
 
 .project-hero img {
