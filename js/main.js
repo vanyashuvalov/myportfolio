@@ -66,9 +66,6 @@ class Application {
         });
       }
       
-      // TEMP: Ensure workspace is visible even when loader is disabled
-      document.body.classList.add('loaded');
-
       // Prevent header flash on viewport-test initial load
       if (window.location.pathname === '/viewport-test') {
         document.body.classList.add('viewport-test');

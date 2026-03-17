@@ -65,6 +65,11 @@ body {
   flex-direction: column;
 }
 
+/* CRITICAL: Hide all content until the app is fully loaded */
+body:not(.loaded) > *:not(#loading-indicator):not(script) {
+  display: none !important;
+}
+
 /* UPDATED COMMENTS: Background removed from body - now on workspace-container */
 body.loaded {
   background: transparent;
