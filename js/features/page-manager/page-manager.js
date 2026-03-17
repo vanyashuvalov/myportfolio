@@ -410,6 +410,12 @@ export class PageManager {
   setPageMode(isOn) {
     document.body.classList.toggle('page-mode', isOn);
     document.documentElement.classList.toggle('page-mode', isOn);
+    this.setThemeColor(isOn ? '#101010' : '#8A547D');
+  }
+
+  setThemeColor(color) {
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', color);
   }
 
   hideDesktopCanvas() {
