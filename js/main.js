@@ -148,8 +148,7 @@ class Application {
       // ANCHOR: page_manager_initialization
       // CRITICAL: Page manager for project pages
       this.pageManager = new PageManager({
-        eventBus: this.eventBus,
-        desktopCanvas: this.canvas
+        eventBus: this.eventBus
       });
 
       // UPDATED COMMENTS: Listen for folder widget clicks and navigation events
