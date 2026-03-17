@@ -42,12 +42,12 @@ body.menu-open .mobile-menu-overlay {
   height: 100dvh;
   background: #1A1A1A;
   z-index: 100002;
-  
-  /* CRITICAL: Slide up from bottom animation */
-  transform: translate3d(0, 100%, 0);
-  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: transform;
-  
+
+  /* Fade-only appearance */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+
   /* SCALED FOR: Scrollable content */
   overflow-y: auto;
   overflow-x: hidden;
@@ -57,7 +57,8 @@ body.menu-open .mobile-menu-overlay {
 }
 
 body.menu-open .mobile-menu {
-  transform: translate3d(0, 0, 0);
+  opacity: 1;
+  visibility: visible;
 }
 
 /* ============================================
@@ -88,173 +89,12 @@ body.menu-open .mobile-menu {
 }
 
 /* ============================================
-   MENU SECTIONS (DEPRECATED)
+   ACTIVE STATE
    ============================================ */
-
-.mobile-menu__section {
-  /* REUSED: Section container */
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-/* UPDATED COMMENTS: Pages section with bottom padding for symmetry */
-.mobile-menu__section--pages {
-  padding-bottom: 24px;
-}
-
-.mobile-menu__section-title {
-  /* UPDATED COMMENTS: Section title styling */
-  font-family: 'Geist Mono', var(--font-family-mono);
-  font-style: normal;
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 16px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.5);
-  margin: 0;
-}
-
-/* ============================================
-   NAVIGATION ITEMS
-   ============================================ */
-
-.mobile-menu__nav {
-  /* REUSED: Navigation list */
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.mobile-menu__item {
-  /* CRITICAL: Touch-friendly menu item */
-  /* UPDATED COMMENTS: Match nav-button styles from button.css */
-  width: 100%;
-  min-height: 48px;
-  padding: 10px;
-  
-  /* REUSED: Button styling from nav-button */
-  background: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(2px);
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  
-  /* UPDATED COMMENTS: Typography matching nav-button--text */
-  font-family: 'Geist Mono', var(--font-family-mono);
-  font-style: normal;
-  font-weight: 500;
-  font-size: 18px;
-  line-height: 23px;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
-  text-align: center;
-  color: #FFFFFF;
-  
-  /* SCALED FOR: Flexbox for centering */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  
-  /* REUSED: Smooth transitions */
-  transition: opacity 0.2s ease, background 0.2s ease;
-  will-change: opacity, background;
-}
-
-.mobile-menu__item:hover {
-  opacity: 0.9;
-  background: rgba(0, 0, 0, 0.6);
-}
-
-.mobile-menu__item:active {
-  opacity: 0.7;
-  background: rgba(0, 0, 0, 0.7);
-}
 
 .mobile-menu__item--active {
   background: rgba(255, 255, 255, 0.1);
   font-weight: 500;
-}
-
-/* ============================================
-   LANGUAGE SECTION
-   ============================================ */
-
-.mobile-menu__language {
-  /* REUSED: Language list */
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.mobile-menu__language .mobile-menu__item {
-  /* CRITICAL: Language item with flag */
-  gap: 12px;
-}
-
-.mobile-menu__language .mobile-menu__item span:first-child {
-  /* UPDATED COMMENTS: Flag icon */
-  width: 20px;
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-}
-
-/* ============================================
-   SOCIAL LINKS
-   ============================================ */
-
-.mobile-menu__social {
-  /* REUSED: Social links grid */
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-
-.mobile-menu__social-button {
-  /* CRITICAL: Touch-friendly social button */
-  min-height: 56px;
-  padding: 12px;
-  
-  /* REUSED: Button reset */
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  cursor: pointer;
-  
-  /* SCALED FOR: Flexbox layout */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  
-  /* UPDATED COMMENTS: Text styling */
-  font-family: 'SF Pro Display', var(--font-family-primary);
-  font-style: normal;
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 16px;
-  color: #FFFFFF;
-  
-  /* REUSED: Smooth transitions */
-  transition: background 0.2s ease, border-color 0.2s ease;
-}
-
-.mobile-menu__social-button:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
-}
-
-.mobile-menu__social-button svg {
-  width: 24px;
-  height: 24px;
-  color: #FFFFFF;
-  fill: #FFFFFF;
 }
 
 /* ============================================
