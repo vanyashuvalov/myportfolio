@@ -16,7 +16,6 @@
   position: fixed;
   inset: 0;
   width: 100vw;
-  height: 100vh;
   height: 100dvh;
   background: rgba(0, 0, 0, 0.5);
   z-index: 100001;
@@ -45,7 +44,6 @@
   position: fixed;
   inset: 0;
   width: 100vw;
-  height: 100vh;
   height: 100dvh;
   background: #1A1A1A;
   z-index: 100002;
@@ -62,10 +60,6 @@
   scrollbar-width: none;
 }
 
-.mobile-menu::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-}
 
 .mobile-menu--open {
   transform: translateY(0);
@@ -320,11 +314,4 @@
   .mobile-menu__content {
     padding: 80px 20px 40px;
   }
-}
-
-/* CRITICAL: Lock viewport and match background while menu is open */
-html.mobile-menu-open,
-body.mobile-menu-open {
-  background: #1A1A1A;
-  overscroll-behavior: none;
 }

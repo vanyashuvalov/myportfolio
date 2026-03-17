@@ -29,7 +29,6 @@ export class MobileMenu {
     this.isOpen = false;
     this.menuElement = null;
     this.overlayElement = null;
-    this.scrollY = 0;
     this.pages = options.pages || [
       { label: 'Home', url: '/', page: 'Home' },
       { label: 'Projects', url: '/projects', page: 'Projects' },
@@ -188,15 +187,8 @@ export class MobileMenu {
     
     this.isOpen = true;
     
-    // CRITICAL: Lock body to prevent iOS address bar shifting
-    this.scrollY = window.scrollY || window.pageYOffset || 0;
-    document.documentElement.classList.add('mobile-menu-open');
-    document.body.classList.add('mobile-menu-open');
-    document.body.style.position = 'fixed';
-    document.body.style.top = `-${this.scrollY}px`;
-    document.body.style.left = '0';
-    document.body.style.right = '0';
-    document.body.style.width = '100%';
+    // CRITICAL: Prevent body scroll
+    document.body.style.overflow = 'hidden';
     
     // CRITICAL: Show overlay and menu
     this.overlayElement.classList.add('mobile-menu-overlay--open');
@@ -228,15 +220,7 @@ export class MobileMenu {
     }
     
     // CRITICAL: Restore body scroll
-    document.body.style.position = '';
-    document.body.style.top = '';
-    document.body.style.left = '';
-    document.body.style.right = '';
-    document.body.style.width = '';
-    document.body.classList.remove('mobile-menu-open');
-    document.documentElement.classList.remove('mobile-menu-open');
-    window.scrollTo(0, this.scrollY);
-    this.scrollY = 0;
+    document.body.style.overflow = '';
     
     // CRITICAL: Hide overlay and menu
     this.overlayElement.classList.remove('mobile-menu-overlay--open');
@@ -297,15 +281,7 @@ export class MobileMenu {
     
     // CRITICAL: Restore body scroll if menu was open
     if (this.isOpen) {
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.left = '';
-      document.body.style.right = '';
-      document.body.style.width = '';
-      document.body.classList.remove('mobile-menu-open');
-      document.documentElement.classList.remove('mobile-menu-open');
-      window.scrollTo(0, this.scrollY);
-      this.scrollY = 0;
+      document.body.style.overflow = '';
     }
   }
 }

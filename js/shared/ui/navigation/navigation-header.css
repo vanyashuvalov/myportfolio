@@ -99,7 +99,6 @@ body.loaded .navigation-wrapper {
   overflow: hidden;
   
   /* UPDATED COMMENTS: Smooth image rendering, removed fixed order */
-  image-rendering: -webkit-optimize-contrast;
   image-rendering: crisp-edges;
 }
 
