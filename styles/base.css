@@ -60,6 +60,7 @@ body {
   color: var(--color-primary);
   position: relative;
   box-sizing: border-box;
+  background: var(--page-bg);
   /* CRITICAL: Flexbox for proper layout */
   display: flex;
   flex-direction: column;
