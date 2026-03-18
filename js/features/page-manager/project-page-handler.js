@@ -147,14 +147,16 @@ export class ProjectPageHandler {
               ` : ''}
 
               ${teamRows.length > 0 ? `
-                <div class="project-team" role="table" aria-label="Project team">
-                  ${teamRows.map(row => `
-                    <div class="project-team-row" role="row">
-                      <span class="project-team-role" role="cell">${this.escapeHtml(String(row.role))}</span>
-                      <span class="project-team-count" role="cell">${this.escapeHtml(String(row.count))}</span>
-                    </div>
-                  `).join('')}
-                </div>
+                <table class="markdown-table project-team-table" aria-label="Project team">
+                  <tbody>
+                    ${teamRows.map(row => `
+                      <tr>
+                        <td>${this.escapeHtml(String(row.role))}</td>
+                        <td>${this.escapeHtml(String(row.count))}</td>
+                      </tr>
+                    `).join('')}
+                  </tbody>
+                </table>
               ` : ''}
               
               ${heroSrc ? `
