@@ -8,15 +8,7 @@ year: 2023
 duration: 3 months
 client: Large Freight Forwarder
 role: Product Designer
-team:
-  - role: Product Designer (Me)
-    count: 1
-  - role: Business Analyst
-    count: 1
-  - role: Project Manager
-    count: 1
-  - role: FE, BE, Tech Lead
-    count: 3
+team: [Product Designer (Me) | 1, Business Analyst | 1, Project Manager | 1, FE / BE / Tech Lead | 3]
 
 description: Created a dispatcher workspace with vertical kanban for shipment management
 hero_image: /assets/projects/logistics-ux-pattern/images/hero.jpg

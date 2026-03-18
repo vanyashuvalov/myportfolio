@@ -71,14 +71,33 @@ export class ProjectPageHandler {
       team = []
     } = frontmatter;
 
+    const normalizedHeroImage = hero_image ? hero_image.replace(/\\/g, '/') : null;
+    const heroSrc = normalizedHeroImage
+      ? (normalizedHeroImage.startsWith('/') ? normalizedHeroImage : `/${normalizedHeroImage}`)
+      : null;
+
     const teamRows = Array.isArray(team)
-      ? team
-          .filter(item => item && typeof item === 'object')
-          .map(item => ({
-            role: item.role ?? item.title ?? item.name,
-            count: item.count ?? item.qty ?? item.number ?? item.size
-          }))
-          .filter(item => item.role && item.count !== undefined && item.count !== null)
+      ? team.flatMap(item => {
+          if (!item) return [];
+          if (typeof item === 'object') {
+            const roleValue = item.role ?? item.title ?? item.name;
+            const countValue = item.count ?? item.qty ?? item.number ?? item.size;
+            if (!roleValue || countValue === undefined || countValue === null) return [];
+            return [{ role: roleValue, count: countValue }];
+          }
+          if (typeof item === 'string') {
+            const parts = item.split('|').map(part => part.trim()).filter(Boolean);
+            if (parts.length >= 2) {
+              return [{ role: parts[0], count: parts[1] }];
+            }
+            const match = item.match(/^(.*?)(?:\s+[-–—]\s+|\s+)(\d+)$/);
+            if (match) {
+              return [{ role: match[1].trim(), count: match[2] }];
+            }
+            return [];
+          }
+          return [];
+        })
       : [];
 
     return `
@@ -138,9 +157,9 @@ export class ProjectPageHandler {
                 </div>
               ` : ''}
               
-              ${hero_image ? `
+              ${heroSrc ? `
                 <div class="project-hero">
-                  <img src="${this.escapeHtml(hero_image)}" alt="${this.escapeHtml(title)}" loading="eager" />
+                  <img src="${this.escapeHtml(heroSrc)}" alt="${this.escapeHtml(title)}" loading="eager" />
                 </div>
               ` : ''}
             </header>
