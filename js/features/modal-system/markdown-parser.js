@@ -520,18 +520,29 @@ export class MarkdownParser {
   renderProblemSolution(content) {
     let problemText = '';
     let solutionText = '';
+    const unlabeled = [];
     
     const lines = content.split('\n').map(line => line.trim()).filter(Boolean);
     lines.forEach(line => {
-      const match = line.match(/^(problem|solution)\s*\|\s*(.+)$/i);
-      if (!match) return;
-      const [, label, text] = match;
-      if (label.toLowerCase() === 'problem') {
-        problemText = text.trim();
-      } else if (label.toLowerCase() === 'solution') {
-        solutionText = text.trim();
+      const match = line.match(/^(problem|solution)\s*(?:\||:|—)\s*(.+)$/i);
+      if (match) {
+        const [, label, text] = match;
+        if (label.toLowerCase() === 'problem') {
+          problemText = text.trim();
+        } else if (label.toLowerCase() === 'solution') {
+          solutionText = text.trim();
+        }
+        return;
       }
+      unlabeled.push(line);
     });
+
+    if (!problemText && unlabeled.length > 0) {
+      problemText = unlabeled[0];
+    }
+    if (!solutionText && unlabeled.length > 1) {
+      solutionText = unlabeled[1];
+    }
     
     return `
       <div class="problem-solution">
