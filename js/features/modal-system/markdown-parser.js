@@ -208,7 +208,7 @@ export class MarkdownParser {
     return text.replace(this.patterns.horizontalRule, () => {
       return `
         <div class="chapter-divider" aria-hidden="true">
-          <img src="/assets/icons/star-devider-icon.svg" alt="" />
+          <img src="/assets/icons/star-devider-icon.svg" alt="" class="chapter-divider-icon" data-no-viewer="true" />
         </div>
       `;
     });

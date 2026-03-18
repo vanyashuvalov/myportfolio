@@ -264,6 +264,10 @@ export class ProjectPageHandler {
     const images = this.pageContainer.querySelectorAll('.project-content img, .project-hero img');
     
     images.forEach(img => {
+      if (img.dataset.noViewer === 'true') {
+        img.style.cursor = 'default';
+        return;
+      }
       // UPDATED COMMENTS: Make images clickable
       img.style.cursor = 'pointer';
       

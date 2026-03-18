@@ -33,6 +33,16 @@
   box-sizing: border-box;
 }
 
+.project-page .markdown-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.project-page .markdown-content > * {
+  margin: 0;
+}
+
 /* ============================================
    PROJECT HEADER ELEMENTS
    ============================================ */
