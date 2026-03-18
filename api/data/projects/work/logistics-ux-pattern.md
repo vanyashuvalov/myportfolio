@@ -8,15 +8,23 @@ year: 2023
 duration: 3 months
 client: Large Freight Forwarder
 role: Product Designer
-team: [Product Designer, Business Analyst, Project Manager, Frontend Dev, Backend Dev, Tech Lead]
+team:
+  - role: Product Designer (Me)
+    count: 1
+  - role: Business Analyst
+    count: 1
+  - role: Project Manager
+    count: 1
+  - role: FE, BE, Tech Lead
+    count: 3
 
 description: Created a dispatcher workspace with vertical kanban for shipment management
-hero_image: /assets/projects/logistics-ux-pattern/images/hero.webp
-thumbnail: /assets/projects/logistics-ux-pattern/images/hero.webp
+hero_image: /assets/projects/logistics-ux-pattern/images/hero.jpg
+thumbnail: /assets/projects/logistics-ux-pattern/images/hero.jpg
 
 meta_title: Vertical Kanban for Dispatchers - UX Case Study
 meta_description: How vertical kanban improved dispatcher efficiency by 35%
-og_image: assets\projects\logistics-ux-pattern\images\hero.webp
+og_image: /assets/projects/logistics-ux-pattern/images/hero.jpg
 
 tags: [UX Design, Logistics, B2B, TMS, Research]
 skills: [User Research, Interaction Design, Prototyping, Field Studies]
@@ -108,15 +116,6 @@ Create a clear dispatcher tool within TMS that:
 ::: callout note
 **Timeline**: 1 quarter = 3 months to release
 :::
-
-| Role | Count | Responsibility |
-|------|-------|----------------|
-| Product Designer | 1 (Me) | UX/UI design, research, prototyping |
-| Business Analyst | 1 | Process analysis, requirements |
-| Project Manager | 1 | Coordination, timeline, communication |
-| Frontend Developer | 1 | Frontend development |
-| Backend Developer | 1 | Backend development, API |
-| Tech Lead | 1 | Architecture, code review |
 
 ## Process
 

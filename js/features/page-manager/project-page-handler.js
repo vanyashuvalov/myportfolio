@@ -67,8 +67,19 @@ export class ProjectPageHandler {
       year,
       client,
       role,
-      description
+      description,
+      team = []
     } = frontmatter;
+
+    const teamRows = Array.isArray(team)
+      ? team
+          .filter(item => item && typeof item === 'object')
+          .map(item => ({
+            role: item.role ?? item.title ?? item.name,
+            count: item.count ?? item.qty ?? item.number ?? item.size
+          }))
+          .filter(item => item.role && item.count !== undefined && item.count !== null)
+      : [];
 
     return `
       <div class="page-wrapper" data-category="${category}">
@@ -111,6 +122,21 @@ export class ProjectPageHandler {
                   <span></span>
                 </div>
               </div>
+
+              ${description ? `
+                <p class="project-summary">${this.escapeHtml(description)}</p>
+              ` : ''}
+
+              ${teamRows.length > 0 ? `
+                <div class="project-team" role="table" aria-label="Project team">
+                  ${teamRows.map(row => `
+                    <div class="project-team-row" role="row">
+                      <span class="project-team-role" role="cell">${this.escapeHtml(String(row.role))}</span>
+                      <span class="project-team-count" role="cell">${this.escapeHtml(String(row.count))}</span>
+                    </div>
+                  `).join('')}
+                </div>
+              ` : ''}
               
               ${hero_image ? `
                 <div class="project-hero">
