@@ -127,11 +127,13 @@
 }
 
 .project-hero {
-  /* UPDATED COMMENTS: Hero image container with 14px border radius */
-  width: 100%;
+  /* UPDATED COMMENTS: Full-bleed hero with side gutters */
+  width: calc(100vw - 120px);
   border-radius: 14px;
   overflow: hidden;
   background: rgba(255, 255, 255, 0.03);
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .project-hero img {
@@ -361,14 +363,14 @@
 
 .project-page .markdown-content > img {
   /* CRITICAL: Full-bleed images with side gutters */
-  width: calc(100vw - (var(--project-image-gutter) * 2));
-  max-width: calc(100vw - (var(--project-image-gutter) * 2));
+  width: calc(100vw - 120px);
+  max-width: calc(100vw - 120px);
   height: auto;
   display: block;
   border-radius: 12px;
   margin: 32px 0;
-  margin-left: 50%;
-  transform: translateX(-50%);
+  margin-left: auto;
+  margin-right: auto;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   object-fit: contain;
 }
@@ -957,6 +959,15 @@
   .project-team-table td {
     padding: 12px 14px;
     font-size: 14px;
+  }
+
+  .project-hero {
+    width: calc(100vw - 32px);
+  }
+
+  .project-page .markdown-content > img {
+    width: calc(100vw - 32px);
+    max-width: calc(100vw - 32px);
   }
   
   .stats-block {

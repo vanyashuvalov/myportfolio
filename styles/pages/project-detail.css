@@ -21,7 +21,6 @@
   color: var(--color-text-light, #FFFFFF) !important;
   position: relative;
   box-sizing: border-box;
-  --project-image-gutter: 60px;
 }
 
 /* CRITICAL: Project content wrapper
@@ -132,12 +131,7 @@
  * WHY: Rounded corners match design system (14px radius)
  */
 .project-hero {
-  width: calc(100vw - (var(--project-image-gutter) * 2));
-  border-radius: 14px;
   margin-top: 24px;
-  margin-left: 50%;
-  transform: translateX(-50%);
-  overflow: hidden; /* Clips image to rounded corners */
 }
 
 .project-hero img {
@@ -167,7 +161,6 @@
 @media (max-width: 768px) {
   .project-page {
     padding: 120px 0 60px 0 !important;
-    --project-image-gutter: 16px;
   }
   
   .project-page-content {
