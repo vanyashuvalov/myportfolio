@@ -118,23 +118,29 @@ export class Router {
    * UPDATED COMMENTS: Skip static files (.html, .css, .js, etc.)
    */
   async handleRoute(url, state = {}) {
+    // Normalize path to avoid trailing-slash mismatches while preserving query/hash
+    const normalized = this.normalizeUrl(url);
+    if (normalized.full !== url) {
+      window.history.replaceState(state, '', normalized.full);
+    }
+
     // CRITICAL: Skip static files - let browser handle them directly
     // UPDATED COMMENTS: Prevents SPA router from intercepting static file requests
     const staticFilePattern = /\.(html|css|js|json|ico|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)$/i;
-    if (staticFilePattern.test(url)) {
+    if (staticFilePattern.test(normalized.path)) {
       return; // Let browser handle static files
     }
     
     // UPDATED COMMENTS: Find matching route
     for (const [pattern, route] of this.routes) {
-      const match = url.match(route.pattern);
+      const match = normalized.path.match(route.pattern);
       
       if (match) {
         // SCALED FOR: Extract route parameters
         const params = match.groups || {};
         
         this.currentRoute = {
-          url,
+          url: normalized.path,
           pattern: route.originalPattern,
           params,
           state
@@ -142,7 +148,7 @@ export class Router {
         
         // CRITICAL: Call route handler
         try {
-          await route.handler({ params, state, url });
+          await route.handler({ params, state, url: normalized.path });
         } catch (error) {
           console.error('Route handler error:', error);
           this.handleRouteError(error);
@@ -153,7 +159,7 @@ export class Router {
     }
     
     // UPDATED COMMENTS: No route matched - show 404
-    this.handle404(url);
+    this.handle404(normalized.path);
   }
 
   /**
@@ -209,6 +215,34 @@ export class Router {
     if (this.eventBus) {
       this.eventBus.emit('router:404', { url });
     }
+  }
+
+  /**
+   * Normalize URL to a clean pathname without trailing slash
+   * while preserving query/hash for history updates.
+   */
+  normalizeUrl(url) {
+    let parsed;
+    const input = url || '/';
+
+    try {
+      parsed = new URL(input, window.location.origin);
+    } catch {
+      // Fallback for odd inputs
+      parsed = {
+        pathname: input.split('?')[0].split('#')[0],
+        search: '',
+        hash: ''
+      };
+    }
+
+    let path = parsed.pathname || '/';
+    if (path.length > 1 && path.endsWith('/')) {
+      path = path.slice(0, -1);
+    }
+
+    const full = `${path}${parsed.search || ''}${parsed.hash || ''}`;
+    return { path, full };
   }
 
   /**
