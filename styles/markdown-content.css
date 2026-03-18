@@ -26,16 +26,6 @@
   widows: 3;
 }
 
-.project-page .markdown-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.project-page .markdown-content > * {
-  width: 100%;
-}
 
 /* CRITICAL: Ensure all child elements respect container width */
 .markdown-content > * {
@@ -53,8 +43,6 @@
   display: flex;
   flex-direction: column;
   gap: 24px; /* Balanced spacing between title, meta row, description, team, hero */
-  align-items: center;
-  text-align: center;
 }
 
 .project-title {
@@ -74,7 +62,6 @@
   align-items: center;
   gap: 16px;
   flex-wrap: wrap;
-  justify-content: center;
 }
 
 .project-tags {
@@ -148,6 +135,7 @@
   background: rgba(255, 255, 255, 0.03);
   margin-left: auto;
   margin-right: auto;
+  align-self: center;
 }
 
 .project-hero img {
@@ -385,6 +373,7 @@
   margin: 32px 0;
   margin-left: auto;
   margin-right: auto;
+  align-self: center;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   object-fit: contain;
 }
@@ -977,11 +966,13 @@
 
   .project-hero {
     width: calc(100vw - 32px);
+    align-self: center;
   }
 
   .project-page .markdown-content > img {
     width: calc(100vw - 32px);
     max-width: calc(100vw - 32px);
+    align-self: center;
   }
   
   .stats-block {
