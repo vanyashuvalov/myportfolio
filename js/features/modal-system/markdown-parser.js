@@ -521,8 +521,19 @@ export class MarkdownParser {
     let problemText = '';
     let solutionText = '';
     const unlabeled = [];
+    const normalized = content.replace(/\r/g, '');
     
-    const lines = content.split('\n').map(line => line.trim()).filter(Boolean);
+    const problemMatch = normalized.match(/Problem\s*(?:\||:|—)\s*([\s\S]*?)(?:\n|$)/i);
+    if (problemMatch) {
+      problemText = problemMatch[1].trim();
+    }
+    
+    const solutionMatch = normalized.match(/Solution\s*(?:\||:|—)\s*([\s\S]*?)(?:\n|$)/i);
+    if (solutionMatch) {
+      solutionText = solutionMatch[1].trim();
+    }
+    
+    const lines = normalized.split('\n').map(line => line.trim()).filter(Boolean);
     lines.forEach(line => {
       const match = line.match(/^(problem|solution)\s*(?:\||:|—)\s*(.+)$/i);
       if (match) {
@@ -534,7 +545,8 @@ export class MarkdownParser {
         }
         return;
       }
-      unlabeled.push(line);
+      const cleaned = line.replace(/^(problem|solution)\s*(?:\||:|—)\s*/i, '').trim();
+      if (cleaned) unlabeled.push(cleaned);
     });
 
     if (!problemText && unlabeled.length > 0) {
