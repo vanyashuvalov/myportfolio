@@ -26,6 +26,17 @@
   widows: 3;
 }
 
+.project-page .markdown-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.project-page .markdown-content > * {
+  width: 100%;
+}
+
 /* CRITICAL: Ensure all child elements respect container width */
 .markdown-content > * {
   max-width: 100%;
@@ -42,6 +53,8 @@
   display: flex;
   flex-direction: column;
   gap: 24px; /* Balanced spacing between title, meta row, description, team, hero */
+  align-items: center;
+  text-align: center;
 }
 
 .project-title {
@@ -61,6 +74,7 @@
   align-items: center;
   gap: 16px;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .project-tags {
