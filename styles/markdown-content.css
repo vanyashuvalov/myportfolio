@@ -11,7 +11,8 @@
   /* UPDATED COMMENTS: Base styles for all markdown content */
   font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 18px;
-  line-height: 160%;
+  line-height: 140%;
+  letter-spacing: 0.01em;
   color: #FFFFFF;
   /* CRITICAL: Prevent content overflow */
   max-width: 100%;
@@ -246,7 +247,8 @@
 .markdown-content p {
   margin: 0 0 12px 0; /* Уменьшено на 40%: было 20px */
   color: rgba(255, 255, 255, 0.9);
-  line-height: 180%; /* Увеличенная высота строки для читаемости */
+  line-height: 140%;
+  letter-spacing: 0.01em;
 }
 
 /* ============================================
@@ -296,7 +298,8 @@
 .markdown-content li {
   margin-bottom: 5px; /* Уменьшено на ~40%: было 8px */
   color: rgba(255, 255, 255, 0.9);
-  line-height: 180%;
+  line-height: 140%;
+  letter-spacing: 0.01em;
   padding-left: 8px;
 }
 
@@ -909,7 +912,8 @@
   
   .markdown-content p {
     margin-bottom: 10px; /* Уменьшено на ~40%: было 16px */
-    line-height: 170%;
+    line-height: 140%;
+    letter-spacing: 0.01em;
   }
   
   /* UPDATED COMMENTS: Disable drop cap on mobile */
