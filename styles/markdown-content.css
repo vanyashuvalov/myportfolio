@@ -359,8 +359,22 @@
    IMAGES
    ============================================ */
 
+.project-page .markdown-content > img {
+  /* CRITICAL: Full-bleed images with side gutters */
+  width: calc(100vw - (var(--project-image-gutter) * 2));
+  max-width: calc(100vw - (var(--project-image-gutter) * 2));
+  height: auto;
+  display: block;
+  border-radius: 12px;
+  margin: 32px 0;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  object-fit: contain;
+}
+
 .markdown-content img {
-  /* CRITICAL: Constrain to content width while preserving aspect ratio */
+  /* CRITICAL: Constrain non-page images to content width */
   max-width: 100%;
   width: 100%;
   height: auto;
