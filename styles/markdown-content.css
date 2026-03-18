@@ -417,6 +417,70 @@
 }
 
 /* ============================================
+   PROBLEM / SOLUTION BLOCK
+   ============================================ */
+
+.problem-solution {
+  display: grid;
+  grid-template-columns: 1fr 1px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.problem-solution-divider {
+  width: 1px;
+  background: rgba(255, 255, 255, 0.15);
+  align-self: stretch;
+}
+
+.problem-solution-col p {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 140%;
+}
+
+.problem-solution-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.problem-solution-title--problem {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.problem-solution-title--solution {
+  color: #23E63A;
+}
+
+.problem-solution-icon {
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+  background-color: currentColor;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+}
+
+.problem-solution-icon--problem {
+  -webkit-mask-image: url('/assets/icons/material-symbols_block-outline.svg');
+  mask-image: url('/assets/icons/material-symbols_block-outline.svg');
+}
+
+.problem-solution-icon--solution {
+  -webkit-mask-image: url('/assets/icons/material-symbols_check.svg');
+  mask-image: url('/assets/icons/material-symbols_check.svg');
+}
+
+/* ============================================
    TABLES
    ============================================ */
 

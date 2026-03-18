@@ -249,6 +249,9 @@ export class MarkdownParser {
         
         case 'piechart':
           return this.renderPieChart(trimmedContent);
+
+        case 'problemsolution':
+          return this.renderProblemSolution(trimmedContent);
         
         default:
           // UPDATED COMMENTS: Unknown block type, render as div
@@ -508,6 +511,47 @@ export class MarkdownParser {
     
     // CRITICAL: Complete pie chart with SVG and legend (single line SVG to avoid paragraph parsing)
     return `<div class="piechart-block"><div class="piechart-svg-container"><svg viewBox="0 0 100 100" class="piechart-svg">${circles}</svg></div><div class="piechart-legend">${legendItems}</div></div>`;
+  }
+
+  /**
+   * Render problem/solution split block
+   * SCALED FOR: Two-column comparison layout
+   */
+  renderProblemSolution(content) {
+    let problemText = '';
+    let solutionText = '';
+    
+    const lines = content.split('\n').map(line => line.trim()).filter(Boolean);
+    lines.forEach(line => {
+      const match = line.match(/^(problem|solution)\s*\|\s*(.+)$/i);
+      if (!match) return;
+      const [, label, text] = match;
+      if (label.toLowerCase() === 'problem') {
+        problemText = text.trim();
+      } else if (label.toLowerCase() === 'solution') {
+        solutionText = text.trim();
+      }
+    });
+    
+    return `
+      <div class="problem-solution">
+        <div class="problem-solution-col">
+          <div class="problem-solution-title problem-solution-title--problem">
+            <span class="problem-solution-icon problem-solution-icon--problem" aria-hidden="true"></span>
+            <span>Problem</span>
+          </div>
+          <p>${this.escapeHtml(problemText)}</p>
+        </div>
+        <div class="problem-solution-divider" aria-hidden="true"></div>
+        <div class="problem-solution-col">
+          <div class="problem-solution-title problem-solution-title--solution">
+            <span class="problem-solution-icon problem-solution-icon--solution" aria-hidden="true"></span>
+            <span>Solution</span>
+          </div>
+          <p>${this.escapeHtml(solutionText)}</p>
+        </div>
+      </div>
+    `;
   }
 
   /**
