@@ -29,6 +29,8 @@ order: 1
 color_theme: "#3B82F6"
 ---
 
+---
+
 ## Summary
 
 Created a dispatcher workspace where the core UX is built around **vertical kanban**

@@ -205,7 +205,13 @@ export class MarkdownParser {
    * REUSED: Simple separator conversion
    */
   parseHorizontalRules(text) {
-    return text.replace(this.patterns.horizontalRule, '<hr />');
+    return text.replace(this.patterns.horizontalRule, () => {
+      return `
+        <div class="chapter-divider" aria-hidden="true">
+          <img src="/assets/icons/star-devider-icon.svg" alt="" />
+        </div>
+      `;
+    });
   }
 
   /**

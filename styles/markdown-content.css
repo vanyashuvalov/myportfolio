@@ -393,11 +393,17 @@
    HORIZONTAL RULES
    ============================================ */
 
-.markdown-content hr {
-  border: none;
-  height: 1px;
-  background: rgba(255, 255, 255, 0.1);
-  margin: 64px 0;
+.chapter-divider {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px 0;
+}
+
+.chapter-divider img {
+  width: 24px;
+  height: 24px;
+  opacity: 0.4;
 }
 
 /* ============================================
