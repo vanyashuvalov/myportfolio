@@ -47,4 +47,10 @@ node_modules/
 dist/
 build/
 
+# Local-only Vercel dev and legacy backend files
+backend/
+start.py
+serve.py
+serve.js
+
 docs
