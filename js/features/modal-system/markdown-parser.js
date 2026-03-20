@@ -311,34 +311,95 @@ export class MarkdownParser {
 
   /**
    * Render image gallery
-   * CRITICAL: Multiple images in grid layout
+   * CRITICAL: Row-based gallery layout with per-row column counts
    */
   renderGallery(content) {
     const imageRegex = /!\[([^\]]*)\]\(([^)]+)\)/g;
-    const images = [];
-    let match;
-    
-    while ((match = imageRegex.exec(content)) !== null) {
-      images.push({
-        alt: match[1],
-        src: match[2]
-      });
+    const lines = content.replace(/\r/g, '').split('\n');
+    const rows = [];
+    let currentRow = null;
+
+    const flushRow = () => {
+      if (currentRow && currentRow.items.length > 0) {
+        rows.push(currentRow);
+      }
+      currentRow = null;
+    };
+
+    for (const rawLine of lines) {
+      const line = rawLine.trim();
+      if (!line) continue;
+
+      const rowSizeMatch = line.match(/^(?:row\s*)?([1-4])$/i);
+      if (rowSizeMatch) {
+        flushRow();
+        currentRow = { columns: Number(rowSizeMatch[1]), items: [] };
+        continue;
+      }
+
+      let match;
+      imageRegex.lastIndex = 0;
+      while ((match = imageRegex.exec(line)) !== null) {
+        if (!currentRow) {
+          currentRow = { columns: 1, items: [] };
+        }
+        currentRow.items.push({
+          alt: match[1],
+          src: match[2]
+        });
+      }
     }
-    
-    if (images.length === 0) return '';
-    
-    const imageHtml = images.map(img => `
-      <div class="gallery-item">
-        <img src="${this.escapeHtml(img.src)}" 
-             alt="${this.escapeHtml(img.alt)}" 
-             loading="lazy" />
-        ${img.alt ? `<div class="gallery-caption">${this.escapeHtml(img.alt)}</div>` : ''}
-      </div>
-    `).join('');
-    
+
+    flushRow();
+
+    if (rows.length === 0) {
+      const images = [];
+      let match;
+      while ((match = imageRegex.exec(content)) !== null) {
+        images.push({
+          alt: match[1],
+          src: match[2]
+        });
+      }
+
+      if (images.length === 0) return '';
+
+      const imageHtml = images.map(img => `
+        <div class="gallery-item">
+          <img src="${this.escapeHtml(img.src)}"
+               alt="${this.escapeHtml(img.alt)}"
+               loading="lazy" />
+          ${img.alt ? `<div class="gallery-caption">${this.escapeHtml(img.alt)}</div>` : ''}
+        </div>
+      `).join('');
+
+      return `
+        <div class="image-gallery">
+          ${imageHtml}
+        </div>
+      `;
+    }
+
+    const rowHtml = rows.map(row => {
+      const itemsHtml = row.items.map(img => `
+        <div class="gallery-item">
+          <img src="${this.escapeHtml(img.src)}"
+               alt="${this.escapeHtml(img.alt)}"
+               loading="lazy" />
+          ${img.alt ? `<div class="gallery-caption">${this.escapeHtml(img.alt)}</div>` : ''}
+        </div>
+      `).join('');
+
+      return `
+        <div class="image-gallery-row image-gallery-row--${row.columns}" data-columns="${row.columns}">
+          ${itemsHtml}
+        </div>
+      `;
+    }).join('');
+
     return `
       <div class="image-gallery">
-        ${imageHtml}
+        ${rowHtml}
       </div>
     `;
   }

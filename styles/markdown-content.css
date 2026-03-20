@@ -639,14 +639,43 @@
    ============================================ */
 
 .image-gallery {
-  /* UPDATED COMMENTS: Grid layout for multiple images */
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 24px;
+  /* UPDATED COMMENTS: Stack rows with consistent spacing */
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   margin: 48px 0;
 }
 
+.image-gallery-row {
+  display: grid;
+  gap: 8px;
+  width: 100%;
+}
+
+.image-gallery-row--1 {
+  grid-template-columns: 1fr;
+}
+
+.image-gallery-row--2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.image-gallery-row--3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.image-gallery-row--4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
 .markdown-gallery-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.image-gallery-row .gallery-item {
   position: relative;
   overflow: hidden;
   border-radius: 12px;
@@ -663,6 +692,15 @@
   box-shadow: none;
   transition: none;
   /* UPDATED COMMENTS: Prevent overflow in gallery */
+  object-fit: cover;
+}
+
+.image-gallery-row .gallery-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 0;
+  box-shadow: none;
   object-fit: cover;
 }
 
@@ -1070,8 +1108,17 @@
   }
   
   .image-gallery {
+    gap: 8px;
+  }
+
+  .image-gallery-row {
+    gap: 8px;
+  }
+
+  .image-gallery-row--2,
+  .image-gallery-row--3,
+  .image-gallery-row--4 {
     grid-template-columns: 1fr;
-    gap: 16px;
   }
   
   .metric-row {

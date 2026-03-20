@@ -185,8 +185,15 @@ Quote content here
 :::
 
 ::: gallery
+1
 ![Caption](/path/1.jpg)
+2
 ![Caption](/path/2.jpg)
+![Caption](/path/3.jpg)
+3
+![Caption](/path/4.jpg)
+![Caption](/path/5.jpg)
+![Caption](/path/6.jpg)
 :::
 
 ::: video

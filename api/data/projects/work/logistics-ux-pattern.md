@@ -104,62 +104,68 @@ I went to the office and saw how tough it is for zoomer dispatchers when instead
 
 The dispatcher is the backbone of shipment execution, with **~40%** of dispatcher time spent on shipment handling, driver communication, and status updates in tracking systems
 
+::: gallery
+2
+![Chart](assets\projects\logistics-ux-pattern\images\dispatch-chart.jpg)
+![Chart](assets\projects\logistics-ux-pattern\images\dispatch-chartbypen.jpg)
 
+2
+![Caption](assets\projects\logistics-ux-pattern\images\dispatch-jirascreen.jpg)
+![Caption](assets\projects\logistics-ux-pattern\images\dispatch-chart.jpg)
 
-
-
-
-
-### Significance
-
-Dispatchers are the key to quality shipment execution
-
-The contracted transport department always has more workload than anywhere else, especially for dispatchers
-
-While logistics coordinators call carriers, request transport, and coordinate with clients only at the beginning, dispatchers spend all this time on routine and calls
-
-So this is simultaneously complex and critical work that must be addressed in TMS (Transportation Management System)
-
-### How Dispatchers Work
-
-A dispatcher's workspace consists of:
-
-- Two phones
-- About a hundred tabs
-- Notes and spreadsheets
-- Constant contact with colleagues
-- Noisy office
-
-Dispatchers communicate and exchange current statuses with logistics coordinators and managers across multiple channels simultaneously: WhatsApp, Telegram, Bitrix, offline
-
-#### Dispatcher Time Distribution
-
-
-| Task | Performance Factors | Time |
-|------|---------------------|------|
-| **Status Updates** | Scout on transport (geo-tracking), Mobile connectivity on the road, Driver communication | 20% |
-| **Driver Coordination** | Driver phone, Road connectivity, Driver literacy | 20% |
-| **Data Transfer** | Number of sources, Platform access, Human factor | 15% |
-| **Colleague Coordination** | Colleague workload, Communication formats, Lunches and breaks | 15% |
-| **Order Processing** | Customer changes, Crises, Different data sources | 10% |
-| **TMS Updates** | Change frequency, Crises, Approvals | 10% |
-| **Other** | Unexpected circumstances, Crises, Human factor | 10% |
-
-### Summary
-
-The dispatcher is the backbone of shipment execution, with ~40% of dispatcher time spent on shipment handling, driver communication, and status updates in tracking systems
-
-## Task and Team
-
-Create a clear dispatcher tool within TMS that:
-
-- Simplifies interaction with logistics coordinators
-- Accelerates shipment processing speed
-- Provides performance reports
-
-::: callout note
-**Timeline**: 1 quarter = 3 months to release
+1
+![Caption](assets\projects\logistics-ux-pattern\images\dispatch-metricks.jpg)
 :::
+
+---
+
+## Design
+
+#### Prototype
+
+I wireframed scenarios in Gemini — this is many times faster than prototyping in Figma. I tested real interaction again offline in the office
+
+#### I Flipped Kanban
+
+Describing these rules:
+- Upcoming tasks are always several times more, they are placed at the bottom of the list
+- When the task's "timer" comes due, it moves up to the "Current" level
+- When the timer expires or in urgent situations, the task moves even higher to "Urgent"
+
+| 🔴 Urgent | The event is scheduled to start/end in 30 minutes |
+| 🟡 Current | The event time remaining is <30 minutes / Checking the movement of long (more than 1 day) transits |
+| ⚫ Upcoming | Overdue according to the planned time / Force majeure |
+
+The concept of task "relevance" is our own, so we grounded it on regulations that the company can configure in TMS, specifically:
+- How often and why the dispatcher should call the driver
+- How much time before an event the dispatcher should call the driver
+- How often the dispatcher should call the driver during long transits
+- Whether dispatchers can transfer shipments to each other
+- and more
+
+::: gallery
+1
+![Caption](assets\projects\logistics-ux-pattern\images\dispatch-largescreen.jpg)
+
+2
+![Chart](assets\projects\logistics-ux-pattern\images\dispatch-barbuttons.jpg)
+![Chart](assets\projects\logistics-ux-pattern\images\dispatch-uielements.jpg)
+
+2
+![Caption](assets\projects\logistics-ux-pattern\images\dispatch-statuses.jpg)
+![Caption](assets\projects\logistics-ux-pattern\images\dispatch-compactview.jpg)
+:::
+
+
+::: quote Kristina, dispatcher trainee
+I used to constantly fear missing something. Now the system itself shows what's urgent. Work became calmer and faster
+:::
+
+
+---
+
+
+
 
 ## Process
 
@@ -338,9 +344,7 @@ A section in TMS as the main dispatcher workspace with these **features**:
 
 ### Qualitative Feedback
 
-::: quote Kristina, dispatcher trainee
-I used to constantly fear missing something. Now the system itself shows what's urgent. Work became calmer and faster
-:::
+
 
 💗 By the way, while we were building production, respondents several times asked managers **"When will you add that thing you showed us?"** I like this result too
 
