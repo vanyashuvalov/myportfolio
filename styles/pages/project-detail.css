@@ -17,7 +17,7 @@
   width: 100% !important;
   max-width: 100% !important;
   margin: 0 auto !important;
-  padding: 180px 0 80px 0 !important;
+  padding: 180px 0 200px 0 !important;
   color: var(--color-text-light, #FFFFFF) !important;
   position: relative;
   box-sizing: border-box;
@@ -115,7 +115,7 @@
 .project-meta-icon {
   width: 16px;
   height: 16px;
-  opacity: 0.7;
+  opacity: 0.6;
 }
 
 /* CRITICAL: Icon theme variants
@@ -168,7 +168,7 @@
 /* MOBILE: Smaller padding and typography */
 @media (max-width: 768px) {
   .project-page {
-    padding: 120px 0 60px 0 !important;
+    padding: 120px 0 200px 0 !important;
   }
   
   .project-page-content {
