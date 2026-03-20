@@ -17,12 +17,12 @@
 .fun-gallery {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 100px; /* Large gap for visual separation */
   padding: 120px 60px 200px 60px;
-  width: 100vw;
+  width: 100%;
   max-width: none;
-  margin-left: 50%;
-  transform: translateX(-50%);
+  margin: 0 auto;
   box-sizing: border-box;
   position: relative;
 }
@@ -30,7 +30,8 @@
 .fun-gallery-item {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  align-items: center;
+  gap: 0;
   width: 100%;
   cursor: pointer;
   transition: opacity 0.2s ease-out;
@@ -43,6 +44,8 @@
 
 .fun-gallery-item-image {
   width: 100%;
+  display: flex;
+  justify-content: center;
   overflow: visible;
   border-radius: 0;
   background: transparent;
@@ -50,23 +53,11 @@
 
 .fun-gallery-item-image img {
   width: auto;
-  max-width: none;
+  max-width: 100%;
   height: auto;
   display: block;
   border-radius: 0;
   box-shadow: none;
-}
-
-.fun-gallery-item-content {
-  width: 100%;
-}
-
-.fun-gallery-item-description {
-  margin: 0;
-  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 16px;
-  line-height: 130%;
-  color: rgba(255, 255, 255, 0.7);
 }
 
 /* ============================================
@@ -78,9 +69,5 @@
   .fun-gallery {
     gap: 60px; /* Reduced from 100px */
     padding: 100px 16px 200px 16px;
-  }
-
-  .fun-gallery-item-description {
-    font-size: 14px;
   }
 }

@@ -70,11 +70,6 @@ export class FunGalleryPageHandler {
         <div class="fun-gallery-item-image">
           <img src="${this.escapeHtml(image)}" alt="${this.escapeHtml(title || description || 'Fun item')}" loading="lazy" />
         </div>
-        ${description ? `
-          <div class="fun-gallery-item-content">
-            <p class="fun-gallery-item-description">${this.escapeHtml(description)}</p>
-          </div>
-        ` : ''}
       </article>
     `;
   }
@@ -115,9 +110,8 @@ export class FunGalleryPageHandler {
     items.forEach(item => {
       item.addEventListener('click', () => {
         const image = item.dataset.image;
-        const description = item.querySelector('.fun-gallery-item-description')?.textContent || '';
         if (image) {
-          this.imageViewer.open(image, description);
+          this.imageViewer.open(image, '');
         }
       });
 
