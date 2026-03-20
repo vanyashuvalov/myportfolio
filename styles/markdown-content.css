@@ -639,12 +639,15 @@
    ============================================ */
 
 .image-gallery {
-  /* UPDATED COMMENTS: Stack rows with consistent spacing */
+  /* UPDATED COMMENTS: Full-bleed gallery matching standalone image width */
   display: flex;
   flex-direction: column;
   gap: 8px;
   margin: 24px 0;
-  width: 100%;
+  width: calc(100vw - 120px);
+  max-width: calc(100vw - 120px);
+  margin-left: calc(50% - ((100vw - 120px) / 2));
+  margin-right: 0;
 }
 
 .image-gallery-row {
@@ -1102,6 +1105,10 @@
   
   .image-gallery {
     gap: 8px;
+    width: calc(100vw - 32px);
+    max-width: calc(100vw - 32px);
+    margin-left: calc(50% - ((100vw - 32px) / 2));
+    margin-right: 0;
   }
 
   .image-gallery-row {
