@@ -613,41 +613,69 @@ export class MarkdownParser {
 
   /**
    * Parse markdown tables
-   * CRITICAL: GitHub-flavored markdown tables
+   * CRITICAL: GitHub-flavored tables + headerless row tables
    */
   parseTables(text) {
-    return text.replace(this.patterns.table, (match, headerRow, bodyRows) => {
-      // Parse header
-      const headers = headerRow.split('|')
-        .map(h => h.trim())
-        .filter(Boolean);
-      
-      // Parse body rows
-      const rows = bodyRows.trim().split('\n')
-        .map(row => {
-          const cells = row.split('|')
-            .map(c => c.trim())
-            .filter(Boolean);
-          return cells;
-        });
-      
-      const headerHtml = headers.map(h => `<th>${this.escapeHtml(h)}</th>`).join('');
-      const bodyHtml = rows.map(row => {
-        const cellsHtml = row.map(cell => `<td>${this.escapeHtml(cell)}</td>`).join('');
-        return `<tr>${cellsHtml}</tr>`;
-      }).join('');
-      
-      return `
-        <table class="markdown-table">
-          <thead>
-            <tr>${headerHtml}</tr>
-          </thead>
-          <tbody>
-            ${bodyHtml}
-          </tbody>
-        </table>
-      `;
-    });
+    const lines = text.replace(/\r/g, '').split('\n');
+    const result = [];
+
+    const isTableLine = (line) => /^\s*\|.*\|\s*$/.test(line);
+    const isSeparatorLine = (line) => /^\s*\|?[\s:-]+(?:\|[\s:-]+)*\|?\s*$/.test(line);
+    const splitCells = (line) => line.split('|').map(cell => cell.trim()).filter(Boolean);
+    const renderBodyRows = (rows) => rows
+      .map(row => `<tr>${row.map(cell => `<td>${this.escapeHtml(cell)}</td>`).join('')}</tr>`)
+      .join('');
+
+    let i = 0;
+    while (i < lines.length) {
+      const line = lines[i];
+      const next = lines[i + 1] || '';
+
+      if (isTableLine(line) && isSeparatorLine(next)) {
+        const headers = splitCells(line);
+        const rows = [];
+        i += 2;
+
+        while (i < lines.length && isTableLine(lines[i])) {
+          rows.push(splitCells(lines[i]));
+          i += 1;
+        }
+
+        result.push(`
+          <table class="markdown-table">
+            <thead>
+              <tr>${headers.map(h => `<th>${this.escapeHtml(h)}</th>`).join('')}</tr>
+            </thead>
+            <tbody>
+              ${renderBodyRows(rows)}
+            </tbody>
+          </table>
+        `);
+        continue;
+      }
+
+      if (isTableLine(line) && isTableLine(next)) {
+        const rows = [];
+        while (i < lines.length && isTableLine(lines[i])) {
+          rows.push(splitCells(lines[i]));
+          i += 1;
+        }
+
+        result.push(`
+          <table class="markdown-table markdown-table--no-head">
+            <tbody>
+              ${renderBodyRows(rows)}
+            </tbody>
+          </table>
+        `);
+        continue;
+      }
+
+      result.push(line);
+      i += 1;
+    }
+
+    return result.join('\n');
   }
 
   /**
