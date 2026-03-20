@@ -44,6 +44,9 @@ class handler(BaseHTTPRequestHandler):
             try:
                 with open(json_file, 'r', encoding='utf-8') as f:
                     data = json.load(f)
+
+                if data.get('hidden'):
+                    continue
                 
                 items.append({
                     "id": json_file.stem,
