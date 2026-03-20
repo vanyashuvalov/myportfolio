@@ -138,7 +138,7 @@ export class MarkdownParser {
    */
   parseImages(text) {
     return text.replace(this.patterns.image, (match, alt, src) => {
-      return `<img src="${this.escapeHtml(src)}" alt="${this.escapeHtml(alt)}" loading="lazy" />`;
+      return `<img class="markdown-image" src="${this.escapeHtml(src)}" alt="${this.escapeHtml(alt)}" loading="lazy" />`;
     });
   }
 
@@ -692,7 +692,7 @@ export class MarkdownParser {
     
     for (const line of lines) {
       const trimmed = line.trim();
-      const standaloneImageMatch = trimmed.match(/^<img\b[^>]*\/?>$/);
+      const standaloneImageMatch = trimmed.match(/^<img\b[^>]*class="[^"]*\bmarkdown-image\b[^"]*"[^>]*\/?>$/);
       
       // Skip empty lines and HTML tags
       if (!trimmed) {

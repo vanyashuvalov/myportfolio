@@ -397,14 +397,14 @@
   object-fit: contain;
 }
 
-.markdown-image-block {
+.project-page .markdown-content > .markdown-image-block {
   width: calc(100vw - 120px);
-  max-width: calc(100vw - 120px);
+  max-width: none;
   height: auto;
   display: block;
   border-radius: 12px;
   margin: 32px 0;
-  margin-left: calc(50% - ((100vw - 120px) / 2));
+  margin-left: calc(50% - 50vw + 60px);
   margin-right: 0;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   box-sizing: border-box;
@@ -417,6 +417,10 @@
   border-radius: inherit;
   box-shadow: none;
   object-fit: contain;
+}
+
+.markdown-image {
+  display: inline-block;
 }
 
 /* ============================================
@@ -1129,10 +1133,10 @@
     margin-right: 0;
   }
 
-  .markdown-image-block {
+  .project-page .markdown-content > .markdown-image-block {
     width: calc(100vw - 32px);
-    max-width: calc(100vw - 32px);
-    margin-left: calc(50% - ((100vw - 32px) / 2));
+    max-width: none;
+    margin-left: calc(50% - 50vw + 16px);
     margin-right: 0;
   }
 
