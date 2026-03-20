@@ -345,7 +345,7 @@ export class MarkdownParser {
         }
         currentRow.items.push({
           alt: match[1],
-          src: match[2]
+          src: match[2].replace(/\\/g, '/')
         });
       }
     }
@@ -358,50 +358,23 @@ export class MarkdownParser {
       while ((match = imageRegex.exec(content)) !== null) {
         images.push({
           alt: match[1],
-          src: match[2]
+          src: match[2].replace(/\\/g, '/')
         });
       }
 
       if (images.length === 0) return '';
 
-      const imageHtml = images.map(img => `
-        <div class="gallery-item">
-          <img src="${this.escapeHtml(img.src)}"
-               alt="${this.escapeHtml(img.alt)}"
-               loading="lazy" />
-          ${img.alt ? `<div class="gallery-caption">${this.escapeHtml(img.alt)}</div>` : ''}
-        </div>
-      `).join('');
+      const imageHtml = images.map(img => `<div class="gallery-item"><img src="${this.escapeHtml(img.src)}" alt="${this.escapeHtml(img.alt)}" loading="lazy" /></div>`).join('');
 
-      return `
-        <div class="image-gallery">
-          ${imageHtml}
-        </div>
-      `;
+      return `<div class="image-gallery">${imageHtml}</div>`;
     }
 
     const rowHtml = rows.map(row => {
-      const itemsHtml = row.items.map(img => `
-        <div class="gallery-item">
-          <img src="${this.escapeHtml(img.src)}"
-               alt="${this.escapeHtml(img.alt)}"
-               loading="lazy" />
-          ${img.alt ? `<div class="gallery-caption">${this.escapeHtml(img.alt)}</div>` : ''}
-        </div>
-      `).join('');
-
-      return `
-        <div class="image-gallery-row image-gallery-row--${row.columns}" data-columns="${row.columns}">
-          ${itemsHtml}
-        </div>
-      `;
+      const itemsHtml = row.items.map(img => `<div class="gallery-item"><img src="${this.escapeHtml(img.src)}" alt="${this.escapeHtml(img.alt)}" loading="lazy" /></div>`).join('');
+      return `<div class="image-gallery-row image-gallery-row--${row.columns}" data-columns="${row.columns}">${itemsHtml}</div>`;
     }).join('');
 
-    return `
-      <div class="image-gallery">
-        ${rowHtml}
-      </div>
-    `;
+    return `<div class="image-gallery">${rowHtml}</div>`;
   }
 
   /**

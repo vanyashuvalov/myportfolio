@@ -643,7 +643,8 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin: 48px 0;
+  margin: 24px 0;
+  width: 100%;
 }
 
 .image-gallery-row {
@@ -705,14 +706,6 @@
 }
 
 /* REMOVED: .gallery-item:hover img scale animation - conflicts with universal gallery-shared.css */
-
-.gallery-caption {
-  padding: 12px 16px;
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.7);
-  text-align: center;
-  background: rgba(0, 0, 0, 0.5);
-}
 
 /* ============================================
    VIDEO EMBEDS
