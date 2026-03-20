@@ -427,7 +427,7 @@ export class MarkdownParser {
   renderQuote(content, author) {
     return `
       <div class="quote-block">
-        <img class="quote-icon" src="/assets/icons/entypo_quote.svg" alt="" aria-hidden="true" />
+        <img class="quote-icon" src="/assets/icons/entypo_quote.svg" alt="" aria-hidden="true" data-no-viewer="true" />
         <div class="quote-content">
           <div class="quote-text">${this.escapeHtml(content)}</div>
           ${author ? `<div class="quote-author">${this.escapeHtml(author)}</div>` : ''}
