@@ -40,6 +40,10 @@ Problem | Dispatchers handle multiple tasks simultaneously and do not have a sin
 Solution | Implementation of a unified dispatching tool in TMS
 :::
 
+### Result
+
+Created a dispatcher workspace where the core UX is built around **vertical kanban**. 10+ in-depth interviews with company dispatchers and managers from other companies
+
 ::: stats
 - **-2%** Failed shipments
 - **-10%** Delays against plan
@@ -47,13 +51,62 @@ Solution | Implementation of a unified dispatching tool in TMS
 - **10** Testing sessions
 :::
 
-**[NEEDED IMAGE: Screenshot of vertical kanban with shipment cards]**
+![App Overview](assets\projects\logistics-ux-pattern\images\dispatch-mobilederklight.jpg)
 
-## Client
+## Research
 
-Large freight forwarder, 10+ billion revenue, multimodal shipments across CIS and internationally, both contracted and owned transport, large (thousands) customer and carrier base, multiple offices in different cities
+#### Subject
 
-## Context
+**Dispatchers** are the key to quality shipment execution
+The contracted transport department always has more workload than anywhere else, especially for dispatchers
+While logistics coordinators call carriers, request transport, and coordinate with clients only at the beginning, dispatchers spend all this time on routine and calls
+So this is simultaneously complex and critical work that must be addressed in TMS (Transportation Management System)
+A dispatcher's workspace consists of:
+- Two phones
+- About a hundred tabs
+- Notes and spreadsheets
+- Constant contact with colleagues
+- Noisy office
+- Some snack food
+Dispatchers communicate and exchange current statuses with logistics coordinators and managers across multiple channels simultaneously: **WhatsApp, Telegram, Bitrix, offline**
+
+![Moodboard](assets\projects\logistics-ux-pattern\images\dispatch-moodboard.jpg)
+
+#### Process
+
+There wasn't much information on internal processes, so we needed to gather and structure it
+I went to the office and saw how tough it is for zoomer dispatchers when instead of TikTok, a bunch of tabs flash on screen, and ringing from unclear foreign driver speech fills their ears against highway noise
+- Spent 3 days in the office, observed work and interaction processes, studied staff composition and regulations
+- Parallelly conducted calls with other freight forwarding companies to learn how they structure their dispatching processes
+- After processing all inputs, created and sent a questionnaire to 30 dispatchers and logistics coordinators to address new questions while validating hypotheses
+
+::: stats
+- **-2%** Failed shipments
+- **-10%** Delays against plan
+- **+35%** Shipments per dispatcher
+- **10** Testing sessions
+:::
+
+#### Dispatcher Time Destribution
+
+::: piechart
+- 40% | Shipment handling and driver communication | 3.2 hours
+- 20% | Status updates in systems | 1.6 hours
+- 15% | Coordination with logistics | 1.2 hours
+- 10% | Crisis management | 0.8 hours
+- 10% | Documentation | 0.8 hours
+- 5% | Other | 0.4 hours
+:::
+
+#### Research Output
+
+The dispatcher is the backbone of shipment execution, with **~40%** of dispatcher time spent on shipment handling, driver communication, and status updates in tracking systems
+
+
+
+
+
+
 
 ### Significance
 
@@ -79,14 +132,6 @@ Dispatchers communicate and exchange current statuses with logistics coordinator
 
 #### Dispatcher Time Distribution
 
-::: piechart
-- 40% | Shipment handling and driver communication | 3.2 hours
-- 20% | Status updates in systems | 1.6 hours
-- 15% | Coordination with logistics | 1.2 hours
-- 10% | Crisis management | 0.8 hours
-- 10% | Documentation | 0.8 hours
-- 5% | Other | 0.4 hours
-:::
 
 | Task | Performance Factors | Time |
 |------|---------------------|------|
