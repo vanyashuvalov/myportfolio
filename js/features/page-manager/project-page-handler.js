@@ -137,7 +137,7 @@ export class ProjectPageHandler {
                 ` : ''}
                 
                 <div class="project-meta-item" data-read-time>
-                  <img src="/assets/icons/iconamoon_clock.svg" alt="" class="project-meta-icon project-meta-icon--dark" />
+                  <img src="/assets/icons/iconamoon_clock 1 white.svg" alt="" class="project-meta-icon project-meta-icon--dark" />
                   <span></span>
                 </div>
               </div>
