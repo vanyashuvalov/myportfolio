@@ -111,10 +111,10 @@ The dispatcher is the backbone of shipment execution, with **~40%** of dispatche
 
 2
 ![Caption](assets\projects\logistics-ux-pattern\images\dispatch-jirascreen.jpg)
-![Caption](assets\projects\logistics-ux-pattern\images\dispatch-chart.jpg)
+![Caption](assets\projects\logistics-ux-pattern\images\dispatch-metricks.jpg)
 
 1
-![Caption](assets\projects\logistics-ux-pattern\images\dispatch-metricks.jpg)
+![Caption](assets\projects\logistics-ux-pattern\images\dispatch-userflowoverall.jpg)
 :::
 
 ---

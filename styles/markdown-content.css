@@ -378,20 +378,6 @@
    IMAGES
    ============================================ */
 
-.project-page .markdown-content > img {
-  /* CRITICAL: Full-bleed images with side gutters */
-  width: calc(100vw - 120px);
-  max-width: calc(100vw - 120px);
-  height: auto;
-  display: block;
-  border-radius: 12px;
-  margin: 32px 0;
-  margin-left: calc(50% - ((100vw - 120px) / 2));
-  margin-right: 0;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  object-fit: contain;
-}
-
 .project-page .markdown-content > .image-gallery {
   width: calc(100vw - 120px);
   max-width: calc(100vw - 120px);
@@ -400,15 +386,36 @@
 }
 
 .markdown-content img:not(.quote-icon) {
-  /* CRITICAL: Constrain non-page images to content width */
+  /* CRITICAL: Default image behavior stays inline-sized unless wrapped as a block */
   max-width: 100%;
-  width: 100%;
+  width: auto;
+  height: auto;
+  display: inline-block;
+  border-radius: 12px;
+  margin: 0;
+  box-shadow: none;
+  object-fit: contain;
+}
+
+.markdown-image-block {
+  width: calc(100vw - 120px);
+  max-width: calc(100vw - 120px);
   height: auto;
   display: block;
   border-radius: 12px;
   margin: 32px 0;
+  margin-left: calc(50% - ((100vw - 120px) / 2));
+  margin-right: 0;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  /* UPDATED COMMENTS: Prevent image overflow */
+  box-sizing: border-box;
+}
+
+.markdown-image-block img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: inherit;
+  box-shadow: none;
   object-fit: contain;
 }
 
@@ -1122,7 +1129,7 @@
     margin-right: 0;
   }
 
-  .project-page .markdown-content > img {
+  .markdown-image-block {
     width: calc(100vw - 32px);
     max-width: calc(100vw - 32px);
     margin-left: calc(50% - ((100vw - 32px) / 2));

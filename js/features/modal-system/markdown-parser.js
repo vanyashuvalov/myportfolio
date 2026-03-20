@@ -692,9 +692,27 @@ export class MarkdownParser {
     
     for (const line of lines) {
       const trimmed = line.trim();
+      const standaloneImageMatch = trimmed.match(/^<img\b[^>]*\/?>$/);
       
       // Skip empty lines and HTML tags
-      if (!trimmed || trimmed.startsWith('<')) {
+      if (!trimmed) {
+        if (paragraph.length > 0) {
+          result.push(`<p>${paragraph.join(' ')}</p>`);
+          paragraph = [];
+        }
+        continue;
+      }
+
+      if (standaloneImageMatch) {
+        if (paragraph.length > 0) {
+          result.push(`<p>${paragraph.join(' ')}</p>`);
+          paragraph = [];
+        }
+        result.push(`<div class="markdown-image-block">${line}</div>`);
+        continue;
+      }
+
+      if (trimmed.startsWith('<')) {
         if (paragraph.length > 0) {
           result.push(`<p>${paragraph.join(' ')}</p>`);
           paragraph = [];
