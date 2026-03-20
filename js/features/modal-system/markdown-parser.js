@@ -34,8 +34,8 @@ export class MarkdownParser {
       // CRITICAL: Custom block patterns (Notion-like)
       // UPDATED COMMENTS: Negative lookahead to prevent capturing list items as param
       // Format: ::: blockType [param]\n content \n:::
-      // Param must NOT start with - or * (list markers)
-      customBlock: /^:::\s*(\w+)(?:\s+(?![-*\d])(.+?))?\s*\n([\s\S]*?)^:::$/gm,
+      // Param must stay on the same line as blockType
+      customBlock: /^:::\s*(\w+)(?:[ \t]+(?![-*\d])(.+?))?[ \t]*\n([\s\S]*?)^:::$/gm,
       table: /^\|(.+)\|\n\|[-:\s|]+\|\n((?:\|.+\|\n?)+)/gm
     };
   }
