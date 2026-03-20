@@ -49,11 +49,11 @@
 }
 
 .fun-gallery-item-image img {
-  width: 100%;
+  width: auto;
+  max-width: none;
   height: auto;
   display: block;
   border-radius: 0;
-  object-fit: contain;
   box-shadow: none;
 }
 
