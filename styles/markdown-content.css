@@ -748,43 +748,50 @@
    ============================================ */
 
 .quote-block {
-  /* REUSED: Enhanced blockquote styling */
-  margin: 48px 0;
-  padding: 32px;
-  background: rgba(255, 255, 255, 0.05);
+  /* REUSED: Note-like quote block styled from Figma */
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 24px;
+  margin: 32px 0;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
   border: none;
-  border-radius: 12px;
-  position: relative;
+  box-sizing: border-box;
 }
 
-/* CRITICAL: Decorative hanging quote mark */
-.quote-block::before {
-  content: '"';
-  position: absolute;
-  left: 32px;
-  top: 24px;
-  font-size: 64px;
-  color: rgba(194, 72, 163, 0.2);
-  font-family: Georgia, serif;
-  line-height: 1;
-  pointer-events: none;
+.quote-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  opacity: 0.3;
+  margin-top: 2px;
 }
 
 .quote-content {
-  font-size: 20px;
-  line-height: 160%;
-  font-style: italic;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.quote-text {
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 130%;
   color: rgba(255, 255, 255, 0.95);
-  margin-bottom: 16px;
-  position: relative;
-  z-index: 1;
 }
 
 .quote-author {
   font-size: 16px;
-  font-style: normal;
-  color: rgba(255, 255, 255, 0.6);
-  font-weight: 500;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 130%;
+  text-align: right;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 /* ============================================
@@ -1045,10 +1052,19 @@
     top: -4px;
   }
   
-  .quote-block::before {
-    font-size: 48px;
-    left: 12px;
-    top: 4px;
+  .quote-block {
+    gap: 12px;
+    padding: 20px;
+    border-radius: 20px;
+  }
+
+  .quote-text {
+    font-size: 18px;
+    line-height: 140%;
+  }
+
+  .quote-author {
+    font-size: 14px;
   }
   
   /* UPDATED COMMENTS: Project header responsive */

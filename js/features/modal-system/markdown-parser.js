@@ -422,14 +422,17 @@ export class MarkdownParser {
 
   /**
    * Render quote block with optional author
-   * REUSED: Enhanced blockquote styling
+   * REUSED: Note-like callout layout with quote icon
    */
   renderQuote(content, author) {
     return `
-      <blockquote class="quote-block">
-        <div class="quote-content">${content}</div>
-        ${author ? `<div class="quote-author">— ${this.escapeHtml(author)}</div>` : ''}
-      </blockquote>
+      <div class="quote-block">
+        <img class="quote-icon" src="/assets/icons/entypo_quote.svg" alt="" aria-hidden="true" />
+        <div class="quote-content">
+          <div class="quote-text">${this.escapeHtml(content)}</div>
+          ${author ? `<div class="quote-author">${this.escapeHtml(author)}</div>` : ''}
+        </div>
+      </div>
     `;
   }
 
