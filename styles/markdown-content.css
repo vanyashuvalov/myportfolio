@@ -16,7 +16,8 @@
   color: #FFFFFF;
   /* CRITICAL: Prevent content overflow */
   max-width: 100%;
-  overflow-x: hidden;
+  overflow: visible;
+  overflow-x: visible;
   box-sizing: border-box;
   word-wrap: break-word;
   overflow-wrap: break-word;
@@ -41,6 +42,10 @@
 
 .project-page .markdown-content > * {
   margin: 0;
+}
+
+.project-content {
+  overflow: visible;
 }
 
 /* ============================================

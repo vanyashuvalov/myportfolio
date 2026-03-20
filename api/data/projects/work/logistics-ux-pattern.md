@@ -53,11 +53,13 @@ Created a dispatcher workspace where the core UX is built around **vertical kanb
 
 ![App Overview](assets\projects\logistics-ux-pattern\images\dispatch-mobilederklight.jpg)
 
+---
+
 ## Research
 
 #### Subject
 
-**Dispatchers** are the key to quality shipment execution
+Dispatchers are the key to **quality** shipment execution
 The contracted transport department always has more workload than anywhere else, especially for dispatchers
 While logistics coordinators call carriers, request transport, and coordinate with clients only at the beginning, dispatchers spend all this time on routine and calls
 So this is simultaneously complex and critical work that must be addressed in TMS (Transportation Management System)
@@ -68,7 +70,7 @@ A dispatcher's workspace consists of:
 - Constant contact with colleagues
 - Noisy office
 - Some snack food
-Dispatchers communicate and exchange current statuses with logistics coordinators and managers across multiple channels simultaneously: **WhatsApp, Telegram, Bitrix, offline**
+Dispatchers communicate and exchange current statuses with logistics coordinators and managers across multiple channels simultaneously: WhatsApp, Telegram, Bitrix, offline
 
 ![Moodboard](assets\projects\logistics-ux-pattern\images\dispatch-moodboard.jpg)
 
