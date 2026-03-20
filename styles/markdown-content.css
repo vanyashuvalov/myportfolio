@@ -687,12 +687,14 @@
   background: rgba(255, 255, 255, 0.03);
 }
 
-.image-gallery-row .gallery-item {
+.image-gallery-row .markdown-gallery-item {
   position: relative;
   overflow: hidden;
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.03);
   width: 100%;
+  max-width: none;
+  align-self: stretch;
 }
 
 .markdown-gallery-item img {
@@ -708,7 +710,7 @@
   object-fit: cover;
 }
 
-.image-gallery-row .gallery-item img {
+.image-gallery-row .markdown-gallery-item img {
   width: 100%;
   height: auto;
   display: block;

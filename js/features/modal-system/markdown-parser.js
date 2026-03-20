@@ -364,13 +364,13 @@ export class MarkdownParser {
 
       if (images.length === 0) return '';
 
-      const imageHtml = images.map(img => `<div class="gallery-item"><img src="${this.escapeHtml(img.src)}" alt="${this.escapeHtml(img.alt)}" loading="lazy" /></div>`).join('');
+      const imageHtml = images.map(img => `<div class="markdown-gallery-item"><img src="${this.escapeHtml(img.src)}" alt="${this.escapeHtml(img.alt)}" loading="lazy" /></div>`).join('');
 
       return `<div class="image-gallery">${imageHtml}</div>`;
     }
 
     const rowHtml = rows.map(row => {
-      const itemsHtml = row.items.map(img => `<div class="gallery-item"><img src="${this.escapeHtml(img.src)}" alt="${this.escapeHtml(img.alt)}" loading="lazy" /></div>`).join('');
+      const itemsHtml = row.items.map(img => `<div class="markdown-gallery-item"><img src="${this.escapeHtml(img.src)}" alt="${this.escapeHtml(img.alt)}" loading="lazy" /></div>`).join('');
       return `<div class="image-gallery-row image-gallery-row--${row.columns}" data-columns="${row.columns}">${itemsHtml}</div>`;
     }).join('');
 
