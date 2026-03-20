@@ -254,8 +254,9 @@
    ============================================ */
 
 .markdown-content strong {
-  font-weight: 600;
-  color: #FFFFFF;
+  font-weight: 700;
+  font-style: italic;
+  color: #8C8C8C;
 }
 
 .markdown-content em {
@@ -389,6 +390,13 @@
   margin-right: 0;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   object-fit: contain;
+}
+
+.project-page .markdown-content > .image-gallery {
+  width: calc(100vw - 120px);
+  max-width: calc(100vw - 120px);
+  margin-left: calc(50% - ((100vw - 120px) / 2));
+  margin-right: 0;
 }
 
 .markdown-content img {
@@ -657,7 +665,7 @@
 }
 
 .image-gallery-row--1 {
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .image-gallery-row--2 {
@@ -684,6 +692,7 @@
   overflow: hidden;
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.03);
+  width: 100%;
 }
 
 .markdown-gallery-item img {
@@ -1108,6 +1117,13 @@
   }
 
   .project-page .markdown-content > img {
+    width: calc(100vw - 32px);
+    max-width: calc(100vw - 32px);
+    margin-left: calc(50% - ((100vw - 32px) / 2));
+    margin-right: 0;
+  }
+
+  .project-page .markdown-content > .image-gallery {
     width: calc(100vw - 32px);
     max-width: calc(100vw - 32px);
     margin-left: calc(50% - ((100vw - 32px) / 2));
