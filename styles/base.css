@@ -103,7 +103,7 @@ body.page-mode::before {
   /* CRITICAL: Overflow must be visible */
   overflow: visible;
   touch-action: auto;
-  cursor: grab;
+  cursor: default;
   overscroll-behavior: none;
   z-index: 2; /* CRITICAL: Above background, below page content in page mode */
   /* CRITICAL: Perfect flexbox centering */
@@ -120,7 +120,7 @@ body.page-mode::before {
 
 .desktop-canvas.is-panning {
   touch-action: none;
-  cursor: grabbing;
+  cursor: default;
 }
 
 /* CRITICAL: Hide scrollbars on canvas while keeping scroll/pan */
