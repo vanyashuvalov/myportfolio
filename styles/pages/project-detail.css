@@ -170,8 +170,8 @@
   max-width: none;
   min-height: 420px;
   margin-top: 24px;
-  left: 50%;
-  transform: translateX(-50%);
+  margin-left: calc(50% - ((100vw - 120px) / 2));
+  margin-right: 0;
   border-radius: 24px;
   overflow: hidden;
   position: relative;
@@ -262,6 +262,8 @@
 
   .project-ending {
     width: calc(100vw - 32px);
+    margin-left: calc(50% - ((100vw - 32px) / 2));
+    margin-right: 0;
     min-height: 320px;
     border-radius: 20px;
   }
