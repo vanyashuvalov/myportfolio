@@ -39,10 +39,8 @@ The driver app is one of four products in the ecosystem:
 - Mobile app for drivers
 - AI-powered pricing algorithm
 
-![App Overview](/assets/projects/biny-driver-app/images/image.png)
-
 ::: callout info
-💡 **Impact**: 200+ screens designed, 50+ research sessions, 20+ updates over a year
+**Impact**: 200+ screens designed, 50+ research sessions, 20+ updates over a year
 :::
 
 ## The Challenge
@@ -261,7 +259,3 @@ The Biny Driver App project demonstrates how thoughtful UX design can bridge the
 The key insight: **simplicity wins**. By reducing interface complexity and providing clear guidance, even users skeptical of technology can successfully adopt digital tools.
 
 ![Order Completion](/assets/projects/biny-driver-app/images/Untitled%206.png)
-
----
-
-**Want to learn more about this project?** [Contact me](https://t.me/vanyashuvalov) to discuss logistics UX design and designing for non-digital-native users.

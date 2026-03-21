@@ -7,6 +7,7 @@
  */
 import { Chip } from '../../shared/ui/chip/chip.js';
 import { ReadingProgress } from '../../shared/ui/reading-progress/reading-progress.js';
+import { SOCIAL_LINKS } from '../../shared/config/social-links.js';
 import { markdownParser } from '../modal-system/markdown-parser.js';
 
 export class ProjectPageHandler {
@@ -167,6 +168,21 @@ export class ProjectPageHandler {
             </header>
             
             <div class="project-content markdown-content">${html}</div>
+
+            <div class="project-ending-divider chapter-divider" aria-hidden="true">
+              <img src="/assets/icons/star-devider-icon.svg" alt="" class="chapter-divider-icon" data-no-viewer="true" />
+            </div>
+
+            <section class="project-ending" aria-label="Contact call to action">
+              <div class="project-ending-content">
+                <h1 class="project-ending-title">Like This<br />Case Study?</h1>
+                <p class="project-ending-text">You can always write to me and discuss your project</p>
+                <a class="project-ending-button" href="${this.escapeHtml(SOCIAL_LINKS.telegram.url)}" target="_blank" rel="noopener noreferrer">
+                  <img src="/assets/icons/icon-park-outline_telegram.svg" alt="" aria-hidden="true" />
+                  <span>Chat Me</span>
+                </a>
+              </div>
+            </section>
           </div>
         </article>
       </div>

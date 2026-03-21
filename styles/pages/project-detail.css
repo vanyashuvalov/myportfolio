@@ -162,6 +162,83 @@
 }
 
 /* ============================================
+   PROJECT ENDING CTA
+   ============================================ */
+
+.project-ending {
+  width: calc(100vw - 120px);
+  max-width: none;
+  min-height: 420px;
+  margin-top: 24px;
+  margin-left: calc(50% - ((100vw - 120px) / 2));
+  margin-right: 0;
+  border-radius: 24px;
+  overflow: hidden;
+  position: relative;
+  box-sizing: border-box;
+  background:
+    linear-gradient(180deg, rgba(14, 14, 14, 0.30) 0%, rgba(14, 14, 14, 0.55) 100%),
+    url('/assets/images/endingpicture.jpg') center center / cover no-repeat;
+}
+
+.project-ending-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 56px;
+  max-width: 560px;
+}
+
+.project-ending-title {
+  margin: 0;
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 72px;
+  font-weight: 500;
+  line-height: 100%;
+  letter-spacing: -0.04em;
+  color: #FFFFFF;
+}
+
+.project-ending-text {
+  margin: 0;
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 20px;
+  line-height: 140%;
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 420px;
+}
+
+.project-ending-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 24px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.45);
+  color: #FFFFFF;
+  text-decoration: none;
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 18px;
+  line-height: 1;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.project-ending-button:hover {
+  background: rgba(0, 0, 0, 0.6);
+  transform: translateY(-1px);
+}
+
+.project-ending-button img {
+  width: 24px;
+  height: 24px;
+  display: block;
+  flex: none;
+}
+
+/* ============================================
    RESPONSIVE
    ============================================ */
 
@@ -177,5 +254,32 @@
   
   .project-title {
     font-size: 28px; /* Reduced from 42px */
+  }
+
+  .project-ending {
+    width: calc(100vw - 32px);
+    margin-left: calc(50% - ((100vw - 32px) / 2));
+    margin-right: 0;
+    min-height: 320px;
+    border-radius: 20px;
+  }
+
+  .project-ending-content {
+    padding: 32px 24px;
+    gap: 12px;
+    max-width: 100%;
+  }
+
+  .project-ending-title {
+    font-size: 40px;
+  }
+
+  .project-ending-text {
+    font-size: 18px;
+  }
+
+  .project-ending-button {
+    padding: 14px 20px;
+    font-size: 16px;
   }
 }
