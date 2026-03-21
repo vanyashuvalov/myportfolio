@@ -412,7 +412,7 @@ export class DesktopCanvas {
       cssPositionClass: 'widget-position--sticker',
       config: {
         title: 'Hi! My name is Ivan, I am Product Designer',
-        content: 'Leading design and prototyping of data dashboard for clinical workers scheduling surgery blocks, resolving critical block time issues\n\nDesigning product flows for clinical workers in maternity health, translating complex healthcare workflows into intuitive experiences for 2,600+ care sites',
+        content: 'I create and help grow B2B services for leading companies and the broader market\n\nI take products from concept to their first customers, relying on research and proven best MVP practices',
         size: 'large',
         theme: 'yellow',
         showButton: true,
