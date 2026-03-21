@@ -143,48 +143,12 @@ body.loaded .navigation-wrapper {
   transition: transform 0.18s ease, box-shadow 3s ease-out, opacity 0.2s ease;
 }
 
-.eyes-avatar__eye.no-transition {
-  transition: none !important;
-}
-
 .eyes-avatar__eye--left {
   transform: rotate(-2deg);
 }
 
 .eyes-avatar__eye--right {
   transform: rotate(2deg);
-}
-
-.eyes-avatar__eye.red-glow {
-  box-shadow:
-    inset 0 0 12px rgba(255, 40, 40, 0.78),
-    inset 0 1px 3px rgba(0, 0, 0, 0.46),
-    0 0 0 1px rgba(255, 255, 255, 0.1);
-}
-
-.eyes-avatar__eye.angry {
-  box-shadow:
-    inset 0 0 14px rgba(255, 40, 40, 0.88),
-    inset 0 1px 3px rgba(0, 0, 0, 0.46),
-    0 0 0 1px rgba(255, 255, 255, 0.1);
-}
-
-.eyes-avatar__eye.angry .eyes-avatar__pupil {
-  box-shadow:
-    inset -1px -1px 2px rgba(0, 0, 0, 0.45),
-    0 0 10px rgba(110, 0, 255, 0.65);
-}
-
-.eyes-avatar__eye.angry.eyes-avatar__eye--left .eyes-avatar__lid--top {
-  transform: translateY(-20%) rotate(12deg);
-}
-
-.eyes-avatar__eye.angry.eyes-avatar__eye--right .eyes-avatar__lid--top {
-  transform: translateY(-20%) rotate(-12deg);
-}
-
-.eyes-avatar__eye--hit-down .eyes-avatar__pupil {
-  transform: translate(calc(-50% + var(--pupil-x)), calc(-50% + var(--pupil-y) + 2px));
 }
 
 .eyes-avatar__pupil {
@@ -244,21 +208,6 @@ body.loaded .navigation-wrapper {
 .eyes-avatar__eye--blink .eyes-avatar__lid--top,
 .eyes-avatar__eye--blink .eyes-avatar__lid--bottom {
   transform: translateY(0);
-}
-
-.eyes-avatar.angry-eyes {
-  animation: shake-sync 0.26s infinite alternate;
-}
-
-@keyframes shake-sync {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-
-  50% {
-    transform: translateX(-1.8px);
-  }
 }
 
 .user-photo img {

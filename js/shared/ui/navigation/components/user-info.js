@@ -19,12 +19,9 @@ export class UserInfo {
     };
 
     this.isInitialized = false;
-    this.isAngry = false;
     this.rafId = null;
     this.driftTimeoutId = null;
     this.blinkTimeoutId = null;
-    this.angryTimeoutId = null;
-    this.redGlowTimeoutId = null;
     this.lastPointerMoveAt = 0;
     this.pointerPosition = { x: 0, y: 0 };
 
@@ -96,7 +93,7 @@ export class UserInfo {
    * SCALED FOR: Small 40x40 avatar container
    */
   handlePointerMove(event) {
-    if (document.hidden || this.isAngry) {
+    if (document.hidden) {
       return;
     }
 
@@ -119,10 +116,6 @@ export class UserInfo {
    * REUSED: Distance-based easing from the reference example
    */
   lookAt(clientX, clientY) {
-    if (this.isAngry) {
-      return;
-    }
-
     const eyes = this.getEyes();
     if (!eyes.length) {
       return;
@@ -170,7 +163,6 @@ export class UserInfo {
       eye.style.setProperty('--highlight-x', '0px');
       eye.style.setProperty('--highlight-y', '0px');
       eye.classList.remove('eyes-avatar__eye--blink');
-      eye.classList.remove('eyes-avatar__eye--hit-down');
     });
   }
 
@@ -185,7 +177,7 @@ export class UserInfo {
         return;
       }
 
-      if (!document.hidden && !this.isAngry && Date.now() - this.lastPointerMoveAt > 1400) {
+      if (!document.hidden && Date.now() - this.lastPointerMoveAt > 1400) {
         this.applyRandomDrift();
       }
 
@@ -199,7 +191,7 @@ export class UserInfo {
    * Gentle background drift to keep the eyes feeling alive
    */
   applyRandomDrift() {
-    if (!this.isInitialized || this.isAngry) {
+    if (!this.isInitialized) {
       return;
     }
 
@@ -209,10 +201,6 @@ export class UserInfo {
     }
 
     eyes.forEach((eye) => {
-      if (eye.classList.contains('red-glow')) {
-        return;
-      }
-
       const moveX = (Math.random() - 0.5) * 1.8;
       const moveY = (Math.random() - 0.5) * 2.4;
 
@@ -234,7 +222,7 @@ export class UserInfo {
         return;
       }
 
-      if (!document.hidden && !this.isAngry) {
+      if (!document.hidden) {
         this.blinkRandomEye();
       }
 
@@ -254,10 +242,6 @@ export class UserInfo {
 
     const eyes = this.getEyes();
     if (!eyes.length) {
-      return;
-    }
-
-    if (this.isAngry) {
       return;
     }
 
@@ -282,7 +266,7 @@ export class UserInfo {
 
     const clickedEye = event.target.closest('.eyes-avatar__eye');
     if (clickedEye) {
-      this.handleEyeClick(clickedEye);
+      this.blinkOne(clickedEye);
       return;
     }
 
@@ -293,7 +277,7 @@ export class UserInfo {
    * Blink both eyes together
    */
   blinkBoth() {
-    if (!this.isInitialized || this.isAngry) {
+    if (!this.isInitialized) {
       return;
     }
 
@@ -306,118 +290,17 @@ export class UserInfo {
   }
 
   /**
-   * Blink a single eye and trigger angry mode like the example
+   * Blink a single eye on click
    */
   blinkOne(eye) {
     if (!eye || !this.isInitialized) {
       return;
     }
 
-    eye.classList.add('eyes-avatar__eye--blink', 'eyes-avatar__eye--hit-down');
+    eye.classList.add('eyes-avatar__eye--blink');
     window.setTimeout(() => {
-      eye.classList.remove('eyes-avatar__eye--blink', 'eyes-avatar__eye--hit-down');
+      eye.classList.remove('eyes-avatar__eye--blink');
     }, 70);
-  }
-
-  /**
-   * Handle click on the eye avatar itself
-   */
-  handleEyeClick(clickedEye) {
-    if (!clickedEye || !this.isInitialized) {
-      return;
-    }
-
-    clickedEye.classList.add('red-glow');
-    clearTimeout(this.redGlowTimeoutId);
-
-    this.redGlowTimeoutId = window.setTimeout(() => {
-      if (!this.isAngry) {
-        clickedEye.classList.remove('red-glow');
-      }
-    }, 3000);
-
-    this.blinkOne(clickedEye);
-
-    if (this.isAngry) {
-      clearTimeout(this.angryTimeoutId);
-      this.angryTimeoutId = window.setTimeout(() => this.stopAngry(), 2000);
-      return;
-    }
-
-    const otherEye = this.getOtherEye(clickedEye);
-    if (otherEye) {
-      otherEye.classList.add('angry');
-    }
-
-    window.setTimeout(() => {
-      this.startAngry();
-    }, 120);
-
-    clearTimeout(this.angryTimeoutId);
-    this.angryTimeoutId = window.setTimeout(() => this.stopAngry(), 2000);
-  }
-
-  /**
-   * Get the eye opposite to the one that was clicked
-   */
-  getOtherEye(clickedEye) {
-    return this.getEyes().find((eye) => eye !== clickedEye) || null;
-  }
-
-  /**
-   * Enter angry mode and freeze pointer tracking
-   */
-  startAngry() {
-    if (!this.isInitialized) {
-      return;
-    }
-
-    this.isAngry = true;
-    this.resetEyes();
-
-    this.getEyes().forEach((eye) => {
-      eye.classList.add('angry');
-    });
-
-    const avatar = document.querySelector('.user-photo--eyes .eyes-avatar');
-    if (avatar) {
-      avatar.classList.add('angry-eyes');
-    }
-  }
-
-  /**
-   * Leave angry mode and restore the normal idle animation
-   */
-  stopAngry() {
-    if (!this.isInitialized) {
-      return;
-    }
-
-    this.isAngry = false;
-
-    const eyes = this.getEyes();
-    eyes.forEach((eye) => {
-      if (eye.classList.contains('red-glow')) {
-        eye.classList.add('no-transition');
-        eye.classList.remove('red-glow');
-        window.setTimeout(() => eye.classList.remove('no-transition'), 10);
-      }
-
-      eye.classList.remove('angry');
-    });
-
-    const avatar = document.querySelector('.user-photo--eyes .eyes-avatar');
-    if (avatar) {
-      avatar.classList.remove('angry-eyes');
-    }
-
-    eyes.forEach((eye) => eye.classList.add('eyes-avatar__eye--blink'));
-    window.setTimeout(() => {
-      eyes.forEach((eye) => eye.classList.remove('eyes-avatar__eye--blink'));
-      window.setTimeout(() => {
-        this.blinkBoth();
-      }, 100);
-    }, 1000);
   }
 
   /**
@@ -450,8 +333,6 @@ export class UserInfo {
     document.removeEventListener('visibilitychange', this.handleVisibilityChange);
     clearTimeout(this.driftTimeoutId);
     clearTimeout(this.blinkTimeoutId);
-    clearTimeout(this.angryTimeoutId);
-    clearTimeout(this.redGlowTimeoutId);
 
     if (this.rafId !== null) {
       window.cancelAnimationFrame(this.rafId);
