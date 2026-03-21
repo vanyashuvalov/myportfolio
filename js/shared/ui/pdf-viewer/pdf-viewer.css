@@ -151,14 +151,14 @@
 /* UPDATED COMMENTS: Mobile adjustments */
 @media (max-width: 768px) {
   .pdf-viewer__close {
-    right: 20px;
+    right: 16px;
     width: 40px;
     height: 40px;
   }
   
   .pdf-viewer__close img {
-    width: 24px;
-    height: 24px;
+    width: var(--button-icon-size-mobile, 22px);
+    height: var(--button-icon-size-mobile, 22px);
   }
   
   .pdf-viewer__container {

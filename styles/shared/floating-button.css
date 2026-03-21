@@ -265,8 +265,8 @@
   .floating-button img,
   .modal-close svg,
   .modal-close img {
-    width: 24px;
-    height: 24px;
+    width: var(--button-icon-size-mobile, 22px);
+    height: var(--button-icon-size-mobile, 22px);
   }
 
   .page-back,
@@ -279,8 +279,8 @@
   .page-back img,
   .page-close svg,
   .page-close img {
-    width: 24px;
-    height: 24px;
+    width: var(--button-icon-size-mobile, 22px);
+    height: var(--button-icon-size-mobile, 22px);
   }
 
   .modal-close,
