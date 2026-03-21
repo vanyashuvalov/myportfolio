@@ -215,6 +215,13 @@ export class Router {
     if (this.eventBus) {
       this.eventBus.emit('router:404', { url });
     }
+
+    // CRITICAL: Redirect unknown SPA routes to the home page
+    // UPDATED COMMENTS: Replace the bad URL so back/forward navigation stays clean
+    if (window.location.pathname !== '/') {
+      window.history.replaceState({}, '', '/');
+      this.handleRoute('/');
+    }
   }
 
   /**

@@ -93,14 +93,22 @@ function requestHandler(req, res) {
   if (pathname === '/') {
     pathname = '/index.html';
   }
-  
-  const filePath = path.join(__dirname, pathname);
+ 
+  let filePath = path.join(__dirname, pathname);
   
   // CRITICAL: Security check - prevent directory traversal
   if (!filePath.startsWith(__dirname)) {
     res.writeHead(403, { 'Content-Type': 'text/plain' });
     res.end('Forbidden');
     return;
+  }
+
+  // CRITICAL: SPA routing fallback
+  // UPDATED COMMENTS: Serve the app shell for deep links without file extensions
+  const hasExtension = path.extname(pathname) !== '';
+  if (!fs.existsSync(filePath) && !hasExtension) {
+    pathname = '/index.html';
+    filePath = path.join(__dirname, pathname);
   }
   
   // REUSED: File existence check
