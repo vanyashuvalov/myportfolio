@@ -166,12 +166,12 @@
    ============================================ */
 
 .project-ending {
-  width: 100vw;
+  width: calc(100vw - 120px);
   max-width: none;
   min-height: 420px;
   margin-top: 24px;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
+  margin-left: calc(50% - 50vw + 60px);
+  margin-right: calc(50% - 50vw + 60px);
   border-radius: 24px;
   overflow: hidden;
   position: relative;
@@ -265,9 +265,9 @@
   }
 
   .project-ending {
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
-    margin-right: calc(50% - 50vw);
+    width: calc(100vw - 32px);
+    margin-left: calc(50% - 50vw + 16px);
+    margin-right: calc(50% - 50vw + 16px);
     min-height: 320px;
     border-radius: 20px;
     padding: 0 16px;
