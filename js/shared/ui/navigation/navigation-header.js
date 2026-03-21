@@ -61,6 +61,7 @@ export class NavigationHeader {
   async init() {
     try {
       this.render();
+      this.userInfo.init();
       this.bindEvents();
       this.setupPageDropdownNavigation();
       this.setupMobileMenuListeners();
@@ -210,6 +211,10 @@ export class NavigationHeader {
       menu.innerHTML = this.mobileMenu.renderMenuContent();
       document.body.appendChild(overlay);
       document.body.appendChild(menu);
+    }
+
+    if (this.userInfo) {
+      this.userInfo.resetEyes();
     }
   }
 
@@ -514,6 +519,9 @@ Contacts: ${SOCIAL_LINKS.telegram.url} | ${SOCIAL_LINKS.email.address}`;
    * SCALED FOR: Memory management with modular cleanup
    */
   destroy() {
+    if (this.userInfo) {
+      this.userInfo.destroy();
+    }
     if (this.mobileMenu) {
       this.mobileMenu.destroy();
     }

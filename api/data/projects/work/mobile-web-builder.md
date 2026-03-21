@@ -31,9 +31,7 @@ color_theme: "#8B5CF6"
 
 ## Project Overview
 
-This project explored the opportunity for a mobile-first website builder — a product category that doesn't exist in the market despite clear demand signals. The goal was to validate the hypothesis, understand the market size, and design a minimal viable prototype.
-
-![Project Overview](/assets/projects/mobile-web-builder/images/Frame_11025444.jpg)
+This project explored the opportunity for a mobile-first website builder — a product category that doesn't exist in the market despite clear demand signals. The goal was to validate the hypothesis, understand the market size, and design a minimal viable prototype
 
 ::: callout info
 **Key Insight**: No website editors exist for mobile devices, despite 90% of people using phones more than computers
@@ -215,7 +213,3 @@ Minimalist MVP design based on current design system principles:
 This project demonstrated that mobile-first website building is a viable product category. The research confirmed that the lack of mobile editors isn't due to lack of demand — it's due to lack of quality products. By targeting underserved segments (small businesses, young entrepreneurs) and leveraging mobile-native features, a mobile website builder could significantly expand the SaaS website builder market.
 
 The key insight: **Mobile isn't just a smaller desktop — it's a different use case requiring different solutions.**
-
----
-
-**Want to learn more about this project?** [Contact me](https://t.me/vanyashuvalov) to discuss product strategy, market research, or mobile-first design approaches.

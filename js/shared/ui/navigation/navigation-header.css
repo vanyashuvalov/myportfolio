@@ -97,9 +97,118 @@ body.loaded .navigation-wrapper {
   flex: none;
   flex-grow: 0;
   overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   
-  /* UPDATED COMMENTS: Smooth image rendering, removed fixed order */
+  /* UPDATED COMMENTS: Shared 40x40 avatar container */
   image-rendering: crisp-edges;
+}
+
+.user-photo--eyes {
+  background:
+    radial-gradient(circle at 50% 38%, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.04) 34%, rgba(12, 16, 28, 0.98) 35%, rgba(5, 7, 12, 1) 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+    inset 0 -6px 12px rgba(0, 0, 0, 0.55),
+    0 8px 20px rgba(0, 0, 0, 0.18);
+  pointer-events: none;
+}
+
+.eyes-avatar {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  transform: translateY(0.5px);
+}
+
+.eyes-avatar__eye {
+  --pupil-x: 0px;
+  --pupil-y: 0px;
+  --highlight-x: 0px;
+  --highlight-y: 0px;
+
+  position: relative;
+  width: 15px;
+  height: 23px;
+  overflow: hidden;
+  border-radius: 50% / 48%;
+  background: radial-gradient(circle at 50% 42%, #fefefe 0%, #ececec 58%, #cfcfcf 100%);
+  box-shadow:
+    inset 0 1px 3px rgba(0, 0, 0, 0.46),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+  flex: none;
+}
+
+.eyes-avatar__eye--left {
+  transform: rotate(-2deg);
+}
+
+.eyes-avatar__eye--right {
+  transform: rotate(2deg);
+}
+
+.eyes-avatar__pupil {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 10px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #9a73ff 0%, #3a16ff 42%, #090013 100%);
+  box-shadow:
+    inset -1px -1px 2px rgba(0, 0, 0, 0.4),
+    0 0 8px rgba(110, 0, 255, 0.5);
+  transform: translate(calc(-50% + var(--pupil-x)), calc(-50% + var(--pupil-y)));
+  transition: transform 0.14s ease-out;
+  will-change: transform;
+}
+
+.eyes-avatar__highlight {
+  position: absolute;
+  top: 19%;
+  left: 34%;
+  width: 2px;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  filter: blur(0.25px);
+  opacity: 0.9;
+  transform: translate(var(--highlight-x), var(--highlight-y));
+  transition: transform 0.14s ease-out;
+}
+
+.eyes-avatar__lid {
+  position: absolute;
+  left: -3px;
+  right: -3px;
+  height: 50%;
+  background: #05070c;
+  z-index: 2;
+  pointer-events: none;
+  transition: transform 0.07s ease-out;
+}
+
+.eyes-avatar__lid--top {
+  top: 0;
+  transform: translateY(-102%);
+  border-radius: 60% 60% 0 0 / 100% 100% 0 0;
+  transform-origin: top center;
+}
+
+.eyes-avatar__lid--bottom {
+  bottom: 0;
+  transform: translateY(102%);
+  border-radius: 0 0 60% 60% / 0 0 100% 100%;
+}
+
+.eyes-avatar__eye--blink .eyes-avatar__lid--top,
+.eyes-avatar__eye--blink .eyes-avatar__lid--bottom {
+  transform: translateY(0);
 }
 
 .user-photo img {

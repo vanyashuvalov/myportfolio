@@ -17,6 +17,17 @@ export class UserInfo {
       statusText: 'Open for work',
       ...options
     };
+
+    this.isInitialized = false;
+    this.rafId = null;
+    this.driftTimeoutId = null;
+    this.blinkTimeoutId = null;
+    this.lastPointerMoveAt = 0;
+    this.pointerPosition = { x: 0, y: 0 };
+
+    this.handlePointerMove = this.handlePointerMove.bind(this);
+    this.handleVisibilityChange = this.handleVisibilityChange.bind(this);
+    this.handleWindowBlur = this.handleWindowBlur.bind(this);
   }
 
   /**
@@ -25,9 +36,24 @@ export class UserInfo {
    */
   render() {
     return `
-      <!-- User Photo -->
-      <div class="user-photo">
-        <img src="${this.options.userPhoto}" alt="${this.options.userName}" loading="lazy">
+      <!-- Animated Eyes Avatar -->
+      <div class="user-photo user-photo--eyes" aria-hidden="true">
+        <div class="eyes-avatar">
+          <span class="eyes-avatar__eye eyes-avatar__eye--left">
+            <span class="eyes-avatar__lid eyes-avatar__lid--top"></span>
+            <span class="eyes-avatar__pupil">
+              <span class="eyes-avatar__highlight"></span>
+            </span>
+            <span class="eyes-avatar__lid eyes-avatar__lid--bottom"></span>
+          </span>
+          <span class="eyes-avatar__eye eyes-avatar__eye--right">
+            <span class="eyes-avatar__lid eyes-avatar__lid--top"></span>
+            <span class="eyes-avatar__pupil">
+              <span class="eyes-avatar__highlight"></span>
+            </span>
+            <span class="eyes-avatar__lid eyes-avatar__lid--bottom"></span>
+          </span>
+        </div>
       </div>
       
       <!-- User Name and Status -->
@@ -39,6 +65,230 @@ export class UserInfo {
         </div>
       </div>
     `;
+  }
+
+  /**
+   * Initialize animated eyes listeners
+   * REUSED: Global pointer tracking pattern
+   */
+  init() {
+    if (this.isInitialized || typeof window === 'undefined') {
+      return;
+    }
+
+    this.isInitialized = true;
+    window.addEventListener('pointermove', this.handlePointerMove, { passive: true });
+    window.addEventListener('blur', this.handleWindowBlur);
+    document.addEventListener('visibilitychange', this.handleVisibilityChange);
+
+    this.resetEyes();
+    this.scheduleRandomDrift();
+    this.scheduleBlink();
+  }
+
+  /**
+   * Update pupil position based on pointer location
+   * SCALED FOR: Small 40x40 avatar container
+   */
+  handlePointerMove(event) {
+    if (document.hidden) {
+      return;
+    }
+
+    this.pointerPosition.x = event.clientX;
+    this.pointerPosition.y = event.clientY;
+    this.lastPointerMoveAt = Date.now();
+
+    if (this.rafId !== null) {
+      return;
+    }
+
+    this.rafId = window.requestAnimationFrame(() => {
+      this.rafId = null;
+      this.lookAt(this.pointerPosition.x, this.pointerPosition.y);
+    });
+  }
+
+  /**
+   * Keep the eyes aimed at the current pointer position
+   * REUSED: Distance-based easing from the reference example
+   */
+  lookAt(clientX, clientY) {
+    const eyes = this.getEyes();
+    if (!eyes.length) {
+      return;
+    }
+
+    eyes.forEach((eye) => {
+      const rect = eye.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      const deltaX = clientX - centerX;
+      const deltaY = clientY - centerY;
+      const distance = Math.hypot(deltaX, deltaY) || 1;
+
+      const maxMoveX = Math.min(4, Math.max(2, rect.width * 0.18));
+      const maxMoveY = Math.min(6, Math.max(3, rect.height * 0.18));
+
+      let moveX = (deltaX * maxMoveX) / Math.max(distance, maxMoveX);
+      let moveY = (deltaY * maxMoveY) / Math.max(distance, maxMoveY);
+
+      moveX = Math.max(-maxMoveX, Math.min(maxMoveX, moveX));
+      moveY = Math.max(-maxMoveY, Math.min(maxMoveY, moveY));
+
+      eye.style.setProperty('--pupil-x', `${moveX}px`);
+      eye.style.setProperty('--pupil-y', `${moveY}px`);
+      eye.style.setProperty('--highlight-x', `${moveX * 0.35}px`);
+      eye.style.setProperty('--highlight-y', `${moveY * 0.35}px`);
+    });
+  }
+
+  /**
+   * Return the eyes currently in the DOM
+   */
+  getEyes() {
+    return Array.from(document.querySelectorAll('.user-photo--eyes .eyes-avatar__eye'));
+  }
+
+  /**
+   * Reset eyes to a neutral centered pose
+   */
+  resetEyes() {
+    this.getEyes().forEach((eye) => {
+      eye.style.setProperty('--pupil-x', '0px');
+      eye.style.setProperty('--pupil-y', '0px');
+      eye.style.setProperty('--highlight-x', '0px');
+      eye.style.setProperty('--highlight-y', '0px');
+      eye.classList.remove('eyes-avatar__eye--blink');
+    });
+  }
+
+  /**
+   * Apply a small idle drift when the pointer is not moving
+   */
+  scheduleRandomDrift() {
+    clearTimeout(this.driftTimeoutId);
+
+    this.driftTimeoutId = window.setTimeout(() => {
+      if (!this.isInitialized) {
+        return;
+      }
+
+      if (!document.hidden && Date.now() - this.lastPointerMoveAt > 1400) {
+        this.applyRandomDrift();
+      }
+
+      if (this.isInitialized) {
+        this.scheduleRandomDrift();
+      }
+    }, 1600 + Math.random() * 2200);
+  }
+
+  /**
+   * Gentle background drift to keep the eyes feeling alive
+   */
+  applyRandomDrift() {
+    if (!this.isInitialized) {
+      return;
+    }
+
+    const eyes = this.getEyes();
+    if (!eyes.length) {
+      return;
+    }
+
+    eyes.forEach((eye) => {
+      const moveX = (Math.random() - 0.5) * 1.8;
+      const moveY = (Math.random() - 0.5) * 2.4;
+
+      eye.style.setProperty('--pupil-x', `${moveX}px`);
+      eye.style.setProperty('--pupil-y', `${moveY}px`);
+      eye.style.setProperty('--highlight-x', `${moveX * 0.35}px`);
+      eye.style.setProperty('--highlight-y', `${moveY * 0.35}px`);
+    });
+  }
+
+  /**
+   * Schedule a random blink
+   */
+  scheduleBlink() {
+    clearTimeout(this.blinkTimeoutId);
+
+    this.blinkTimeoutId = window.setTimeout(() => {
+      if (!this.isInitialized) {
+        return;
+      }
+
+      if (!document.hidden) {
+        this.blinkRandomEye();
+      }
+
+      if (this.isInitialized) {
+        this.scheduleBlink();
+      }
+    }, 4500 + Math.random() * 4500);
+  }
+
+  /**
+   * Blink one or both eyes
+   */
+  blinkRandomEye() {
+    if (!this.isInitialized) {
+      return;
+    }
+
+    const eyes = this.getEyes();
+    if (!eyes.length) {
+      return;
+    }
+
+    const targets = Math.random() < 0.45
+      ? [eyes[Math.floor(Math.random() * eyes.length)]]
+      : eyes;
+
+    targets.forEach((eye) => eye.classList.add('eyes-avatar__eye--blink'));
+
+    window.setTimeout(() => {
+      targets.forEach((eye) => eye.classList.remove('eyes-avatar__eye--blink'));
+    }, 110);
+  }
+
+  /**
+   * Reset the eyes when the page loses focus
+   */
+  handleWindowBlur() {
+    this.resetEyes();
+  }
+
+  /**
+   * Pause animation when the tab is hidden
+   */
+  handleVisibilityChange() {
+    if (document.hidden) {
+      this.resetEyes();
+    }
+  }
+
+  /**
+   * Remove listeners and timers
+   */
+  destroy() {
+    if (!this.isInitialized) {
+      return;
+    }
+
+    this.isInitialized = false;
+    window.removeEventListener('pointermove', this.handlePointerMove);
+    window.removeEventListener('blur', this.handleWindowBlur);
+    document.removeEventListener('visibilitychange', this.handleVisibilityChange);
+    clearTimeout(this.driftTimeoutId);
+    clearTimeout(this.blinkTimeoutId);
+
+    if (this.rafId !== null) {
+      window.cancelAnimationFrame(this.rafId);
+      this.rafId = null;
+    }
   }
 
   /**
