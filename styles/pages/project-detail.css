@@ -166,16 +166,17 @@
    ============================================ */
 
 .project-ending {
-  width: calc(100vw - 120px);
+  width: 100vw;
   max-width: none;
   min-height: 420px;
   margin-top: 24px;
-  margin-left: calc(50% - ((100vw - 120px) / 2));
-  margin-right: 0;
+  margin-left: 50%;
+  transform: translateX(-50%);
   border-radius: 24px;
   overflow: hidden;
   position: relative;
   box-sizing: border-box;
+  padding: 0 60px;
   background:
     linear-gradient(180deg, rgba(14, 14, 14, 0.30) 0%, rgba(14, 14, 14, 0.55) 100%),
     url('/assets/images/endingpicture.jpg') center center / cover no-repeat;
@@ -188,7 +189,10 @@
   flex-direction: column;
   align-items: center;
   gap: 16px;
-  padding: 56px;
+  justify-content: center;
+  width: 100%;
+  min-height: 420px;
+  padding: 56px 0;
   max-width: 760px;
   margin: 0 auto;
   text-align: center;
@@ -261,15 +265,17 @@
   }
 
   .project-ending {
-    width: calc(100vw - 32px);
-    margin-left: calc(50% - ((100vw - 32px) / 2));
-    margin-right: 0;
+    width: 100vw;
+    margin-left: 50%;
+    transform: translateX(-50%);
     min-height: 320px;
     border-radius: 20px;
+    padding: 0 16px;
   }
 
   .project-ending-content {
-    padding: 32px 24px;
+    min-height: 320px;
+    padding: 32px 0;
     gap: 12px;
     max-width: 100%;
   }

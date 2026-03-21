@@ -1211,4 +1211,14 @@
   .piechart-legend {
     width: 100%;
   }
+
+  .problem-solution {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .problem-solution-divider {
+    width: 100%;
+    height: 1px;
+  }
 }
