@@ -117,7 +117,8 @@
   
   /* ANCHOR: button_dimensions */
   /* UPDATED COMMENTS: Button sizing for floating action buttons */
-  --button-size: 64px;
+  --button-size: 72px;
+  --button-icon-size: 40px;
   
   /* ANCHOR: z_index */
   /* UPDATED COMMENTS: Z-index layering system with proper modal hierarchy */

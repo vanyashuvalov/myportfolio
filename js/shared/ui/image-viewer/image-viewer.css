@@ -76,8 +76,8 @@
   transform: translateY(-50%);
   
   /* UPDATED COMMENTS: Button styling matching page-close */
-  width: 64px;
-  height: 64px;
+  width: var(--button-size, 72px);
+  height: var(--button-size, 72px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -125,8 +125,8 @@
 }
 
 .image-viewer__close img {
-  width: 32px;
-  height: 32px;
+  width: var(--button-icon-size, 40px);
+  height: var(--button-icon-size, 40px);
   color: #FFFFFF;
   fill: #FFFFFF;
   flex: none;

@@ -74,13 +74,13 @@
    ============================================ */
 
 /* CRITICAL: Icon styling (SVG or IMG)
- * SIZE: 32px × 32px (50% of button size)
+ * SIZE: controlled by --button-icon-size (desktop default: 40px)
  * COLOR: White for visibility on dark background
  */
 .floating-button svg,
 .floating-button img {
-  width: 32px;
-  height: 32px;
+  width: var(--button-icon-size, 40px);
+  height: var(--button-icon-size, 40px);
   color: var(--color-text-light, #FFFFFF);
   fill: var(--color-text-light, #FFFFFF);
   flex: none; /* Prevent icon from shrinking */
@@ -136,8 +136,8 @@
 
 .modal-close svg,
 .modal-close img {
-  width: 32px;
-  height: 32px;
+  width: var(--button-icon-size, 40px);
+  height: var(--button-icon-size, 40px);
   color: var(--color-text-light, #FFFFFF);
   fill: var(--color-text-light, #FFFFFF);
   flex: none;
@@ -189,8 +189,8 @@
 
 .page-back svg,
 .page-back img {
-  width: 32px;
-  height: 32px;
+  width: var(--button-icon-size, 40px);
+  height: var(--button-icon-size, 40px);
   color: var(--color-text-light, #FFFFFF);
   fill: var(--color-text-light, #FFFFFF);
   flex: none;
@@ -242,8 +242,8 @@
 
 .page-close svg,
 .page-close img {
-  width: 32px;
-  height: 32px;
+  width: var(--button-icon-size, 40px);
+  height: var(--button-icon-size, 40px);
   color: var(--color-text-light, #FFFFFF);
   fill: var(--color-text-light, #FFFFFF);
   flex: none;
@@ -256,30 +256,38 @@
 /* MOBILE: Smaller button size and adjusted positions */
 @media (max-width: 768px) {
   .floating-button,
-  .modal-close,
-  .page-back,
-  .page-close {
-    width: 32px;
-    height: 32px;
+  .modal-close {
+    width: 40px;
+    height: 40px;
   }
   
   .floating-button svg,
   .floating-button img,
   .modal-close svg,
-  .modal-close img,
+  .modal-close img {
+    width: 24px;
+    height: 24px;
+  }
+
+  .page-back,
+  .page-close {
+    width: 40px;
+    height: 40px;
+  }
+
   .page-back svg,
   .page-back img,
   .page-close svg,
   .page-close img {
-    width: 18px;
-    height: 18px;
+    width: 24px;
+    height: 24px;
   }
-  
+
   .modal-close,
   .page-close {
     right: 16px;
   }
-  
+
   .page-back {
     left: 16px;
     display: none !important;
