@@ -133,8 +133,8 @@
   font-family: 'Geist Mono', var(--font-family-mono);
   font-style: normal;
   font-weight: var(--font-weight-normal);
-  font-size: var(--font-size-lg);
-  line-height: 130%;
+  font-size: 18px;
+  line-height: 22px;
   letter-spacing: var(--letter-spacing-normal);
   color: #FFFFFF;
   
@@ -207,7 +207,7 @@
   }
   
   .toast__text {
-    font-size: var(--font-size-base);
+    font-size: 18px;
   }
 }
 
@@ -224,6 +224,6 @@
   }
   
   .toast__text {
-    font-size: var(--font-size-sm);
+    font-size: 18px;
   }
 }

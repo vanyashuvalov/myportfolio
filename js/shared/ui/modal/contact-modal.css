@@ -210,8 +210,8 @@
   font-family: 'Geist Mono', var(--font-family-mono);
   font-style: normal;
   font-weight: var(--font-weight-normal);
-  font-size: var(--font-size-xl);
-  line-height: 130%;
+  font-size: 18px;
+  line-height: 22px;
   color: #FFFFFF;
   opacity: 0.8;
   
@@ -262,8 +262,8 @@
   font-family: 'Geist Mono', var(--font-family-mono);
   font-style: normal;
   font-weight: var(--font-weight-medium);
-  font-size: var(--font-size-lg);
-  line-height: 23px;
+  font-size: 18px;
+  line-height: 22px;
   text-align: center;
   letter-spacing: var(--letter-spacing-tight);
   text-transform: uppercase;
@@ -336,7 +336,7 @@
   
   .modal-container .modal-input,
   .modal-container .modal-button {
-    font-size: var(--font-size-base);
+    font-size: 18px;
   }
 }
 
@@ -358,6 +358,6 @@
   .modal-container .modal-input,
   .modal-container .modal-button {
     padding: var(--space-3) var(--space-4);
-    font-size: var(--font-size-sm);
+    font-size: 18px;
   }
 }
