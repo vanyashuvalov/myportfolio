@@ -49,6 +49,7 @@ export class ActionButtons {
         text: this.options.isMobile ? 'Telegram' : null,
         action: 'telegram',
         ariaLabel: 'Contact via Telegram',
+        size: 'small',
         url: this.socialLinks.telegram.url
       }),
       
@@ -58,6 +59,7 @@ export class ActionButtons {
         text: this.options.isMobile ? 'LinkedIn' : null,
         action: 'linkedin',
         ariaLabel: 'View LinkedIn profile',
+        size: 'small',
         url: this.socialLinks.linkedin.url
       }),
       
@@ -67,6 +69,7 @@ export class ActionButtons {
         text: this.options.isMobile ? 'Email' : null,
         action: 'email',
         ariaLabel: 'Send email',
+        size: 'small',
         url: this.socialLinks.email.url
       }),
       
@@ -76,6 +79,7 @@ export class ActionButtons {
         text: this.options.isMobile ? 'GitHub' : null,
         action: 'github',
         ariaLabel: 'View GitHub profile',
+        size: 'small',
         url: this.socialLinks.github.url
       }),
       

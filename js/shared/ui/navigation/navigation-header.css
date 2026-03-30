@@ -96,14 +96,14 @@ body.loaded .navigation-wrapper {
 /* ANCHOR: breadcrumb_separators */
 /* UPDATED COMMENTS: Dynamic breadcrumb separator elements without fixed order */
 .breadcrumb-separator {
-  width: 10px;
-  height: 20px;
+  width: 12px;
+  height: 22px;
   
   font-family: 'Geist Mono', var(--font-family-mono);
   font-style: normal;
   font-weight: 400;
-  font-size: 16px;
-  line-height: 20px;
+  font-size: 18px;
+  line-height: 22px;
   letter-spacing: -0.02em;
   text-transform: uppercase;
   color: #FFFFFF;
@@ -256,7 +256,7 @@ body.loaded .navigation-wrapper {
 }
 
 .user-profile-link:hover {
-  opacity: 0.7;
+  opacity: 1;
 }
 
 .user-profile-link:focus-visible {
@@ -272,22 +272,22 @@ body.loaded .navigation-wrapper {
   align-items: center;
   padding: 0;
   gap: 6px;
-  height: 20px;
+  height: 22px;
   flex: none;
   flex-grow: 0;
   /* UPDATED COMMENTS: Removed fixed order for dynamic positioning */
 }
 
 .user-name {
-  height: 20px;
+  height: 22px;
   white-space: nowrap;
   
   /* REUSED: Geist Mono font from Figma specs */
   font-family: 'Geist Mono', var(--font-family-mono);
   font-style: normal;
   font-weight: 400;
-  font-size: 16px;
-  line-height: 20px;
+  font-size: 18px;
+  line-height: 22px;
   letter-spacing: -0.02em;
   text-transform: uppercase;
   color: #FFFFFF;
@@ -353,7 +353,7 @@ body.loaded .navigation-wrapper {
   align-items: center;
   padding: 0;
   gap: 8px;
-  height: 20px;
+  height: 22px;
   flex: 1 1 auto;
   min-width: 0;
   flex-grow: 1;
@@ -361,14 +361,14 @@ body.loaded .navigation-wrapper {
 }
 
 .page-title {
-  height: 20px;
+  height: 22px;
   white-space: nowrap;
   
   font-family: 'Geist Mono', var(--font-family-mono);
   font-style: normal;
   font-weight: 400;
-  font-size: 16px;
-  line-height: 20px;
+  font-size: 18px;
+  line-height: 22px;
   letter-spacing: -0.02em;
   text-transform: uppercase;
   color: #FFFFFF;
@@ -390,8 +390,8 @@ body.loaded .navigation-wrapper {
   width: 100%;
   max-width: 100%;
   min-width: 0;
-  font-size: 16px;
-  line-height: 20px;
+  font-size: 18px;
+  line-height: 22px;
 }
 
 .page-title:hover {
@@ -414,14 +414,14 @@ body.loaded .navigation-wrapper {
   flex-direction: row;
   align-items: center;
   gap: 6px;
-  height: 20px;
+  height: 22px;
   
   /* REUSED: Geist Mono font matching navigation style */
   font-family: 'Geist Mono', var(--font-family-mono);
   font-style: normal;
   font-weight: 400;
-  font-size: 16px;
-  line-height: 20px;
+  font-size: 18px;
+  line-height: 22px;
   letter-spacing: -0.02em;
   text-transform: uppercase;
   color: #FFFFFF;
@@ -431,13 +431,38 @@ body.loaded .navigation-wrapper {
 }
 
 .nav-button--dropdown:hover {
-  opacity: 0.7;
+  opacity: 1;
 }
 
 .nav-button--dropdown:focus {
-  outline: 2px solid rgba(255, 255, 255, 0.5);
-  outline-offset: 4px;
-  border-radius: 4px;
+  outline: none;
+}
+
+.nav-button--dropdown:focus-visible {
+  outline: none;
+}
+
+.nav-button--dropdown:active {
+  outline: none;
+}
+
+.navigation-wrapper .nav-button:hover {
+  opacity: 1;
+}
+
+.navigation-wrapper .nav-button--icon:hover,
+.navigation-wrapper .nav-button--text:hover,
+.navigation-wrapper .nav-button--dropdown:hover {
+  opacity: 1;
+}
+
+.navigation-wrapper .nav-button--dropdown:hover .nav-button__text,
+.navigation-wrapper .nav-button--dropdown:hover .nav-button__flag,
+.navigation-wrapper .nav-button--text:hover .nav-button__text,
+.navigation-wrapper .nav-button--text:hover .nav-button__icon,
+.navigation-wrapper .nav-button--icon:hover svg,
+.navigation-wrapper .nav-button--icon:hover iconify-icon {
+  opacity: 1;
 }
 
 /* UPDATED COMMENTS: Flag variant with icon */
@@ -490,7 +515,7 @@ body.loaded .navigation-wrapper {
   align-items: center;
   padding: 0;
   gap: 8px;
-  height: 20px;
+  height: 22px;
   flex: none;
   flex-grow: 0;
   /* UPDATED COMMENTS: Removed fixed order for dynamic positioning */
@@ -509,14 +534,14 @@ body.loaded .navigation-wrapper {
 }
 
 .language-text {
-  height: 20px;
+  height: 22px;
   white-space: nowrap;
   
   font-family: 'Geist Mono', var(--font-family-mono);
   font-style: normal;
   font-weight: 400;
-  font-size: 16px;
-  line-height: 20px;
+  font-size: 18px;
+  line-height: 22px;
   letter-spacing: -0.02em;
   text-transform: uppercase;
   color: #FFFFFF;
@@ -527,7 +552,17 @@ body.loaded .navigation-wrapper {
 }
 
 .language-text:hover {
-  opacity: 0.7;
+  opacity: 1;
+}
+
+.user-name:hover,
+.status-text:hover {
+  opacity: 1;
+}
+
+.user-name-section:hover .user-name,
+.user-name-section:hover .status-text {
+  opacity: 1;
 }
 
 /* ANCHOR: action_buttons */

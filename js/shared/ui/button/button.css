@@ -37,7 +37,7 @@
 .nav-button--icon {
   width: 40px;
   height: 40px;
-  padding: 10px;
+  padding: 8px;
   gap: 0;
   display: flex;
   align-items: center;
@@ -98,8 +98,8 @@
   font-family: 'Geist Mono', var(--font-family-mono);
   font-style: normal;
   font-weight: 500;
-  font-size: 16px;
-  line-height: 20px;
+  font-size: 18px;
+  line-height: 22px;
   letter-spacing: -0.02em;
   text-transform: uppercase;
   color: #FFFFFF;
@@ -117,7 +117,7 @@
 .nav-button--dropdown {
   gap: 0;
   padding: 0;
-  height: 20px;
+  height: 22px;
   min-width: 0;
   background: transparent;
   border: none;
@@ -132,8 +132,8 @@
   font-family: 'Geist Mono', var(--font-family-mono);
   font-style: normal;
   font-weight: 400;
-  font-size: 16px;
-  line-height: 20px;
+  font-size: 18px;
+  line-height: 22px;
   letter-spacing: -0.02em;
   text-transform: uppercase;
   color: #FFFFFF;
@@ -243,11 +243,13 @@
 /* ANCHOR: specific_button_widths */
 /* UPDATED COMMENTS: Specific widths for navigation buttons */
 .nav-button--cv {
-  width: 117px;
+  width: auto;
+  min-width: fit-content;
 }
 
 .nav-button--share {
-  width: 107px;
+  width: auto;
+  min-width: fit-content;
 }
 
 /* ANCHOR: accessibility */
