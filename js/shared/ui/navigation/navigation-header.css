@@ -353,6 +353,7 @@ body.loaded .navigation-wrapper {
 
 .page-section .nav-button--dropdown {
   width: 100%;
+  max-width: 100%;
 }
 
 .page-section .nav-button__text {
