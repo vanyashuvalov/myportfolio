@@ -23,13 +23,33 @@
   /* REUSED: Hidden during loading state */
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.5s ease-in, visibility 0.5s ease-in;
+  transition: opacity 0.5s ease-in, visibility 0.5s ease-in, transform 0.25s ease, padding 0.25s ease;
 }
 
 /* SCALED FOR: Show navigation after loading is complete */
 body.loaded .navigation-wrapper {
   opacity: 1;
   visibility: visible;
+}
+
+.navigation-wrapper--collapsed {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.navigation-wrapper--collapsed .user-profile-link,
+.navigation-wrapper--collapsed .language-section,
+.navigation-wrapper--collapsed .page-section,
+.navigation-wrapper--collapsed .action-buttons,
+.navigation-wrapper--collapsed .breadcrumb-separator {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(-8px);
+}
+
+.navigation-wrapper--collapsed .nav-section {
+  gap: 0;
 }
 
 /* ANCHOR: main_container */

@@ -50,8 +50,104 @@ export class NavigationHeader {
       currentPage: this.options.currentPage,
       currentLanguage: this.options.currentLanguage
     });
+    this.navigationWrapper = null;
+    this.scrollState = {
+      lastY: 0,
+      rafId: null,
+      collapsed: false
+    };
+    this.handleScrollVisibility = this.handleScrollVisibility.bind(this);
     
     this.isInitialized = false;
+  }
+
+  /**
+   * Setup scroll-based visibility for the navigation header
+   * SCALED FOR: Long desktop pages where the header collapses on scroll down
+   */
+  setupScrollVisibility() {
+    if (typeof window === 'undefined') return;
+
+    this.scrollState.lastY = window.scrollY || window.pageYOffset || 0;
+    this.syncScrollVisibilityState();
+    window.addEventListener('scroll', this.handleScrollVisibility, { passive: true });
+  }
+
+  /**
+   * Handle scroll with requestAnimationFrame throttling
+   */
+  handleScrollVisibility() {
+    if (typeof window === 'undefined') return;
+    if (this.scrollState.rafId !== null) return;
+
+    this.scrollState.rafId = window.requestAnimationFrame(() => {
+      this.scrollState.rafId = null;
+      this.updateScrollVisibility();
+    });
+  }
+
+  /**
+   * Update collapsed state based on scroll direction and page length
+   */
+  updateScrollVisibility(force = false) {
+    if (typeof window === 'undefined') return;
+
+    const currentY = window.scrollY || window.pageYOffset || 0;
+    const isDesktop = window.matchMedia('(min-width: 769px)').matches;
+    const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight || 0;
+    const canCollapse = isDesktop && scrollHeight > window.innerHeight + 48;
+
+    if (!canCollapse) {
+      this.scrollState.lastY = currentY;
+      this.setNavigationCollapsed(false);
+      return;
+    }
+
+    if (force) {
+      this.scrollState.lastY = currentY;
+      this.setNavigationCollapsed(false);
+      return;
+    }
+
+    const delta = currentY - this.scrollState.lastY;
+    const downThreshold = 10;
+    const upThreshold = -10;
+
+    if (currentY <= 24) {
+      this.setNavigationCollapsed(false);
+    } else if (delta > downThreshold) {
+      this.setNavigationCollapsed(true);
+    } else if (delta < upThreshold) {
+      this.setNavigationCollapsed(false);
+    }
+
+    this.scrollState.lastY = currentY;
+  }
+
+  /**
+   * Apply the collapsed class to the navigation wrapper
+   */
+  setNavigationCollapsed(collapsed) {
+    if (!this.navigationWrapper) {
+      this.navigationWrapper = this.container.querySelector('.navigation-wrapper');
+    }
+    if (!this.navigationWrapper) return;
+    if (this.scrollState.collapsed === collapsed) return;
+
+    this.scrollState.collapsed = collapsed;
+    this.navigationWrapper.classList.toggle('navigation-wrapper--collapsed', collapsed);
+
+    if (collapsed) {
+      this.closeAllDropdowns();
+    }
+  }
+
+  /**
+   * Keep the DOM in sync with the current scroll state after rerendering
+   */
+  syncScrollVisibilityState() {
+    if (!this.navigationWrapper) return;
+    this.navigationWrapper.classList.toggle('navigation-wrapper--collapsed', this.scrollState.collapsed);
   }
 
   /**
@@ -63,6 +159,7 @@ export class NavigationHeader {
       this.render();
       this.userInfo.init();
       this.bindEvents();
+      this.setupScrollVisibility();
       this.setupPageDropdownNavigation();
       this.setupMobileMenuListeners();
       this.setupMobileMenuActions();
@@ -198,6 +295,8 @@ export class NavigationHeader {
       <!-- REUSED: BurgerButton component -->
       ${this.burgerButton.render()}
     `;
+    this.navigationWrapper = this.container.querySelector('.navigation-wrapper');
+    this.syncScrollVisibilityState();
 
     if (!document.querySelector('.mobile-menu')) {
       const overlay = document.createElement('div');
@@ -473,6 +572,7 @@ Contacts: ${SOCIAL_LINKS.telegram.url} | ${SOCIAL_LINKS.email.address}`;
    * SCALED FOR: Responsive behavior
    */
   handleResize() {
+    this.updateScrollVisibility(true);
     this.eventBus.emit('navigation:resize');
   }
 
@@ -528,6 +628,13 @@ Contacts: ${SOCIAL_LINKS.telegram.url} | ${SOCIAL_LINKS.email.address}`;
     }
     if (this.mobileMenu) {
       this.mobileMenu.destroy();
+    }
+    if (typeof window !== 'undefined') {
+      window.removeEventListener('scroll', this.handleScrollVisibility);
+      if (this.scrollState.rafId !== null) {
+        window.cancelAnimationFrame(this.scrollState.rafId);
+        this.scrollState.rafId = null;
+      }
     }
     if (this.container) {
       this.container.innerHTML = '';
