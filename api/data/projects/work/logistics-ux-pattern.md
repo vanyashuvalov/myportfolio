@@ -83,10 +83,9 @@ I went to the office and saw how tough it is for zoomer dispatchers when instead
 - After processing all inputs, created and sent a questionnaire to 30 dispatchers and logistics coordinators to address new questions while validating hypotheses
 
 ::: stats
-- **-2%** Failed shipments
-- **-10%** Delays against plan
-- **+35%** Shipments per dispatcher
+- **50** Respondents
 - **10** Testing sessions
+- **3** Days in the office
 :::
 
 #### Dispatcher Time Destribution
