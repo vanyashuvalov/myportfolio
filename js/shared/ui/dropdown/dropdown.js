@@ -86,9 +86,9 @@ export class Dropdown {
     tempDiv.innerHTML = dropdownHTML;
     this.dropdownElement = tempDiv.firstElementChild;
     
-    // UPDATED COMMENTS: Position dropdown relative to button
+    // UPDATED COMMENTS: Position dropdown relative to the fixed navigation, not the document flow
     const buttonRect = buttonElement.getBoundingClientRect();
-    this.dropdownElement.style.position = 'absolute';
+    this.dropdownElement.style.position = 'fixed';
     this.dropdownElement.style.top = `${buttonRect.bottom + 8}px`;
     this.dropdownElement.style.left = `${buttonRect.left}px`;
     this.dropdownElement.style.opacity = '0';

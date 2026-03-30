@@ -510,7 +510,11 @@ Contacts: ${SOCIAL_LINKS.telegram.url} | ${SOCIAL_LINKS.email.address}`;
     // CRITICAL: Update DOM directly without re-rendering
     const pageButton = this.container.querySelector('[data-dropdown="page"] .nav-button__text');
     if (pageButton) {
-      pageButton.textContent = pageName;
+      pageButton.textContent = this.breadcrumb.getDisplayPageTitle(pageName);
+      const pageButtonElement = pageButton.closest('button');
+      if (pageButtonElement) {
+        pageButtonElement.title = pageName;
+      }
     }
   }
 

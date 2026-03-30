@@ -16,6 +16,7 @@ export class Button {
       type: 'icon', // 'icon', 'text', 'dropdown', 'dropdown-flag'
       icon: null,
       text: null,
+      title: null,
       action: null,
       ariaLabel: null,
       className: '',
@@ -79,12 +80,14 @@ export class Button {
     const dataAttrs = Object.entries(this.options.dataAttrs || {})
       .map(([key, value]) => `data-${key}="${value}"`)
       .join(' ');
+    const titleAttr = this.options.title ? ` title="${this.escapeAttribute(this.options.title)}"` : '';
     
     return `
       <button class="${baseClasses} nav-button--text ${sizeClasses} ${this.options.className}" 
               data-action="${this.options.action}" 
               ${dataAttrs}
-              aria-label="${this.options.ariaLabel}">
+              aria-label="${this.options.ariaLabel}"
+              ${titleAttr}>
         ${this.options.icon ? `<div class="nav-button__icon">${this.options.icon}</div>` : ''}
         <span class="nav-button__text">${this.options.text}</span>
       </button>
@@ -97,11 +100,14 @@ export class Button {
    * REUSED: Consistent with existing nav-button--dropdown class
    */
   renderDropdownButton(baseClasses, sizeClasses) {
+    const titleAttr = this.options.title ? ` title="${this.escapeAttribute(this.options.title)}"` : '';
+    
     return `
       <button class="${baseClasses}--dropdown ${sizeClasses} ${this.options.className}" 
               aria-expanded="${this.options.ariaExpanded}" 
               aria-haspopup="true"
-              data-dropdown="${this.options.dropdown}">
+              data-dropdown="${this.options.dropdown}"
+              ${titleAttr}>
         <span class="nav-button__text">${this.options.text}</span>
       </button>
     `;
@@ -206,5 +212,17 @@ export class Button {
    */
   updateOptions(newOptions) {
     Object.assign(this.options, newOptions);
+  }
+
+  /**
+   * Escape attribute values for safe HTML output
+   */
+  escapeAttribute(value) {
+    return String(value)
+      .replace(/&/g, '&amp;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
   }
 }

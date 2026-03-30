@@ -43,6 +43,7 @@ body.loaded .navigation-wrapper {
   padding: 0;
   height: 40px;
   width: 100%;
+  min-width: 0;
   
   /* SCALED FOR: Hardware acceleration for smooth performance */
   will-change: transform;
@@ -59,9 +60,10 @@ body.loaded .navigation-wrapper {
   padding: 0;
   gap: 18px;
   height: 40px;
-  flex: none;
+  flex: 1 1 auto;
+  min-width: 0;
   order: 0;
-  flex-grow: 0;
+  flex-grow: 1;
 }
 
 /* ANCHOR: breadcrumb_separators */
@@ -325,8 +327,9 @@ body.loaded .navigation-wrapper {
   padding: 0;
   gap: 10px;
   height: 29px;
-  flex: none;
-  flex-grow: 0;
+  flex: 1 1 auto;
+  min-width: 0;
+  flex-grow: 1;
   /* UPDATED COMMENTS: Removed fixed order for dynamic positioning */
 }
 
@@ -346,6 +349,18 @@ body.loaded .navigation-wrapper {
   flex: none;
   flex-grow: 0;
   cursor: pointer;
+}
+
+.page-section .nav-button--dropdown {
+  width: 100%;
+}
+
+.page-section .nav-button__text {
+  display: block;
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .page-title:hover {

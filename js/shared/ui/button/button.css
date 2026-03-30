@@ -112,12 +112,16 @@
   gap: 0;
   padding: 0;
   height: 29px;
-  min-width: fit-content;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
   background: transparent;
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
 }
 
 .nav-button--dropdown .nav-button__text {
@@ -134,6 +138,11 @@
   order: 0;
   flex-grow: 0;
   margin-right: 10px;
+  min-width: 0;
+  max-width: min(24ch, 100%);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   /* UPDATED COMMENTS: Margin instead of gap for better hover area */
 }
 

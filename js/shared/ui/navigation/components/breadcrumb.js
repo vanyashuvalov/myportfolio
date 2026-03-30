@@ -43,6 +43,18 @@ export class Breadcrumb {
   }
 
   /**
+   * Limit the visible page title so it stays within the navigation layout
+   */
+  getDisplayPageTitle(pageName = this.options.currentPage) {
+    const title = String(pageName || '');
+    if (title.length <= 24) {
+      return title;
+    }
+
+    return `${title.slice(0, 21).trimEnd()}...`;
+  }
+
+  /**
    * Render page section as dropdown button
    * REUSED: Button component with dropdown variant
    * UPDATED COMMENTS: Uses Button component instead of hardcoded HTML
@@ -50,12 +62,17 @@ export class Breadcrumb {
   renderPageSection() {
     const pageButton = new Button({
       type: 'dropdown',
-      text: this.options.currentPage,
+      text: this.getDisplayPageTitle(),
+      title: this.options.currentPage,
       dropdown: 'page',
       ariaExpanded: this.dropdownStates.page
     });
     
-    return pageButton.render();
+    return `
+      <div class="page-section">
+        ${pageButton.render()}
+      </div>
+    `;
   }
 
   /**
