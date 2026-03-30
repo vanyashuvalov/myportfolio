@@ -301,7 +301,6 @@ export class ProjectPageHandler {
     this.destroyReadingProgress();
     
     this.readingProgress = new ReadingProgress({
-      container: this.pageContainer,
       color: 'rgba(255, 255, 255, 0.3)',
       height: 2,
       zIndex: 100003
