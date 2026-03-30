@@ -217,6 +217,24 @@ body.loaded .navigation-wrapper {
   object-position: center;
 }
 
+.user-profile-link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.user-profile-link:hover {
+  opacity: 0.7;
+}
+
+.user-profile-link:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 4px;
+}
+
 /* ANCHOR: user_name_section */
 .user-name-section {
   /* UPDATED COMMENTS: User name and status grouped together with 10px gap */

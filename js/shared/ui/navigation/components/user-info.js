@@ -58,13 +58,15 @@ export class UserInfo {
       </div>
       
       <!-- User Name and Status -->
-      <div class="user-name-section">
-        <h1 class="user-name">${this.options.userName}</h1>
-        <div class="status-badge" role="status" aria-label="Current status">
-          <div class="status-indicator" aria-hidden="true"></div>
-          <span class="status-text">${this.options.statusText}</span>
+      <a class="user-profile-link" href="/" aria-label="Go to home page">
+        <div class="user-name-section">
+          <h1 class="user-name">${this.options.userName}</h1>
+          <div class="status-badge" role="status" aria-label="Current status">
+            <div class="status-indicator" aria-hidden="true"></div>
+            <span class="status-text">${this.options.statusText}</span>
+          </div>
         </div>
-      </div>
+      </a>
     `;
   }
 
