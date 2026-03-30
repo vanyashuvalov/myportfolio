@@ -29,6 +29,13 @@ export class ContactInput {
     this.sendButton = null;
     this.isInitialized = false;
     this.isExpanded = false; // Track if width is expanded
+    this.contactInputWrapper = null;
+    this.scrollState = {
+      lastY: 0,
+      rafId: null,
+      collapsed: false
+    };
+    this.handleScrollVisibility = this.handleScrollVisibility.bind(this);
   }
 
   /**
@@ -40,6 +47,7 @@ export class ContactInput {
       await this.render();
       this.cacheElements();
       this.bindEvents();
+      this.setupScrollVisibility();
       
       this.isInitialized = true;
       
@@ -92,9 +100,95 @@ export class ContactInput {
    * SCALED FOR: Performance optimization
    */
   cacheElements() {
+    this.contactInputWrapper = this.container.querySelector('.contact-input-wrapper');
     this.wrapper = this.container.querySelector('.contact-input');
     this.inputElement = this.container.querySelector('.contact-input__field');
     this.sendButton = this.container.querySelector('.contact-input__send');
+  }
+
+  /**
+   * Setup scroll-based visibility for the bottom input
+   * SCALED FOR: Long pages where the input should collapse on scroll down
+   */
+  setupScrollVisibility() {
+    if (typeof window === 'undefined') return;
+
+    this.scrollState.lastY = window.scrollY || window.pageYOffset || 0;
+    this.syncScrollVisibilityState();
+    window.addEventListener('scroll', this.handleScrollVisibility, { passive: true });
+  }
+
+  /**
+   * Handle scroll with requestAnimationFrame throttling
+   */
+  handleScrollVisibility() {
+    if (typeof window === 'undefined') return;
+    if (this.scrollState.rafId !== null) return;
+
+    this.scrollState.rafId = window.requestAnimationFrame(() => {
+      this.scrollState.rafId = null;
+      this.updateScrollVisibility();
+    });
+  }
+
+  /**
+   * Update collapsed state based on scroll direction and page length
+   */
+  updateScrollVisibility(force = false) {
+    if (typeof window === 'undefined') return;
+
+    const currentY = window.scrollY || window.pageYOffset || 0;
+    const isDesktop = window.matchMedia('(min-width: 769px)').matches;
+    const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight || 0;
+    const canCollapse = isDesktop && scrollHeight > window.innerHeight + 48;
+
+    if (!canCollapse) {
+      this.scrollState.lastY = currentY;
+      this.setContactInputCollapsed(false);
+      return;
+    }
+
+    if (force) {
+      this.scrollState.lastY = currentY;
+      this.setContactInputCollapsed(false);
+      return;
+    }
+
+    const delta = currentY - this.scrollState.lastY;
+    const downThreshold = 10;
+    const upThreshold = -10;
+
+    if (currentY <= 24) {
+      this.setContactInputCollapsed(false);
+    } else if (delta > downThreshold) {
+      this.setContactInputCollapsed(true);
+    } else if (delta < upThreshold) {
+      this.setContactInputCollapsed(false);
+    }
+
+    this.scrollState.lastY = currentY;
+  }
+
+  /**
+   * Apply the collapsed class to the input wrapper
+   */
+  setContactInputCollapsed(collapsed) {
+    if (!this.contactInputWrapper) {
+      this.contactInputWrapper = this.container.querySelector('.contact-input-wrapper');
+    }
+    if (!this.contactInputWrapper) return;
+    if (this.scrollState.collapsed === collapsed) return;
+
+    this.scrollState.collapsed = collapsed;
+    this.contactInputWrapper.classList.toggle('contact-input-wrapper--collapsed', collapsed);
+  }
+
+  /**
+   * Keep the DOM in sync with the current scroll state after rerendering
+   */
+  syncScrollVisibilityState() {
+    if (!this.contactInputWrapper) return;
+    this.contactInputWrapper.classList.toggle('contact-input-wrapper--collapsed', this.scrollState.collapsed);
   }
 
   /**
@@ -323,6 +417,13 @@ export class ContactInput {
    * SCALED FOR: Memory management
    */
   destroy() {
+    if (typeof window !== 'undefined') {
+      window.removeEventListener('scroll', this.handleScrollVisibility);
+      if (this.scrollState.rafId !== null) {
+        window.cancelAnimationFrame(this.scrollState.rafId);
+        this.scrollState.rafId = null;
+      }
+    }
     if (this.container) {
       this.container.innerHTML = '';
     }

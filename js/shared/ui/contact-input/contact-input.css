@@ -24,7 +24,9 @@
   /* SCALED FOR: Hidden by default, shown after body.loaded */
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.5s ease-in, visibility 0.5s ease-in;
+  transform: translateY(0);
+  transition: opacity 0.5s ease-in, visibility 0.5s ease-in, transform 0.28s ease;
+  will-change: opacity, transform;
 }
 
 /* SCALED FOR: Show contact input after loading is complete */
@@ -34,6 +36,12 @@ body.loaded .contact-input-wrapper,
   visibility: visible;
 }
 
+.contact-input-wrapper--collapsed {
+  opacity: 0;
+  transform: translateY(calc(100% + 24px));
+  pointer-events: none;
+}
+
 /* ANCHOR: contact_input_field */
 /* REUSED: Exact Figma auto-layout specs */
 .contact-input {
@@ -41,17 +49,17 @@ body.loaded .contact-input-wrapper,
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  padding: 20px 26px;
-  gap: 10px;
+  padding: 16px 22px;
+  gap: 8px;
   
-  width: 467px;
+  width: 440px;
   max-width: 100%;
-  min-height: 64px;
+  min-height: 56px;
   
   /* UPDATED COMMENTS: Semi-transparent background with blur - EXACT FIGMA SPECS */
   background: rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(2px);
-  border-radius: 36px;
+  border-radius: 30px;
   
   /* REUSED: Hardware acceleration */
   will-change: opacity, background, width;
@@ -69,8 +77,8 @@ body.loaded .contact-input-wrapper,
 /* ANCHOR: comment_icon */
 /* UPDATED COMMENTS: Comment icon on the left - becomes white when has value */
 .contact-input__icon {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   opacity: 0.5;
   
   flex: none;
@@ -102,14 +110,14 @@ body.loaded .contact-input-wrapper,
 /* REUSED: Geist Mono font from design system */
 .contact-input__field {
   width: 100%;
-  min-height: 26px;
+  min-height: 22px;
   max-height: 260px;
   
   font-family: 'Geist Mono', var(--font-family-mono);
   font-style: normal;
   font-weight: 400;
-  font-size: 20px;
-  line-height: 130%;
+  font-size: 16px;
+  line-height: 20px;
   color: #FFFFFF;
   opacity: 0.8;
   
@@ -159,8 +167,8 @@ body.loaded .contact-input-wrapper,
 /* ANCHOR: send_icon */
 /* UPDATED COMMENTS: Send icon appears when text entered */
 .contact-input__send {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   opacity: 0;
   
   flex: none;
@@ -213,31 +221,26 @@ body.loaded .contact-input-wrapper,
   
   .contact-input {
     width: 100%;
-    /* CRITICAL: Keep original padding - don't change on mobile */
-    /* padding remains 20px 26px from desktop */
+    /* CRITICAL: Keep compact desktop sizing overridden for mobile width only */
   }
   
   .contact-input__field {
     width: auto;
-    /* CRITICAL: Keep original font size - don't change on mobile */
-    /* font-size remains 20px from desktop */
+    /* CRITICAL: Keep desktop text sizing on mobile */
   }
 }
 
 @media (max-width: 480px) {
   .contact-input {
-    /* CRITICAL: Keep original padding and height - don't change on mobile */
-    /* padding remains 20px 26px, min-height remains 64px from desktop */
+    /* CRITICAL: Keep compact desktop sizing on mobile */
   }
   
   .contact-input__icon,
   .contact-input__send {
-    /* CRITICAL: Keep original icon size - don't change on mobile */
-    /* width and height remain 24px from desktop */
+    /* CRITICAL: Keep compact icon sizing on mobile */
   }
   
   .contact-input__field {
-    /* CRITICAL: Keep original font size - don't change on mobile */
-    /* font-size remains 20px from desktop */
+    /* CRITICAL: Keep compact desktop text sizing on mobile */
   }
 }

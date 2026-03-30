@@ -17,6 +17,8 @@
   left: 0;
   right: 0;
   padding: 20px 20px 20px;
+  height: 80px;
+  box-sizing: border-box;
   z-index: var(--z-navigation, 1000);
   display: flex;
   justify-content: center;
@@ -39,13 +41,12 @@ body.loaded .navigation-wrapper {
 .breadcrumb-separator {
   transition:
     opacity 0.28s ease,
-    transform 0.28s ease,
-    visibility 0s linear 0.28s;
+    transform 0.28s ease;
   will-change: opacity, transform;
 }
 
 .navigation-wrapper--collapsed .navigation-header {
-  transform: translateY(-12px);
+  transform: none;
 }
 
 .navigation-wrapper--collapsed .user-profile-link,
@@ -56,7 +57,6 @@ body.loaded .navigation-wrapper {
   opacity: 0;
   transform: translateY(-16px);
   pointer-events: none;
-  visibility: hidden;
 }
 
 /* ANCHOR: main_container */
@@ -85,7 +85,7 @@ body.loaded .navigation-wrapper {
   flex-direction: row;
   align-items: center;
   padding: 0;
-  gap: 18px;
+  gap: 14px;
   height: 40px;
   flex: 1 1 auto;
   min-width: 0;
@@ -96,14 +96,14 @@ body.loaded .navigation-wrapper {
 /* ANCHOR: breadcrumb_separators */
 /* UPDATED COMMENTS: Dynamic breadcrumb separator elements without fixed order */
 .breadcrumb-separator {
-  width: 14px;
-  height: 29px;
+  width: 10px;
+  height: 20px;
   
   font-family: 'Geist Mono', var(--font-family-mono);
   font-style: normal;
   font-weight: 400;
-  font-size: 22px;
-  line-height: 29px;
+  font-size: 16px;
+  line-height: 20px;
   letter-spacing: -0.02em;
   text-transform: uppercase;
   color: #FFFFFF;
@@ -271,23 +271,23 @@ body.loaded .navigation-wrapper {
   flex-direction: row;
   align-items: center;
   padding: 0;
-  gap: 7px;
-  height: 29px;
+  gap: 6px;
+  height: 20px;
   flex: none;
   flex-grow: 0;
   /* UPDATED COMMENTS: Removed fixed order for dynamic positioning */
 }
 
 .user-name {
-  height: 29px;
+  height: 20px;
   white-space: nowrap;
   
   /* REUSED: Geist Mono font from Figma specs */
   font-family: 'Geist Mono', var(--font-family-mono);
   font-style: normal;
   font-weight: 400;
-  font-size: 22px;
-  line-height: 29px;
+  font-size: 16px;
+  line-height: 20px;
   letter-spacing: -0.02em;
   text-transform: uppercase;
   color: #FFFFFF;
@@ -304,9 +304,9 @@ body.loaded .navigation-wrapper {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  padding: 4px 12px;
-  gap: 8px;
-  height: 26px;
+  padding: 3px 10px;
+  gap: 6px;
+  height: 22px;
   white-space: nowrap;
   
   /* UPDATED COMMENTS: Green status background with transparency */
@@ -330,14 +330,14 @@ body.loaded .navigation-wrapper {
 }
 
 .status-text {
-  height: 18px;
+  height: 16px;
   white-space: nowrap;
   
   font-family: 'Geist Mono', var(--font-family-mono);
   font-style: normal;
   font-weight: 400;
-  font-size: 14px;
-  line-height: 18px;
+  font-size: 13px;
+  line-height: 16px;
   letter-spacing: -0.02em;
   text-transform: uppercase;
   color: #53F38E;
@@ -352,8 +352,8 @@ body.loaded .navigation-wrapper {
   flex-direction: row;
   align-items: center;
   padding: 0;
-  gap: 10px;
-  height: 29px;
+  gap: 8px;
+  height: 20px;
   flex: 1 1 auto;
   min-width: 0;
   flex-grow: 1;
@@ -361,14 +361,14 @@ body.loaded .navigation-wrapper {
 }
 
 .page-title {
-  height: 29px;
+  height: 20px;
   white-space: nowrap;
   
   font-family: 'Geist Mono', var(--font-family-mono);
   font-style: normal;
   font-weight: 400;
-  font-size: 22px;
-  line-height: 29px;
+  font-size: 16px;
+  line-height: 20px;
   letter-spacing: -0.02em;
   text-transform: uppercase;
   color: #FFFFFF;
@@ -390,6 +390,8 @@ body.loaded .navigation-wrapper {
   width: 100%;
   max-width: 100%;
   min-width: 0;
+  font-size: 16px;
+  line-height: 20px;
 }
 
 .page-title:hover {
@@ -411,15 +413,15 @@ body.loaded .navigation-wrapper {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 8px;
-  height: 29px;
+  gap: 6px;
+  height: 20px;
   
   /* REUSED: Geist Mono font matching navigation style */
   font-family: 'Geist Mono', var(--font-family-mono);
   font-style: normal;
   font-weight: 400;
-  font-size: 22px;
-  line-height: 29px;
+  font-size: 16px;
+  line-height: 20px;
   letter-spacing: -0.02em;
   text-transform: uppercase;
   color: #FFFFFF;
@@ -440,7 +442,7 @@ body.loaded .navigation-wrapper {
 
 /* UPDATED COMMENTS: Flag variant with icon */
 .nav-button--dropdown--flag {
-  gap: 10px;
+  gap: 8px;
 }
 
 .nav-button__flag {
@@ -487,8 +489,8 @@ body.loaded .navigation-wrapper {
   flex-direction: row;
   align-items: center;
   padding: 0;
-  gap: 10px;
-  height: 29px;
+  gap: 8px;
+  height: 20px;
   flex: none;
   flex-grow: 0;
   /* UPDATED COMMENTS: Removed fixed order for dynamic positioning */
@@ -507,14 +509,14 @@ body.loaded .navigation-wrapper {
 }
 
 .language-text {
-  height: 29px;
+  height: 20px;
   white-space: nowrap;
   
   font-family: 'Geist Mono', var(--font-family-mono);
   font-style: normal;
   font-weight: 400;
-  font-size: 22px;
-  line-height: 29px;
+  font-size: 16px;
+  line-height: 20px;
   letter-spacing: -0.02em;
   text-transform: uppercase;
   color: #FFFFFF;
@@ -534,7 +536,7 @@ body.loaded .navigation-wrapper {
   flex-direction: row;
   align-items: center;
   padding: 0;
-  gap: 12px;
+  gap: 8px;
   height: 40px;
   flex: none;
   order: 1;
