@@ -23,7 +23,7 @@
   /* REUSED: Hidden during loading state */
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.5s ease-in, visibility 0.5s ease-in, transform 0.25s ease, padding 0.25s ease;
+  transition: opacity 0.5s ease-in, visibility 0.5s ease-in;
 }
 
 /* SCALED FOR: Show navigation after loading is complete */
@@ -32,9 +32,20 @@ body.loaded .navigation-wrapper {
   visibility: visible;
 }
 
-.navigation-wrapper--collapsed {
-  padding-top: 12px;
-  padding-bottom: 12px;
+.user-profile-link,
+.language-section,
+.page-section,
+.action-buttons,
+.breadcrumb-separator {
+  transition:
+    opacity 0.28s ease,
+    transform 0.28s ease,
+    visibility 0s linear 0.28s;
+  will-change: opacity, transform;
+}
+
+.navigation-wrapper--collapsed .navigation-header {
+  transform: translateY(-12px);
 }
 
 .navigation-wrapper--collapsed .user-profile-link,
@@ -43,13 +54,9 @@ body.loaded .navigation-wrapper {
 .navigation-wrapper--collapsed .action-buttons,
 .navigation-wrapper--collapsed .breadcrumb-separator {
   opacity: 0;
-  visibility: hidden;
+  transform: translateY(-16px);
   pointer-events: none;
-  transform: translateY(-8px);
-}
-
-.navigation-wrapper--collapsed .nav-section {
-  gap: 0;
+  visibility: hidden;
 }
 
 /* ANCHOR: main_container */

@@ -89,7 +89,11 @@ export class Breadcrumb {
       ariaExpanded: this.dropdownStates.language
     });
     
-    return languageButton.render();
+    return `
+      <div class="language-section">
+        ${languageButton.render()}
+      </div>
+    `;
   }
 
   /**
