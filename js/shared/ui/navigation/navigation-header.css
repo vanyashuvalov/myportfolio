@@ -379,16 +379,18 @@ body.loaded .navigation-wrapper {
 }
 
 .page-section .nav-button--dropdown {
-  width: 100%;
+  width: fit-content;
   max-width: 100%;
+  min-width: 0;
+  align-self: flex-start;
   text-align: left;
 }
 
 .page-section .nav-button__text {
-  display: block;
-  flex: 1 1 auto;
-  width: 100%;
-  max-width: 100%;
+  display: inline-block;
+  flex: none;
+  width: auto;
+  max-width: min(24ch, 100%);
   min-width: 0;
   font-size: 18px;
   line-height: 22px;

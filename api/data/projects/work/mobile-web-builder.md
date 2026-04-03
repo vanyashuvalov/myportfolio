@@ -11,12 +11,12 @@ role: Product Designer & Researcher
 team: [Product Designer]
 
 description: Validating market opportunity and designing prototype for mobile-first website builder, addressing untapped mobile editing market
-hero_image: /assets/projects/mobile-web-builder/images/Frame_11025444.jpg
-thumbnail: /assets/projects/mobile-web-builder/images/Frame_11025444.jpg
+hero_image: /assets/projects/mobile-web-builder/images/hero.png
+thumbnail: /assets/projects/mobile-web-builder/images/hero.png
 
 meta_title: Mobile Website Builder UX Case Study - Product Strategy
 meta_description: How I validated market opportunity and designed a mobile-first website builder prototype
-og_image: /assets/projects/mobile-web-builder/images/Frame_11025444.jpg
+og_image: /assets/projects/mobile-web-builder/images/hero.png
 
 tags: [Mobile App, Product Strategy, Website Builder, UX Research, SaaS]
 skills: [Market Research, Quantitative Research, Prototyping, Product Strategy]
@@ -29,176 +29,150 @@ order: 4
 color_theme: "#8B5CF6"
 ---
 
-## Project Overview
+## Context
 
-This project explored the opportunity for a mobile-first website builder — a product category that doesn't exist in the market despite clear demand signals. The goal was to validate the hypothesis, understand the market size, and design a minimal viable prototype
+The project explored whether a mobile-first website builder could exist as a real product category rather than just a prototype idea. The starting point was a simple contradiction: people build and manage digital products from their phones every day, but website editors still overwhelmingly assume a desktop workflow.
 
-::: callout info
-**Key Insight**: No website editors exist for mobile devices, despite 90% of people using phones more than computers
+::: problemsolution
+Problem | There was clear mobile usage behavior, but no serious mobile-native website editor in the market, which made the opportunity hard to prove and easy to dismiss.
+Solution | Validate the demand with market and user research, then design a minimal mobile-first editor concept around the most realistic use cases.
 :::
 
-### Brief Summary
+### Result
 
-- Packaged mobile website builder prototype
-- Analyzed market size, conducted quantitative research, validated hypothesis
-- Defined product growth strategy
+The work framed the opportunity as a product strategy problem rather than just a UI exercise. It combined market analysis, survey research, and prototype design to test whether mobile website building could be a viable category.
 
-![Brief Summary](/assets/projects/mobile-web-builder/images/image.png)
+::: stats
+- **2** months of work
+- **80-100** survey responses
+- **5** competitor scenarios reviewed
+:::
 
-## The Hypothesis
+![Hero](/assets/projects/mobile-web-builder/images/hero.png)
 
-### Core Assumption
-
-**Fact**: There is NOT A SINGLE website editor for mobile devices, even though web technologies support it, and 90% of people primarily use phones rather than computers.
-
-The growth of mobile traffic and the habit of setting up services "on the go" creates demand for such a product. Unlike competitors who primarily develop desktop editors, this product would occupy the empty mobile niche, leveraging smartphone strengths (photo/video, push notifications, integrations).
-
-### Target Audience
-
-- Small business owners
-- Bloggers and content creators
-- Young entrepreneurs
-- Users who find desktop editors inconvenient
-
-### Market Trend
-
-Mobile traffic is dominant, but competitors almost entirely ignore the mobile segment.
-
-### Proposed Solution
-
-An ultra-simple mobile-friendly website builder with:
-- Service integration capabilities
-- Templates
-- Subscription-based monetization
-
-### Expected Outcome
-
-- Increase in mobile websites
-- New audience engagement
-- Expansion of the SaaS website builder market through mobile users
+---
 
 ## Research
 
-### Market Analysis
+#### Subject
 
-I evaluated the market considering:
+The central question was not whether websites could technically be edited on mobile, but whether users actually had a reason to do that and whether the market had left that need uncovered.
+
+The main hypotheses were:
+- People often need to work without PC access
+- Mobile-native product creation is a real behavior, not a niche fantasy
+- Current tools do not solve the problem well enough
+- A simpler editor could lower the barrier for creators and small businesses
+
+::: callout
+The challenge was to prove that this is not just a smaller desktop workflow, but a different use case that deserves its own product shape.
+:::
+
+#### Market Analysis
+
+The market exploration focused on whether mobile editing demand existed at all, and if so, how large the uncovered space might be.
+
 - Total number of websites
-- Percentage of active websites
-- Percentage of websites on CMS
-- Percentage of websites on .ru domains
-- Domain registration trends in Russia
+- Share of active websites
+- Share of sites on CMS platforms
+- Domain registration trends
+- Existing product coverage in the mobile segment
 
-The market is small but essentially unoccupied. Based on the hypothesis, the product wouldn't just capture market share — it would expand the market itself.
+The conclusion was that the opportunity looked small at first glance, but in practice it was essentially unoccupied. That meant the product would not only compete for market share, it could expand the market itself.
 
-[View Market Research Document](https://docs.google.com/document/d/1JofWOVQyHOw83CzM5xxRT_7LxaK9B7jhQedD0lUFt9w/edit)
+![Market Analysis](/assets/projects/mobile-web-builder/images/scerens-ui-overview.png)
 
-### Quantitative Research
+#### Process
 
-I conducted surveys collecting **80-100 responses** across **2 questionnaires**:
+To make the hypothesis testable, the research was split into two audiences with different expectations and levels of digital confidence.
 
-**Group 1: Creators, Micro-entrepreneurs, Designers**
-- Published in design Telegram channels and among friends in digital/small business
-- Questions about: current tools used, frequency of needing a website without PC access, willingness to pay
+- Creators, micro-entrepreneurs, and designers
+- Non-digital-native users aged 15-25
+- Surveyed current work habits and pain points
+- Compared willingness to pay across segments
+- Looked for the gap between need and existing product quality
 
-**Group 2: Non-digital-native consumers, 15-25 years**
-- Distributed through personal networks
-- Questions about: side income interests, learning expectations, willingness to learn new tools
+::: stats
+- **2** Survey groups
+- **80-100** responses
+- **1** product hypothesis to validate
+:::
 
-### Survey Results
+#### Research Output
 
-**Professionals, Micro-entrepreneurs, Creators**
+The strongest signal was that mobile usage was already there, but mobile website editors were not. That gap made the category interesting enough to design for, even if the first version had to stay minimal.
 
-| Question | No | Neutral | Yes |
-| --- | --- | --- | --- |
-| Do you often need to work on a website when you don't have PC access? | 32% | 38% | 30% |
-| Have you used mobile website editors? | 64% | 23% | 13% |
-| Would you pay for a convenient mobile business website editor? | 34% | 45% | 21% |
-| Are you satisfied with current mobile website solutions? | 68% | 25% | 7% |
+::: gallery
+2
+![Scope Features](/assets/projects/mobile-web-builder/images/main%20scope%20features.png)
+![Scope Features](/assets/projects/mobile-web-builder/images/scope%20features.png)
 
-**Consumers, Youth, Non-digital-natives**
+2
+![Creative Ideas](/assets/projects/mobile-web-builder/images/tiktok-creative-ideas.png)
+![Hero](/assets/projects/mobile-web-builder/images/hero.png)
+:::
 
-| Question | No | Neutral | Yes |
-| --- | --- | --- | --- |
-| Are you interested in earning money by creating websites? | 19% | 29% | 52% |
-| Would you learn new online tools for additional income? | 9% | 27% | 64% |
-| Have you considered side gigs related to internet products or websites? | 41% | 25% | 34% |
-| Have you faced the problem "all internet earnings require a PC"? | 35% | 32% | 33% |
+---
 
-### Key Findings
+## Design
 
-1. **Demand Exists**: Most users experience inconvenience without a PC, but mobile editors are essentially non-existent
-2. **Willingness to Pay**: Significant portion from both groups, especially creators and micro-businesses
-3. **Market Gap**: Almost no one uses mobile editors — not due to lack of need, but lack of quality products
-4. **Growth Potential**: High across both target audiences through reduced barriers
+#### Prototype
 
-## Design Process
+The prototype focused on the smallest possible editor experience that could still feel plausible on a phone screen. Instead of trying to recreate a desktop builder, the concept leaned into mobile-native behaviors and tight task focus.
 
-### Product Scope
+#### Product Scope
 
-Defined scope and MVP priorities, broken into 3 categories:
+The product scope was split into three practical layers so the idea could stay understandable:
 
-- **The Editor (Canvas)**: Core website building functionality
-- **User Website (Publishing)**: Publication and hosting capabilities
-- **Service (Extras)**: Additional features around the editor
+- **The Editor (Canvas)**: core content editing and page building
+- **User Website (Publishing)**: publication and hosting behavior
+- **Service (Extras)**: supporting features around the editor
 
-![Product Scope](/assets/projects/mobile-web-builder/images/image%201.png)
+![Product Scope](/assets/projects/mobile-web-builder/images/main%20scope%20features.png)
 
-### Hypothesis Validation Approach
+#### Visual Design
 
-![Validation Framework](/assets/projects/mobile-web-builder/images/image%202.png)
+The UI direction stayed minimal because the project was meant to validate the product category, not to over-design the interface.
 
-## Design Solution
+- Simple layout with few visual dependencies
+- Strong hierarchy for editing actions
+- Mobile-friendly interaction patterns
+- Clear separation between canvas, tools, and preview
 
-### Competitive Analysis
+![Editor Screen](/assets/projects/mobile-web-builder/images/screens-editor.png)
 
-Analyzed 5 top website builders for deep scenarios, plus 5 related mobile apps (photo editors, design canvases).
+#### Design System
 
-### Visual Design
+The concept also needed to look like something a real product team could eventually ship and scale, so the visual system remained restrained and modular.
 
-Minimalist MVP design based on current design system principles:
+![Design Overview](/assets/projects/mobile-web-builder/images/scerens-ui-overview.png)
 
-![MVP Design](/assets/projects/mobile-web-builder/images/image%203.png)
+::: quote Product Strategy Note
+Mobile isn't just a smaller desktop. It's a different use case that needs a different product shape.
+:::
 
-![Design System](/assets/projects/mobile-web-builder/images/image%204.png)
+### Design Process
 
-## Results & Impact
+1. **Hypothesis Framing**: Defined the product category problem first
+2. **Market Analysis**: Checked whether the opportunity was actually uncovered
+3. **Segment Research**: Separated creators from less technical users
+4. **Survey Design**: Built questionnaires around behavior and willingness to pay
+5. **Prototype Scope**: Reduced the concept to the minimum believable editor
+6. **Visual Design**: Kept the interface minimal and mobile-native
+7. **Iteration**: Adjusted the concept based on research signals
+8. **Narrative Synthesis**: Turned the work into a product strategy case study
 
-### Validated Findings
+### Technical Collaboration
 
-- **Market Opportunity Confirmed**: Small but unoccupied market with expansion potential
-- **User Demand Validated**: 30% of professionals need mobile editing regularly
-- **Youth Interest Strong**: 52% interested in website creation for income, 64% willing to learn
-- **Monetization Potential**: 21% of professionals willing to pay for quality mobile solution
+Even though this was a hypothesis project, the concept still had to stay grounded in realistic product constraints:
 
-### Business Potential
+- Publishing and hosting considerations
+- Template-based content creation
+- Service integrations as optional expansion
+- Subscription-style monetization logic
+- Mobile-first interaction limits and screen density
 
-- Expansion of SaaS website builder market to mobile users
-- New audience acquisition through reduced barriers
-- Subscription-based revenue model with low customer acquisition cost
-
-## Lessons Learned
-
-### What Worked Well
-
-1. **Quantitative Validation**: Survey data provided clear evidence of market opportunity
-2. **Segmented Research**: Separating professionals from youth revealed different needs
-3. **Market Sizing**: Understanding the market wasn't just about share, but expansion
-
-### Challenges Overcome
-
-1. **Small Market Perception**: Initial market size seemed small, but represented untapped potential
-2. **User Education**: Non-digital-native users need different onboarding approaches
-3. **Feature Prioritization**: Balancing simplicity with necessary functionality
-
-### Next Steps
-
-1. Develop customer journey maps through content marketing
-2. Build landing page to test conversion
-3. Validate hypothesis through Gen-Z channels (vertical video content)
-
-![Creative Concepts](/assets/projects/mobile-web-builder/images/image%205.png)
-
-## Timeline
+### Timeline
 
 ::: metrics
 - Market Research: 1 week
@@ -208,8 +182,46 @@ Minimalist MVP design based on current design system principles:
 - Total Duration: 2 months
 :::
 
+---
+
+## Results
+
+### Quantitative Metrics
+
+::: metrics
+- **30%** of professionals regularly need mobile website work
+- **52%** of young respondents are interested in website creation for income
+- **64%** of young respondents are willing to learn new tools
+- **21%** of professionals would pay for a quality mobile solution
+:::
+
+### Business Impact
+
+::: stats
+- **1** clearly defined market gap
+- **2** user segments validated
+- **5** competitor scenarios reviewed
+- **1** product direction worth pursuing
+:::
+
+### Qualitative Feedback
+
+The research suggested that mobile website editing is not blocked by lack of interest. It is blocked by lack of a good product, which is a very different problem to solve.
+
+### Future Improvements
+
+- Landing page testing
+- Customer journey mapping
+- More detailed publishing flows
+- Stronger template library
+- Validation through short-form content channels
+
+---
+
 ## Conclusion
 
-This project demonstrated that mobile-first website building is a viable product category. The research confirmed that the lack of mobile editors isn't due to lack of demand — it's due to lack of quality products. By targeting underserved segments (small businesses, young entrepreneurs) and leveraging mobile-native features, a mobile website builder could significantly expand the SaaS website builder market.
+The Mobile Website Builder project showed that a missing category can be more interesting than an existing crowded market. The core finding was that mobile-native website editing is not just a convenience feature. It is a different context with different constraints and different product expectations.
 
-The key insight: **Mobile isn't just a smaller desktop — it's a different use case requiring different solutions.**
+The main insight was simple: if people are already trying to work from mobile, the product should meet them there instead of asking them to switch devices.
+
+![Creative Concepts](/assets/projects/mobile-web-builder/images/tiktok-creative-ideas.png)
