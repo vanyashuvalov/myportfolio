@@ -72,6 +72,10 @@ A dispatcher's workspace consists of:
 - Some snack food
 Dispatchers communicate and exchange current statuses with logistics coordinators and managers across multiple channels simultaneously: WhatsApp, Telegram, Bitrix, offline
 
+::: callout
+The challenge is to focus the dispatcher's **full attention** on urgent shipments and engage him in every way possible
+:::
+
 ![Moodboard](assets\projects\logistics-ux-pattern\images\dispatch-moodboard.jpg)
 
 #### Process
@@ -83,9 +87,9 @@ I went to the office and saw how tough it is for zoomer dispatchers when instead
 - After processing all inputs, created and sent a questionnaire to 30 dispatchers and logistics coordinators to address new questions while validating hypotheses
 
 ::: stats
-- **50** Respondents
-- **10** Testing sessions
 - **3** Days in the office
+- **10** Testing sessions
+- **50** Respondents
 :::
 
 #### Dispatcher Time Destribution
@@ -141,6 +145,12 @@ The concept of task "relevance" is our own, so we grounded it on regulations tha
 - How often the dispatcher should call the driver during long transits
 - Whether dispatchers can transfer shipments to each other
 - and more
+
+The dispatcher handles a large number of shipments per day—up to 50. But at any given time, the most urgent ones requiring a follow-up call number **at most 5**
+
+::: callout
+That's why a **Kanban board** with a width that fits up to 4 cards is ideal, and the space left by one highlighted card creates "breathing room" to provoke maximum focus
+:::
 
 ::: gallery
 1
