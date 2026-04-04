@@ -440,6 +440,20 @@ export class MarkdownParser {
       const match = trimmedLine.match(/^(.+?):\s*(.+?)(?:\s*→\s*(.+?))?(?:\s*\((.+?)\))?$/);
       if (match) {
         const [, label, before, after, impact] = match;
+
+        // UPDATED COMMENTS: Treat simple label/value rows as timeline items instead of comparisons
+        if (!after && !impact) {
+          const labelHtml = this.parseInlineFormatting(this.escapeHtml(label.trim()));
+          const valueHtml = this.parseInlineFormatting(this.escapeHtml(before.trim()));
+
+          return `
+            <div class="metric-row metric-row--single">
+              <div class="metric-label">${labelHtml}</div>
+              <div class="metric-value">${valueHtml}</div>
+            </div>
+          `;
+        }
+
         const labelHtml = this.parseInlineFormatting(this.escapeHtml(label.trim()));
         const beforeHtml = this.parseInlineFormatting(this.escapeHtml(before.trim()));
         const afterHtml = after ? this.parseInlineFormatting(this.escapeHtml(after.trim())) : '';

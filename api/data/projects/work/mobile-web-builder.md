@@ -44,11 +44,9 @@ The work framed the opportunity as a product strategy problem rather than just a
 
 ::: stats
 - **2** months of work
-- **80-100** survey responses
+- **100** survey responses
 - **5** competitor scenarios reviewed
 :::
-
-![Hero](/assets/projects/mobile-web-builder/images/hero.png)
 
 ---
 
@@ -102,15 +100,7 @@ To make the hypothesis testable, the research was split into two audiences with 
 
 The strongest signal was that mobile usage was already there, but mobile website editors were not. That gap made the category interesting enough to design for, even if the first version had to stay minimal.
 
-::: gallery
-2
-![Scope Features](/assets/projects/mobile-web-builder/images/main%20scope%20features.png)
 ![Scope Features](/assets/projects/mobile-web-builder/images/scope%20features.png)
-
-2
-![Creative Ideas](/assets/projects/mobile-web-builder/images/tiktok-creative-ideas.png)
-![Hero](/assets/projects/mobile-web-builder/images/hero.png)
-:::
 
 ---
 
@@ -153,14 +143,14 @@ Mobile isn't just a smaller desktop. It's a different use case that needs a diff
 
 ### Design Process
 
-1. **Hypothesis Framing**: Defined the product category problem first
-2. **Market Analysis**: Checked whether the opportunity was actually uncovered
-3. **Segment Research**: Separated creators from less technical users
-4. **Survey Design**: Built questionnaires around behavior and willingness to pay
-5. **Prototype Scope**: Reduced the concept to the minimum believable editor
-6. **Visual Design**: Kept the interface minimal and mobile-native
-7. **Iteration**: Adjusted the concept based on research signals
-8. **Narrative Synthesis**: Turned the work into a product strategy case study
+| 1 | Hypothesis Framing | Defined the product category problem first |
+| 2 | Market Analysis | Checked whether the opportunity was actually uncovered |
+| 3 | Segment Research | Separated creators from less technical users |
+| 4 | Survey Design | Built questionnaires around behavior and willingness to pay |
+| 5 | Prototype Scope | Reduced the concept to the minimum believable editor |
+| 6 | Visual Design | Kept the interface minimal and mobile-native |
+| 7 | Iteration | Adjusted the concept based on research signals |
+| 8 | Narrative Synthesis | Turned the work into a product strategy case study |
 
 ### Technical Collaboration
 

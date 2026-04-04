@@ -882,6 +882,15 @@
 
 .metric-row--single .metric-label {
   flex: 1;
+  min-width: 0;
+}
+
+.metric-value {
+  flex: 0 0 auto;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.55);
+  text-align: right;
+  white-space: nowrap;
 }
 
 .metric-values {
@@ -1212,6 +1221,11 @@
   
   .metric-values {
     justify-content: flex-start;
+  }
+
+  .metric-value {
+    text-align: left;
+    white-space: normal;
   }
   
   /* CRITICAL: Disable sticky headers on mobile for better performance */
