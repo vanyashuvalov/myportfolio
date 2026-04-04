@@ -391,13 +391,13 @@
 }
 
 .markdown-content img:not(.quote-icon) {
-  /* CRITICAL: Default image behavior stays inline-sized unless wrapped as a block */
+  /* CRITICAL: Standalone content images should center within their block */
   max-width: 100%;
   width: auto;
   height: auto;
-  display: inline-block;
+  display: block;
   border-radius: 12px;
-  margin: 0;
+  margin: 0 auto;
   box-shadow: none;
   object-fit: contain;
 }
@@ -406,26 +406,31 @@
   width: calc(100vw - 120px);
   max-width: none;
   height: auto;
-  display: block;
+  display: flex;
+  justify-content: center;
   border-radius: 12px;
   margin: 32px 0;
   margin-left: calc(50% - 50vw + 60px);
   margin-right: 0;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   box-sizing: border-box;
+  padding: 0;
 }
 
 .markdown-image-block img {
-  width: 100%;
+  width: auto;
+  max-width: 100%;
   height: auto;
   display: block;
   border-radius: inherit;
+  margin: 0 auto;
   box-shadow: none;
   object-fit: contain;
 }
 
 .markdown-image {
-  display: inline-block;
+  display: block;
+  margin: 0 auto;
 }
 
 /* ============================================
