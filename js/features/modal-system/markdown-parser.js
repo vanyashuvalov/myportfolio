@@ -429,27 +429,40 @@ export class MarkdownParser {
 
   /**
    * Render metrics block (table-like stats)
-   * SCALED FOR: Before/After comparisons
+   * SCALED FOR: Before/after comparisons and simple metric rows
    */
   renderMetrics(content) {
     const lines = content.split('\n').filter(line => line.trim());
     const metrics = lines.map(line => {
-      // Parse "Metric: Before → After (Impact)"
-      const match = line.match(/^[\*\-]\s*(.+?):\s*(.+?)(?:\s*→\s*(.+?))?(?:\s*\((.+?)\))?$/);
+      const trimmedLine = line.replace(/^[\*\-]\s*/, '').trim();
+
+      // Parse "Metric: Before → After (Impact)" and "Metric: Value"
+      const match = trimmedLine.match(/^(.+?):\s*(.+?)(?:\s*→\s*(.+?))?(?:\s*\((.+?)\))?$/);
       if (match) {
         const [, label, before, after, impact] = match;
+        const labelHtml = this.parseInlineFormatting(this.escapeHtml(label.trim()));
+        const beforeHtml = this.parseInlineFormatting(this.escapeHtml(before.trim()));
+        const afterHtml = after ? this.parseInlineFormatting(this.escapeHtml(after.trim())) : '';
+        const impactHtml = impact ? this.parseInlineFormatting(this.escapeHtml(impact.trim())) : '';
+
         return `
           <div class="metric-row">
-            <div class="metric-label">${this.escapeHtml(label)}</div>
+            <div class="metric-label">${labelHtml}</div>
             <div class="metric-values">
-              <span class="metric-before">${this.escapeHtml(before)}</span>
-              ${after ? `<span class="metric-arrow">→</span><span class="metric-after">${this.escapeHtml(after)}</span>` : ''}
-              ${impact ? `<span class="metric-impact">${this.escapeHtml(impact)}</span>` : ''}
+              <span class="metric-before">${beforeHtml}</span>
+              ${after ? `<span class="metric-arrow">→</span><span class="metric-after">${afterHtml}</span>` : ''}
+              ${impact ? `<span class="metric-impact">${impactHtml}</span>` : ''}
             </div>
           </div>
         `;
       }
-      return '';
+
+      const simpleHtml = this.parseInlineFormatting(this.escapeHtml(trimmedLine));
+      return `
+        <div class="metric-row metric-row--single">
+          <div class="metric-label">${simpleHtml}</div>
+        </div>
+      `;
     }).filter(Boolean).join('');
     
     return `
