@@ -3,5 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "build": "echo 'No build needed - static files'"
+  },
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
   }
 }
