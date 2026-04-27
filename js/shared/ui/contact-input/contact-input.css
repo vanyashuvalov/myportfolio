@@ -54,7 +54,7 @@ body.loaded .contact-input-wrapper,
   
   width: 440px;
   max-width: 100%;
-  min-height: 56px;
+  min-height: 64px;
   
   /* UPDATED COMMENTS: Semi-transparent background with blur - EXACT FIGMA SPECS */
   background: rgba(0, 0, 0, 0.3);
