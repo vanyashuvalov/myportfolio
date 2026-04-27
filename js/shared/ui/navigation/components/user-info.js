@@ -118,29 +118,8 @@ export class UserInfo {
       return;
     }
 
-    eyes.forEach((eye) => {
-      const rect = eye.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-
-      const deltaX = clientX - centerX;
-      const deltaY = clientY - centerY;
-      const distance = Math.hypot(deltaX, deltaY) || 1;
-
-      const maxMoveX = Math.min(4, Math.max(2, rect.width * 0.18));
-      const maxMoveY = Math.min(6, Math.max(3, rect.height * 0.18));
-
-      let moveX = (deltaX * maxMoveX) / Math.max(distance, maxMoveX);
-      let moveY = (deltaY * maxMoveY) / Math.max(distance, maxMoveY);
-
-      moveX = Math.max(-maxMoveX, Math.min(maxMoveX, moveX));
-      moveY = Math.max(-maxMoveY, Math.min(maxMoveY, moveY));
-
-      eye.style.setProperty('--pupil-x', `${moveX}px`);
-      eye.style.setProperty('--pupil-y', `${moveY}px`);
-      eye.style.setProperty('--highlight-x', `${moveX * 0.35}px`);
-      eye.style.setProperty('--highlight-y', `${moveY * 0.35}px`);
-    });
+    const { moveX, moveY } = this.calculateSharedGaze(eyes, clientX, clientY);
+    this.applyEyeVector(eyes, moveX, moveY);
   }
 
   /**
@@ -201,11 +180,47 @@ export class UserInfo {
 
     // Keep the same drift pattern, but scale it down so the idle motion feels calmer.
     const driftAmplitudeScale = 0.5;
+    const moveX = (Math.random() - 0.5) * 1.8 * driftAmplitudeScale;
+    const moveY = (Math.random() - 0.5) * 2.4 * driftAmplitudeScale;
 
+    this.applyEyeVector(eyes, moveX, moveY);
+  }
+
+  /**
+   * Calculate a single gaze vector for both eyes so they track the pointer with the same angle.
+   * PURPOSE: Prevent cross-eyed motion by keeping the left and right pupils aligned to one shared direction.
+   * CONNECTIONS: Used by both pointer tracking and idle drift so the avatar feels coherent in all states.
+   */
+  calculateSharedGaze(eyes, clientX, clientY) {
+    const rects = eyes.map((eye) => eye.getBoundingClientRect());
+    const avgCenterX = rects.reduce((sum, rect) => sum + rect.left + rect.width / 2, 0) / rects.length;
+    const avgCenterY = rects.reduce((sum, rect) => sum + rect.top + rect.height / 2, 0) / rects.length;
+    const averageWidth = rects.reduce((sum, rect) => sum + rect.width, 0) / rects.length;
+    const averageHeight = rects.reduce((sum, rect) => sum + rect.height, 0) / rects.length;
+
+    const deltaX = clientX - avgCenterX;
+    const deltaY = clientY - avgCenterY;
+    const distance = Math.hypot(deltaX, deltaY) || 1;
+
+    const maxMoveX = Math.min(4, Math.max(2, averageWidth * 0.18));
+    const maxMoveY = Math.min(6, Math.max(3, averageHeight * 0.18));
+
+    let moveX = (deltaX * maxMoveX) / Math.max(distance, maxMoveX);
+    let moveY = (deltaY * maxMoveY) / Math.max(distance, maxMoveY);
+
+    moveX = Math.max(-maxMoveX, Math.min(maxMoveX, moveX));
+    moveY = Math.max(-maxMoveY, Math.min(maxMoveY, moveY));
+
+    return { moveX, moveY };
+  }
+
+  /**
+   * Apply one shared gaze vector to both eyes.
+   * PURPOSE: Keep the pupils moving in the same direction so the avatar reads as one coherent face.
+   * CONNECTIONS: Shared by pointer tracking and idle drift to avoid independent per-eye movement.
+   */
+  applyEyeVector(eyes, moveX, moveY) {
     eyes.forEach((eye) => {
-      const moveX = (Math.random() - 0.5) * 1.8 * driftAmplitudeScale;
-      const moveY = (Math.random() - 0.5) * 2.4 * driftAmplitudeScale;
-
       eye.style.setProperty('--pupil-x', `${moveX}px`);
       eye.style.setProperty('--pupil-y', `${moveY}px`);
       eye.style.setProperty('--highlight-x', `${moveX * 0.35}px`);
