@@ -7,7 +7,6 @@ import { EventBus } from '../../utils/event-bus.js';
 import { toastManager } from '../../utils/toast-manager.js';
 import { TOAST_MESSAGES } from '../toast/toast-messages.js';
 import { UserInfo } from './components/user-info.js';
-import { Breadcrumb } from './components/breadcrumb.js';
 import { ActionButtons } from './components/action-buttons.js';
 import { BurgerButton } from './components/burger-button.js';
 import { MobileMenu } from './components/mobile-menu.js';
@@ -15,7 +14,7 @@ import { SOCIAL_LINKS } from '../../config/social-links.js';
 
 /**
  * NavigationHeader class - Main navigation component
- * Orchestrates user info, breadcrumb, and action button components
+ * Orchestrates user info, action button, and mobile menu components
  * 
  * @class NavigationHeader
  */
@@ -28,7 +27,6 @@ export class NavigationHeader {
       userPhoto: 'assets/images/avatar.jpg',
       statusText: 'Open for work',
       currentPage: 'Home',
-      currentLanguage: 'EN',
       // UPDATED COMMENTS: Use centralized social links configuration
       socialLinks: {
         telegram: SOCIAL_LINKS.telegram.url,
@@ -42,13 +40,11 @@ export class NavigationHeader {
     
     // REUSED: Modular component initialization
     this.userInfo = new UserInfo(this.options);
-    this.breadcrumb = new Breadcrumb(this.options);
     this.actionButtons = new ActionButtons(this.options);
     this.burgerButton = new BurgerButton();
     this.mobileMenu = new MobileMenu({
       eventBus: this.eventBus,
-      currentPage: this.options.currentPage,
-      currentLanguage: this.options.currentLanguage
+      currentPage: this.options.currentPage
     });
     this.navigationWrapper = null;
     this.scrollState = {
@@ -160,7 +156,6 @@ export class NavigationHeader {
       this.userInfo.init();
       this.bindEvents();
       this.setupScrollVisibility();
-      this.setupPageDropdownNavigation();
       this.setupMobileMenuListeners();
       this.setupMobileMenuActions();
       this.mobileMenu.init();
@@ -216,71 +211,19 @@ export class NavigationHeader {
   }
   
   /**
-   * Setup page dropdown navigation listener
-   * CRITICAL: Listen for page selection and trigger router navigation
-   * UPDATED COMMENTS: Integrates dropdown with router for seamless navigation
-   */
-  setupPageDropdownNavigation() {
-    // CRITICAL: Listen for page dropdown selection
-    this.eventBus.on('page-dropdown:select', ({ url, label }) => {
-      // UPDATED COMMENTS: Trigger folder navigation event for router
-      this.eventBus.emit('folder:navigate', { url });
-    });
-    
-    // CRITICAL: Listen for language dropdown selection (frontend only)
-    this.eventBus.on('language-dropdown:select', ({ langId, langLabel }) => {
-      // UPDATED COMMENTS: Update language in navigation (no backend logic yet)
-      this.updateCurrentLanguage(langLabel);
-    });
-  }
-  
-  /**
-   * Update current language display
-   * CRITICAL: Frontend-only language update without re-rendering
-   * UPDATED COMMENTS: Updates language text in navigation header + mobile menu sync
-   * 
-   * @param {string} langLabel - New language label (EN/RU)
-   */
-  updateCurrentLanguage(langLabel) {
-    // CRITICAL: Update internal state
-    this.options.currentLanguage = langLabel;
-    this.breadcrumb.updateBreadcrumb({ currentLanguage: langLabel });
-    this.mobileMenu.updateCurrentLanguage(langLabel);
-    
-    // CRITICAL: Update DOM directly without re-rendering
-    const langButton = this.container.querySelector('[data-dropdown="language"] .nav-button__text');
-    if (langButton) {
-      langButton.textContent = langLabel;
-    }
-  }
-
-  /**
    * Render navigation header HTML structure
-   * REUSED: Dynamic breadcrumb generation with separators between ALL THREE elements
-   * UPDATED COMMENTS: Three separate elements: [User+Status] / [EN] / [HOME]
+   * REUSED: Compact header with user identity and action buttons only
+   * UPDATED COMMENTS: Removed breadcrumb, page dropdown, and language switcher for the project-folder layout
    * CRITICAL: Burger button rendered OUTSIDE navigation-wrapper for proper z-index
    * UPDATED COMMENTS: Uses BurgerButton component instead of hardcoded HTML
    */
   render() {
-    // REUSED: Three distinct navigation elements for proper separation
-    // UPDATED COMMENTS: Swapped order - language section now comes before page section
-    const breadcrumbElements = [
-      this.userInfo.render(),
-      this.breadcrumb.renderLanguageSection(),
-      this.breadcrumb.renderPageSection()
-    ];
-    
-    // UPDATED COMMENTS: Generate separators dynamically between each of THREE elements
-    const breadcrumbHTML = breadcrumbElements
-      .filter(element => element && element.trim()) // Remove empty elements
-      .join('<div class="breadcrumb-separator">/</div>');
-    
     this.container.innerHTML = `
       <div class="navigation-wrapper">
         <nav class="navigation-header" role="navigation" aria-label="Main navigation">
           <!-- ANCHOR: nav_section -->
           <div class="nav-section">
-            ${breadcrumbHTML}
+            ${this.userInfo.render()}
           </div>
           
           <!-- ANCHOR: action_buttons -->
@@ -551,20 +494,17 @@ Contacts: ${SOCIAL_LINKS.telegram.url} | ${SOCIAL_LINKS.email.address}`;
 
   /**
    * Toggle dropdown menus
-   * UPDATED COMMENTS: Dropdown state management with modular components and button element
+   * UPDATED COMMENTS: Dropdown UI removed, so this stays as a safe no-op for legacy events
    */
   toggleDropdown(type, button) {
-    this.breadcrumb.toggleDropdown(type, button);
     this.eventBus.emit('navigation:dropdown-toggle', { type, button });
   }
 
   /**
    * Close all open dropdowns
-   * REUSED: Centralized dropdown management
+   * REUSED: Safe no-op after breadcrumb dropdown removal
    */
   closeAllDropdowns() {
-    this.breadcrumb.dropdownStates.page = false;
-    this.breadcrumb.dropdownStates.language = false;
   }
 
   /**
@@ -585,7 +525,6 @@ Contacts: ${SOCIAL_LINKS.telegram.url} | ${SOCIAL_LINKS.email.address}`;
     
     // UPDATED COMMENTS: Update all child components
     this.userInfo.updateUserInfo(newState);
-    this.breadcrumb.updateBreadcrumb(newState);
     this.actionButtons.updateSocialLinks(newState.socialLinks || {});
     
     if (this.isInitialized) {
@@ -604,18 +543,7 @@ Contacts: ${SOCIAL_LINKS.telegram.url} | ${SOCIAL_LINKS.email.address}`;
   updateCurrentPage(pageName) {
     // CRITICAL: Update internal state
     this.options.currentPage = pageName;
-    this.breadcrumb.updateBreadcrumb({ currentPage: pageName });
     this.mobileMenu.updateCurrentPage(pageName);
-    
-    // CRITICAL: Update DOM directly without re-rendering
-    const pageButton = this.container.querySelector('[data-dropdown="page"] .nav-button__text');
-    if (pageButton) {
-      pageButton.textContent = this.breadcrumb.getDisplayPageTitle(pageName);
-      const pageButtonElement = pageButton.closest('button');
-      if (pageButtonElement) {
-        pageButtonElement.title = pageName;
-      }
-    }
   }
 
   /**

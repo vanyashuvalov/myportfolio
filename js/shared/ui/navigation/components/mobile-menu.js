@@ -31,7 +31,6 @@ export class MobileMenu {
     this.overlayElement = null;
     this.pages = options.pages || [
       { label: 'Home', url: '/', page: 'Home' },
-      { label: 'Projects', url: '/projects', page: 'Projects' },
       { label: 'Fun', url: '/fun', page: 'Fun' },
       { label: 'Viewport Test', url: '/viewport-test', page: 'Viewport Test' }
     ];
@@ -204,12 +203,13 @@ export class MobileMenu {
    * CRITICAL: Update active state in menu
    */
   updateCurrentPage(pageName) {
-    this.options.currentPage = pageName;
+    const normalizedPage = pageName === 'Projects' ? 'Home' : pageName;
+    this.options.currentPage = normalizedPage;
     
     // CRITICAL: Update active state in DOM
     const items = this.menuElement?.querySelectorAll('[data-action="navigate"]') || [];
     items.forEach(item => {
-      if (item.dataset.page === pageName) {
+      if (item.dataset.page === normalizedPage) {
         item.classList.add('mobile-menu__item--active');
       } else {
         item.classList.remove('mobile-menu__item--active');

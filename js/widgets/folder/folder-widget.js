@@ -15,11 +15,16 @@ export class FolderWidget extends WidgetBase {
   constructor(element, options = {}) {
     super(element, { ...options, type: 'folder' });
     
-    // UPDATED COMMENTS: Folder configuration with project data and theme support
+    // UPDATED COMMENTS: Folder configuration with project data, theme support, and project-specific mode
     this.title = options.title || 'Projects';
     this.itemCount = options.itemCount || 17;
     this.projects = options.projects || this.getDefaultProjects();
     this.theme = options.theme || 'default'; // REUSED: Theme system for SVG variants
+    this.mode = options.mode || 'category';
+    this.subtitle = options.subtitle || `${this.itemCount} items`;
+    this.projectUrl = options.projectUrl || null;
+    this.projectId = options.projectId || null;
+    this.projectCategory = options.projectCategory || 'work';
     
     this.createFolderStructure();
   }
@@ -66,8 +71,8 @@ export class FolderWidget extends WidgetBase {
         
         <!-- Folder labels -->
         <div class="folder-labels">
-          <div class="folder-title">${this.escapeHtml(this.title)}</div>
-          <div class="folder-subtitle">${this.itemCount} items</div>
+          <div class="folder-title" title="${this.escapeHtml(this.title)}">${this.escapeHtml(this.title)}</div>
+          <div class="folder-subtitle" title="${this.escapeHtml(this.subtitle)}">${this.escapeHtml(this.subtitle)}</div>
         </div>
       </div>
     `;
@@ -79,17 +84,20 @@ export class FolderWidget extends WidgetBase {
    * SCALED FOR: Dynamic project thumbnails with fallback to placeholder
    */
   generateProjectCards() {
-    // CRITICAL: Use last 3 projects or create empty cards
-    const projectsToShow = this.projects.slice(0, 3);
+    // CRITICAL: Repeat the single project thumbnail in project mode so the folder still reads as a layered stack
+    const projectsToShow = this.mode === 'project' && this.projects.length === 1
+      ? [this.projects[0], this.projects[0], this.projects[0]]
+      : this.projects.slice(0, 3);
     
     let cardsHTML = '';
     for (let i = 0; i < 3; i++) {
       const project = projectsToShow[i];
       const cardClass = `project-card project-card--${i + 1}`;
       
-      if (project && project.image) {
+      if (project && (project.image || project.thumbnail)) {
         // UPDATED COMMENTS: Card with project thumbnail as background
-        cardsHTML += `<div class="${cardClass}" style="background-image: url('${this.escapeHtml(project.image)}'); background-size: cover; background-position: center;"></div>`;
+        const imageUrl = project.image || project.thumbnail;
+        cardsHTML += `<div class="${cardClass}" style="background-image: url('${this.escapeHtml(imageUrl)}'); background-size: cover; background-position: center;"></div>`;
       } else {
         // REUSED: Empty card with default styling
         cardsHTML += `<div class="${cardClass}"></div>`;
@@ -154,19 +162,29 @@ export class FolderWidget extends WidgetBase {
 
   /**
    * Widget-specific click handler
-   * UPDATED COMMENTS: Navigates to projects list page
+   * UPDATED COMMENTS: Navigates directly to the project page in project mode, or keeps legacy folder navigation for non-project folders
    */
   onClick(data) {
-    // CRITICAL: Navigate to projects list page instead of opening modal
     if (this.eventBus) {
-      // UPDATED COMMENTS: Determine category from theme
+      if (this.projectUrl) {
+        this.eventBus.emit('folder:navigate', {
+          widget: this,
+          url: this.projectUrl,
+          projectId: this.projectId,
+          category: this.projectCategory,
+          title: this.title
+        });
+        return;
+      }
+
+      // UPDATED COMMENTS: Determine category from theme for legacy folder navigation
       const category = this.theme === 'pink' ? 'fun' : 'work';
       
       this.eventBus.emit('folder:navigate', {
         widget: this,
         category: category,
         title: this.title,
-        url: category === 'fun' ? '/fun' : '/projects'
+        url: category === 'fun' ? '/fun' : '/'
       });
     } else {
       console.error('❌ No eventBus available!');
@@ -196,7 +214,12 @@ export class FolderWidget extends WidgetBase {
       title: this.title,
       itemCount: this.itemCount,
       projects: this.projects,
-      theme: this.theme
+      theme: this.theme,
+      mode: this.mode,
+      subtitle: this.subtitle,
+      projectUrl: this.projectUrl,
+      projectId: this.projectId,
+      projectCategory: this.projectCategory
     };
   }
 }

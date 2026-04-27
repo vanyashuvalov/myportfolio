@@ -35,10 +35,7 @@ body.loaded .navigation-wrapper {
 }
 
 .user-profile-link,
-.language-section,
-.page-section,
-.action-buttons,
-.breadcrumb-separator {
+.action-buttons {
   transition:
     opacity 0.28s ease,
     transform 0.28s ease;
@@ -50,10 +47,7 @@ body.loaded .navigation-wrapper {
 }
 
 .navigation-wrapper--collapsed .user-profile-link,
-.navigation-wrapper--collapsed .language-section,
-.navigation-wrapper--collapsed .page-section,
-.navigation-wrapper--collapsed .action-buttons,
-.navigation-wrapper--collapsed .breadcrumb-separator {
+.navigation-wrapper--collapsed .action-buttons {
   opacity: 0;
   transform: translateY(-16px);
   pointer-events: none;
@@ -680,14 +674,8 @@ body.loaded .navigation-wrapper {
     gap: 12px;
   }
   
-  /* CRITICAL: Hide breadcrumb elements on mobile */
-  .breadcrumb-separator,
+  /* CRITICAL: Hide secondary desktop-only elements on mobile */
   .user-name-section .status-badge,
-  .nav-button--dropdown {
-    display: none !important;
-  }
-  
-  /* CRITICAL: Hide desktop action buttons on mobile */
   .action-buttons {
     display: none !important;
   }

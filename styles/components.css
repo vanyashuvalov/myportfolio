@@ -35,10 +35,10 @@
   left: var(--widget-offset-projects-folder-left);
 }
 
-/* папка фан: центр */
+/* папка фан: нижний правый угол */
 .widget-position--fun-folder {
-  top: var(--widget-offset-fun-folder-top);
-  left: var(--widget-offset-fun-folder-left);
+  right: var(--widget-offset-fun-folder-right);
+  bottom: var(--widget-offset-fun-folder-bottom);
 }
 
 /* резюме: центр-низ */

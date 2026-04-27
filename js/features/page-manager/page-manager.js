@@ -3,7 +3,6 @@
  */
 import { Router } from './router.js';
 import { ProjectPageHandler } from './project-page-handler.js';
-import { ProjectsListPageHandler } from './projects-list-page-handler.js';
 import { FunGalleryPageHandler } from './fun-gallery-page-handler.js';
 
 export class PageManager {
@@ -18,7 +17,6 @@ export class PageManager {
     this.viewportTestCleanup = null;
 
     this.projectHandler = null;
-    this.projectsListHandler = null;
     this.funGalleryHandler = null;
 
     this.router = new Router({ eventBus: this.eventBus });
@@ -63,7 +61,6 @@ export class PageManager {
     };
 
     this.projectHandler = new ProjectPageHandler(handlerOptions);
-    this.projectsListHandler = new ProjectsListPageHandler(handlerOptions);
     this.funGalleryHandler = new FunGalleryPageHandler(handlerOptions);
 
     this.bindHandlerEvents();
@@ -79,9 +76,8 @@ export class PageManager {
       this.router.navigate('/');
     });
 
-    this.eventBus.on('page:backToProjects', ({ category } = {}) => {
-      const url = category === 'fun' ? '/fun' : '/projects';
-      this.router.navigate(url);
+    this.eventBus.on('page:backToProjects', () => {
+      this.router.navigate('/');
     });
 
     this.eventBus.on('page:navigateToProject', ({ projectId, category } = {}) => {
@@ -95,13 +91,14 @@ export class PageManager {
     this.router.register('/projects/:id', async (context) => {
       const id = context.params.id;
       if (!id || id === 'work' || id === 'fun') {
-        this.showProjectsListPage(id || 'work');
-      } else {
-        this.showProjectPage(id, 'work');
+        this.showDesktopCanvas();
+        return;
       }
+
+      this.showProjectPage(id, 'work');
     });
 
-    this.router.register('/projects', () => this.showProjectsListPage('work'));
+    this.router.register('/projects', () => this.showDesktopCanvas());
     this.router.register('/fun', () => this.showFunGalleryPage());
     this.router.register('/fun/:id', (context) => this.showProjectPage(context.params.id, 'fun'));
     this.router.register('/viewport-test', () => this.showViewportTestPage());
@@ -120,17 +117,6 @@ export class PageManager {
       render: (data) => this.projectHandler.render(data),
       setup: (data) => this.projectHandler.setupEvents(data),
       eventPayload: { projectId, category }
-    });
-  }
-
-  async showProjectsListPage(category = 'work') {
-    return this.showPage({
-      type: 'projects-list',
-      withOverlay: true,
-      load: () => this.projectsListHandler.load(category),
-      render: (data) => this.projectsListHandler.render(data),
-      setup: (data) => this.projectsListHandler.setupEvents(data),
-      eventPayload: { category }
     });
   }
 

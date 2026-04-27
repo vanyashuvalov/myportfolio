@@ -181,7 +181,7 @@
   /* UPDATED COMMENTS: Contact input gets bottom safe-area padding */
   /* CRITICAL: Modal containers NO padding - content inside handles safe-area */
   /* UPDATED COMMENTS: Removed padding to prevent double safe-area spacing */
-  /* Content elements (.projects-list, .project-page) handle their own safe-area padding */
+  /* Content elements (.project-page, .fun-gallery) handle their own safe-area padding */
   .modal-container {
     padding: 0;
   }

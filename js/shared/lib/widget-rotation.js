@@ -15,7 +15,7 @@ export const WIDGET_ROTATIONS = {
   'clock': 0,        // Clock needs to be perfectly straight for readability
   'sticker': -1,     // Slight left tilt for casual note appearance
   'resume': -2,      // Left tilt for document realism
-  'folder': -1,      // Slight left tilt for natural folder placement
+  'folder': 0,       // Folder widgets should stay level for the new desktop layout
   'cat': 0,          // Cat should be level for proper animation
   'feed-button': 2,  // Slight right tilt for button dynamics
   'cat-sticker': -1, // Cat sticker with left tilt matching Figma spec

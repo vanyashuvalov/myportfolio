@@ -16,6 +16,7 @@ SCALED FOR: Multiple channels, caching, error handling, Telegram bot integration
 import json
 import logging
 import os
+import re
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, List, Optional
@@ -36,13 +37,13 @@ class APIConfig:
     """API server configuration"""
     
     def __init__(self):
-        # CRITICAL: Use backend/data paths for correct file location
-        self.data_dir = Path(__file__).parent / 'data' / 'telegram'
+        # CRITICAL: Use repo-level api/data paths for correct file location
+        self.data_dir = Path(__file__).parent.parent / 'api' / 'data' / 'telegram'
         self.data_file = self.data_dir / 'channels_data.json'
         self.static_dir = self.data_dir
         
         # UPDATED COMMENTS: Projects directory for markdown files
-        self.projects_dir = Path(__file__).parent / 'data' / 'projects'
+        self.projects_dir = Path(__file__).parent.parent / 'api' / 'data' / 'projects'
         
         # SCALED FOR: Cache configuration
         self.cache_ttl = 3600  # 1 hour cache
@@ -411,6 +412,11 @@ def parse_project_metadata(md_file: Path, category: str) -> Optional[Dict]:
                     value = value.strip('"\'')
                 
                 metadata[key] = value
+
+        # UPDATED COMMENTS: Collect a small set of unique project images from the markdown body
+        # so folder previews can show three different visuals from the same project instead of repeating one hero image.
+        body = parts[2].strip()
+        preview_images = extract_project_preview_images(metadata, body)
         
         # REUSED: Project ID from filename
         project_id = md_file.stem
@@ -420,6 +426,7 @@ def parse_project_metadata(md_file: Path, category: str) -> Optional[Dict]:
             "category": category,
             "title": metadata.get('title', project_id),
             "thumbnail": metadata.get('thumbnail', '/assets/images/bg-mountains.jpg'),  # UPDATED: Use existing image as fallback
+            "images": preview_images,
             "description": metadata.get('description', ''),
             "tags": metadata.get('tags', []),
             "year": metadata.get('year'),
@@ -430,6 +437,39 @@ def parse_project_metadata(md_file: Path, category: str) -> Optional[Dict]:
     except Exception as e:
         logging.error(f"Error parsing project metadata: {e}")
         return None
+
+def extract_project_preview_images(metadata: Dict, body: str) -> List[str]:
+    """
+    Extract a small list of unique preview images for project folders.
+    UPDATED COMMENTS: Combines frontmatter image fields with markdown body images so the folder preview can show different assets from the same project.
+    CONNECTED: Used by /api/projects and the desktop canvas project folder rendering.
+    """
+    preview_images: List[str] = []
+
+    def add_image(raw_value: Optional[str]):
+        if not raw_value:
+            return
+
+        normalized = str(raw_value).strip().replace('\\', '/')
+        if not normalized:
+            return
+        if not normalized.startswith(('http://', 'https://', '/')):
+            normalized = f"/{normalized}"
+        if normalized not in preview_images:
+            preview_images.append(normalized)
+
+    # UPDATED COMMENTS: Prefer explicitly declared frontmatter images first because they are already curated by the project author.
+    for key in ('hero_image', 'thumbnail', 'og_image'):
+        add_image(metadata.get(key))
+
+    # UPDATED COMMENTS: Fall back to markdown image links so we can pull additional screenshots from the body of the case study.
+    for match in re.findall(r'!\[[^\]]*\]\(([^)]+)\)', body):
+        add_image(match)
+        if len(preview_images) >= 3:
+            break
+
+    # UPDATED COMMENTS: Return at most three assets for the folder stack preview.
+    return preview_images[:3]
 
 # ANCHOR: contact_message_endpoint
 @app.post("/api/contact/send")

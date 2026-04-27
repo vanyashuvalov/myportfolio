@@ -103,7 +103,7 @@ export class ProjectPageHandler {
 
     return `
       <div class="page-wrapper" data-category="${category}">
-        <button class="page-back" data-action="back-to-projects" aria-label="Back to projects">
+        <button class="page-back" data-action="back-to-projects" aria-label="Back to desktop">
           <img src="/assets/icons/iconamoon_arrow-down-2.svg" alt="Back" style="transform: rotate(90deg);" />
         </button>
         
@@ -116,7 +116,7 @@ export class ProjectPageHandler {
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
               <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
             </svg>
-            <span>Back to Desktop</span>
+            <span>Back to Hub</span>
           </button>
         </header>
         
@@ -196,7 +196,7 @@ export class ProjectPageHandler {
    * @param {Object} data - Project data
    */
   setupEvents(data) {
-    // CRITICAL: Back button returns to projects list
+    // CRITICAL: Back button returns to the desktop hub where project folders live
     const backButton = this.pageContainer.querySelector('[data-action="back-to-projects"]');
     if (backButton) {
       backButton.addEventListener('click', () => {

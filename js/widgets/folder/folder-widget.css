@@ -4,7 +4,7 @@
 
 /* ANCHOR: folder_widget */
 .folder-widget {
-  width: 140px;
+  width: 210px; /* UPDATED COMMENTS: 1.5x wider title block for longer project names */
   height: 194px; /* UPDATED COMMENTS: Increased height to accommodate labels */
   /* UPDATED COMMENTS: Fixed wrapper size with overflow visible */
   overflow: visible;
@@ -12,7 +12,7 @@
 
 .folder-container {
   position: relative;
-  width: 140px;
+  width: 210px; /* UPDATED COMMENTS: Match widget width so the longer title remains fully contained */
   height: 194px; /* UPDATED COMMENTS: Increased height to accommodate labels (140px + 54px) */
   /* UPDATED COMMENTS: Fixed container size, content can overflow */
   overflow: visible;
@@ -134,14 +134,14 @@
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  width: 140px;
+  width: 210px; /* UPDATED COMMENTS: Expanded label area to give longer folder names room before truncation */
   height: 46px; /* UPDATED COMMENTS: Space for both title and subtitle */
   margin-top: 8px; /* UPDATED COMMENTS: 8px gap from folder icon, similar to resume widget */
   z-index: 6; /* UPDATED COMMENTS: Above all other layers for proper text visibility */
 }
 
 .folder-title {
-  width: 140px;
+  width: 210px; /* UPDATED COMMENTS: 1.5x title width so project names can stay readable longer */
   height: 19px;
   font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
   font-style: normal;
@@ -150,11 +150,14 @@
   line-height: 19px;
   text-align: center;
   color: #FFFFFF;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   /* CRITICAL: No rotation - labels stay horizontal */
 }
 
 .folder-subtitle {
-  width: 140px;
+  width: 210px; /* UPDATED COMMENTS: Keep the subtitle aligned with the wider title block */
   height: 19px;
   font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
   font-style: normal;
@@ -163,6 +166,9 @@
   line-height: 19px;
   text-align: center;
   color: #FFFFFF;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   /* CRITICAL: No rotation - labels stay horizontal */
 }
 

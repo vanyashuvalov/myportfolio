@@ -12,6 +12,7 @@ import { FeedButtonWidget } from '../../widgets/feed-button/feed-button-widget.j
 import { ResumeWidget } from '../../widgets/resume/resume-widget.js';
 import { widgetInitializer } from '../../shared/lib/widget-initializer.js';
 import { getWidgetRotation } from '../../shared/lib/widget-rotation.js';
+import { PROJECT_FOLDER_LIMIT, getProjectFolderLayout } from '../../shared/config/project-folder-layout.js';
 
 /**
  * DesktopCanvas - Main container and manager for all desktop widgets
@@ -424,16 +425,7 @@ export class DesktopCanvas {
     // REUSED: Widget creation logic for Projects folder (центр-лево)
     // UPDATED COMMENTS: Now uses real project count from API
     const projectData = await this.getProjectData();
-    const projectsFolderWidget = {
-      type: 'folder',
-      cssPositionClass: 'widget-position--projects-folder',
-      config: {
-        title: 'Projects',
-        itemCount: projectData.count, // CRITICAL: Real count from API
-        theme: 'default', // CRITICAL: Default theme uses regular SVGs
-        projects: projectData.projects
-      }
-    };
+    const projectFolderWidgets = this.createProjectFolderWidgets(projectData.projects);
     
     // REUSED: Widget creation logic for Fun folder (центр-право)
     // UPDATED COMMENTS: Now uses real fun item count from API
@@ -504,7 +496,15 @@ export class DesktopCanvas {
     
     // Create all widgets (cat-sticker temporarily hidden)
     this.createWidget(stickerWidget.type, null, stickerWidget.config, stickerWidget.cssPositionClass);
-    this.createWidget(projectsFolderWidget.type, null, projectsFolderWidget.config, projectsFolderWidget.cssPositionClass);
+    projectFolderWidgets.forEach((folderWidget) => {
+      this.createWidget(
+        folderWidget.type,
+        null,
+        folderWidget.config,
+        folderWidget.cssPositionClass,
+        folderWidget.cssPositionStyle
+      );
+    });
     this.createWidget(funFolderWidget.type, null, funFolderWidget.config, funFolderWidget.cssPositionClass);
     this.createWidget(resumeWidget.type, null, resumeWidget.config, resumeWidget.cssPositionClass);
     this.createWidget(clockWidget.type, null, clockWidget.config, clockWidget.cssPositionClass);
@@ -533,6 +533,79 @@ export class DesktopCanvas {
   }
 
   /**
+   * Create project folder widget descriptors from backend data
+   * REUSED: Folder widget component with project-specific mode
+   * SCALED FOR: Up to ten visible project folders with stable canvas coordinates
+   *
+   * @param {Array<Object>} projects - Work projects returned from the backend API
+   * @returns {Array<Object>} Widget descriptor list
+   */
+  createProjectFolderWidgets(projects = []) {
+    return projects.slice(0, PROJECT_FOLDER_LIMIT).map((project, index) => {
+      const placement = getProjectFolderLayout(index);
+      const projectId = project.id || project.slug;
+      const projectUrl = project.category === 'fun'
+        ? `/fun/${projectId}`
+        : `/projects/${projectId}`;
+      const previewImages = this.getProjectPreviewImages(project);
+
+      return {
+        type: 'folder',
+        cssPositionClass: 'widget-position--project-folder',
+        cssPositionStyle: {
+          left: placement.left,
+          top: placement.top
+        },
+        config: {
+          title: project.title || projectId,
+          subtitle: project.year ? String(project.year) : 'Case study',
+          itemCount: 1,
+          theme: 'default',
+          mode: 'project',
+          projectUrl,
+          projectId,
+          projectCategory: project.category || 'work',
+          projects: previewImages.map((image) => ({ image })),
+          rotation: placement.rotation
+        }
+      };
+    });
+  }
+
+  /**
+   * Build a normalized list of preview images for a project folder.
+   * UPDATED COMMENTS: Prefers distinct project screenshots from backend data and falls back to the thumbnail only if needed.
+   * CONNECTED: Used by createProjectFolderWidgets so folder previews can show three different images from the same project.
+   *
+   * @param {Object} project - Project payload returned from the backend API
+   * @returns {Array<string>} Ordered list of preview image URLs
+   */
+  getProjectPreviewImages(project) {
+    const fallbackImage = project.thumbnail || project.image || '/assets/images/bg-mountains.jpg';
+    const sourceImages = Array.isArray(project.images) ? project.images : [];
+    const uniqueImages = [];
+
+    const addImage = (value) => {
+      if (!value) return;
+      const normalized = String(value).trim();
+      if (!normalized) return;
+      if (!uniqueImages.includes(normalized)) {
+        uniqueImages.push(normalized);
+      }
+    };
+
+    // UPDATED COMMENTS: Preserve the curated order from the backend while guaranteeing at least three visible cards.
+    sourceImages.forEach(addImage);
+    addImage(fallbackImage);
+
+    while (uniqueImages.length < 3) {
+      uniqueImages.push(fallbackImage);
+    }
+
+    return uniqueImages.slice(0, 3);
+  }
+
+  /**
    * Get project data for folder widget
    * REUSED: Project data loading utility with realistic portfolio projects
    * UPDATED COMMENTS: Now fetches real project count from backend API
@@ -552,27 +625,32 @@ export class DesktopCanvas {
       clearTimeout(timeoutId);
       
       if (!response.ok) {
-        console.warn('Failed to fetch projects, using fallback count');
-        return { count: 17, projects: [] }; // Fallback to hardcoded value
+        console.warn('Failed to fetch projects, using empty folder set');
+        return { count: 0, projects: [] };
       }
       
       const data = await response.json();
-      const projects = data.projects || []; // CRITICAL: Extract projects array from response object
+      const projects = (data.projects || []).map((project, index) => ({
+        id: project.id || project.slug,
+        slug: project.slug || project.id,
+        title: project.title || project.slug || `Project ${index + 1}`,
+        thumbnail: project.thumbnail || project.image || '/assets/images/bg-mountains.jpg',
+        images: Array.isArray(project.images) ? project.images : [],
+        description: project.description || '',
+        tags: project.tags || [],
+        year: project.year,
+        category: project.category || 'work'
+      })); // CRITICAL: Extract project array and normalize data for folder rendering
       
       // UPDATED COMMENTS: Return real project count from API
       return {
         count: projects.length,
-        projects: projects.slice(0, 3).map((project, index) => ({
-          id: project.slug || project.id,
-          title: project.title,
-          image: project.thumbnail || '/assets/images/projects/placeholder.jpg',
-          rotation: [-0.33, 5.67, 11.67][index] || 0
-        }))
+        projects
       };
     } catch (error) {
       console.error('Error fetching project data:', error);
       // SCALED FOR: Graceful fallback on API failure
-      return { count: 17, projects: [] };
+      return { count: 0, projects: [] };
     }
   }
 
@@ -597,8 +675,8 @@ export class DesktopCanvas {
       clearTimeout(timeoutId);
       
       if (!response.ok) {
-        console.warn('Failed to fetch fun items, using fallback count');
-        return { count: 9, items: [] }; // Fallback to hardcoded value
+        console.warn('Failed to fetch fun items, using empty fallback');
+        return { count: 0, items: [] };
       }
       
       const data = await response.json();
@@ -617,7 +695,7 @@ export class DesktopCanvas {
     } catch (error) {
       console.error('Error fetching fun item data:', error);
       // SCALED FOR: Graceful fallback on API failure
-      return { count: 9, items: [] };
+      return { count: 0, items: [] };
     }
   }
 
@@ -626,7 +704,7 @@ export class DesktopCanvas {
    * UPDATED COMMENTS: CSS-based positioning with optional fallback to JS positioning
    * SCALED FOR: Separation of positioning and visual effects
    */
-  createWidget(type, position = null, config = {}, cssPositionClass = null) {
+  createWidget(type, position = null, config = {}, cssPositionClass = null, cssPositionStyle = null) {
     if (this.widgets.size >= this.config.maxWidgets) {
       console.warn(`Maximum widget limit (${this.config.maxWidgets}) reached`);
       return null;
@@ -643,15 +721,18 @@ export class DesktopCanvas {
     const innerElement = document.createElement('div');
     
     // UPDATED COMMENTS: CSS-based positioning takes priority over JS positioning
-    if (cssPositionClass) {
+    if (cssPositionClass || cssPositionStyle) {
       // CRITICAL: Use CSS viewport positioning for responsive design
-      wrapperElement.className = `widget-wrapper ${cssPositionClass}`;
+      wrapperElement.className = `widget-wrapper ${cssPositionClass || ''}`.trim();
       wrapperElement.style.position = 'absolute';
       // CRITICAL: Don't set transform here - SimpleDragHover will handle it
       wrapperElement.style.transformOrigin = 'top left';
       wrapperElement.style.willChange = 'transform';
       wrapperElement.style.opacity = '0';
       wrapperElement.style.transition = 'opacity 0.3s ease-out';
+      if (cssPositionStyle) {
+        Object.assign(wrapperElement.style, cssPositionStyle);
+      }
       
       // CRITICAL: Don't set dataset.initialX/Y for CSS positioning - let CSS handle it
       // SimpleDragHover will use current computed position as starting point
@@ -678,13 +759,13 @@ export class DesktopCanvas {
     // REUSED: Widget creation with wrapper structure
     const widget = new WidgetClass(wrapperElement, {
       type,
-      position: cssPositionClass ? null : (position || this.findAvailablePosition()),
+      position: (cssPositionClass || cssPositionStyle) ? null : (position || this.findAvailablePosition()),
       rotation: getWidgetRotation(type), // CRITICAL: Pass individual rotation from shared module
       eventBus: this.eventBus,
       assetManager: this.assetManager,
       canvasBounds: this.bounds,
       innerElement: innerElement,
-      cssPositioning: !!cssPositionClass, // CRITICAL: Flag for CSS-based positioning
+      cssPositioning: !!(cssPositionClass || cssPositionStyle), // CRITICAL: Flag for CSS-based positioning
       ...config
     });
     

@@ -39,7 +39,7 @@ class Application {
   async init() {
     try {
       const initialPath = window.location.pathname || '/';
-      const shouldStartInPageMode = initialPath !== '/' && initialPath !== '/viewport-test';
+      const shouldStartInPageMode = initialPath !== '/' && initialPath !== '/projects' && initialPath !== '/viewport-test';
       if (shouldStartInPageMode) {
         document.documentElement.classList.add('page-mode');
         document.body.classList.add('page-mode');
@@ -168,15 +168,15 @@ class Application {
           let targetUrl;
           
           if (url) {
-            // UPDATED COMMENTS: Direct URL from navigation menu or breadcrumb
+            // UPDATED COMMENTS: Direct URL from navigation or project folder click
             targetUrl = url;
           } else if (category) {
             // UPDATED COMMENTS: Category-based URL from folder widget
-            targetUrl = category === 'fun' ? '/fun' : '/projects';
+            targetUrl = category === 'fun' ? '/fun' : '/';
           } else {
-            // UPDATED COMMENTS: Fallback to projects if neither provided
-            console.warn('⚠️ folder:navigate called without url or category, defaulting to /projects');
-            targetUrl = '/projects';
+            // UPDATED COMMENTS: Fallback to desktop hub if neither provided
+            console.warn('⚠️ folder:navigate called without url or category, defaulting to /');
+            targetUrl = '/';
           }
           
           this.pageManager.router.navigate(targetUrl);
@@ -197,11 +197,6 @@ class Application {
         if (type === 'project' && projectId) {
           // UPDATED COMMENTS: Will be updated when project data loads
           this.updateNavigationForProject(projectId, category);
-        } else if (type === 'projects-list') {
-          // CRITICAL: Use category to determine page name
-          // UPDATED COMMENTS: category='fun' → 'Fun', otherwise 'Projects'
-          const pageName = category === 'fun' ? 'Fun' : 'Projects';
-          this.navigation.updateCurrentPage(pageName);
         }
       });
 
@@ -417,9 +412,11 @@ class Application {
     // CRITICAL: Parse URL to determine page name
     if (url === '/' || url === '') {
       this.navigation.updateCurrentPage('Home');
-    } else if (url === '/projects' || url.startsWith('/projects/')) {
+    } else if (url === '/projects') {
+      this.navigation.updateCurrentPage('Home');
+    } else if (url.startsWith('/projects/')) {
       // UPDATED COMMENTS: Will be updated with project title when loaded
-      this.navigation.updateCurrentPage('Projects');
+      this.navigation.updateCurrentPage('Home');
     } else if (url === '/fun') {
       // CRITICAL: Fun projects list page
       this.navigation.updateCurrentPage('Fun');
@@ -437,7 +434,7 @@ class Application {
   /**
    * Update navigation for specific project
    * CRITICAL: Fetch project data and update navigation with title
-   * UPDATED COMMENTS: Shows project title in navigation breadcrumb WITHOUT re-rendering
+   * UPDATED COMMENTS: Shows project title in the navigation bar WITHOUT re-rendering
    * 
    * @param {string} projectId - Project ID
    * @param {string} category - Project category
