@@ -211,7 +211,11 @@ export class ProjectsListModal {
     // CRITICAL: Navigate and wait for page to show BEFORE closing modal
     // UPDATED COMMENTS: This prevents desktop flash
     const url = category === 'fun' ? `/fun/${projectId}` : `/projects/${projectId}`;
-    await this.pageManager.router.navigate(url);
+    if (this.pageManager?.navigateWithTransition) {
+      await this.pageManager.navigateWithTransition(url);
+    } else if (this.pageManager?.router) {
+      await this.pageManager.router.navigate(url);
+    }
     
     // UPDATED COMMENTS: Close modal AFTER page is visible
     // REUSED: EventBus pattern for modal communication

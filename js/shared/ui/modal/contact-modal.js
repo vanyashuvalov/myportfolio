@@ -173,10 +173,10 @@ export class ContactModal {
     
     // CRITICAL: Change button text based on contact presence
     if (this.contactInfo.length > 0) {
-      this.sendButton.textContent = 'SEND';
+      this.sendButton.textContent = 'Send';
       this.sendButton.classList.remove('modal-button--anonymous');
     } else {
-      this.sendButton.textContent = 'SEND ANONYMOUSLY';
+      this.sendButton.textContent = 'Send anonymously';
       this.sendButton.classList.add('modal-button--anonymous');
     }
   }
@@ -195,7 +195,7 @@ export class ContactModal {
     
     // UPDATED COMMENTS: Disable button during submission
     this.sendButton.disabled = true;
-    this.sendButton.textContent = 'SENDING...';
+    this.sendButton.textContent = 'Sending...';
     
     try {
       // CRITICAL: Send message to backend
@@ -219,7 +219,7 @@ export class ContactModal {
       toastManager.showError(TOAST_MESSAGES.MESSAGE_ERROR);
       
       this.sendButton.disabled = false;
-      this.sendButton.textContent = this.contactInfo ? 'SEND' : 'SEND ANONYMOUSLY';
+      this.sendButton.textContent = this.contactInfo ? 'Send' : 'Send anonymously';
     }
   }
 

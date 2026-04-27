@@ -96,7 +96,6 @@ class Application {
         eventBus: this.eventBus,
         userName: 'Shuvalov Ivan',
         userPhoto: 'assets/images/avatar.jpg',
-        statusText: 'Open for work',
         currentPage: 'Home',
         currentLanguage: 'EN'
         // CRITICAL: Social links are now managed in NavigationHeader via action-buttons.js
@@ -179,7 +178,7 @@ class Application {
             targetUrl = '/';
           }
           
-          this.pageManager.router.navigate(targetUrl);
+          void this.pageManager.navigateWithTransition(targetUrl);
         } else {
           console.error('❌ PageManager not available');
         }

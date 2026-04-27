@@ -266,7 +266,7 @@
   line-height: 22px;
   text-align: center;
   letter-spacing: var(--letter-spacing-tight);
-  text-transform: uppercase;
+  text-transform: none;
   color: #000000;
   
   /* Inside auto layout */

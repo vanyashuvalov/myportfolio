@@ -14,7 +14,6 @@ export class UserInfo {
     this.options = {
       userName: 'Shuvalov Ivan',
       userPhoto: 'assets/images/avatar.jpg',
-      statusText: 'Open for work',
       ...options
     };
 
@@ -57,14 +56,10 @@ export class UserInfo {
         </div>
       </div>
       
-      <!-- User Name and Status -->
+      <!-- User Identity -->
       <a class="user-profile-link" href="/" aria-label="Go to home page">
         <div class="user-name-section">
           <h1 class="user-name">${this.options.userName}</h1>
-          <div class="status-badge" role="status" aria-label="Current status">
-            <div class="status-indicator" aria-hidden="true"></div>
-            <span class="status-text">${this.options.statusText}</span>
-          </div>
         </div>
       </a>
     `;
@@ -240,7 +235,9 @@ export class UserInfo {
   }
 
   /**
-   * Blink one or both eyes
+   * Blink both eyes together on a random idle tick.
+   * PURPOSE: Keep the idle animation synchronized so the avatar never looks cross-eyed from independent blinks.
+   * CONNECTIONS: Driven by the same timeout loop as the rest of the eye idle animation.
    */
   blinkRandomEye() {
     if (!this.isInitialized) {
@@ -252,14 +249,10 @@ export class UserInfo {
       return;
     }
 
-    const targets = Math.random() < 0.45
-      ? [eyes[Math.floor(Math.random() * eyes.length)]]
-      : eyes;
-
-    targets.forEach((eye) => eye.classList.add('eyes-avatar__eye--blink'));
+    eyes.forEach((eye) => eye.classList.add('eyes-avatar__eye--blink'));
 
     window.setTimeout(() => {
-      targets.forEach((eye) => eye.classList.remove('eyes-avatar__eye--blink'));
+      eyes.forEach((eye) => eye.classList.remove('eyes-avatar__eye--blink'));
     }, 110);
   }
 
@@ -273,7 +266,7 @@ export class UserInfo {
 
     const clickedEye = event.target.closest('.eyes-avatar__eye');
     if (clickedEye) {
-      this.blinkOne(clickedEye);
+      this.blinkBoth();
       return;
     }
 
@@ -297,17 +290,17 @@ export class UserInfo {
   }
 
   /**
-   * Blink a single eye on click
+   * Compatibility wrapper for older click paths that used to blink one eye.
+   * PURPOSE: Preserve the public method shape while redirecting all visual blinks to the synchronized two-eye animation.
+   * CONNECTIONS: Called from the document click handler in this component.
    */
   blinkOne(eye) {
     if (!eye || !this.isInitialized) {
       return;
     }
 
-    eye.classList.add('eyes-avatar__eye--blink');
-    window.setTimeout(() => {
-      eye.classList.remove('eyes-avatar__eye--blink');
-    }, 70);
+    // Keep this method as a compatibility wrapper, but route the visual effect through the synchronized blink.
+    this.blinkBoth();
   }
 
   /**

@@ -252,6 +252,12 @@
   min-width: fit-content;
 }
 
+/* CRITICAL: Keep header action labels in normal case while leaving the rest of the navigation typography untouched */
+.nav-button--cv .nav-button__text,
+.nav-button--share .nav-button__text {
+  text-transform: none;
+}
+
 /* ANCHOR: accessibility */
 /* REUSED: Accessibility improvements */
 .nav-button:focus {

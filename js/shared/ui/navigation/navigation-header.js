@@ -25,7 +25,6 @@ export class NavigationHeader {
     this.options = {
       userName: 'Shuvalov Ivan',
       userPhoto: 'assets/images/avatar.jpg',
-      statusText: 'Open for work',
       currentPage: 'Home',
       // UPDATED COMMENTS: Use centralized social links configuration
       socialLinks: {

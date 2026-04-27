@@ -14,6 +14,7 @@ export class PageManager {
     this.desktopCanvasEl = null;
 
     this.isPageMode = false;
+    this.isTransitioning = false;
     this.viewportTestCleanup = null;
 
     this.projectHandler = null;
@@ -73,17 +74,17 @@ export class PageManager {
     }
 
     this.eventBus.on('page:close', () => {
-      this.router.navigate('/');
+      void this.navigateWithTransition('/');
     });
 
     this.eventBus.on('page:backToProjects', () => {
-      this.router.navigate('/');
+      void this.navigateWithTransition('/');
     });
 
     this.eventBus.on('page:navigateToProject', ({ projectId, category } = {}) => {
       if (!projectId) return;
       const url = category === 'fun' ? `/fun/${projectId}` : `/projects/${projectId}`;
-      this.router.navigate(url);
+      void this.navigateWithTransition(url);
     });
   }
 
@@ -134,7 +135,10 @@ export class PageManager {
     try {
       this.cleanupViewportTest();
       this.setPageMode(true);
-      if (withOverlay) this.toggleOverlay(true);
+      if (withOverlay) {
+        this.toggleOverlay(true);
+        await this.waitForTransitionPaint();
+      }
       this.hideDesktopCanvas();
       this.pageContainer.style.display = 'block';
       this.pageContainer.innerHTML = '';
@@ -189,7 +193,9 @@ export class PageManager {
 
       const backBtn = this.pageContainer.querySelector('[data-action="back-to-desktop"]');
       if (backBtn) {
-        backBtn.addEventListener('click', () => this.router.navigate('/'));
+        backBtn.addEventListener('click', () => {
+          void this.navigateWithTransition('/');
+        });
       }
 
       const reloadBtn = this.pageContainer.querySelector('[data-action="reload"]');
@@ -363,6 +369,46 @@ export class PageManager {
     this.transitionOverlay.classList.toggle('page-transition-overlay--active', show);
   }
 
+  /**
+   * Navigate with the black transition overlay already visible.
+   * PURPOSE: Ensure page switches paint a black frame before the target page renders.
+   * CONNECTIONS: Used by internal page navigation events, back buttons, and modal flows.
+   */
+  async navigateWithTransition(url, state = {}) {
+    if (!url || this.isTransitioning) return;
+
+    this.isTransitioning = true;
+
+    try {
+      this.setPageMode(true);
+      this.toggleOverlay(true);
+      await this.waitForTransitionPaint();
+
+      await this.router.navigate(url, state);
+
+      await this.waitForTransitionPaint();
+    } catch (error) {
+      console.error('Transition navigation failed:', error);
+      throw error;
+    } finally {
+      if (this.transitionOverlay?.classList.contains('page-transition-overlay--active')) {
+        this.toggleOverlay(false);
+      }
+
+      this.isTransitioning = false;
+    }
+  }
+
+  /**
+   * Wait for the browser to paint a couple of frames.
+   * PURPOSE: Let the overlay become visible before DOM/content replacement happens.
+   * CONNECTIONS: Shared by page transitions and route-driven navigations.
+   */
+  async waitForTransitionPaint() {
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+  }
+
   async showErrorPage(message) {
     const errorHtml = `
       <div class="page-wrapper">
@@ -379,7 +425,9 @@ export class PageManager {
 
     const btn = this.pageContainer.querySelector('[data-action="back-to-desktop"]');
     if (btn) {
-      btn.addEventListener('click', () => this.router.navigate('/'));
+      btn.addEventListener('click', () => {
+        void this.navigateWithTransition('/');
+      });
     }
   }
 

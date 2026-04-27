@@ -87,7 +87,7 @@ export class ActionButtons {
       cv: new Button({
         type: 'text',
         icon: this.iconProvider.getDownloadSVG(),
-        text: 'GET CV',
+        text: 'Get CV',
         action: 'download-cv',
         ariaLabel: 'Download CV',
         className: 'nav-button--cv',

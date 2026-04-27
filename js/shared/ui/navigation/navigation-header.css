@@ -99,7 +99,7 @@ body.loaded .navigation-wrapper {
   font-size: 18px;
   line-height: 22px;
   letter-spacing: -0.02em;
-  text-transform: uppercase;
+  text-transform: none;
   color: #FFFFFF;
   opacity: 0.3;
   
@@ -478,6 +478,12 @@ body.loaded .navigation-wrapper {
 .nav-button__text {
   white-space: nowrap;
   flex: none;
+}
+
+/* CRITICAL: Header action labels should keep their natural casing instead of inheriting the uppercase nav style. */
+.nav-button--cv .nav-button__text,
+.nav-button--share .nav-button__text {
+  text-transform: none;
 }
 
 .dropdown-arrow {
