@@ -191,6 +191,8 @@ export class UserInfo {
 
   /**
    * Gentle background drift to keep the eyes feeling alive
+   * REUSED: Shares the same pupil/highlight CSS variables as pointer tracking
+   * CONTEXT: Reduced the idle motion amplitude by 50% to prevent the avatar from feeling too jittery in the navigation header
    */
   applyRandomDrift() {
     if (!this.isInitialized) {
@@ -202,9 +204,12 @@ export class UserInfo {
       return;
     }
 
+    // Keep the same drift pattern, but scale it down so the idle motion feels calmer.
+    const driftAmplitudeScale = 0.5;
+
     eyes.forEach((eye) => {
-      const moveX = (Math.random() - 0.5) * 1.8;
-      const moveY = (Math.random() - 0.5) * 2.4;
+      const moveX = (Math.random() - 0.5) * 1.8 * driftAmplitudeScale;
+      const moveY = (Math.random() - 0.5) * 2.4 * driftAmplitudeScale;
 
       eye.style.setProperty('--pupil-x', `${moveX}px`);
       eye.style.setProperty('--pupil-y', `${moveY}px`);
