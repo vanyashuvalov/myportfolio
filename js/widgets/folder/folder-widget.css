@@ -135,41 +135,47 @@
   align-items: center;
   gap: 8px;
   width: 210px; /* UPDATED COMMENTS: Expanded label area to give longer folder names room before truncation */
-  height: 46px; /* UPDATED COMMENTS: Space for both title and subtitle */
+  height: auto; /* UPDATED COMMENTS: Allow the title to wrap naturally without clipping */
   margin-top: 8px; /* UPDATED COMMENTS: 8px gap from folder icon, similar to resume widget */
   z-index: 6; /* UPDATED COMMENTS: Above all other layers for proper text visibility */
 }
 
 .folder-title {
   width: 210px; /* UPDATED COMMENTS: 1.5x title width so project names can stay readable longer */
-  height: 19px;
+  min-height: 19px;
   font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
   font-style: normal;
   font-weight: 500; /* UPDATED COMMENTS: Increased from 400 to 500 for better readability */
   font-size: 16px;
-  line-height: 19px;
+  line-height: 1.2;
   text-align: center;
   color: #FFFFFF;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+  overflow-wrap: anywhere;
   /* CRITICAL: No rotation - labels stay horizontal */
 }
 
 .folder-subtitle {
   width: 210px; /* UPDATED COMMENTS: Keep the subtitle aligned with the wider title block */
-  height: 19px;
+  min-height: 19px;
   font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 16px; /* UPDATED COMMENTS: Confirmed SF Pro 16px as requested */
-  line-height: 19px;
+  line-height: 1.2;
   text-align: center;
   color: #FFFFFF;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+  overflow-wrap: anywhere;
   /* CRITICAL: No rotation - labels stay horizontal */
+}
+
+.folder-subtitle:empty {
+  display: none;
 }
 
 /* CRITICAL: Shadow states moved to shared styles/components.css for reusability */

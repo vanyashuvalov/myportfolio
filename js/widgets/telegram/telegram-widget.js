@@ -318,8 +318,8 @@ export class TelegramWidget extends WidgetBase {
     if (this.channelData.avatar_url) {
       return this.channelData.avatar_url;
     }
-    // REUSED: Fallback to local avatar file
-    return '/assets/images/telegram-avatar.jpg';
+    // REUSED: Fallback to the dedicated local channel avatar asset
+    return '/assets/images/telegram-channel-avatar.png';
   }
 
   /**

@@ -556,12 +556,15 @@ export class DesktopCanvas {
           left: placement.left,
           top: placement.top
         },
+        // UPDATED COMMENTS: Treat the logistics case study as selected even before the backend reload catches up.
+        selected: !!(project.selected || project.slug === 'logistics-ux-pattern' || project.id === 'logistics-ux-pattern'),
         config: {
           title: project.title || projectId,
-          subtitle: project.year ? String(project.year) : 'Case study',
+          subtitle: '',
           itemCount: 1,
           theme: 'default',
           mode: 'project',
+          selected: !!(project.selected || project.slug === 'logistics-ux-pattern' || project.id === 'logistics-ux-pattern'),
           projectUrl,
           projectId,
           projectCategory: project.category || 'work',
@@ -630,17 +633,30 @@ export class DesktopCanvas {
       }
       
       const data = await response.json();
-      const projects = (data.projects || []).map((project, index) => ({
-        id: project.id || project.slug,
-        slug: project.slug || project.id,
-        title: project.title || project.slug || `Project ${index + 1}`,
-        thumbnail: project.thumbnail || project.image || '/assets/images/bg-mountains.jpg',
-        images: Array.isArray(project.images) ? project.images : [],
-        description: project.description || '',
-        tags: project.tags || [],
-        year: project.year,
-        category: project.category || 'work'
-      })); // CRITICAL: Extract project array and normalize data for folder rendering
+      const projects = (data.projects || [])
+        .map((project, index) => ({
+          id: project.id || project.slug,
+          slug: project.slug || project.id,
+          title: project.title || project.slug || `Project ${index + 1}`,
+          thumbnail: project.thumbnail || project.image || '/assets/images/bg-mountains.jpg',
+          images: Array.isArray(project.images) ? project.images : [],
+          description: project.description || '',
+          tags: project.tags || [],
+          year: project.year,
+          order: project.order,
+          selected: project.selected,
+          category: project.category || 'work'
+        }))
+        .sort((a, b) => {
+          const orderA = Number.isFinite(Number(a.order)) ? Number(a.order) : Number.MAX_SAFE_INTEGER;
+          const orderB = Number.isFinite(Number(b.order)) ? Number(b.order) : Number.MAX_SAFE_INTEGER;
+
+          if (orderA !== orderB) {
+            return orderA - orderB;
+          }
+
+          return (a.title || '').localeCompare(b.title || '');
+        }); // CRITICAL: Extract project array, normalize data, and respect explicit order for folder rendering
       
       // UPDATED COMMENTS: Return real project count from API
       return {

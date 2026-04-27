@@ -1,5 +1,5 @@
 ---
-title: New Immersive UX Pattern in Logistics
+title: Dispatcher Workspace for a High-Load Logistics TMS
 slug: logistics-ux-pattern
 category: work
 status: published
@@ -25,6 +25,7 @@ project_type: B2B SaaS
 
 featured: true
 show_in_portfolio: true
+selected: true
 order: 1
 color_theme: "#3B82F6"
 ---

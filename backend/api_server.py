@@ -340,6 +340,12 @@ async def get_projects(category: str = Query(default='all', description="Project
                 except Exception as e:
                     logging.error(f"Error parsing project {md_file}: {e}")
                     continue
+
+        # UPDATED COMMENTS: Respect explicit project ordering from markdown so folder positions stay intentional.
+        projects.sort(key=lambda project: (
+            int(project.get('order', 9999)) if str(project.get('order', '')).isdigit() else 9999,
+            project.get('title', '')
+        ))
         
         return {
             "projects": projects,
@@ -408,6 +414,8 @@ def parse_project_metadata(md_file: Path, category: str) -> Optional[Dict]:
                 # SCALED FOR: Parse arrays
                 if value.startswith('[') and value.endswith(']'):
                     value = [v.strip().strip('"\'') for v in value[1:-1].split(',')]
+                elif value.lower() in ['true', 'false']:
+                    value = value.lower() == 'true'
                 else:
                     value = value.strip('"\'')
                 
@@ -430,6 +438,8 @@ def parse_project_metadata(md_file: Path, category: str) -> Optional[Dict]:
             "description": metadata.get('description', ''),
             "tags": metadata.get('tags', []),
             "year": metadata.get('year'),
+            "order": metadata.get('order'),
+            "selected": metadata.get('selected', False),
             "client": metadata.get('client'),
             "role": metadata.get('role')
         }

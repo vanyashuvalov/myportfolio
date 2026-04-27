@@ -21,10 +21,11 @@ export class FolderWidget extends WidgetBase {
     this.projects = options.projects || this.getDefaultProjects();
     this.theme = options.theme || 'default'; // REUSED: Theme system for SVG variants
     this.mode = options.mode || 'category';
-    this.subtitle = options.subtitle || `${this.itemCount} items`;
+    this.subtitle = options.subtitle ?? `${this.itemCount} items`;
     this.projectUrl = options.projectUrl || null;
     this.projectId = options.projectId || null;
     this.projectCategory = options.projectCategory || 'work';
+    this.selected = options.selected || false;
     
     this.createFolderStructure();
   }
@@ -118,11 +119,18 @@ export class FolderWidget extends WidgetBase {
         front: '/assets/images/folder-top-pink.svg'
       };
     }
+
+    if (this.selected) {
+      return {
+      back: '/assets/images/back.svg',
+      front: '/assets/images/frontal%20selected.svg'
+      };
+    }
     
-    // Default theme
+    // Default theme: project folders use the standard back/front assets, while Fun keeps the pink variant.
     return {
-      back: '/assets/images/folder-bot.svg',
-      front: '/assets/images/folder-top.svg'
+      back: '/assets/images/back.svg',
+      front: '/assets/images/frontal.svg'
     };
   }
 
@@ -219,7 +227,8 @@ export class FolderWidget extends WidgetBase {
       subtitle: this.subtitle,
       projectUrl: this.projectUrl,
       projectId: this.projectId,
-      projectCategory: this.projectCategory
+      projectCategory: this.projectCategory,
+      selected: this.selected
     };
   }
 }
