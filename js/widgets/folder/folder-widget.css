@@ -147,7 +147,7 @@
   font-style: normal;
   font-weight: 500; /* UPDATED COMMENTS: Increased from 400 to 500 for better readability */
   font-size: 16px;
-  line-height: 1.2;
+  line-height: 1.3;
   text-align: center;
   color: #FFFFFF;
   overflow: visible;
@@ -164,7 +164,7 @@
   font-style: normal;
   font-weight: 400;
   font-size: 16px; /* UPDATED COMMENTS: Confirmed SF Pro 16px as requested */
-  line-height: 1.2;
+  line-height: 1.3;
   text-align: center;
   color: #FFFFFF;
   overflow: visible;

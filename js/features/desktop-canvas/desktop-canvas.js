@@ -435,6 +435,7 @@ export class DesktopCanvas {
       cssPositionClass: 'widget-position--fun-folder',
       config: {
         title: 'Fun',
+        subtitle: '', // UPDATED COMMENTS: Keep Fun label clean without an item count under the folder name
         itemCount: funData.count, // CRITICAL: Real count from API
         theme: 'pink', // CRITICAL: Pink theme uses pink SVGs
         projects: funData.items // CRITICAL: Use items for gallery preview

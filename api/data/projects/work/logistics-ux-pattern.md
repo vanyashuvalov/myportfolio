@@ -1,5 +1,5 @@
 ---
-title: Dispatcher Workspace for a High-Load Logistics TMS
+title: Dispatcher module for TMS
 slug: logistics-ux-pattern
 category: work
 status: published

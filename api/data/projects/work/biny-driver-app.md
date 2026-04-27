@@ -1,5 +1,5 @@
 ---
-title: Biny Driver App - Logistics UX Case Study
+title: Driver App Redesign
 slug: biny-driver-app
 category: work
 status: published

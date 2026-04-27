@@ -1,5 +1,5 @@
 ---
-title: Mobile Website Builder - Product Strategy Case Study
+title: Mobile Website Builder
 slug: mobile-web-builder
 category: work
 status: published
