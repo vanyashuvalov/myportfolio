@@ -20,7 +20,7 @@ export class Button {
       action: null,
       ariaLabel: null,
       className: '',
-      size: 'default', // 'small', 'default', 'large'
+      size: 'default', // 'small', 'default', 'large', 'social'
       isActive: false, // Active state for navigation items
       customContent: null, // Custom HTML content (e.g., flag icons)
       dropdown: null, // Dropdown identifier for aria-haspopup
@@ -200,6 +200,7 @@ export class Button {
   getSizeClasses() {
     const sizeMap = {
       small: 'nav-button--small',
+      social: 'nav-button--social',
       default: '',
       large: 'nav-button--large'
     };

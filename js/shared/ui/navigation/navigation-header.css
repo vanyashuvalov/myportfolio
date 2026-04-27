@@ -283,7 +283,7 @@ body.loaded .navigation-wrapper {
   font-size: 18px;
   line-height: 22px;
   letter-spacing: -0.02em;
-  text-transform: uppercase;
+  text-transform: none;
   color: #FFFFFF;
   
   flex: none;

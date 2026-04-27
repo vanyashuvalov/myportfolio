@@ -301,6 +301,12 @@
   transition: all var(--transition-fast, 0.2s ease);
 }
 
+/* CRITICAL: Contact send button keeps normal sentence case while the generic modal button style remains uppercase for other modals. */
+.modal-button--primary.modal-button--anonymous,
+.modal-button--primary[data-action="send-contact"] {
+  text-transform: none;
+}
+
 /* CRITICAL: Primary button variant
  * STYLE: Accent color background, white text
  * INTERACTION: Hover lift effect, disabled state

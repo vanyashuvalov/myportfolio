@@ -45,6 +45,19 @@
   /* UPDATED COMMENTS: Center icon content perfectly */
 }
 
+/* CRITICAL: Social header buttons use a fully rounded pill/circle shape and match the action-button height. */
+.nav-button--social {
+  width: 36px;
+  height: 36px;
+  padding: 8px;
+  border-radius: 9999px;
+}
+
+.nav-button--social.nav-button--icon {
+  width: 36px;
+  height: 36px;
+}
+
 .nav-button--icon svg,
 .nav-button--icon iconify-icon {
   width: 20px;
@@ -245,11 +258,17 @@
 .nav-button--cv {
   width: auto;
   min-width: fit-content;
+  padding-left: 12px;
+  padding-right: 12px;
+  border-radius: 9999px;
 }
 
 .nav-button--share {
   width: auto;
   min-width: fit-content;
+  padding-left: 12px;
+  padding-right: 12px;
+  border-radius: 9999px;
 }
 
 /* CRITICAL: Keep header action labels in normal case while leaving the rest of the navigation typography untouched */
