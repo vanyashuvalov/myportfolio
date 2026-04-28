@@ -103,9 +103,9 @@
   
   /* ANCHOR: transitions */
   /* REUSED: Universal animation timing for consistent UX */
-  --transition-fast: 0.2s ease;
-  --transition-normal: 0.3s ease-out;
-  --transition-slow: 0.5s ease-out 0.3s;
+  --transition-fast: 0.4s ease;
+  --transition-normal: 0.6s ease-out;
+  --transition-slow: 1s ease-out 0.6s;
   --transition-bounce: 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   
   /* ANCHOR: border_radius */
