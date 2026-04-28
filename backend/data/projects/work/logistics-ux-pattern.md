@@ -1,21 +1,21 @@
 ---
-title: New Immersive UX Pattern in Logistics
+title: Dispatcher Workspace for TMS
 slug: logistics-ux-pattern
 category: work
 status: published
 
-year: 2023
+year: 2025
 duration: 3 months
 client: Large Freight Forwarder
 role: Product Designer
-team: [Product Designer (Me) | 1, Business Analyst | 1, Project Manager | 1, FE / BE / Tech Lead | 3]
+team: [Product Designer (Me), Business Analyst, Project Manager, 3 Engineers]
 
-description: Created a dispatcher workspace with vertical kanban for shipment management
+description: Designed a dispatcher workspace for a high-load logistics TMS, focusing on clarity, speed, and control for teams managing thousands of daily shipments
 hero_image: /assets/projects/logistics-ux-pattern/images/hero.jpg
 thumbnail: /assets/projects/logistics-ux-pattern/images/hero.jpg
 
-meta_title: Vertical Kanban for Dispatchers - UX Case Study
-meta_description: How vertical kanban improved dispatcher efficiency by 35%
+meta_title: Dispatcher Workspace for a High-Load Logistics TMS
+meta_description: How a relevance-based dispatcher workspace improved shipments per dispatcher by 35%, reduced delays by 10%, and lowered failed shipments by 2%
 og_image: /assets/projects/logistics-ux-pattern/images/hero.jpg
 
 tags: [UX Design, Logistics, B2B, TMS, Research]
@@ -30,45 +30,32 @@ order: 1
 color_theme: "#3B82F6"
 ---
 
----
+## Overview
 
-## Context
-
-The client was a large **freight forwarder**, 10+ billion revenue, multimodal shipments across CIS and internationally, both contracted and owned transport, large (thousands) customer and carrier base, multiple offices in different cities
+I designed a dispatcher workspace for a large freight forwarder handling multimodal shipments across CIS and international routes. The company worked with thousands of customers and carriers across multiple offices, but dispatchers still had no proper operational tool. Their workflow was spread across calls, spreadsheets, chats, notes, and many browser tabs, which slowed execution, increased mental load, and made onboarding harder.
 
 ::: problemsolution
-Problem | Dispatchers handle multiple tasks simultaneously and do not have a single, convenient tool for solving them, which complicates employee onboarding and slows down the work process.
-Solution | Implementation of a unified dispatching tool in TMS
+Problem | Dispatchers handled multiple tasks simultaneously and had no single convenient tool for solving them, which complicated onboarding and slowed the work process.
+Solution | A unified dispatching tool inside TMS.
 :::
+
+### Team Outcome
 
 ::: stats
-- **-2%** Failed shipments
-- **-10%** Delays against plan
 - **+35%** Shipments per dispatcher
-- **10** Testing sessions
+- **-10%** Delays against plan
+- **-2%** Failed shipments
 :::
 
-**[NEEDED IMAGE: Screenshot of vertical kanban with shipment cards]**
-
-## Client
-
-Large freight forwarder, 10+ billion revenue, multimodal shipments across CIS and internationally, both contracted and owned transport, large (thousands) customer and carrier base, multiple offices in different cities
+![Dispatcher workspace overview](/assets/projects/logistics-ux-pattern/images/dispatch-mobilederklight.jpg)
 
 ## Context
 
-### Significance
+The client was a large freight forwarder with more than 10 billion in revenue, multimodal transportation, owned and contracted fleets, and a large customer and carrier base. Shipment execution required constant coordination between dispatchers, logistics coordinators, drivers, and managers.
 
-Dispatchers are the key to quality shipment execution
+Dispatchers sat in the middle of that system. They were responsible for tracking shipment progress, staying in touch with drivers, handling exceptions, updating statuses, and keeping the rest of the team aligned.
 
-The contracted transport department always has more workload than anywhere else, especially for dispatchers
-
-While logistics coordinators call carriers, request transport, and coordinate with clients only at the beginning, dispatchers spend all this time on routine and calls
-
-So this is simultaneously complex and critical work that must be addressed in TMS (Transportation Management System)
-
-### How Dispatchers Work
-
-A dispatcher's workspace consists of:
+A dispatcher's workspace consisted of:
 
 - Two phones
 - About a hundred tabs
@@ -76,9 +63,49 @@ A dispatcher's workspace consists of:
 - Constant contact with colleagues
 - Noisy office
 
-Dispatchers communicate and exchange current statuses with logistics coordinators and managers across multiple channels simultaneously: WhatsApp, Telegram, Bitrix, offline
+Dispatchers communicated and exchanged current statuses with logistics coordinators and managers across multiple channels at the same time: WhatsApp, Telegram, Bitrix, and offline.
 
-#### Dispatcher Time Distribution
+::: callout
+The challenge was to focus the dispatcher full attention on urgent shipments and reduce noise everywhere else.
+:::
+
+## Problem
+
+The contracted transport department always had more workload than anywhere else, especially for dispatchers. While logistics coordinators called carriers, requested transport, and coordinated with clients only at the beginning, dispatchers spent all this time on routine and calls.
+
+That made the work simultaneously complex and critical, because it had to be handled inside TMS while staying fast enough for daily operations.
+
+The main problems were:
+
+- Too many tools
+- High cognitive load
+- Errors and delays
+- Hard onboarding
+
+## Research
+
+There was not enough structured documentation about how dispatching actually worked inside the company, so I spent time in the office observing real workflows. I watched how dispatchers interacted with drivers, logistics coordinators, and managers, how they tracked shipment progress, and where they lost focus.
+
+I also spoke with people from other freight forwarding companies to compare approaches and understand which patterns were common across the industry. After that, I ran a questionnaire to validate assumptions and close the remaining gaps.
+
+### Subject
+
+Dispatchers are the key to quality shipment execution. The research showed that the dispatcher is the backbone of shipment handling, driver communication, and status updates.
+
+### Process
+
+- Spent 3 days in the office, observed work and interaction processes, studied staff composition and regulations
+- Conducted calls with other freight forwarding companies to learn how they structure their dispatching processes
+- Created and sent a questionnaire to 30 dispatchers and logistics coordinators to validate hypotheses
+
+::: stats
+- **3** Days in office
+- **10** In-depth interviews
+- **10** Testing sessions
+- **50** Respondents
+:::
+
+### Dispatcher Time Distribution
 
 ::: piechart
 - 40% | Shipment handling and driver communication | 3.2 hours
@@ -89,229 +116,95 @@ Dispatchers communicate and exchange current statuses with logistics coordinator
 - 5% | Other | 0.4 hours
 :::
 
-| Task | Performance Factors | Time |
-|------|---------------------|------|
-| **Status Updates** | Scout on transport (geo-tracking), Mobile connectivity on the road, Driver communication | 20% |
-| **Driver Coordination** | Driver phone, Road connectivity, Driver literacy | 20% |
-| **Data Transfer** | Number of sources, Platform access, Human factor | 15% |
-| **Colleague Coordination** | Colleague workload, Communication formats, Lunches and breaks | 15% |
-| **Order Processing** | Customer changes, Crises, Different data sources | 10% |
-| **TMS Updates** | Change frequency, Crises, Approvals | 10% |
-| **Other** | Unexpected circumstances, Crises, Human factor | 10% |
+The dispatcher is the backbone of shipment execution, with about 40% of dispatcher time spent on shipment handling, driver communication, and status updates in tracking systems.
 
-### Summary
+::: gallery
+2
+![Research chart](/assets/projects/logistics-ux-pattern/images/dispatch-chart.jpg)
+![Research chart by pen](/assets/projects/logistics-ux-pattern/images/dispatch-chartbypen.jpg)
 
-The dispatcher is the backbone of shipment execution, with ~40% of dispatcher time spent on shipment handling, driver communication, and status updates in tracking systems
+2
+![Jira screen](/assets/projects/logistics-ux-pattern/images/dispatch-jirascreen.jpg)
+![Metrics](/assets/projects/logistics-ux-pattern/images/dispatch-metricks.jpg)
 
-## Task and Team
-
-Create a clear dispatcher tool within TMS that:
-
-- Simplifies interaction with logistics coordinators
-- Accelerates shipment processing speed
-- Provides performance reports
-
-::: callout note
-**Timeline**: 1 quarter = 3 months to release
+1
+![User flow overall](/assets/projects/logistics-ux-pattern/images/dispatch-userflowoverall.jpg)
 :::
 
-## Process
+## Key insight
 
-### Problem Definition
+A dispatcher may deal with up to 50 shipments per day, but at any given moment only a few actually require immediate attention.
 
-The initiative originally came from stakeholders — there were several assumptions about what most affects the logistics office that can be automated
+In practice, that number was usually around 4 to 5 shipments.
 
-On the horizon were sections for security services, document management, and legacy redesign
+## Stakeholder challenge
 
-We decided security services could wait since they still work through their own channels, document management wasn't critical since the platform is primarily for internal use
+The business expected a dashboard to show as many shipment cards as possible. The logic was simple: if a dispatcher handles up to 50 shipments per day, the interface should show a large part of that workload.
 
-So we focused on a useful and necessary feature, since the logistics coordinators the MVP was dedicated to work directly with dispatchers, making it more convenient for them to interact on a unified platform
+My research showed the opposite. In the office, dispatchers rarely worked with more than 4 to 5 urgent shipments at the same time.
 
-### Research
+As a result, it became clear that the product should display all necessary information in a card, but no more than 4 cards should be needed at any given moment.
 
-There wasn't much information on internal processes, so we needed to gather and structure it
-
-I went to the **office** and saw how tough it is for zoomer dispatchers when instead of TikTok, a bunch of tabs flash on screen, and ringing from unclear foreign driver speech fills their ears against highway noise
-
-- Spent 3 days in the office, observed work and interaction processes, studied staff composition and regulations
-- Parallelly **conducted calls** with other freight forwarding companies to learn how they structure their dispatching processes
-- After processing all inputs, **created and sent a questionnaire** to 30 dispatchers and logistics coordinators to address new questions while validating hypotheses
-
-::: stats
-- **3** days in office with dispatchers
-- **10+** in-depth interviews
-- **30** questionnaires sent
-- **5** partner companies surveyed
-- **120+** hours of observation
+::: quote Senior Logistics Manager
+We need to focus all attention on urgent shipments. The rest does not really matter at that moment.
 :::
-
-There was a lot of content, we worked with business and development on the future architecture, structured requirements
-
-**[NEEDED IMAGE: Architecture diagram or research map]**
-
-### Hypothesis Set
-
-The result was:
-
-#### 1. Information Priority for Dispatcher
-
-Order by frequency of use:
-
-| Priority | Information | View Frequency |
-|----------|-------------|----------------|
-| 1 | Current cargo event and status | Every 5-10 min |
-| 2 | Driver number | With every call |
-| 3 | Route from-to | 3-5 times per day |
-| 4 | Driver data | 2-3 times per day |
-| 5 | Truck and trailer (number, brand) | 1-2 times per day |
-
-#### 2. Time Zones
-
-The dispatcher looks at the local time of the cargo event, not their own time zone, to coordinate the driver on timings
-
-::: callout note
-**Example**: A dispatcher in Moscow is handling a shipment in Vladivostok (+7 hours). They need to see local time 14:00, not Moscow time 07:00
-:::
-
-#### 3. Quick Status Capture
-
-The dispatcher needs the ability to quickly call the driver and immediately capture status during the call
-
-## Design (How I Flipped the Kanban)
-
-Initially, the shipment process was represented entirely in a BPMN-like diagram
-
-**[NEEDED IMAGE: BPMN diagram of shipment process]**
-
-I identified **3 statuses** for task classification, the most important criterion being relevance:
-
-| Status | Condition | Visual |
-|--------|-----------|--------|
-| 🔴 **Urgent** | Overdue by plan / Crisis | Red card, top of list |
-| 🟡 **Current** | Until event <30 min / Transit check | Yellow card, middle |
-| ⚫️ **Upcoming** | Until event >30 min | Gray card, bottom of list |
-
-The concept of task and timings for events was drawn in a timeline diagram
-
-**[NEEDED IMAGE: Timeline diagram with event timings]**
-
-At the same time, the idea came to separate them visually, the choice fell on kanban
-
-But classical kanban didn't fit well because the cards were large, causing important info to not fit on screen and risking losing current and urgent tasks
-
-### So I Flipped the Kanban
-
-Describing these rules:
-
-- **Upcoming** tasks are always several times more, they are placed at the bottom of the list
-- When the task's "timer" comes due, it moves up to the **"Current"** level
-- When the timer expires or in urgent situations, the task moves even higher to **"Urgent"**
-
-The concept of task "relevance" is our own, so we grounded it on regulations that **the company can configure** in TMS, specifically:
-
-- How often and why the dispatcher should call the driver
-- How much time before an event the dispatcher should call the driver
-- How often the dispatcher should call the driver during long transits
-- Whether dispatchers can transfer shipments to each other
-- and more
-
-### Prototype
-
-I wireframed scenarios in Gemini — this is many times faster than prototyping in Figma
-
-I tested real interaction again offline in the office
-
-#### Testing Iterations
-
-| Round | Participants | Issues Found | Status |
-|-------|--------------|--------------|--------|
-| 1 | 3 dispatchers | 12 critical | Redesign |
-| 2 | 5 dispatchers | 8 medium | Refinement |
-| 3 | 4 dispatchers | 3 minor | Polish |
-| 4 | 8 dispatchers | 1 minor | Ready |
-
-Total 10 sessions, feedback, design refinements, but main hypotheses were confirmed
 
 ## Solution
 
-**[NEEDED IMAGE: Final dispatcher workspace interface]**
+I designed the workspace around relevance, not around the full shipment list. The core interaction model is a vertical board with three levels: Urgent, Current, Upcoming.
 
-A section in TMS as the main dispatcher workspace with these **features**:
+Shipment movement between those levels was grounded in operational rules configured in TMS:
 
-### Core Capabilities
+- When the dispatcher should contact the driver
+- How long before an event a call is needed
+- How often long transits should be checked
+- When a shipment becomes overdue or enters an exception state
 
-| Category | Functions |
-|----------|-----------|
-| **Visualization** | Vertical kanban with prioritization; Cards with key information; Status color coding |
-| **Time** | Local event time tracking; Base timezone settings; Timers until events |
-| **Communication** | Quick driver call; Event comments; File attachments (bills, photos) |
-| **Management** | Arrival/completion marking; Postpone task; Transfer to another dispatcher |
-| **Analytics** | Task statistics; Change history; Management reports |
-| **Integration** | Sync with 1C, Bitrix; Open map with geo-tracker; Shipment details on click |
+The dispatcher sees the necessary information directly on the card: route, address, cargo event time, driver, and contacts. From there, the main task can be completed without switching to other systems.
 
-### Detailed Features
+| Status | Condition | Visual |
+|---|---|---|
+| Urgent | An employee missed the cargo event and needs to resolve it urgently | Red card, top of the list |
+| Current | The cargo event is current and requires resolution soon | Yellow card, middle of the list |
+| Upcoming | The shipment requires no action and is awaiting a cargo event | Gray card, bottom of the list |
 
-::: callout note
-**Key Feature**: Vertical kanban automatically moves urgent tasks to the top
+Possible dispatcher actions:
+
+- Confirm from the card toolbar
+- Postpone from the card footer
+- Send to another dispatcher from the context menu
+- Copy the phone number from the phone field
+- Copy any block in the card by hovering over it
+- Scan the QR code for a quick phone call
+- Open detailed shipment info from the shipment number
+
+::: gallery
+1
+![Large screen workspace](/assets/projects/logistics-ux-pattern/images/dispatch-largescreen.jpg)
+
+2
+![Button states](/assets/projects/logistics-ux-pattern/images/dispatch-barbuttons.jpg)
+![UI elements](/assets/projects/logistics-ux-pattern/images/dispatch-uielements.jpg)
+
+2
+![Statuses](/assets/projects/logistics-ux-pattern/images/dispatch-statuses.jpg)
+![Compact view](/assets/projects/logistics-ux-pattern/images/dispatch-compactview.jpg)
 :::
 
-- Shipments and their tasks as cards containing all necessary dispatcher info + task completion time
-- VERTICAL kanban of these cards with most urgent tasks at the top
-- Overall task statistics for the period
-- Notifications only for the dispatcher with push and sound alerts (configurable)
-- Admin ability to configure task completion time according to regulations
-- Tracking of transit (long — more than 1 day) shipments and driver movement check tasks
+::: callout
+The interface needed to be easy to scan under pressure and reduce anxiety, not add to it.
+:::
 
-**[NEEDED IMAGE: Detailed shipment card view]**
+## Outcome
 
-## Results
+The final workspace turned dispatching from a passive tracking process into an attention-driven workflow. Instead of scanning multiple tools and remembering what matters, dispatchers could see which shipments required action now, which were current, and which could wait.
+
+Measured against the operational baseline by comparing June 2024 with June 2025 to reduce seasonal noise, the broader TMS changes were associated with:
 
 ::: stats
-- **-2%** Failed shipments with dispatcher
-- **-10%** Delays against planned time
-- **+35%** Shipments per dispatcher
+- **+35%** Shipments per dispatcher working hour
+- **-10%** Delayed control events against plan
+- **-2%** Failed or disputed shipments share
 :::
 
-### Before / After Comparison
-
-| Metric | Before Implementation | After Implementation | Change |
-|--------|----------------------|----------------------|--------|
-| Failed shipments | 4.2% | 2.2% | -2% |
-| Plan delays | 18% | 8% | -10% |
-| Shipments per dispatcher | 23/month | 31/month | +35% |
-| Time per task | 8 min | 5 min | -37% |
-| Satisfaction | 6.2/10 | 8.7/10 | +40% |
-
-### Data Sources
-
-**Metric sources**:
-- Median number of shipments per dispatcher over 1 month relative to total shipments
-- Historical data on shipment closing plan/fact from 1C for each dispatcher working 3+ months
-- Reports in TMS post-factum and reports from 1C
-- Satisfaction surveys among dispatchers (NPS)
-
-### Qualitative Feedback
-
-::: quote Kristina, dispatcher trainee
-I used to constantly fear missing something. Now the system itself shows what's urgent. Work became calmer and faster
-:::
-
-💗 By the way, while we were building production, respondents several times asked managers **"When will you add that thing you showed us?"** I like this result too
-
-## Next Steps
-
-**Near-term plans**:
-- Important for scaling to design onboarding directly on the platform so seniors don't spend time training newcomers on the tool
-- Test functionality on other offices and companies in the long term
-- Add ability for drivers in the app to mark cargo events and upload attachments themselves
-- Test the hypothesis of packaging the dispatching module as a separate product
-- Check the product's impact on employee turnover
-
-**Strategic hypotheses**:
-- Package the dispatching module as a separate product
-- Check the product's impact on employee turnover
-- Try scaling the product to other companies
-
----
-
-**Want to discuss UX for logistics?** [Write to me](https://t.me/vanyashuvalov)
+My contribution was the dispatcher workflow model, field research, prioritization logic, information architecture, interaction design, and prototype validation.

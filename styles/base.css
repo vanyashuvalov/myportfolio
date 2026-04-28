@@ -5,7 +5,7 @@
 /* ANCHOR: css_variables */
 /* UPDATED: Shared background for desktop canvas only */
 :root {
-  --app-bg: #8A547D;
+  --app-bg: #1E1E1E;
   --app-bg-size: 100% 100%;
   --app-bg-position: center bottom;
   --app-bg-repeat: no-repeat;
@@ -198,13 +198,12 @@ body.loaded .desktop-canvas .workspace-container {
   position: relative;
   width: 100%;
   height: 100%;
-  /* CRITICAL: Solid background only */
-  background-color: #8A547D;
-  background-image:
-    radial-gradient(circle at center, rgba(0, 0, 0, 0.07) 1.5px, transparent 1.5px);
-  background-size: 16px 16px;
-  background-position: 0 0;
-  background-repeat: repeat;
+  /* CRITICAL: Solid black background to match the rest of the dark desktop surfaces */
+  background-color: var(--app-bg);
+  background-image: none;
+  background-size: 0 0;
+  background-position: center;
+  background-repeat: no-repeat;
   /* CRITICAL: Internal coordinate system for widgets */
   overflow: visible;
   overscroll-behavior: none;
@@ -234,6 +233,17 @@ body.loaded .desktop-canvas .workspace-container {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.5s ease-in;
+}
+
+/* ANCHOR: workspace_texture_dots */
+/* REUSED: Subtle dot texture that stays visible on the dark desktop background */
+/* UPDATED COMMENTS: Lighter dots used so the texture remains readable on #1E1E1E */
+.workspace-container {
+  background-image:
+    radial-gradient(circle at center, rgba(255, 255, 255, 0.02) 1.5px, transparent 1.5px);
+  background-size: 16px 16px;
+  background-position: 0 0;
+  background-repeat: repeat;
 }
 
 /* CRITICAL: Top/bottom fade overlay above mountains, below widgets */
@@ -335,7 +345,7 @@ body.loaded .workspace-container::before {
   text-align: center;
   color: white;
   z-index: 9999;
-  background: var(--page-bg);
+  background: var(--app-bg);
 }
 
 .loading-indicator::before {

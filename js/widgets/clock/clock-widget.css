@@ -24,6 +24,7 @@
   width: 140px;
   height: 140px;
   background: #0B0B0B; /* CRITICAL: Dark background as specified */
+  border: 1px solid rgba(255, 255, 255, 0.15); /* REUSED: Thin white outline for contrast on dark desktop background */
   border-radius: 14px; /* CRITICAL: 14px border radius as specified */
   display: flex;
   align-items: center;
