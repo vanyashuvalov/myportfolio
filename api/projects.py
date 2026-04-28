@@ -12,7 +12,9 @@ SCALED FOR: Stateless serverless architecture
 """
 
 import json
+import re
 from http.server import BaseHTTPRequestHandler
+from typing import Dict, List, Optional
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
@@ -50,16 +52,18 @@ class handler(BaseHTTPRequestHandler):
                                 if ':' in line:
                                     key, value = line.split(':', 1)
                                     key = key.strip()
-                                    value = value.strip().strip('"\'')
-                                    if value.startswith('[') and value.endswith(']'):
-                                        value = [v.strip().strip('"\'') for v in value[1:-1].split(',')]
+                                    value = parse_frontmatter_value(value.strip())
                                     metadata[key] = value
+
+                            body = parts[2].strip()
+                            preview_images = extract_project_preview_images(metadata, body)
                             
                             projects.append({
                                 "id": md_file.stem,
                                 "category": cat,
                                 "title": metadata.get('title', md_file.stem),
                                 "thumbnail": metadata.get('thumbnail', '/assets/images/bg-mountains.jpg'),
+                                "images": preview_images,
                                 "description": metadata.get('description', ''),
                                 "tags": metadata.get('tags', []),
                                 "year": metadata.get('year'),
@@ -93,5 +97,53 @@ class handler(BaseHTTPRequestHandler):
             "total": len(projects),
             "category": category
         }
-        
+
         self.wfile.write(json.dumps(response).encode())
+
+
+def parse_frontmatter_value(raw_value: str):
+    """
+    Parse a single YAML-like frontmatter value.
+    PURPOSE: Keep Vercel project metadata parsing aligned with the local backend parser.
+    CONNECTIONS: Used by /api/projects so folder previews receive the same image payload as the local server.
+    """
+    value = raw_value.strip().strip('"\'')
+
+    if value.startswith('[') and value.endswith(']'):
+        return [v.strip().strip('"\'') for v in value[1:-1].split(',') if v.strip()]
+
+    if value.lower() in ['true', 'false']:
+        return value.lower() == 'true'
+
+    return value
+
+
+def extract_project_preview_images(metadata: Dict, body: str) -> List[str]:
+    """
+    Build up to three preview image URLs for a project folder.
+    PURPOSE: Let the desktop canvas render different thumbnails per folder instead of repeating one fallback image.
+    CONNECTIONS: Mirrors the backend/api_server.py logic so Vercel and local development behave the same.
+    """
+    preview_images: List[str] = []
+
+    def add_image(raw_value: Optional[str]):
+        if not raw_value:
+            return
+
+        normalized = str(raw_value).strip().replace('\\', '/')
+        if not normalized:
+            return
+        if not normalized.startswith(('http://', 'https://', '/')):
+            normalized = f"/{normalized}"
+        if normalized not in preview_images:
+            preview_images.append(normalized)
+
+    for key in ('hero_image', 'thumbnail', 'og_image'):
+        add_image(metadata.get(key))
+
+    for match in re.findall(r'!\[[^\]]*\]\(([^)]+)\)', body):
+        add_image(match)
+        if len(preview_images) >= 3:
+            break
+
+    return preview_images[:3]

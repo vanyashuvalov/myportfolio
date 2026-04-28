@@ -135,12 +135,15 @@ export class PageManager {
     try {
       this.cleanupViewportTest();
       this.setPageMode(true);
+      if (this.pageContainer) {
+        this.pageContainer.style.display = 'block';
+        this.pageContainer.style.opacity = '0';
+      }
       if (withOverlay) {
         this.toggleOverlay(true);
         await this.waitForTransitionPaint();
       }
       this.hideDesktopCanvas();
-      this.pageContainer.style.display = 'block';
       this.pageContainer.innerHTML = '';
       this.pageContainer.scrollTop = 0;
 
@@ -148,6 +151,10 @@ export class PageManager {
       this.pageContainer.innerHTML = render(data);
       if (setup) await setup(data);
 
+      if (this.pageContainer) {
+        await this.waitForTransitionPaint();
+        this.pageContainer.style.opacity = '1';
+      }
       if (withOverlay) this.toggleOverlay(false);
       this.isPageMode = true;
       this.forceViewportReflow();
@@ -162,10 +169,17 @@ export class PageManager {
   async showDesktopCanvas() {
     this.cleanupViewportTest();
 
-    this.pageContainer.style.display = 'none';
-    this.pageContainer.innerHTML = '';
+    if (this.pageContainer) {
+      this.pageContainer.style.opacity = '0';
+    }
 
     this.setPageMode(false);
+
+    this.toggleOverlay(true);
+    await this.waitForTransitionPaint();
+
+    this.pageContainer.style.display = 'none';
+    this.pageContainer.innerHTML = '';
 
     if (this.desktopCanvasEl) {
       this.desktopCanvasEl.style.display = 'flex';
@@ -176,6 +190,9 @@ export class PageManager {
 
     this.projectHandler?.destroy();
     this.funGalleryHandler?.destroy();
+
+    await this.waitForTransitionPaint();
+    this.toggleOverlay(false);
 
     this.eventBus?.emit('page:hidden', { type: 'desktop-canvas' });
   }
@@ -189,6 +206,7 @@ export class PageManager {
       this.setPageMode(false);
       this.hideDesktopCanvas();
       this.pageContainer.style.display = 'block';
+      this.pageContainer.style.opacity = '1';
       this.pageContainer.innerHTML = this.renderViewportTestPage();
 
       const backBtn = this.pageContainer.querySelector('[data-action="back-to-desktop"]');
@@ -410,6 +428,11 @@ export class PageManager {
   }
 
   async showErrorPage(message) {
+    if (this.pageContainer) {
+      this.pageContainer.style.display = 'block';
+      this.pageContainer.style.opacity = '1';
+    }
+
     const errorHtml = `
       <div class="page-wrapper">
         <div class="page-error">
@@ -444,7 +467,7 @@ export class PageManager {
   setPageMode(isOn) {
     document.body.classList.toggle('page-mode', isOn);
     document.documentElement.classList.toggle('page-mode', isOn);
-    const pageBg = isOn ? '#101010' : '#8A547D';
+    const pageBg = isOn ? '#101010' : '#1E1E1E';
     document.documentElement.style.setProperty('--page-bg', pageBg);
     this.setThemeColor(pageBg);
   }
