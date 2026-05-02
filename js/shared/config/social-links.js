@@ -1,5 +1,5 @@
 /* ANCHOR: social_links_config */
-/* FSD: shared/config → centralized social media and contact links */
+/* FSD: shared/config -> centralized social media and contact links */
 /* REUSED: Single source of truth for all external links */
 /* CRITICAL: All social links must be managed here, nowhere else */
 
@@ -7,7 +7,7 @@
  * Social Links Configuration
  * Centralized configuration for all social media and contact links
  * Used across widgets, navigation, and other components
- * 
+ *
  * @constant {Object} SOCIAL_LINKS
  */
 export const SOCIAL_LINKS = {
@@ -18,14 +18,14 @@ export const SOCIAL_LINKS = {
     displayName: 'Telegram',
     icon: 'telegram' // References icon-park-outline_telegram.svg
   },
-  
+
   email: {
     url: 'mailto:intjivan@gmail.com',
     address: 'intjivan@gmail.com',
     displayName: 'Email',
     icon: 'email'
   },
-  
+
   // ANCHOR: professional_links
   linkedin: {
     url: 'https://www.linkedin.com/in/ivan-shuvalov-19ba39259',
@@ -33,28 +33,27 @@ export const SOCIAL_LINKS = {
     displayName: 'LinkedIn',
     icon: 'linkedin'
   },
-  
+
   github: {
     url: 'https://github.com/vanyashuvalov',
     username: 'ivanshuvalov',
     displayName: 'GitHub',
     icon: 'github'
   },
-  
+
   // ANCHOR: portfolio_links
   portfolio: {
     url: 'https://ivanshuvalov.vercel.app',
     displayName: 'Portfolio',
     icon: 'external-link'
   },
-  
-  // ЗАМЕНИТЬ
+
   resume: {
     url: '/assets/documents/ivan-shuvalov-resume.pdf',
     displayName: 'Resume PDF',
     icon: 'download'
   },
-  
+
   // ANCHOR: telegram_channels
   // CRITICAL: Telegram channel configuration for widgets
   telegramChannel: {
@@ -68,7 +67,7 @@ export const SOCIAL_LINKS = {
 /**
  * Icon paths configuration
  * Maps icon names to their file paths in assets
- * 
+ *
  * @constant {Object} ICON_PATHS
  */
 export const ICON_PATHS = {
@@ -84,7 +83,7 @@ export const ICON_PATHS = {
 /**
  * Get social link by key
  * REUSED: Utility function for accessing social links
- * 
+ *
  * @param {string} key - Social link key
  * @returns {Object|null} Social link object or null if not found
  */
@@ -95,7 +94,7 @@ export function getSocialLink(key) {
 /**
  * Get icon path by key
  * SCALED FOR: Icon path resolution utility
- * 
+ *
  * @param {string} key - Icon key
  * @returns {string|null} Icon path or null if not found
  */
@@ -106,7 +105,7 @@ export function getIconPath(key) {
 /**
  * Get all social links as array
  * UPDATED COMMENTS: Utility for iterating over all social links
- * 
+ *
  * @returns {Array} Array of social link objects with keys
  */
 export function getAllSocialLinks() {
