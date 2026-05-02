@@ -25,6 +25,8 @@
   --color-bg-tertiary: #F3F4F6;
   --color-bg-light: #FFFFFF;
   --color-bg-dark: #101010;
+  /* UPDATED COMMENTS: Mobile edge fade color keeps fixed viewport gradients aligned with the current dark workspace background */
+  --color-mobile-edge-fade-rgb: 16, 16, 16;
   
   /* UPDATED COMMENTS: UI element colors */
   --color-border: rgba(14, 22, 33, 0.2);

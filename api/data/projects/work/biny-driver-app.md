@@ -15,7 +15,7 @@ hero_image: /assets/projects/biny-driver-app/images/image.png
 thumbnail: /assets/projects/biny-driver-app/images/image.png
 
 meta_title: Biny Driver App UX Case Study - Logistics Mobile App
-meta_description: How we redesigned a logistics driver app for 50+ year old users, reducing support load by 80%
+meta_description: How we redesigned a logistics driver app for 50+ year old users, improving registration completion and reducing support pressure in the driver flow
 og_image: /assets/projects/biny-driver-app/images/image.png
 
 tags: [Logistics, Mobile App, UX Design, Driver App, B2B]
@@ -44,7 +44,7 @@ Created a driver app that focused on trust, clarity, and speed of action instead
 
 ::: stats
 - **200+** screens designed
-- **50+** research sessions
+- **3** days in the field
 - **20+** design iterations over 12 months
 :::
 
@@ -192,8 +192,8 @@ The work was closely aligned with Android and backend development to keep the pr
 ### Quantitative Metrics
 
 ::: metrics
-- Support Tickets: 100+ daily → 20 daily (-80%)
-- Registration Completion: <5% → 65% (+60%)
+- Registration Completion: 5% → 50%
+- Support requests related to driver flow: ~10x lower
 - Daily Active Users: 2x increase
 - Order Completion Rate: +35%
 :::
@@ -201,11 +201,10 @@ The work was closely aligned with Android and backend development to keep the pr
 ### Business Impact
 
 ::: stats
-- **50,000+** drivers in the ecosystem
 - **200+** screens designed
-- **50+** research sessions conducted
 - **20+** iterations over 12 months
-- **Zero** driver churn caused by UX issues
+- Method: support tickets / registration sessions
+- Comparison window: month before vs month after release
 :::
 
 ### Qualitative Feedback
@@ -213,6 +212,8 @@ The work was closely aligned with Android and backend development to keep the pr
 The strongest outcome was not just better metrics, but lower anxiety during day-to-day use. Drivers started trusting the app enough to rely on it instead of defaulting to support calls.
 
 ### Future Improvements
+
+The first redesign did not fully resolve payment trust and card withdrawal clarity. That part remained a known limitation after release and is better presented as a separate failure-correction case than as a problem solved in the first pass.
 
 - AI-powered scheduling recommendations
 - Voice commands for hands-free operation

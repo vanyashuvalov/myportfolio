@@ -412,8 +412,8 @@ export class DesktopCanvas {
       type: 'sticker',
       cssPositionClass: 'widget-position--sticker',
       config: {
-        title: 'Hi! My name is Ivan, I am Product Designer',
-        content: 'I create and help grow B2B services for leading companies and the broader market\n\nI take products from concept to their first customers, relying on research and proven best MVP practices',
+        title: 'Product Designer working on complex B2B systems',
+        content: 'I design dashboards, research-driven workflows and operational interfaces for products where roles, data, permissions, statuses and business logic matters',
         size: 'large',
         theme: 'yellow',
         showButton: true,
