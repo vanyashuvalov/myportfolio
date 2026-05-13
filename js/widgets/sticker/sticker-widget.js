@@ -106,19 +106,23 @@ export class StickerWidget extends WidgetBase {
   /**
    * Format content with paragraph support and markdown bold
    * REUSED: Content formatting utility for rich text display
-   * UPDATED COMMENTS: Added **text** → <strong>text</strong> conversion
+   * UPDATED COMMENTS: escapeHtml first, then convert **text** → <strong>text</strong>
+   * so that HTML tags in the bold replacement are NOT re-escaped
    */
   formatContent(content) {
     if (!content) return '';
     
-    // UPDATED COMMENTS: Convert markdown bold **text** to HTML <strong>text</strong>
-    const processedContent = content.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-    
     // Split by double newlines for paragraphs
-    const paragraphs = processedContent.split('\n\n').filter(p => p.trim());
+    const paragraphs = content.split('\n\n').filter(p => p.trim());
     
     return paragraphs
-      .map(paragraph => `<p>${this.escapeHtml(paragraph.trim())}</p>`)
+      .map(paragraph => {
+        // CRITICAL: escape first to prevent XSS, then apply bold markdown
+        // Order matters: escape → bold replacement (safe tags only)
+        const escaped = this.escapeHtml(paragraph.trim());
+        const withBold = escaped.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+        return `<p>${withBold}</p>`;
+      })
       .join('');
   }
 
