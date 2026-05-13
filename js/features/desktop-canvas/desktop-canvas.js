@@ -412,8 +412,8 @@ export class DesktopCanvas {
       type: 'sticker',
       cssPositionClass: 'widget-position--sticker',
       config: {
-        title: 'Product Designer working on complex B2B systems',
-        content: 'I design dashboards, research-driven workflows and operational interfaces for products where roles, data, permissions, statuses and business logic matters',
+        title: "I'm Ivan, a Senior Product Designer for complex B2B systems",
+        content: "My designs are used by hundreds of thousands of people and major brands, including <strong>Coca-Cola</strong>, <strong>X5</strong>, <strong>Metro</strong>, <strong>LeroyMerlin</strong>, <strong>Hoff</strong>, <strong>Bork</strong>, <strong>Lenta</strong>, <strong>Askona</strong>, <strong>Gorilla</strong>, and others",
         size: 'large',
         theme: 'yellow',
         showButton: true,
