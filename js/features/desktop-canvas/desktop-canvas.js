@@ -413,7 +413,7 @@ export class DesktopCanvas {
       cssPositionClass: 'widget-position--sticker',
       config: {
         title: "I'm Ivan, a Senior Product Designer for complex B2B systems",
-        content: "My designs are used by hundreds of thousands of people and major brands, including <strong>Coca-Cola</strong>, <strong>X5</strong>, <strong>Metro</strong>, <strong>LeroyMerlin</strong>, <strong>Hoff</strong>, <strong>Bork</strong>, <strong>Lenta</strong>, <strong>Askona</strong>, <strong>Gorilla</strong>, and others",
+        content: "My designs are used by hundreds of thousands of people and major brands, including **Coca-Cola**, **X5**, **Metro**, **LeroyMerlin**, **Hoff**, **Bork**, **Lenta**, **Askona**, **Gorilla**, and others",
         size: 'large',
         theme: 'yellow',
         showButton: true,

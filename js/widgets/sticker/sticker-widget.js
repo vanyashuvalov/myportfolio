@@ -104,14 +104,18 @@ export class StickerWidget extends WidgetBase {
   }
 
   /**
-   * Format content with paragraph support
+   * Format content with paragraph support and markdown bold
    * REUSED: Content formatting utility for rich text display
+   * UPDATED COMMENTS: Added **text** → <strong>text</strong> conversion
    */
   formatContent(content) {
     if (!content) return '';
     
+    // UPDATED COMMENTS: Convert markdown bold **text** to HTML <strong>text</strong>
+    const processedContent = content.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    
     // Split by double newlines for paragraphs
-    const paragraphs = content.split('\n\n').filter(p => p.trim());
+    const paragraphs = processedContent.split('\n\n').filter(p => p.trim());
     
     return paragraphs
       .map(paragraph => `<p>${this.escapeHtml(paragraph.trim())}</p>`)
