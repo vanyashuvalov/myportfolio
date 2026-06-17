@@ -3,6 +3,7 @@
 /* SCALED FOR: Lazy loading and performance optimization */
 
 // UPDATED COMMENTS: ES6 module imports for clean dependency management
+import { inject } from '@vercel/analytics';
 import { DesktopCanvas } from './features/desktop-canvas/desktop-canvas.js';
 import { PerformanceMonitor } from './shared/utils/performance-monitor.js';
 import { AssetManager } from './shared/utils/asset-manager.js';
@@ -11,6 +12,9 @@ import { NavigationHeader } from './shared/ui/navigation/navigation-header.js';
 import { ContactInput } from './shared/ui/contact-input/contact-input.js';
 import { ModalManager } from './features/modal-system/modal-manager.js';
 import { PageManager } from './features/page-manager/page-manager.js';
+
+// Initialize Vercel Web Analytics
+inject();
 
 /**
  * Application class - Main application controller
