@@ -31,8 +31,7 @@ export class MobileMenu {
     this.overlayElement = null;
     this.pages = options.pages || [
       { label: 'Home', url: '/', page: 'Home' },
-      { label: 'Fun', url: '/fun', page: 'Fun' },
-      { label: 'Viewport Test', url: '/viewport-test', page: 'Viewport Test' }
+      { label: 'Fun', url: '/fun', page: 'Fun' }
     ];
     
     // REUSED: ActionButtons component from desktop navigation
