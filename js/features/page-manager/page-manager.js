@@ -15,6 +15,7 @@ export class PageManager {
 
     this.isPageMode = false;
     this.isTransitioning = false;
+    this.pageRequestId = 0;
     this.viewportTestCleanup = null;
 
     this.projectHandler = null;
@@ -96,7 +97,7 @@ export class PageManager {
         return;
       }
 
-      this.showProjectPage(id, 'work');
+      return this.showProjectPage(id, 'work');
     });
 
     this.router.register('/projects', () => this.showDesktopCanvas());
@@ -132,6 +133,8 @@ export class PageManager {
   }
 
   async showPage({ load, render, setup, type, eventPayload = {}, withOverlay = false }) {
+    const requestId = ++this.pageRequestId;
+    const isCurrent = () => requestId === this.pageRequestId;
     try {
       this.cleanupViewportTest();
       this.setPageMode(true);
@@ -142,17 +145,21 @@ export class PageManager {
       if (withOverlay) {
         this.toggleOverlay(true);
         await this.waitForTransitionPaint();
+        if (!isCurrent()) return;
       }
       this.hideDesktopCanvas();
       this.pageContainer.innerHTML = '';
       this.pageContainer.scrollTop = 0;
 
       const data = await load();
+      if (!isCurrent()) return;
       this.pageContainer.innerHTML = render(data);
       if (setup) await setup(data);
+      if (!isCurrent()) return;
 
       if (this.pageContainer) {
         await this.waitForTransitionPaint();
+        if (!isCurrent()) return;
         this.pageContainer.style.opacity = '1';
       }
       if (withOverlay) this.toggleOverlay(false);
@@ -160,6 +167,7 @@ export class PageManager {
       this.forceViewportReflow();
       this.eventBus?.emit('page:shown', { type, ...eventPayload });
     } catch (error) {
+      if (!isCurrent()) return;
       console.error(`Failed to show ${type} page:`, error);
       if (withOverlay) this.toggleOverlay(false);
       this.showErrorPage(error.message);
@@ -167,6 +175,7 @@ export class PageManager {
   }
 
   async showDesktopCanvas() {
+    const requestId = ++this.pageRequestId;
     this.cleanupViewportTest();
 
     if (this.pageContainer) {
@@ -177,6 +186,7 @@ export class PageManager {
 
     this.toggleOverlay(true);
     await this.waitForTransitionPaint();
+    if (requestId !== this.pageRequestId) return;
 
     this.pageContainer.style.display = 'none';
     this.pageContainer.innerHTML = '';
@@ -192,12 +202,14 @@ export class PageManager {
     this.funGalleryHandler?.destroy();
 
     await this.waitForTransitionPaint();
+    if (requestId !== this.pageRequestId) return;
     this.toggleOverlay(false);
 
     this.eventBus?.emit('page:hidden', { type: 'desktop-canvas' });
   }
 
   async showViewportTestPage() {
+    ++this.pageRequestId;
     try {
       this.cleanupViewportTest();
       document.body.classList.add('viewport-test');
@@ -409,10 +421,7 @@ export class PageManager {
       console.error('Transition navigation failed:', error);
       throw error;
     } finally {
-      if (this.transitionOverlay?.classList.contains('page-transition-overlay--active')) {
-        this.toggleOverlay(false);
-      }
-
+      // Route handlers own the overlay; an older transition must not hide it.
       this.isTransitioning = false;
     }
   }

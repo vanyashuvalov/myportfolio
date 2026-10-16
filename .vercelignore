@@ -33,6 +33,7 @@ test_*.py
 *_test.py
 test-*.html
 test-*.js
+tests/
 CONTACT_API_FIX.md
 test_api_validation.py
 

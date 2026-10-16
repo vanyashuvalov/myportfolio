@@ -132,7 +132,7 @@
   font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 16px;
   font-weight: 500; /* UPDATED COMMENTS: Increased from 400 to 500 for better readability */
-  color: var(--color-primary);
+  color: #f5f5f5;
   text-align: center;
   /* CRITICAL: 10px margin from document wrapper as specified */
   margin-top: 10px;

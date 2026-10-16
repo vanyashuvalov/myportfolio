@@ -281,7 +281,8 @@ class Application {
   escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
-    return div.innerHTML;
+    // This value is also embedded in a double-quoted HTML attribute.
+    return div.innerHTML.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
   }
 
   /**
@@ -345,8 +346,15 @@ class Application {
       this.eventBus.emit('modal:close');
     }
     
-    // Space key feeds the cat
-    if (event.key === ' ' && !event.target.matches('input, textarea')) {
+    // Keep native keyboard activation and scrolling outside the home canvas.
+    const interactiveTarget = event.target.closest(
+      'input, textarea, select, button, a, [role="button"], [role="link"], ' +
+      '[role="textbox"], [contenteditable]:not([contenteditable="false"])'
+    );
+    const overlayOpen = this.contactModalManager?.isOpen || this.pdfViewer?.isOpen;
+    if (event.key === ' ' && !event.defaultPrevented && !event.repeat &&
+        !event.ctrlKey && !event.metaKey && !event.altKey &&
+        window.location.pathname === '/' && !overlayOpen && !interactiveTarget) {
       event.preventDefault();
       this.eventBus.emit('cat:feed');
     }

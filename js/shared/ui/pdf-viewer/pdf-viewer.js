@@ -53,11 +53,13 @@ export class PDFViewer {
     document.body.appendChild(this.viewerElement);
     
     // SCALED FOR: Smooth fade-in animation
+    const openedElement = this.viewerElement;
     requestAnimationFrame(() => {
-      this.viewerElement.classList.add('pdf-viewer--visible');
+      if (!this.isOpen || this.viewerElement !== openedElement) return;
+      openedElement.classList.add('pdf-viewer--visible');
       
       // CRITICAL: Show close button with delay like ImageViewer
-      const closeButton = this.viewerElement.querySelector('.pdf-viewer__close');
+      const closeButton = openedElement.querySelector('.pdf-viewer__close');
       if (closeButton) {
         closeButton.classList.add('pdf-viewer__close--visible');
       }
@@ -83,16 +85,16 @@ export class PDFViewer {
     if (!this.isOpen || !this.viewerElement) return;
     
     this.isOpen = false;
-    
-    // UPDATED COMMENTS: Fade out animation
-    this.viewerElement.classList.remove('pdf-viewer--visible');
+    const closingElement = this.viewerElement;
+    this.viewerElement = null;
+    document.removeEventListener('keydown', this.handleKeydown);
+
+    // Fade out only the element belonging to this close operation.
+    closingElement.classList.remove('pdf-viewer--visible');
     
     // CRITICAL: Remove from DOM after animation
     setTimeout(() => {
-      if (this.viewerElement && this.viewerElement.parentNode) {
-        this.viewerElement.parentNode.removeChild(this.viewerElement);
-      }
-      this.viewerElement = null;
+      closingElement.remove();
     }, 300);
     
     // CRITICAL: Restore body scroll

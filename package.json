@@ -2,6 +2,7 @@
   "name": "portfolio",
   "version": "1.0.0",
   "scripts": {
-    "build": "echo 'No build needed - static files'"
+    "build": "echo 'No build needed - static files'",
+    "test": "node --test tests/*.test.mjs"
   }
 }
